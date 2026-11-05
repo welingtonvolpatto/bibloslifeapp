@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>VEREDA — Your Personalized Bible Study Plan</title>
+<meta name="description" content="Bible study guides, prayers and Scripture explanations to help you grow in faith.">
+<link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#2E5E4E;--blue-d:#234A3D;--blue-soft:#E6EFEA;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:#fff;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit}
+.app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;display:flex;flex-direction:column}
+header{height:56px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;position:sticky;top:0;background:#fff;z-index:10}
+header.transparent{background:transparent}
+.hbtn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px}
+.hbtn.hidden{visibility:hidden}
+.logo{text-align:center;font-weight:800;font-size:22px;letter-spacing:.5px;color:var(--title)}
+.progress{height:4px;background:var(--line);margin:0 16px;border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--blue);transition:width .35s}
+main{flex:1;display:flex;flex-direction:column}
+.screen{flex:1;display:flex;flex-direction:column;padding:12px 16px 110px;animation:fade .35s ease}
+.screen.center{justify-content:center}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.footer-cta{position:fixed;left:0;right:0;bottom:0;padding:12px 16px 20px;background:#fff;border-top:1px solid var(--line);z-index:20}
+.footer-cta .inner{max-width:398px;margin:0 auto}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:56px;border-radius:12px;background:var(--blue);color:#fff;font-size:18px;font-weight:700;transition:background .15s,opacity .15s}
+.btn:hover{background:var(--blue-d)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+h1.t{font-size:23px;line-height:28px;font-weight:600;text-align:center;color:var(--text);margin-bottom:8px}
+p.s{font-size:14px;line-height:20px;text-align:center;color:var(--muted);margin-bottom:16px}
+.q-title{font-size:24px;line-height:1.3;font-weight:700;text-align:center;color:var(--title);padding:10px 8px 6px}
+.q-hint{text-align:center;color:var(--muted);font-size:14px;margin-bottom:12px}
+.opts{margin-top:12px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-radius:12px;padding:20px 16px;margin-bottom:10px;font-size:16px;font-weight:500;transition:border-color .15s,background .15s}
+.opt .ico{width:28px;height:28px;flex:none}
+.opt .c{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
+.opt.multi .c{border-radius:6px}
+.opt:hover{border-color:#cfd3da}
+.opt.sel{border-color:var(--blue);background:#f3f7ff}
+.opt.sel .c{background:var(--blue);border-color:var(--blue)}
+.opt.sel .c::after{content:"";width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+/* image tiles */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.tile{position:relative;border-radius:14px;overflow:hidden;border:2px solid transparent;background:var(--soft);transition:border-color .15s}
+.tile.sel{border-color:#2b2d30}
+.tile .img{width:100%;display:block;object-fit:cover}
+.tile .lbl{position:absolute;left:10px;right:10px;bottom:10px;height:44px;border-radius:10px;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 14px;font-size:17px;font-weight:600;color:#111}
+.tile.wide .lbl{height:34px;left:6px;right:6px;bottom:6px;font-size:15px;padding:0 6px 0 12px}
+.tile.wide .arr{width:22px;height:22px}
+.tile .arr{width:26px;height:26px;border-radius:50%;background:#2b2d30;display:flex;align-items:center;justify-content:center}
+/* gender intro */
+.social{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 14px}
+.social .rate{display:flex;flex-direction:column;align-items:center;font-size:20px;font-weight:700;color:#444}
+.social .rate small{font-size:10px;font-weight:600;color:#19b56b}
+.social p{font-size:13px;color:#77797e;line-height:1.35;max-width:170px}
+.big-title{font-size:27px;line-height:1.25;font-weight:600;text-align:center;letter-spacing:.3px;color:#222;text-transform:uppercase}
+.big-sub{font-size:15px;text-align:center;color:#444;margin:10px 0 18px;letter-spacing:.3px;text-transform:uppercase}
+.legal{margin-top:24px;font-size:12px;color:#6b6f76;text-align:center;line-height:1.45}
+.legal a{color:var(--blue)}
+/* info / break */
+.hero-img{width:100%;border-radius:12px;display:block;margin-bottom:22px;aspect-ratio:342/220;object-fit:cover}
+.info-title{font-size:24px;font-weight:600;text-align:center;line-height:1.3;margin-bottom:12px;color:var(--title)}
+.info-text{font-size:16px;line-height:1.45;text-align:center;color:var(--muted)}
+.banner{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:12px;padding:12px;margin-top:22px;font-size:14px;line-height:1.4}
+.banner .pi{width:44px;height:44px;border-radius:50%;flex:none;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px}
+/* reveal */
+.reveal{text-align:center;padding-top:40px}
+.reveal .glow{width:150px;height:150px;border-radius:50%;margin:30px auto;background:radial-gradient(circle,#fff6d8 0%,#ffd77a 35%,#c9c5fa 70%,transparent 72%);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.reveal .hint{font-size:13px;color:var(--muted);margin-top:10px}
+/* loader */
+.ring{width:170px;height:170px;margin:26px auto 30px;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700}
+.steps li{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 0;font-size:16px;color:#9a9ca1;transition:color .3s}
+.steps li .d{width:22px;height:22px;border-radius:50%;border:2px solid #d9dbe0;flex:none;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.steps li.on{color:var(--text)}
+.steps li.done .d{background:var(--green);border-color:var(--green)}
+.steps li.done .d::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:60;padding:20px}
+.modal .box{background:#fff;border-radius:16px;padding:22px 18px;width:100%;max-width:360px;text-align:center;animation:fade .25s}
+.modal small{display:block;color:var(--muted);font-size:13px;margin-bottom:8px}
+.modal h3{font-size:19px;line-height:1.35;margin-bottom:18px;color:var(--title)}
+.modal .yn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal .yn button{height:52px;border-radius:12px;border:1px solid var(--line);font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px}
+.modal .yn button:hover{border-color:var(--blue)}
+/* summary */
+.arch-card{border-radius:16px;padding:20px;margin-top:16px;background:linear-gradient(160deg,#f3f0ff,#e4f1fd);text-align:center}
+.arch-card .kicker{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#6b6f76;font-weight:700}
+.arch-card .name{font-size:28px;font-weight:800;color:var(--title);margin:6px 0 2px}
+.arch-card .role{font-size:15px;color:#4b4e55;font-weight:600}
+.arch-card p{font-size:14px;line-height:1.5;color:#4b4e55;margin-top:10px}
+.divider{height:1px;background:var(--line);margin:18px 0}
+.inside h4{font-size:14px;font-weight:700;margin-bottom:10px}
+.inside li{list-style:none;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-size:14px;line-height:1.4}
+.inside li b{display:block;font-size:14px}
+.inside li span{color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.chips span{font-size:12px;font-weight:700;background:#fff;border-radius:20px;padding:5px 10px;color:#444}
+/* email / name */
+.field{width:100%;height:56px;border:1px solid #dfe1e5;border-radius:12px;padding:0 16px;font-size:16px;margin-top:18px;outline:none}
+.field:focus{border-color:var(--blue)}
+.err{color:#e5484d;font-size:13px;margin-top:6px;min-height:18px}
+.privacy{display:flex;gap:10px;margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.45}
+.privacy a{color:var(--blue)}
+/* cards sequence */
+.cards-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;z-index:5;
+  background:linear-gradient(0deg,rgba(255,235,244,.7) 2.43%,rgba(201,197,250,.7) 51.21%,rgba(163,159,212,.7) 100%)}
+.stack{position:relative;width:100%;max-width:360px;height:220px}
+.stack .card{position:absolute;inset:0;border-radius:18px;display:flex;align-items:center;justify-content:center;padding:26px;text-align:center;font-size:19px;font-weight:600;line-height:1.4;box-shadow:0 10px 30px rgba(60,50,120,.15);opacity:0;transform:translateY(30px) scale(.96);transition:all .6s ease}
+.stack .card.show{opacity:1;transform:none}
+.stack .card.back{transform:translateY(-14px) scale(.94);opacity:.6}
+/* offer */
+.topbar{position:sticky;top:0;background:#fff;z-index:20;display:flex;align-items:center;gap:16px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.timer{display:flex;flex-direction:column;align-items:center;min-width:110px}
+.timer .digits{font-size:34px;font-weight:600;line-height:1;color:#000}
+.timer .digits span{margin:0 3px}
+.timer .lbl{display:flex;gap:16px;font-size:12px;color:#222;margin-top:4px}
+.topbar .btn{flex:1}
+.offer{padding:0 16px 32px}
+.sec-title{font-size:26px;font-weight:600;text-align:center;color:var(--title);margin:32px 0 20px;line-height:1.25}
+.arch-mini{display:flex;align-items:center;gap:14px;border-radius:14px;padding:14px;background:linear-gradient(160deg,#f3f0ff,#e4f1fd);margin-top:20px}
+.arch-mini .av{width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none}
+.arch-mini b{display:block;font-size:17px}
+.arch-mini span{font-size:13px;color:#55585e}
+.highlights{border:1px solid var(--line);border-radius:12px}
+.highlights li{list-style:none;display:flex;gap:16px;padding:16px;font-size:15px;line-height:1.45;color:#3d4046;border-bottom:1px solid var(--line)}
+.highlights li:last-child{border-bottom:0}
+.highlights svg{flex:none}
+.plans{display:flex;flex-direction:column;gap:12px}
+.plan{border:2px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer}
+.plan .badge{display:none;background:var(--blue);color:#fff;text-align:center;font-size:12.5px;font-weight:700;padding:4px 0}
+.plan.popular .badge{display:block}
+.plan .body{display:flex;align-items:center;gap:14px;padding:18px 14px}
+.plan .radio{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
+.plan.sel{border-color:var(--blue)}
+.plan.sel .radio{background:#2b2d30;border-color:#2b2d30}
+.plan.sel .radio::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.plan .info{flex:1}
+.plan .name{font-size:19px;font-weight:600;color:var(--title)}
+.plan .price{font-size:12.5px;color:#55585e;margin-top:2px;line-height:1.35}
+.plan .price b{font-size:14.5px;color:#222;font-weight:700}
+.plan .off{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:700;padding:5px 10px;border-radius:8px;background:#f3f4f6;color:#55585e}
+.plan.sel .off{background:var(--blue);color:#fff}
+.plan .day{background:#f5f6f7;border-radius:6px;padding:8px 10px;text-align:center;min-width:88px}
+.plan .day small{display:block;font-size:11px;color:#6b6f76;font-weight:500}
+.plan .day strong{display:block;font-size:15px;font-weight:700;color:#222;line-height:1.2}
+.terms{font-size:12px;color:#6b6f76;text-align:center;line-height:1.5;margin:18px 4px}
+.terms a{color:#55585e}
+.safe{display:flex;align-items:center;justify-content:center;gap:6px;width:max-content;margin:14px auto 10px;padding:7px 16px;border-radius:8px;background:var(--green-bg);color:var(--green);font-size:15px;font-weight:600}
+.faq{border:1px solid var(--line);border-radius:12px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:last-child{border-bottom:0}
+.faq summary{list-style:none;display:flex;justify-content:space-between;gap:16px;padding:18px 16px;font-size:16px;line-height:1.4;color:var(--title);cursor:pointer}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:24px;color:#b6b9bf;font-weight:300;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq p{padding:0 16px 18px;font-size:14.5px;color:#55585e;line-height:1.5}
+footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 30px}
+.menu{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;z-index:70}
+.menu.open{display:block}
+.menu .panel{position:absolute;right:0;top:0;bottom:0;width:78%;max-width:320px;background:#fff;padding:24px 20px}
+.menu h4{font-size:18px;font-weight:700;margin-bottom:18px}
+.menu a{display:block;padding:12px 0;color:var(--text);text-decoration:none;border-bottom:1px solid var(--line);font-size:15px}
+
+/* ===== offer page (VEREDA) ===== */
+.o-card.o-social{background:var(--blue-soft);border:0;text-align:center;padding:22px 14px}
+.o-social h3{font-size:21px;font-weight:600;line-height:1.35;color:var(--title)}
+.o-rate{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-top:16px;padding:8px;text-align:left}
+.o-rate .stores{display:flex;align-items:center;gap:10px;background:#f3f4f6;border-radius:10px;padding:10px 12px}
+.o-rate .stores svg{width:24px;height:24px}
+.o-rate .stores i{width:1px;height:28px;background:#d9dbe0}
+.o-rate .rt span{font-size:14px;color:#3d4046}.o-rate .rt span b{font-size:22px;color:var(--blue);margin-right:2px}
+.o-rate .rt strong{display:block;font-size:14px;font-weight:700;color:var(--title)}
+.pay{display:flex;justify-content:center;gap:5px;flex-wrap:wrap}
+.pay span{width:40px;height:26px;border:1px solid #e3e4e7;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;min-width:0}
+.pay span svg{width:100%;height:100%;display:block}
+
+.hl{color:var(--blue)}
+.o-top{position:sticky;top:0;z-index:20;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
+.o-logo{height:16px}
+.o-cta{width:auto;height:44px;padding:0 26px;font-size:15px}
+.offer{padding:8px 16px 24px}
+.o-h1{font-size:22px;font-weight:400;text-align:center;line-height:1.3;margin:22px 0 14px;color:var(--title)}
+.o-h1 b{font-weight:700}
+.o-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.o-chips>div{display:flex;align-items:center;gap:10px;background:var(--blue-soft);border-radius:10px;padding:10px 12px;font-size:14px;font-weight:600;color:var(--title)}
+.o-chips svg{width:22px;height:22px;color:var(--blue);flex:none}
+.o-chips small{display:block;font-size:11px;font-weight:500;color:var(--muted)}
+.o-bubble{position:relative;margin:14px 0 18px;border:1.5px solid #8FD3BF;border-radius:12px;padding:10px 14px;text-align:center;background:#fff}
+.o-bubble b{display:block;font-size:14px;color:var(--title)}
+.o-bubble span{font-size:12.5px;color:var(--muted);line-height:1.45}
+.o-bubble::after{content:"";position:absolute;left:50%;bottom:-8px;width:14px;height:14px;background:#fff;border-right:1.5px solid #8FD3BF;border-bottom:1.5px solid #8FD3BF;transform:translateX(-50%) rotate(45deg)}
+.o-journey{position:relative;background:var(--soft);border-radius:16px;padding:12px 12px 14px;overflow:hidden;margin:0 6px}
+.o-journey .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#fff;border-radius:10px;padding:3px;position:relative;z-index:2}
+.o-journey .tabs button{height:32px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--blue)}
+.o-journey .tabs button.on{background:var(--blue);color:#fff}
+.o-journey .tl{padding:12px 0 6px;width:72%;position:relative;z-index:2}
+.o-journey .day{display:grid;grid-template-columns:44px 1fr;align-items:center;margin-bottom:12px}
+.o-journey .dl{font-size:12px;color:#7a7f87}
+.o-journey .bar{display:block;padding:12px 10px;border-radius:6px;font-size:12.5px;font-weight:600;color:var(--title);border-left:3px solid}
+.bar.k0{background:#d5efe7;border-color:#2f9e83}.bar.k1{background:#fde7dc;border-color:#ec8a5c}.bar.k2{background:#fde7dc;border-color:#c79be8}.bar.k3{background:#fde7dc;border-color:#ec8a5c}
+.o-journey .day.fade{opacity:.35}
+.o-journey .coach{position:absolute;right:-6px;top:58px;width:44%;z-index:1;-webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent);mask-image:linear-gradient(to bottom,#000 70%,transparent)}
+.o-journey .jf{position:relative;z-index:2;text-align:center;font-size:12.5px;line-height:1.45}
+.o-journey .jf b{display:block}
+.o-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 16px;margin-top:24px}
+.o-get h3{font-size:20px;font-weight:600;text-align:center;margin-bottom:16px}
+.gi{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.gi p{font-size:13.5px;line-height:1.4;color:var(--muted)}
+.gi p b{color:var(--title);font-weight:600}
+.gic{width:30px;height:30px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;color:#fff}
+.gic svg{width:18px;height:18px}
+.gic.c0{background:#F08A4B}.gic.c1{background:#9B6BD6}.gic.c2{background:var(--blue)}.gic.c3{background:#E54B7A}.gic.c4{background:#2f9e83}
+.o-h2{font-size:22px;font-weight:600;text-align:center;line-height:1.3;margin:32px 0 18px;color:var(--title)}
+.o-plans{display:flex;flex-direction:column;gap:12px}
+.o-plan{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;background:#fff}
+.o-plan.sel{border-color:var(--blue)}
+.o-plan .rib{background:var(--blue);color:#fff;text-align:center;font-size:11.5px;font-weight:700;padding:4px 0;display:flex;align-items:center;justify-content:center;gap:5px}
+.o-plan .rib svg{width:12px;height:12px}
+.o-pb{display:flex;align-items:center;gap:14px;padding:16px 12px}
+.o-plan .radio{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
+.o-plan.sel .radio{background:#1E2430;border-color:#1E2430}
+.o-plan.sel .radio::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.o-pn{flex:1}.o-pn b{display:block;font-size:17px;font-weight:600;color:var(--title)}.o-pn s{font-size:12px;color:#a2a6ad}
+.o-pp{background:#f3f4f6;border-radius:24px 10px 10px 24px;padding:6px 10px 6px 12px}
+.o-plan.sel .o-pp{background:var(--blue-soft)}
+.pd{display:flex;align-items:flex-start;color:var(--title);line-height:1}
+.pd .cur{font-size:12px;font-weight:700;margin-top:4px}
+.pd .int{font-size:34px;font-weight:700;letter-spacing:-1px;margin:0 2px}
+.pd .dec{display:flex;flex-direction:column;font-size:12px}
+.pd .dec b{font-size:13px;margin-top:3px}
+.pd .dec small{font-size:10.5px;font-weight:500;margin-top:2px}
+.o-note{background:var(--soft);border-radius:12px;padding:12px 14px;margin:16px 0;text-align:center;font-size:13px;line-height:1.5;color:#3d4046}
+.o-terms{font-size:11.5px;color:#6b6f76;text-align:center;line-height:1.5;margin:12px 4px}
+.o-terms a{color:#55585e}
+.o-stats{border-radius:16px;padding:16px;background:linear-gradient(135deg,#E6EFEA,#F6ECD6)}
+.o-stats .srow{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px dashed rgba(0,0,0,.12);font-size:13px;color:#3d4046}
+.o-stats .big{font-size:34px;font-weight:600;color:var(--title);min-width:72px}
+.o-stats small{display:block;text-align:center;font-size:10.5px;color:#888;margin-top:8px}
+.o-end{display:grid;grid-template-columns:1fr 1fr;gap:8px}.o-end div:last-child:nth-child(odd){grid-column:1/-1}
+.o-disc{font-size:10.5px;color:#888;text-align:center;margin-top:10px}
+.o-guide{margin-top:32px;border-radius:14px;padding:16px;background:#fff;border:2px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,#8FC7B0,#E3C27F);background-origin:border-box;background-clip:padding-box,border-box}
+.o-guide b{display:block;font-size:15px;line-height:1.4;margin-bottom:10px;color:var(--title)}
+.o-guide div{display:flex;align-items:center;gap:10px;font-size:13px;color:#3d4046;padding:6px 0}
+.o-guide svg{width:18px;height:18px;color:var(--blue);flex:none}
+.o-sub{text-align:center;color:var(--muted);font-size:14px;margin:-8px 0 12px}
+.o-rev b{display:block;font-size:15px;margin-bottom:6px}.o-rev p{font-size:13px;line-height:1.5;color:#55585e}
+.o-end div{background:var(--blue-soft);border:1px solid #cfe0d6;border-radius:10px;padding:12px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.o-end small{font-size:11px;letter-spacing:.04em;color:#55585e}
+.o-end b{font-family:Georgia,"Times New Roman",serif;font-size:19px;font-weight:700;color:var(--blue);letter-spacing:.02em}
+.o-stats{padding:8px 18px 14px}
+.o-stats .srow{border-bottom:0;padding:10px 0;font-size:14px}
+.o-stats .big{font-size:40px;font-weight:500;letter-spacing:-1px}
+.o-stats .big sup{font-size:16px;vertical-align:22px;margin-left:2px}
+.o-stats .sdiv{display:flex;align-items:center;gap:8px;color:#9aa39d;font-size:10px}.o-stats .sdiv i{flex:1;height:1px;background:rgba(0,0,0,.12)}
+.o-rev .stars{display:flex;gap:3px;margin-bottom:8px}
+.o-rev .stars i{width:18px;height:18px;background:#00B67A;color:#fff;font-style:normal;font-size:12px;display:flex;align-items:center;justify-content:center}
+.o-rev .who{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:10px}
+.o-rev .who span{font-size:13px}
+.o-rev .who img,.o-rev .who em{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none}
+.o-rev .who em{background:var(--blue-soft);color:var(--blue);font-style:normal;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.em-wrap{position:relative;margin-top:18px}
+.em-field{position:relative}
+.em-field input{width:100%;height:56px;border:1.5px solid #dfe1e5;border-radius:12px;padding:0 48px 0 16px;font-size:16px;outline:none;background:#fff}
+.em-field input:focus{border-color:var(--blue)}
+.em-field svg{position:absolute;right:16px;top:50%;width:22px;height:22px;transform:translateY(-50%);color:#7a7f87;pointer-events:none}
+.em-sug{list-style:none;margin-top:6px;background:var(--soft);border-radius:12px;max-height:176px;overflow-y:auto;padding:4px 0}
+.em-sug li{padding:12px 16px;font-size:15px;color:#2b2d30;cursor:pointer}
+.em-sug li:hover{background:var(--blue-soft)}
+
+/* ===== Bible Study funnel ===== */
+.st-title{text-transform:none;font-size:28px;font-weight:700;letter-spacing:0}
+.st-sub{text-transform:none;letter-spacing:0;color:var(--muted)}
+.pf{border:1px solid var(--line);border-radius:14px;padding:16px 16px 0;margin-top:8px;overflow:hidden}
+.pf-h{display:block;font-size:16px;margin-bottom:14px}
+.pf-bar{position:relative;height:8px;border-radius:8px;background:linear-gradient(90deg,#E08A68,#E3C27F 50%,#2E5E4E)}
+.pf-bar i{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--ink);transform:translate(-50%,-50%)}
+.pf-lv{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:#9aa0a6;margin:8px 0 12px}.pf-lv .on{color:var(--ink)}
+.pf-st{display:flex;gap:12px;align-items:center;background:var(--blue-soft);border-radius:12px;padding:12px;margin-bottom:12px}
+.pf-st svg{width:24px;height:24px;color:var(--blue);flex:none}.pf-st p{font-size:14px;line-height:1.45}.pf-st b{display:block}
+.pf-low{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.pf-rows div{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.pf-rows svg{width:40px;height:40px;padding:9px;border-radius:8px;background:#EDEEF0;color:var(--blue);flex:none}
+.pf-rows p{font-size:14px;line-height:1.3}.pf-rows small{display:block;font-size:13px;color:var(--muted)}.pf-rows b{white-space:nowrap}
+.pf-low img{width:122px;height:auto;align-self:flex-end;border-radius:10px 10px 0 0;object-fit:cover;max-height:170px}
+.cr{margin-top:20px}.cr-i{margin-bottom:18px}
+.cr-t{display:flex;justify-content:space-between;font-size:15px;font-weight:600;margin-bottom:8px}.cr-p{color:var(--muted)}
+.cr-b{height:8px;border-radius:8px;background:var(--line);overflow:hidden}.cr-b i{display:block;height:100%;width:0;background:var(--blue);border-radius:8px}
+.nl{display:flex;flex-direction:column;gap:12px;margin-top:auto;padding-top:220px}
+.nl-n{font-size:14px;font-weight:600;color:#7E8288;height:34px}
+.gr-b{align-self:center;background:var(--blue-soft);color:var(--blue);font-weight:700;font-size:14px;padding:8px 16px;border-radius:20px;margin-top:6px}
+.gr{border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:10px}
+.gr-s{width:100%;height:auto;display:block}
+.gr-l{stroke-dasharray:420;stroke-dashoffset:420;animation:grd 1.6s ease forwards}.gr-a{opacity:0;animation:gra .8s 1s ease forwards}
+.gr-d,.gr-tag{opacity:0;animation:gra .4s 1.5s ease forwards}
+@keyframes grd{to{stroke-dashoffset:0}}@keyframes gra{to{opacity:1}}
+.gr-x{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:6px 10px 0}
+.cp{background:#E6EFEA;border-radius:14px;padding:12px;margin:-4px 0 14px}
+.cp-h{display:flex;gap:10px;align-items:flex-start}.cp-h svg{width:22px;height:22px;color:#19b56b;flex:none;margin-top:2px}
+.cp-h b{display:block;font-size:15px}.cp-h small{font-size:12px;color:var(--muted);line-height:1.35}
+.cp-row{display:flex;gap:10px;margin-top:10px}
+.cp-code{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:10px 12px;font-weight:600;font-size:14px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cp-code svg{width:16px;height:16px;color:#19b56b;flex:none}
+.cp-t{background:#fff;border-radius:10px;padding:6px 12px;text-align:center}
+.cp-t b{display:block;font-size:22px;color:var(--blue);line-height:1.1}.cp-t small{display:flex;gap:10px;font-size:9.5px;color:var(--muted)}.cp-t i{font-style:normal}
+.o-ps{display:block;font-size:12px;color:#55585e;margin-top:2px}
+.o-tp{text-align:right;background:#f3f4f6;border-radius:10px;padding:6px 10px;min-width:74px}
+.o-plan.sel .o-tp{background:var(--blue-soft)}
+.o-tp em{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;background:#19b56b;color:#fff;border-radius:4px;padding:1px 5px;margin-bottom:2px}
+.o-tp b{display:block;font-size:17px;color:var(--title)}.o-tp s{font-size:11.5px;color:#a2a6ad}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="hdrWrap">
+    <header id="hdr">
+      <button class="hbtn hidden" id="backBtn" aria-label="Back"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.7071 4.29289C12.0976 4.68342 12.0976 5.31658 11.7071 5.70711L6.41421 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H6.41421L11.7071 18.2929C12.0976 18.6834 12.0976 19.3166 11.7071 19.7071C11.3166 20.0976 10.6834 20.0976 10.2929 19.7071L3.29289 12.7071C2.90237 12.3166 2.90237 11.6834 3.29289 11.2929L10.2929 4.29289C10.6834 3.90237 11.3166 3.90237 11.7071 4.29289Z" fill="currentColor"/></svg></button>
+      <div class="logo" id="logo"></div>
+      <button class="hbtn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </header>
+    <div class="progress" id="progress" style="display:none"><i></i></div>
+  </div>
+  <main id="view"></main>
+  <div class="footer-cta" id="cta" style="display:none"><div class="inner"><button class="btn" id="ctaBtn">Continue</button></div></div>
+</div>
+
+<div class="menu" id="menu"><div class="panel">
+  <h4>Docs</h4>
+  <a href="#">Terms and Conditions of use</a><a href="#">Privacy Policy</a><a href="#">Subscription Policy</a><a href="#">Cookie Policy</a><a href="#">Contact Us</a><a href="#">Do Not Sell or Share My Personal Information</a>
+</div></div>
+
+<script>
+/* =====================================================================
+   CONFIG — edit everything here
+   ===================================================================== */
+const CONFIG = {
+  brand: "VEREDA",
+  supportEmail: "support@vereda.app",
+  companyAddress: "Your Company Ltd, Address, City, Country",
+  checkoutUrl: "#",            // your checkout link; ?plan=, &email=, &name=, &archetype= are appended
+  leadWebhook: "",             // optional: URL that receives {email, name, archetype, answers} via POST
+  // Social proof shown on the first screen. Leave rating empty to hide it.
+  // Only use numbers you can prove (your own real reviews).
+  // Image folder + files. Put YOUR images here with these names (webp/jpg/png).
+  // If a file is missing, a neutral placeholder is drawn automatically.
+  img: "../images/",
+  images: {
+    gender_male: "gender_male.webp", gender_female: "gender_female.webp",
+    age: { female: ["f_age_18_34.webp","f_age_35_44.webp","f_age_45_54.webp","f_age_55_plus.webp"],
+           male:   ["m_age_18_34.webp","m_age_35_44.webp","m_age_45_54.webp","m_age_55_plus.webp"] },
+    break1: {male:"break1_m.webp", female:"break1_f.webp"}, break2: {male:"break2_m.webp", female:"break2_f.webp"}, break3: {male:"break3_m.webp", female:"break3_f.webp"}, break4: "break4.webp",
+    coach: "coach.webp"
+  },
+  brandName: "VEREDA",
+  links: { terms: "#", privacy: "#", subscription: "#", cookies: "#", contact: "#" },
+  // Offer variant: "coupon" (personalized promo code + timer, total prices) or "perday" (price per day)
+  offerVariant: "coupon",
+  coupon: { percent: 53, minutes: 7, suffix: "" },   // code = FIRSTNAME_MON (e.g. ANA_NOV); suffix is appended if set
+  // Offer page — plans (edit prices here)
+  plans: [
+    {name:"1-Week Trial", now:"$6.49", then:"$43.20", every:"4 weeks", full:"$13.99", perDay:"1.99", popular:false, terms:"First week is $6.49, then $43.20 every 4 weeks."},
+    {name:"4-Week Plan", now:"$19.99", then:"$43.20", every:"4 weeks", off:"53% OFF", full:"$43.20", perDay:"1.44", popular:true,  terms:"First 4 weeks are $19.99, then $43.20 every 4 weeks."},
+    {name:"12-Week Plan", now:"$39.99", then:"$86.40", every:"12 weeks", off:"53% OFF", full:"$86.40", perDay:"0.96", popular:false, terms:"First 12 weeks are $39.99, then $86.40 every 12 weeks."}
+  ],
+  planNote: "A 4-week plan gives you enough time to turn reading the Bible into a lasting <span class=\"hl\">daily habit</span>.",
+  weeks: [
+    ["Step into Light","Do I know Jesus?","Grace vs Works","Talking With God"],
+    ["Walking by Faith","When God Feels Silent","Forgiveness That Frees","The Power of Rest"],
+    ["Fear Not","Love in Action","Hearing God's Voice","Strength in Weakness"],
+    ["Your Calling","Living Generously","Hope That Holds","Walking It Out Daily"]
+  ],
+  benefits: [
+    {icon:"book",  lead:"You grow confident in your faith", text:"enough to share it and stand by it"},
+    {icon:"chart", lead:"You build a daily Bible habit that sticks", text:"with a simple plan made for your life"},
+    {icon:"heart", lead:"You feel closer to God every day", text:"through a rhythm of reading, prayer, and reflection"},
+    {icon:"spark", lead:"You understand Scripture deeply", text:"with clear guidance through every chapter"},
+    {icon:"home",  lead:"You stay consistent without burnout", text:"at your own pace, even on busy days"}
+  ],
+  faq: [
+    {q:"What if I don't understand what I'm reading?", a:"Every reading comes with a plain-language explanation and key takeaways, so you always know what the passage means and why it matters for your life today."},
+    {q:"What if I can't stay consistent?", a:"Sessions take about 10 minutes and fit any time of day. Gentle reminders and a clear next step help you keep going, and missing a day never resets your progress."},
+    {q:"Do I need to know the Bible already?", a:"Not at all. The plan starts where you are, whether you're opening the Bible for the first time or coming back after a long time."}
+  ],
+  // ===== SOCIAL PROOF — replace every [ ] placeholder with YOUR real data before running ads =====
+  // Leave a field empty ("" or []) to hide that block.
+  social: { count: "950K", rating: "4.8", ratingSource: "Rating in App Stores" },
+  endorsements: [
+    {top:"UNIVERSITY OF", name:"OXFORD"}, {top:"UNIVERSITY OF", name:"CAMBRIDGE"},
+    {name:"HARVARD", bottom:"UNIVERSITY"}, {name:"YALE", bottom:"UNIVERSITY"},
+    {name:"PRINCETON", bottom:"THEOLOGICAL SEMINARY"}
+  ],
+  endorsementsNote: "VEREDA is not affiliated with, endorsed by, or sponsored by these institutions. References reflect published biblical and theological scholarship used in selected content.",
+  stats: [
+    {value:"96", text:"say VEREDA has had a positive impact on their daily life"},
+    {value:"85", text:"understand Scripture better than before"},
+    {value:"83", text:"feel a stronger connection to God"}
+  ],
+  statsSource: "Based on a voluntary survey of VEREDA users",
+  // photo: file in images/ (e.g. "review_ana.webp") — a real customer's photo, with permission; empty = initial letter
+  reviews: [
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""},
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""},
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""}
+  ],
+  defaultPlan: 1,
+  timerSeconds: 600
+};
+
+/* =====================================================================
+   ARCHETYPES — 4 per gender, same scoring as the original funnel
+   ===================================================================== */
+const ARCH = {
+  female:{ A:"mary", B:"deborah", C:"ruth", D:"esther" },
+  male:  { A:"moses", B:"david", C:"abraham", D:"paul" }
+};
+const ARCH_INFO = {
+  mary:   {emoji:"🕊️", role:"The Faithful Heart", desc:"You meet life with quiet trust. People feel safe around you, and your calm is a gift that points others back to God.", traits:["Peaceful","Trusting","Nurturing"]},
+  deborah:{emoji:"🔥", role:"The Bold Leader", desc:"You act fast, think in ideas and inspire people to move. God uses your energy to lead with courage and clarity.", traits:["Courageous","Decisive","Visionary"]},
+  ruth:   {emoji:"🌾", role:"The Loyal Companion", desc:"Your kindness runs deep and steady. You stay when others leave, and your faithfulness opens doors for blessing.", traits:["Loyal","Compassionate","Devoted"]},
+  esther: {emoji:"👑", role:"The Purpose Seeker", desc:"You sense you were made for something bigger. You grow strongest when you step out in faith at the right moment.", traits:["Brave","Purposeful","Wise"]},
+  moses:  {emoji:"🪨", role:"The Steady Shepherd", desc:"You lead by staying calm under pressure. Your patience and care help others find their way through hard seasons.", traits:["Patient","Humble","Steadfast"]},
+  david:  {emoji:"⚔️", role:"The Passionate Warrior", desc:"You run toward challenges with heart and creativity. Your passion is a powerful tool when it is anchored in God.", traits:["Passionate","Creative","Fearless"]},
+  abraham:{emoji:"⭐", role:"The Trusting Pioneer", desc:"You think deeply and care for people. You are willing to follow God into the unknown, one faithful step at a time.", traits:["Faithful","Thoughtful","Generous"]},
+  paul:   {emoji:"📜", role:"The Devoted Messenger", desc:"Once you are convinced of something, you give it everything. Your conviction can turn your story into hope for others.", traits:["Driven","Convicted","Resilient"]}
+};
+const PLAN_INSIDE = [
+  ["Your archetype profile","Strengths, blind spots and how you connect with God"],
+  ["Daily 10-minute Bible plan","Readings matched to your archetype and goals"],
+  ["Guided prayers & reflections","Short audio and written prompts for real life"],
+  ["Progress tracking","Build a consistent habit and see your growth"]
+];
+// Scoring rule extracted from the original mapping (feelDuring + doFirst + peopleSay)
+const A_LIST = "Calm_Trytostaycalm_P Calm_Lookathowothersfeel_P Calm_Trytounderstandwhy_P Sensitive_Stopandthink_P Sensitive_Trytostaycalm_P Sensitive_Lookathowothersfeel_P Sensitive_Trytounderstandwhy_P Hopeful_Stopandthink_P Hopeful_Trytostaycalm_P Hopeful_Lookathowothersfeel_P Hopeful_Trytounderstandwhy_P Focused_Trytostaycalm_P Focused_Lookathowothersfeel_P Overwhelmed_Trytostaycalm_P Overwhelmed_Lookathowothersfeel_P Energetic_Trytostaycalm_P Energetic_Lookathowothersfeel_P Calm_Trytostaycalm_K Calm_Lookathowothersfeel_K Sensitive_Trytostaycalm_K Sensitive_Lookathowothersfeel_K Hopeful_Trytostaycalm_K Hopeful_Lookathowothersfeel_K";
+const B_LIST = "Energetic_Reactquickly_I Energetic_Stopandthink_I Energetic_Trytostaycalm_I Energetic_Trytounderstandwhy_I Energetic_Lookathowothersfeel_I Focused_Reactquickly_I Hopeful_Reactquickly_I Calm_Reactquickly_I Sensitive_Reactquickly_I Overwhelmed_Reactquickly_I Energetic_Reactquickly_W Energetic_Trytostaycalm_W Energetic_Lookathowothersfeel_W Focused_Reactquickly_W Calm_Reactquickly_W Hopeful_Reactquickly_W Sensitive_Reactquickly_W Overwhelmed_Reactquickly_W Energetic_Reactquickly_P Energetic_Stopandthink_P Energetic_Trytounderstandwhy_P Focused_Reactquickly_P Energetic_Reactquickly_K Energetic_Stopandthink_K Energetic_Trytounderstandwhy_K Focused_Reactquickly_K";
+const C_LIST = "Calm_Trytounderstandwhy_K Focused_Trytostaycalm_K Focused_Lookathowothersfeel_K Focused_Trytounderstandwhy_K Sensitive_Stopandthink_K Sensitive_Trytounderstandwhy_K Hopeful_Stopandthink_K Hopeful_Trytounderstandwhy_K Overwhelmed_Stopandthink_K Overwhelmed_Trytostaycalm_K Overwhelmed_Lookathowothersfeel_K Overwhelmed_Trytounderstandwhy_K Calm_Reactquickly_P Sensitive_Reactquickly_P Hopeful_Reactquickly_P Overwhelmed_Stopandthink_P Overwhelmed_Trytounderstandwhy_P Overwhelmed_Reactquickly_P Hopeful_Lookathowothersfeel_W Sensitive_Lookathowothersfeel_W Overwhelmed_Lookathowothersfeel_W Hopeful_Stopandthink_I Hopeful_Trytostaycalm_I Hopeful_Lookathowothersfeel_I Hopeful_Trytounderstandwhy_I Sensitive_Stopandthink_I Sensitive_Trytostaycalm_I Sensitive_Lookathowothersfeel_I Sensitive_Trytounderstandwhy_I Calm_Trytostaycalm_I Calm_Lookathowothersfeel_I Focused_Trytostaycalm_I Focused_Lookathowothersfeel_I Overwhelmed_Stopandthink_I Overwhelmed_Trytostaycalm_I Overwhelmed_Lookathowothersfeel_I Overwhelmed_Trytounderstandwhy_I Calm_Reactquickly_K Sensitive_Reactquickly_K Hopeful_Reactquickly_K Overwhelmed_Reactquickly_K Focused_Trytounderstandwhy_P Energetic_Trytostaycalm_K Energetic_Lookathowothersfeel_K";
+const STRONG = {"A peaceful spirit":"P","Wise and practical thinking":"W","A gentle, kind heart":"K","A gift for ideas":"I"};
+function computeArchetype(){
+  const g = state.gender==="male"?"male":"female";
+  const s = STRONG[state.answers.peopleSay];
+  if(!s) return ARCH[g].D;
+  const key = state.answers.feelDuring+"_"+(state.answers.doFirst||"").replace(/\s/g,"")+"_"+s;
+  if(A_LIST.split(" ").includes(key)) return ARCH[g].A;
+  if(B_LIST.split(" ").includes(key)) return ARCH[g].B;
+  if(C_LIST.split(" ").includes(key)) return ARCH[g].C;
+  return ARCH[g].D;
+}
+
+/* =====================================================================
+   FUNNEL — 31 screens, same order as the original
+   ===================================================================== */
+const STEPS = [
+  {type:"gender"},
+  {type:"age", key:"age", title:"Please choose your age group", sub:"Your answers will help us create your profile summary and personalized subscription plan", options:["18-34","35-44","45-54","55+"]},
+  {type:"info", img:"break1", title:"We\u2019re glad you\u2019re here", text:"This journey is yours \u2014 and we\u2019ll walk it with you. No matter where you are in your faith, you\u2019re in the right place."},
+  {type:"q", key:"ChristianTime", title:"How long have you been a Christian?", options:["Under 5 years","5\u201315 years","15+ years","All my life"]},
+  {type:"q", key:"GoChurch", title:"Do you go to church?", options:["Every week","Sometimes","Rarely","No"]},
+  {type:"q", key:"ReadOrListen", title:"How often do you read or listen to the Bible?", options:["Every day","A few times a week","Rarely","Almost never"], score:[3,2,1,0]},
+  {type:"q", key:"ScriptureUnders", title:"Do you feel like you understand what you read in Scripture?", options:["Yes, most of it","Some parts","Not really","I struggle with it"], score:[6,4,2,0]},
+  {type:"q", key:"QuestAboutBible", title:"When you have a question about the Bible \u2014 what do you do?", options:["Ask my pastor","Search in the Bible myself","Google it","I usually just skip it"], score:[3,2,1,0]},
+  {type:"q", key:"ExplainBible", title:"Could you explain the Gospel to someone right now?", options:["Yes, easily","I\u2019d try","Not really","No"], score:[6,4,2,0]},
+  {type:"q", key:"HardQuestion", title:"Have you ever been asked a hard question about your faith and didn\u2019t have an answer?", options:["Yes, it was uncomfortable","Once or twice","Not yet, but I\u2019d worry about it","No"]},
+  {type:"q", key:"OthersTalk", title:"When others talk about the Bible deeply \u2014 what do you do?", options:["I join in","I listen quietly","I feel like I should know more"], score:[3,1,0]},
+  {type:"q", key:"BibleDeep", title:"How deeply would you like to know the Bible?", options:["The basics \u2014 enough to feel grounded","Confident enough to share with others","Well enough to lead or teach","Like a pastor","Like a theologian"]},
+  {type:"q", key:"ExampleFor", title:"Is there someone in your life you want to be a stronger example of faith for?", options:["Yes, my kids","Yes, my family","Yes, my friends or community","Not really"]},
+  {type:"q", key:"StopStudyBible", title:"What stops you from studying the Bible more?", options:["No time","Don\u2019t know where to start","It feels overwhelming","Hard to stay consistent","I don\u2019t enjoy reading","I lose interest"]},
+  {type:"q", key:"DistanceToGod", title:"Have you noticed anything that creates distance between you and God?", options:["Distraction and busyness","Feeling unworthy","Emotional exhaustion","Not hearing from Him","I\u2019m not sure"]},
+  {type:"multi", key:"Struggle", title:"Which struggles feel most present in your life right now?", options:["Stress","Overthinking and guilt","Feeling alone","Screen and time-wasting habits","Spiritual burnout","Lack of purpose","Other"]},
+  {type:"q", key:"Salvation", title:"When it comes to your salvation \u2014 do you know or do you hope?", options:["I know for sure","I believe so, but I haven\u2019t really studied it","I hope so","I try not to think about it"]},
+  {type:"multi", key:"NeedsNow", title:"What matters most to you right now?", options:["Growing closer to God","Finding a clearer purpose","Strengthening my faith","Nurturing inner peace","Building healthier habits","Other"]},
+  {type:"multi", key:"connectionToGod", title:"What would help you feel more connected to God?", options:["Quiet time","Bible study","Evening reflection","Prayer","Journaling","Worship","Family devotionals","Couple devotionals","Community / Small group","Other"]},
+  {type:"multi", key:"AreaOfLife", title:"What area of life do you most want God to transform?", options:["Thoughts","Emotions","Habits","Relationships","Self-worth","Other"]},
+  {type:"multi", key:"SpendTime", title:"How do you like to spend time in God\u2019s Word?", options:["Reading quietly","Listening to audio","Watching videos or teachings","A mix of all","Not sure"]},
+  {type:"q", key:"WhenTime", title:"When are you most free?", options:["Morning","Afternoon","Evening","During commute","Not sure"]},
+  {type:"q", key:"howMuchTime", title:"How much time can you dedicate to Bible study daily?", options:["5 minutes","10 minutes","10-20 minutes","30+ minutes"]},
+  {type:"profile"},
+  {type:"yn", key:"spiritualReadiness", title:"Are you ready to take a step toward spiritual renewal?"},
+  {type:"crafting"},
+  {type:"email"},
+  {type:"newsletter"},
+  {type:"name"},
+  {type:"graph"},
+  {type:"offer"}
+];
+const BARRIER={"Stress":"Stress","Overthinking and guilt":"Overthinking","Feeling alone":"Loneliness","Screen and time-wasting habits":"Distraction","Spiritual burnout":"Burnout","Lack of purpose":"Lack of purpose"};
+const GOALS={"Growing closer to God":"Closer to God","Finding a clearer purpose":"Clearer purpose","Strengthening my faith":"Stronger faith","Nurturing inner peace":"Inner peace","Building healthier habits":"Healthier habits"};
+function quizScore(){let t=0;STEPS.forEach(s=>{if(s.score){const i=s.options.indexOf(state.answers[s.key]);if(i>=0)t+=s.score[i];}});return t;}
+function level(){const sc=quizScore();return sc<=7?{i:0,pct:22,name:"Foundations",text:"You\u2019re laying a real foundation. There\u2019s a genuine hunger to understand Scripture, and that\u2019s where strong faith begins."}:sc<=15?{i:1,pct:55,name:"Growing",text:"You\u2019re in a growing season. You understand more than you used to, and you\u2019re ready to go deeper into Scripture."}:{i:2,pct:85,name:"Rooted",text:"You\u2019re well rooted in Scripture. You understand it deeply, and you\u2019re ready to go further and share what you know."};}
+function barrier(){const v=(state.answers.Struggle||[])[0];return BARRIER[v]||"Inconsistency";}
+function goalTxt(){const v=(state.answers.NeedsNow||[])[0];return GOALS[v]||"Growing confidence";}
+function motivation(){return ["10-20 minutes","30+ minutes"].includes(state.answers.howMuchTime)?"Strong":"Growing";}
+const QUESTION_STEPS = STEPS.filter(s=>["age","q","multi","yn"].includes(s.type)).length;
+
+const PAYLOGOS=[
+ '<svg viewBox="0 0 48 30"><text x="24" y="19.5" text-anchor="middle" font-family="Verdana,Arial,sans-serif" font-size="10" font-weight="700" font-style="italic"><tspan fill="#253B80">Pay</tspan><tspan fill="#179BD7">Pal</tspan></text></svg>',
+ '<svg viewBox="0 0 48 30"><path fill="#000" d="M15.6 10.9c-.5.6-1.2 1-1.9 1-.1-.8.3-1.6.7-2.1.5-.6 1.3-1 1.9-1 .1.8-.2 1.6-.7 2.1zm.7 1.1c-1 0-1.9.6-2.4.6s-1.3-.6-2.1-.5c-1.1 0-2.1.6-2.6 1.6-1.1 1.9-.3 4.8.8 6.4.5.8 1.2 1.6 2 1.6.8 0 1.1-.5 2.1-.5s1.2.5 2.1.5c.9 0 1.4-.8 2-1.6.6-.9.9-1.8.9-1.8s-1.7-.7-1.7-2.7c0-1.7 1.4-2.5 1.4-2.5-.8-1.2-2-1.3-2.5-1.1z"/><text x="20.5" y="20" font-family="Arial,sans-serif" font-size="10" font-weight="600" fill="#000">Pay</text></svg>',
+ '<svg viewBox="0 0 48 30"><text x="9" y="19.5" font-family="Arial,sans-serif" font-size="11" font-weight="700"><tspan fill="#4285F4">G</tspan></text><text x="18" y="19.5" font-family="Arial,sans-serif" font-size="10" font-weight="600" fill="#5F6368">Pay</text></svg>',
+ '<svg viewBox="0 0 48 30"><text x="24" y="19.5" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="11" font-weight="900" font-style="italic" fill="#1A1F71">VISA</text></svg>',
+ '<svg viewBox="0 0 48 30"><circle cx="20" cy="15" r="7" fill="#EB001B"/><circle cx="28" cy="15" r="7" fill="#F79E1B"/><path d="M24 9.3a7 7 0 0 1 0 11.4 7 7 0 0 1 0-11.4z" fill="#FF5F00"/></svg>',
+ '<svg viewBox="0 0 48 30"><circle cx="20" cy="15" r="7" fill="#EB001B"/><circle cx="28" cy="15" r="7" fill="#00A2E5"/><path d="M24 9.3a7 7 0 0 1 0 11.4 7 7 0 0 1 0-11.4z" fill="#7375CF"/></svg>',
+ '<svg viewBox="0 0 48 30"><rect width="48" height="30" rx="3" fill="#2E77BC"/><text x="24" y="14" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="8" font-weight="900" fill="#fff">AM</text><text x="24" y="23" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="8" font-weight="900" fill="#fff">EX</text></svg>'
+].map(x=>`<span>${x}</span>`).join('');
+const ICON={
+ book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v16H5.5A2.5 2.5 0 0 0 3 21.5z"/><path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H13v16h5.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg>',
+ chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 16v-3M12 16V9M16 16v-5"/></svg>',
+ heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+ spark:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>',
+ home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10l8-6 8 6v10H4z"/><path d="M10 20v-6h4v6"/></svg>',
+ alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v5M12 16.5v.5"/></svg>',
+ bulb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
+ shield:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+ smile:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4 4 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg>',
+ note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+ apple:'<svg viewBox="0 0 24 24" fill="#000"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9s-2-.9-3.3-.9C6.1 6.9 4.5 7.9 3.6 9.4c-1.8 3.1-.5 7.7 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1.1-2.8-4.3zM14 5.1c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4z"/></svg>',
+ play:'<svg viewBox="0 0 24 24"><path d="M4 2.8 13.4 12 4 21.2c-.3-.2-.5-.6-.5-1V3.8c0-.4.2-.8.5-1z" fill="#00C3FF"/><path d="M16.6 8.8 13.4 12 4 2.8c.3-.2.8-.2 1.2 0z" fill="#00E676"/><path d="M16.6 15.2 5.2 21.1c-.4.2-.9.2-1.2 0l9.4-9.2z" fill="#FF3A44"/><path d="m20.3 10.8-3.7-2-3.2 3.2 3.2 3.2 3.7-2c.9-.5.9-1.9 0-2.4z" fill="#FFD400"/></svg>',
+ tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+ bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>'
+};
+/* ===================================================================== */
+const $ = id=>document.getElementById(id);
+const view = $('view');
+const state = {i:0, gender:null, answers:{}, email:"", name:"", archetype:null, plan:CONFIG.defaultPlan, history:[]};
+$('logo').innerHTML = `<img src="${CONFIG.img}logo.svg" alt="${CONFIG.brand}" style="height:18px;display:block;margin:0 auto">`;
+$('menuBtn').onclick=()=>$('menu').classList.add('open');
+$('menu').onclick=e=>{if(e.target.id==='menu')$('menu').classList.remove('open');};
+$('backBtn').onclick=()=>{ if(state.history.length){ state.i=state.history.pop(); render(); } };
+
+function go(next){ state.history.push(state.i); state.i = next ?? state.i+1; render(); }
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function setCTA(label, onClick, disabled=false){
+  if(!label){ $('cta').style.display='none'; return; }
+  $('cta').style.display=''; const b=$('ctaBtn'); b.textContent=label; b.disabled=disabled; b.onclick=onClick;
+}
+// image with automatic placeholder when the file doesn't exist
+function img(file, cls, label, ratio){
+  const r = ratio||"342/220";
+  return `<img class="${cls}" src="${CONFIG.img}${file}" alt="" style="aspect-ratio:${r}" data-ph="${esc(label||"")}" data-r="${r}" onerror="imgFallback(this)">`;
+}
+function imgFallback(el){ el.onerror=null; el.src=placeholder(el.dataset.ph, el.dataset.r); }
+function placeholder(label, ratio){
+  const [w,h]=ratio.split("/").map(Number);
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#f4ecdf'/><stop offset='1' stop-color='#d9d4f5'/></linearGradient></defs><rect width='${w}' height='${h}' fill='url(#g)'/><circle cx='${w/2}' cy='${h*0.42}' r='${Math.min(w,h)*0.16}' fill='#fff' opacity='.7'/><text x='50%' y='${h*0.78}' font-family='sans-serif' font-size='${Math.round(Math.min(w,h)*0.07)}' fill='#7a7480' text-anchor='middle'>${label}</text></svg>`;
+  return "data:image/svg+xml;utf8,"+encodeURIComponent(svg);
+}
+function progress(){
+  const qIndex = STEPS.slice(0,state.i+1).filter(s=>["age","q","multi","yn"].includes(s.type)).length;
+  $('progress').firstElementChild.style.width = Math.min(100,qIndex/QUESTION_STEPS*100)+'%';
+}
+
+function render(){
+  const s = STEPS[state.i];
+  window.scrollTo(0,0);
+  $('hdrWrap').style.display = s.type==="offer" ? "none" : "";
+  $('hdr').classList.toggle('transparent', s.type==="cards");
+  $('backBtn').classList.toggle('hidden', state.i===0 || ["crafting","offer"].includes(s.type));
+  const showProg = !["gender","profile","crafting","email","newsletter","name","graph","offer"].includes(s.type);
+  $('progress').style.display = showProg?'':'none'; if(showProg) progress();
+  setCTA(null);
+  (R[s.type])(s);
+}
+
+const R = {
+  gender(){
+    const so = CONFIG.social.rating ? `<div class="social"><div class="rate">${esc(CONFIG.social.rating)}<small>★★★★★</small></div><p>${esc(CONFIG.social.count)} believers already grow with the ${esc(CONFIG.brandName)} app</p></div>` : "";
+    view.innerHTML = `<section class="screen">${so}
+      <h1 class="big-title st-title">Grow closer to God<br>by discovering<br>Biblical wisdom</h1>
+      <p class="big-sub st-sub">Pass this quiz to get the right subscription plan for you</p>
+      <div class="tiles">
+        <button class="tile" data-g="male">${img(CONFIG.images.gender_male,"img","","168/240")}<span class="lbl">Male <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
+        <button class="tile" data-g="female">${img(CONFIG.images.gender_female,"img","","168/240")}<span class="lbl">Female <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
+      </div>
+      <div class="legal">By continuing you agree to our<br><a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a> | <a href="#">Subscription Policy</a><br><a href="#">Cookie Policy</a><p style="margin-top:12px">Please review before continuing</p></div>
+    </section>`;
+    view.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{t.classList.add('sel');state.gender=t.dataset.g;state.answers.gender=t.dataset.g;setTimeout(()=>go(),250);});
+  },
+  age(s){
+    const files = CONFIG.images.age[state.gender==="male"?"male":"female"];
+    view.innerHTML = `<section class="screen"><h1 class="t">${s.title}</h1><p class="s">${s.sub}</p>
+      <div class="tiles">${s.options.map((o,i)=>`<button class="tile wide ${state.answers.age===o?'sel':''}" data-v="${o}">${img(files[i],"img","","345/311")}<span class="lbl">${o}<span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>`).join("")}</div></section>`;
+    view.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{view.querySelectorAll('.tile').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');state.answers.age=t.dataset.v;setTimeout(()=>go(),250);});
+  },
+  info(s){
+    view.innerHTML = `<section class="screen">${img((v=>typeof v==="object"?v[state.gender==="male"?"male":"female"]:v)(CONFIG.images[s.img]),"hero-img","")}
+      <h2 class="info-title">${s.title}</h2><p class="info-text">${s.text}</p>
+      ${s.banner?`<div class="banner"><span class="pi">🙏</span><span>${s.banner}</span></div>`:""}</section>`;
+    setCTA("Continue",()=>go());
+  },
+  q(s){
+    view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><div class="opts">${
+      s.options.map(o=>`<button class="opt"><span>${esc(o)}</span><span class="c"></span></button>`).join("")}</div></section>`;
+    view.querySelectorAll('.opt').forEach((b,i)=>{
+      const v=s.options[i], stored=s.save?s.save(v):v;
+      if(state.answers[s.key]===stored) b.classList.add('sel');
+      b.onclick=()=>{view.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');state.answers[s.key]=stored;setTimeout(()=>go(),300);};
+    });
+  },
+  multi(s){
+    const cur = new Set(state.answers[s.key]||[]);
+    view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><p class="q-hint">Select all that apply</p><div class="opts">${
+      s.options.map(o=>`<button class="opt multi ${cur.has(o)?'sel':''}"><span>${esc(o)}</span><span class="c"></span></button>`).join("")}</div></section>`;
+    const upd=()=>setCTA("Continue",()=>{state.answers[s.key]=[...cur];go();},cur.size===0);
+    view.querySelectorAll('.opt').forEach((b,i)=>b.onclick=()=>{const v=s.options[i];cur.has(v)?cur.delete(v):cur.add(v);b.classList.toggle('sel');upd();});
+    upd();
+  },
+  yn(s){
+    view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><div class="opts">
+      <button class="opt" data-v="No"><span style="display:flex;align-items:center;gap:12px"><span class="ico">❌</span>No</span><span class="c"></span></button>
+      <button class="opt" data-v="Yes"><span style="display:flex;align-items:center;gap:12px"><span class="ico">✅</span>Yes</span><span class="c"></span></button></div></section>`;
+    view.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{b.classList.add('sel');state.answers[s.key]=b.dataset.v;setTimeout(()=>go(),300);});
+  },
+  reveal(){
+    view.innerHTML = `<section class="screen reveal"><h2 class="info-title">Your answers have been analyzed</h2><p class="info-text">Your spiritual archetype is ready</p><div class="glow"></div></section>`;
+    setCTA("Reveal My Archetype",()=>go());
+  },
+  loader(){
+    state.archetype = computeArchetype();
+    const steps=["Analyzing your spiritual patterns","Identifying your core strengths","Matching your unique archetype","Preparing your personal plan"];
+    const pops=[[25,"Do you believe God created you with a unique purpose?"],[50,"Are you ready to see how your faith shapes who you are?"],[75,"Your archetype is almost ready. Want to reveal it?"]];
+    const C=2*Math.PI*74;
+    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:10px">Revealing your spiritual archetype</h2>
+      <div class="ring"><svg width="170" height="170"><circle cx="85" cy="85" r="74" stroke="#edeef0" stroke-width="12" fill="none"/><circle id="arc" cx="85" cy="85" r="74" stroke="#2E5E4E" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="pct" id="pct">0%</div></div>
+      <ul class="steps">${steps.map(t=>`<li><span class="d"></span>${t}</li>`).join("")}</ul></section>`;
+    let p=0, paused=false; const li=view.querySelectorAll('.steps li');
+    const tick=()=>{
+      if(paused) return;
+      const pop=pops.find(x=>x[0]===p);
+      if(pop && !pop.done){ pop.done=true; paused=true; return ask(pop[1],()=>{paused=false;t=setTimeout(tick,60);}); }
+      $('pct').textContent=p+'%'; $('arc').style.strokeDashoffset=C*(1-p/100);
+      li.forEach((l,i)=>{l.classList.toggle('on',p>=i*25);l.classList.toggle('done',p>=(i+1)*25);});
+      if(p>=100) return setTimeout(()=>go(),600);
+      p++; t=setTimeout(tick,60);
+    };
+    let t=setTimeout(tick,300);
+  },
+  summary(){
+    const a=ARCH_INFO[state.archetype], nm=state.archetype[0].toUpperCase()+state.archetype.slice(1);
+    view.innerHTML = `<section class="screen"><h2 class="info-title">Your archetype has been identified</h2><p class="info-text">We've built a complete profile and personal plan around it</p>
+      <div class="arch-card"><div style="font-size:44px">${a.emoji}</div><div class="kicker">Your spiritual archetype</div><div class="name">${nm}</div><div class="role">${a.role}</div><p>${a.desc}</p><div class="chips">${a.traits.map(x=>`<span>${x}</span>`).join("")}</div></div>
+      <div class="divider"></div>
+      <div class="inside"><h4>What's inside your Archetype Plan:</h4><ul>${PLAN_INSIDE.map(([b,s])=>`<li><span>✅</span><div><b>${b}</b><span>${s}</span></div></li>`).join("")}</ul></div></section>`;
+    setCTA("Continue",()=>go());
+  },
+  email(){
+    const DOMAINS=["gmail.com","icloud.com","yahoo.com","hotmail.com","outlook.com","aol.com","live.com","msn.com","me.com","protonmail.com"];
+    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:12px">Enter your email to get your <span class="hl">Personalized Bible Study Plan</span></h2>
+      <div class="em-wrap"><div class="em-field"><input id="em" type="email" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Enter your email" value="${esc(state.email)}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg></div>
+        <ul class="em-sug" id="sug" hidden></ul></div>
+      <div class="err" id="er"></div>
+      <div class="privacy"><span>🔒</span><span>We respect your privacy and are committed to protecting your personal data. Your data will be processed according to our <a href="${CONFIG.links.privacy}">Privacy policy</a>.</span></div></section>`;
+    const inp=$('em'), sug=$('sug');
+    const ok=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    const showSug=()=>{
+      const v=inp.value.trim(); if(!v){sug.hidden=true;return;}
+      const [user,dom='']=v.split('@'); if(!user){sug.hidden=true;return;}
+      const list=v.includes('@')?DOMAINS.filter(d=>d.startsWith(dom)&&d!==dom):DOMAINS;
+      if(!list.length){sug.hidden=true;return;}
+      sug.innerHTML=list.map(d=>`<li data-v="${esc(user)}@${d}">${esc(user)}@${d}</li>`).join('');
+      sug.hidden=false;
+      sug.querySelectorAll('li').forEach(li=>li.onmousedown=e=>{e.preventDefault();inp.value=li.dataset.v;sug.hidden=true;$('er').textContent='';upd();});
+    };
+    const upd=()=>setCTA("Continue",()=>{const v=inp.value.trim();if(!ok(v)){$('er').textContent="Please enter a valid email";return;}state.email=v;go();},!inp.value.trim());
+    inp.oninput=()=>{$('er').textContent="";showSug();upd();};
+    inp.onfocus=showSug; inp.onblur=()=>setTimeout(()=>sug.hidden=true,150);
+    upd();
+  },
+  name(){
+    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:12px">What's your first name?</h2>
+      <input class="field" id="nm" type="text" placeholder="First name" autocomplete="given-name" value="${esc(state.name)}"></section>`;
+    const upd=()=>setCTA("Continue",()=>{state.name=$('nm').value.trim();sendLead();go();},!$('nm').value.trim());
+    $('nm').oninput=upd; upd();
+  },
+  cards(){
+    const texts=["Most people learn their archetype and forget it the next day","But when you live it daily — your faith, decisions and confidence grow","We've created a simple plan to help you do exactly that"];
+    const bgs=["#FFFFFF","#F6FBFE","#E4F1FD"];
+    view.innerHTML = `<div class="cards-screen"><div class="stack">${texts.map((t,i)=>`<div class="card" style="background:${bgs[i]}">${t}</div>`).join("")}</div></div>`;
+    const cs=view.querySelectorAll('.card'); let i=0;
+    const step=()=>{ cs.forEach((c,j)=>{c.classList.toggle('show',j===i);c.classList.toggle('back',j<i);}); i++; if(i<cs.length) setTimeout(step,2900); };
+    step(); setTimeout(()=>go(),2900*cs.length+300);
+  },
+  profile(){
+    const L=level(), photo=state.gender==="male"?CONFIG.images.coach:CONFIG.images.gender_female;
+    view.innerHTML=`<section class="screen"><h2 class="info-title" style="margin-top:6px">Here’s your<br><span class="hl">Bible Growth profile</span></h2>
+      <div class="pf"><b class="pf-h">Scripture Confidence</b>
+        <div class="pf-bar"><i style="left:${L.pct}%"></i></div>
+        <div class="pf-lv">${["Foundations","Growing","Rooted"].map((n,i)=>`<span class="${i===L.i?'on':''}">${n}</span>`).join('')}</div>
+        <div class="pf-st">${ICON.book}<p><b>Spiritual status</b>${L.text}</p></div>
+        <div class="pf-low"><div class="pf-rows">
+          <div>${ICON.spark}<p><small>Motivation</small><b>${motivation()}</b></p></div>
+          <div>${ICON.heart}<p><small>Main Barrier</small><b>${barrier()}</b></p></div>
+          <div>${ICON.bulb}<p><small>Growth Goal</small><b>${goalTxt()}</b></p></div>
+        </div><img src="${CONFIG.img}${photo}" alt="" onerror="this.style.display='none'"></div>
+      </div></section>`;
+    setCTA("Continue",()=>go());
+  },
+  crafting(){
+    const items=[["Aligning with your goals","Goals","Are you ready to study the Bible daily?"],["Identifying growth areas","Growth areas","Are you willing to stay consistent this time?"],["Picking Bible verses for you","Content","Are you committed to growing in your faith?"]];
+    const revs=CONFIG.reviews;
+    view.innerHTML=`<section class="screen"><h2 class="info-title" style="margin-top:6px">We are crafting your<br><span class="hl">Personalized Bible Study Plan</span></h2>
+      <div class="cr">${items.map((it,i)=>`<div class="cr-i"><div class="cr-t"><span class="cr-l">${it[0]}</span><span class="cr-p" id="cp${i}">0%</span></div><div class="cr-b"><i id="cb${i}"></i></div></div>`).join('')}</div>
+      <div class="cr-rev" id="crev"></div></section>`;
+    const showRev=i=>{const r=revs[i%Math.max(1,revs.length)];if(!r){$('crev').innerHTML='';return;}$('crev').innerHTML=`<div class="o-card o-rev" style="margin-top:22px"><div class="stars">${'<i>★</i>'.repeat(r.stars||5)}</div><b>${esc(r.title)}</b><p>${esc(r.text)}</p><div class="who"><span>${esc(r.name)}</span>${r.photo?`<img src="${CONFIG.img}${esc(r.photo)}" alt="">`:`<em>${esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em>`}</div></div>`;};
+    let k=0;
+    const run=()=>{
+      if(k>=items.length) return setTimeout(()=>go(),500);
+      showRev(k); let p=0; const asked={};
+      const tick=()=>{
+        if(p===60 && !asked[k]){asked[k]=1;return ask(items[k][2],()=>setTimeout(tick,40));}
+        $('cp'+k).textContent=p+'%'; $('cb'+k).style.width=p+'%';
+        if(p>=100){$('cp'+k).textContent='100%';k++;return setTimeout(run,300);}
+        p++; setTimeout(tick,35);
+      }; tick();
+    }; setTimeout(run,300);
+  },
+  newsletter(){
+    view.innerHTML=`<section class="screen center" style="justify-content:flex-start"><h2 class="info-title" style="margin-top:40px">Do you want to receive emails with <span class="hl">Bible study tips</span> and our <span class="hl">spiritual growth updates</span>?</h2>
+      <div class="nl"><button class="btn" id="nlY">YES, I’M IN!</button><button class="nl-n" id="nlN">I DON’T WANT TO RECEIVE TIPS OR UPDATES</button></div></section>`;
+    $('nlY').onclick=()=>{state.answers.newsletter=true;go();}; $('nlN').onclick=()=>{state.answers.newsletter=false;go();};
+  },
+  graph(){
+    const d=new Date(Date.now()+28*864e5).toLocaleDateString("en",{month:"long",day:"numeric"});
+    view.innerHTML=`<section class="screen"><div class="gr-b">Ready to get your plan?</div>
+      <h2 class="info-title" style="margin-top:14px">See your spiritual life<br>transform by <span class="hl">${d}</span></h2>
+      <div class="gr"><svg viewBox="0 0 320 200" class="gr-s"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E5E4E" stop-opacity=".28"/><stop offset="1" stop-color="#2E5E4E" stop-opacity="0"/></linearGradient></defs>
+        <g stroke="#ECEEF1">${[40,80,120,160].map(y=>`<line x1="10" x2="310" y1="${y}" y2="${y}"/>`).join('')}</g>
+        <path class="gr-a" d="M20 165 C 90 160, 150 135, 200 100 S 280 40, 300 32 L300 180 L20 180Z" fill="url(#ga)"/>
+        <path class="gr-l" d="M20 165 C 90 160, 150 135, 200 100 S 280 40, 300 32" fill="none" stroke="#2E5E4E" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="20" cy="165" r="7" fill="#fff" stroke="#E08A68" stroke-width="4"/><circle class="gr-d" cx="300" cy="32" r="8" fill="#2E5E4E" stroke="#fff" stroke-width="3"/>
+        <g class="gr-tag"><rect x="210" y="2" width="96" height="22" rx="11" fill="#2E5E4E"/><text x="258" y="17" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Closer to God</text></g>
+        <g><rect x="4" y="128" width="40" height="20" rx="10" fill="#fdebe3"/><text x="24" y="142" text-anchor="middle" font-size="11" font-weight="700" fill="#B05A3A">Now</text></g></svg>
+        <div class="gr-x">${["Week 1","Week 2","Week 3","Week 4"].map(w=>`<span>${w}</span>`).join('')}</div></div></section>`;
+    setCTA("Continue",()=>go());
+  },
+  offer(){
+    const C=CONFIG, P=C.plans;
+    const challenge=barrier(), goal=goalTxt();
+    const price=v=>{const [i,c]=String(v).replace('$','').split('.');return `<span class="pd"><span class="cur">$</span><span class="int">${i}</span><span class="dec"><b>${c||'00'}</b><small>per day</small></span></span>`;};
+    const isC=C.offerVariant==="coupon";
+    const code=((state.name||"FRIEND").replace(/[^A-Za-z]/g,"")||"FRIEND").toUpperCase()+"_"+new Date().toLocaleString("en",{month:"short"}).toUpperCase()+(C.coupon.suffix||"");
+    const couponBox=()=>isC?`<div class="cp"><div class="cp-h">${ICON.tag}<div><b>Your promo code applied!</b><small>${C.coupon.percent}% off your first purchase. Standard pricing applies on renewal</small></div></div><div class="cp-row"><span class="cp-code">${ICON.check}${esc(code)}</span><span class="cp-t"><b class="tm">0${C.coupon.minutes}:00</b><small><i>minutes</i><i>seconds</i></small></span></div></div>`:'';
+    const right=p=>isC?`<div class="o-tp">${p.off?`<em>${p.off}</em>`:''}<b>${p.now}</b>${p.off?`<s>${p.then}</s>`:''}</div>`:`<div class="o-pp">${price(p.perDay)}</div>`;
+    const sub=p=>isC?`<small class="o-ps">${p.now} now, then ${p.then} every ${p.every}</small>`:`<s>${p.full}</s>`;
+    const plansBlock=()=>`<h3 class="o-h2">Your <span class="hl">Personalized Bible Study Plan</span> is ready!</h3>${couponBox()}
+      <div class="o-plans">${P.map((p,i)=>`<div class="o-plan ${p.popular?'pop':''}" data-i="${i}">${p.popular?`<div class="rib">${ICON.spark} MOST POPULAR</div>`:''}
+        <div class="o-pb"><span class="radio"></span><div class="o-pn"><b>${p.name}</b>${sub(p)}</div>${right(p)}</div></div>`).join('')}</div>
+      <div class="o-note">${C.planNote}</div>
+      <button class="btn sub">Get my plan</button>
+      <p class="o-terms">By clicking \u201cGet my plan\u201d, you agree to automatic subscription renewal. <span class="tdyn"></span> Cancel via the app or email: <a href="mailto:${C.supportEmail}">${C.supportEmail}</a>. See <a href="${C.links.subscription}">Subscription Terms</a> for details.</p>
+      <div class="safe">${ICON.shield}Pay safe and secure</div>
+      <div class="pay">${PAYLOGOS}</div>`;
+    const social = C.social.count ? `<div class="o-card o-social"><h3><span class="hl">${esc(C.social.count)} believers</span> already <span class="hl">grow</span><br>with the ${esc(C.brandName)} app</h3>${C.social.rating?`<div class="o-rate"><div class="stores">${ICON.apple}<i></i>${ICON.play}</div><div class="rt"><span><b>${esc(C.social.rating)}</b> out of 5</span><strong>${esc(C.social.ratingSource)}</strong></div></div>`:''}</div>` : '';
+    const stats = C.stats.length ? `<h3 class="o-h2">People just like you achieved great results with ${esc(C.brandName)}!</h3><div class="o-stats">${C.stats.map((x,i)=>`${i?'<div class="sdiv"><i></i><span>✦</span><i></i></div>':''}<div class="srow"><span class="big">${esc(x.value)}<sup>%</sup></span><span>${esc(x.text)}</span></div>`).join('')}<small>${esc(C.statsSource)}</small></div>` : '';
+    const reviews = C.reviews.length ? `<h3 class="o-h2">Users love ${esc(C.brandName)}!</h3><p class="o-sub">Become a member of our global community</p>${C.reviews.map(r=>`<div class="o-card o-rev"><div class="stars">${'<i>★</i>'.repeat(r.stars||5)}</div><b>${esc(r.title)}</b><p>${esc(r.text)}</p><div class="who"><span>${esc(r.name)}</span>${r.photo?`<img src="${C.img}${esc(r.photo)}" alt="">`:`<em>${esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em>`}</div></div>`).join('')}` : '';
+    const endorse = C.endorsements.length ? `<div class="o-card"><h3 class="o-h2" style="margin-top:0">Our Bible study plan is based on approaches used by experts from:</h3><div class="o-end">${C.endorsements.map(e=>typeof e==='string'?`<div><b>${esc(e)}</b></div>`:`<div>${e.top?`<small>${esc(e.top)}</small>`:''}<b>${esc(e.name)}</b>${e.bottom?`<small>${esc(e.bottom)}</small>`:''}</div>`).join('')}</div><p class="o-disc">${esc(C.endorsementsNote)}</p></div>` : '';
+    view.innerHTML = `<div class="o-top"><img src="${C.img}logo.svg" alt="${esc(C.brandName)}" class="o-logo"><button class="btn o-cta" id="getPlan">Get my plan</button></div>
+    <div class="offer">
+      <h1 class="o-h1">Your Personalized<br><b>Bible Study Plan is ready!</b></h1>
+      <div class="o-chips"><div>${ICON.alert}<span><small>Main challenge</small>${challenge}</span></div><div>${ICON.bulb}<span><small>Goal</small>${goal}</span></div></div>
+      <div class="o-bubble"><b>You’re ready to begin</b><span>Your plan keeps it simple — Scripture in plain words, one small step at a time</span></div>
+      <div class="o-journey">
+        <div class="tabs">${C.weeks.map((w,i)=>`<button class="${i===0?'on':''}" data-w="${i}">Week ${i+1}</button>`).join('')}</div>
+        <div class="tl" id="tl"></div>
+        <img class="coach" src="${C.img}${state.gender==='female'?C.images.gender_female:C.images.coach}" alt="" onerror="this.style.display='none'">
+        <div class="jf"><b>Keep growing closer to God</b><span>Unlock your complete devotional journey</span></div>
+      </div>
+      <div class="o-card o-get"><h3>What You get with <span class="hl">${esc(C.brandName)}</span></h3>
+        ${C.benefits.map((b,i)=>`<div class="gi"><span class="gic c${i}">${ICON[b.icon]}</span><p><b>${b.lead}</b> ${b.text}</p></div>`).join('')}</div>
+      ${social}
+      <div id="pA">${plansBlock()}</div>
+      ${endorse}${stats}
+      <div class="o-guide"><b>Study the Bible with clear guidance — not on your own</b>
+        <div>${ICON.smile}Simple explanations for every chapter</div><div>${ICON.note}Key takeaways so nothing gets missed</div><div>${ICON.bolt}A daily action to live out what you read</div></div>
+      <h3 class="o-h2">People often ask</h3>
+      <div class="faq">${C.faq.map(f=>`<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}</div>
+      ${reviews}
+      <div id="pB">${plansBlock()}</div>
+    </div>
+    <footer class="addr">${esc(C.companyAddress)}</footer>`;
+    const tl=$('tl');
+    const showWeek=w=>{tl.innerHTML=C.weeks[w].map((d,i)=>`<div class="day ${i===3?'fade':''}"><span class="dl">Day ${w*4+i+1}</span><span class="bar k${i}">${esc(d)}</span></div>`).join('');view.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',+b.dataset.w===w));};
+    view.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showWeek(+b.dataset.w)); showWeek(0);
+    const sync=()=>{view.querySelectorAll('.o-plan').forEach(p=>p.classList.toggle('sel',+p.dataset.i===state.plan));view.querySelectorAll('.tdyn').forEach(t=>t.textContent=P[state.plan].terms);};
+    view.querySelectorAll('.o-plan').forEach(p=>p.onclick=()=>{state.plan=+p.dataset.i;sync();});
+    view.querySelectorAll('.sub').forEach(b=>b.onclick=checkout);
+    $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
+    sync();
+    if(isC){let t=C.coupon.minutes*60;const tk=()=>{const m=String(Math.floor(t/60)).padStart(2,'0'),ss=String(t%60).padStart(2,'0');view.querySelectorAll('.tm').forEach(e=>e.textContent=m+':'+ss);if(t>0)t--;};tk();clearInterval(window.__cpT);window.__cpT=setInterval(tk,1000);}
+  }
+};
+
+function ask(q, done){
+  const m=document.createElement('div'); m.className='modal';
+  m.innerHTML=`<div class="box"><small>To move forward, specify</small><h3>${q}</h3><div class="yn"><button>❌ No</button><button>✅ Yes</button></div></div>`;
+  document.body.appendChild(m);
+  m.querySelectorAll('button').forEach(b=>b.onclick=()=>{m.remove();done();});
+}
+let timerOn=false;
+function startTimer(){
+  if(timerOn) return; timerOn=true;
+  let t=CONFIG.timerSeconds;
+  const tick=()=>{const mm=$('mm'),ss=$('ss');if(!mm)return;mm.textContent=String(Math.floor(t/60)).padStart(2,'0');ss.textContent=String(t%60).padStart(2,'0');if(t>0)t--;};
+  tick(); setInterval(tick,1000);
+}
+function sendLead(){
+  if(!CONFIG.leadWebhook) return;
+  fetch(CONFIG.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:state.email,name:state.name,archetype:state.archetype,gender:state.gender,answers:state.answers})}).catch(()=>{});
+}
+function checkout(){
+  if(CONFIG.checkoutUrl==="#") return;
+  const u=new URL(CONFIG.checkoutUrl,location.href);
+  u.searchParams.set('plan',state.plan); u.searchParams.set('email',state.email); u.searchParams.set('name',state.name); u.searchParams.set('archetype',state.archetype);
+  location.href=u.toString();
+}
+render();
+</script>
+</body>
+</html>
