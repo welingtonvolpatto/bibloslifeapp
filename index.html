@@ -6,6 +6,12 @@
 <title>VEREDA — Discover Your Spiritual Archetype</title>
 <meta name="description" content="Bible study guides, prayers and Scripture explanations to help you grow in faith.">
 <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+<!-- Utmify: pixel + UTM tracking -->
+<script>
+  window.pixelId = "6999baaab6c8592bd0aec04f";
+  (function(){var a=document.createElement("script");a.setAttribute("async","");a.setAttribute("defer","");a.setAttribute("src","https://cdn.utmify.com.br/scripts/pixel/pixel.js");document.head.appendChild(a);})();
+</script>
+<script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-subids async defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -320,7 +326,7 @@ const CONFIG = {
   brand: "VEREDA",
   supportEmail: "support@vereda.app",
   companyAddress: "Your Company Ltd, Address, City, Country",
-  checkoutUrl: "#",            // your checkout link; ?plan=, &email=, &name=, &archetype= are appended
+  checkoutUrl: "#",            // fallback checkout link; each plan below can have its own checkoutUrl (Hotmart link). UTMs, email and name are passed along
   leadWebhook: "",             // optional: URL that receives {email, name, archetype, answers} via POST
   // Social proof shown on the first screen. Leave rating empty to hide it.
   // Only use numbers you can prove (your own real reviews).
@@ -341,11 +347,11 @@ const CONFIG = {
   coupon: { percent: 0, minutes: 7, suffix: "" },   // percent > 0 only if your checkout really applies that discount
   // Offer page — plans (edit prices here)
   plans: [
-    {name:"7-Day Free Trial", price:29.90, every:"month",    days:30, trialDays:7, popular:false,
+    {name:"7-Day Free Trial", checkoutUrl:"#", price:29.90, every:"month",    days:30, trialDays:7, popular:false,
      terms:"Free for 7 days, then $29.90 every month until you cancel. Cancel anytime before the trial ends and you won\u2019t be charged."},
-    {name:"Monthly Plan",     price:29.90, every:"month",    days:30, popular:true,
+    {name:"Monthly Plan",     checkoutUrl:"#", price:29.90, every:"month",    days:30, popular:true,
      terms:"$29.90 today, then $29.90 every month until you cancel."},
-    {name:"3-Month Plan",     price:59.90, every:"3 months", days:90, popular:false, compareAt:89.70,
+    {name:"3-Month Plan",     checkoutUrl:"#", price:59.90, every:"3 months", days:90, popular:false, compareAt:89.70,
      terms:"$59.90 today, then $59.90 every 3 months until you cancel."}
   ],
   currency: "$",
@@ -754,9 +760,14 @@ function sendLead(){
   fetch(CONFIG.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:state.email,name:state.name,archetype:state.archetype,gender:state.gender,answers:state.answers})}).catch(()=>{});
 }
 function checkout(){
-  if(CONFIG.checkoutUrl==="#") return;
-  const u=new URL(CONFIG.checkoutUrl,location.href);
-  u.searchParams.set('plan',state.plan); u.searchParams.set('email',state.email); u.searchParams.set('name',state.name); u.searchParams.set('archetype',state.archetype);
+  const p=CONFIG.plans[state.plan]||{};
+  const target=p.checkoutUrl||CONFIG.checkoutUrl;
+  if(!target||target==="#") return;
+  const u=new URL(target,location.href);
+  // keep ad tracking (utm_*, src, sck, xcod, fbclid...) from the landing URL
+  new URLSearchParams(location.search).forEach((v,k)=>{ if(!u.searchParams.has(k)) u.searchParams.set(k,v); });
+  if(state.email) u.searchParams.set('email',state.email);
+  if(state.name)  u.searchParams.set('name',state.name);
   location.href=u.toString();
 }
 render();
