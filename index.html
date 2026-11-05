@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Discover Your Spiritual Archetype</title>
+<title>VEREDA — Discover Your Spiritual Archetype</title>
 <meta name="description" content="Bible study guides, prayers and Scripture explanations to help you grow in faith.">
+<link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#1766ff;--blue-d:#0f55e0;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
+:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#1E5AE8;--blue-d:#1748C2;--blue-soft:#EAF0FE;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:#fff;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -168,6 +169,83 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .menu .panel{position:absolute;right:0;top:0;bottom:0;width:78%;max-width:320px;background:#fff;padding:24px 20px}
 .menu h4{font-size:18px;font-weight:700;margin-bottom:18px}
 .menu a{display:block;padding:12px 0;color:var(--text);text-decoration:none;border-bottom:1px solid var(--line);font-size:15px}
+
+/* ===== offer page (VEREDA) ===== */
+.hl{color:var(--blue)}
+.o-top{position:sticky;top:0;z-index:20;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
+.o-logo{height:16px}
+.o-cta{width:auto;height:44px;padding:0 26px;font-size:15px}
+.offer{padding:8px 16px 24px}
+.o-h1{font-size:22px;font-weight:400;text-align:center;line-height:1.3;margin:22px 0 14px;color:var(--title)}
+.o-h1 b{font-weight:700}
+.o-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.o-chips>div{display:flex;align-items:center;gap:10px;background:var(--blue-soft);border-radius:10px;padding:10px 12px;font-size:14px;font-weight:600;color:var(--title)}
+.o-chips svg{width:22px;height:22px;color:var(--blue);flex:none}
+.o-chips small{display:block;font-size:11px;font-weight:500;color:var(--muted)}
+.o-bubble{position:relative;margin:14px 0 18px;border:1.5px solid #8FD3BF;border-radius:12px;padding:10px 14px;text-align:center;background:#fff}
+.o-bubble b{display:block;font-size:14px;color:var(--title)}
+.o-bubble span{font-size:12.5px;color:var(--muted);line-height:1.45}
+.o-bubble::after{content:"";position:absolute;left:50%;bottom:-8px;width:14px;height:14px;background:#fff;border-right:1.5px solid #8FD3BF;border-bottom:1.5px solid #8FD3BF;transform:translateX(-50%) rotate(45deg)}
+.o-journey{position:relative;background:var(--soft);border-radius:16px;padding:12px 12px 14px;overflow:hidden;margin:0 6px}
+.o-journey .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#fff;border-radius:10px;padding:3px;position:relative;z-index:2}
+.o-journey .tabs button{height:32px;border-radius:8px;font-size:12.5px;font-weight:600;color:#3aa58a}
+.o-journey .tabs button.on{background:#2f9e83;color:#fff}
+.o-journey .tl{padding:12px 0 6px;width:72%;position:relative;z-index:2}
+.o-journey .day{display:grid;grid-template-columns:44px 1fr;align-items:center;margin-bottom:12px}
+.o-journey .dl{font-size:12px;color:#7a7f87}
+.o-journey .bar{display:block;padding:12px 10px;border-radius:6px;font-size:12.5px;font-weight:600;color:var(--title);border-left:3px solid}
+.bar.k0{background:#d5efe7;border-color:#2f9e83}.bar.k1{background:#fde7dc;border-color:#ec8a5c}.bar.k2{background:#fde7dc;border-color:#c79be8}.bar.k3{background:#fde7dc;border-color:#ec8a5c}
+.o-journey .day.fade{opacity:.35}
+.o-journey .coach{position:absolute;right:-6px;top:58px;width:44%;z-index:1;-webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent);mask-image:linear-gradient(to bottom,#000 70%,transparent)}
+.o-journey .jf{position:relative;z-index:2;text-align:center;font-size:12.5px;line-height:1.45}
+.o-journey .jf b{display:block}
+.o-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 16px;margin-top:24px}
+.o-get h3{font-size:20px;font-weight:600;text-align:center;margin-bottom:16px}
+.gi{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.gi p{font-size:13.5px;line-height:1.4;color:var(--muted)}
+.gi p b{color:var(--title);font-weight:600}
+.gic{width:30px;height:30px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;color:#fff}
+.gic svg{width:18px;height:18px}
+.gic.c0{background:#F08A4B}.gic.c1{background:#9B6BD6}.gic.c2{background:var(--blue)}.gic.c3{background:#E54B7A}.gic.c4{background:#2f9e83}
+.o-social{background:var(--blue-soft);border:0;text-align:center}
+.o-social h3{font-size:19px;font-weight:600;line-height:1.35}
+.o-rate{background:#fff;border-radius:10px;margin-top:12px;padding:10px;font-size:13px}
+.o-h2{font-size:22px;font-weight:600;text-align:center;line-height:1.3;margin:32px 0 18px;color:var(--title)}
+.o-plans{display:flex;flex-direction:column;gap:12px}
+.o-plan{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;background:#fff}
+.o-plan.sel{border-color:var(--blue)}
+.o-plan .rib{background:var(--blue);color:#fff;text-align:center;font-size:11.5px;font-weight:700;padding:4px 0;display:flex;align-items:center;justify-content:center;gap:5px}
+.o-plan .rib svg{width:12px;height:12px}
+.o-pb{display:flex;align-items:center;gap:14px;padding:16px 12px}
+.o-plan .radio{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
+.o-plan.sel .radio{background:#1E2430;border-color:#1E2430}
+.o-plan.sel .radio::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.o-pn{flex:1}.o-pn b{display:block;font-size:17px;font-weight:600;color:var(--title)}.o-pn s{font-size:12px;color:#a2a6ad}
+.o-pp{background:#f3f4f6;border-radius:24px 10px 10px 24px;padding:6px 10px 6px 12px}
+.o-plan.sel .o-pp{background:var(--blue-soft)}
+.pd{display:flex;align-items:flex-start;color:var(--title);line-height:1}
+.pd .cur{font-size:12px;font-weight:700;margin-top:4px}
+.pd .int{font-size:34px;font-weight:700;letter-spacing:-1px;margin:0 2px}
+.pd .dec{display:flex;flex-direction:column;font-size:12px}
+.pd .dec b{font-size:13px;margin-top:3px}
+.pd .dec small{font-size:10.5px;font-weight:500;margin-top:2px}
+.o-note{background:var(--soft);border-radius:12px;padding:12px 14px;margin:16px 0;text-align:center;font-size:13px;line-height:1.5;color:#3d4046}
+.o-terms{font-size:11.5px;color:#6b6f76;text-align:center;line-height:1.5;margin:12px 4px}
+.o-terms a{color:#55585e}
+.o-stats{border-radius:16px;padding:16px;background:linear-gradient(135deg,#f3e8ff,#e0ecff)}
+.o-stats .srow{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px dashed rgba(0,0,0,.12);font-size:13px;color:#3d4046}
+.o-stats .big{font-size:34px;font-weight:600;color:var(--title);min-width:72px}
+.o-stats small{display:block;text-align:center;font-size:10.5px;color:#888;margin-top:8px}
+.o-end{display:grid;grid-template-columns:1fr 1fr;gap:8px}.o-end div:last-child:nth-child(odd){grid-column:1/-1}
+.o-disc{font-size:10.5px;color:#888;text-align:center;margin-top:10px}
+.o-end div{background:var(--blue-soft);border-radius:8px;padding:12px;text-align:center;font-size:13px;font-weight:600}
+.o-guide{margin-top:32px;border-radius:14px;padding:16px;background:#fff;border:2px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,#8fb3ff,#e8a8d8);background-origin:border-box;background-clip:padding-box,border-box}
+.o-guide b{display:block;font-size:15px;line-height:1.4;margin-bottom:10px;color:var(--title)}
+.o-guide div{display:flex;align-items:center;gap:10px;font-size:13px;color:#3d4046;padding:6px 0}
+.o-guide svg{width:18px;height:18px;color:#9B6BD6;flex:none}
+.o-sub{text-align:center;color:var(--muted);font-size:14px;margin:-8px 0 12px}
+.o-rev .stars{color:#19b56b;letter-spacing:2px;margin-bottom:6px}
+.o-rev b{display:block;font-size:15px;margin-bottom:6px}.o-rev p{font-size:13px;line-height:1.5;color:#55585e}.o-rev span{display:block;text-align:right;font-size:12.5px;margin-top:8px}
 </style>
 </head>
 <body>
@@ -194,14 +272,13 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
    CONFIG — edit everything here
    ===================================================================== */
 const CONFIG = {
-  brand: "BIBLOSLIFE",
-  supportEmail: "support@bibloslife.com",
+  brand: "VEREDA",
+  supportEmail: "support@vereda.app",
   companyAddress: "Your Company Ltd, Address, City, Country",
   checkoutUrl: "#",            // your checkout link; ?plan=, &email=, &name=, &archetype= are appended
   leadWebhook: "",             // optional: URL that receives {email, name, archetype, answers} via POST
   // Social proof shown on the first screen. Leave rating empty to hide it.
   // Only use numbers you can prove (your own real reviews).
-  social: { rating: "", text: "" },
   // Image folder + files. Put YOUR images here with these names (webp/jpg/png).
   // If a file is missing, a neutral placeholder is drawn automatically.
   img: "images/",
@@ -209,15 +286,51 @@ const CONFIG = {
     gender_male: "gender_male.webp", gender_female: "gender_female.webp",
     age: { female: ["f_age_18_34.webp","f_age_35_44.webp","f_age_45_54.webp","f_age_55_plus.webp"],
            male:   ["m_age_18_34.webp","m_age_35_44.webp","m_age_45_54.webp","m_age_55_plus.webp"] },
-    break1: "break1.webp", break2: "break2.webp", break3: "break3.webp", break4: "break4.webp"
+    break1: "break1.webp", break2: "break2.webp", break3: "break3.webp", break4: "break4.webp",
+    coach: "coach.webp"
   },
+  brandName: "VEREDA",
+  links: { terms: "#", privacy: "#", subscription: "#", cookies: "#", contact: "#" },
+  // Offer page — plans (edit prices here)
   plans: [
-    {name:"1-Week Trial",  now:"$6.49",  then:"$43.20", every:"4 weeks",  perDay:"$0.93", off:"",        popular:false,
-     terms:"First week is $6.49, then $43.20 every 4 weeks."},
-    {name:"4-Week Plan",   now:"$19.99", then:"$43.20", every:"4 weeks",  perDay:"$0.71", off:"53% OFF", popular:true,
-     terms:"First 4 weeks are $19.99, then $43.20 every 4 weeks."},
-    {name:"12-Week Plan",  now:"$39.99", then:"$86.40", every:"12 weeks", perDay:"$0.48", off:"53% OFF", popular:false,
-     terms:"First 12 weeks are $39.99, then $86.40 every 12 weeks."}
+    {name:"1-Week Plan",  full:"$13.99", perDay:"1.99", popular:false, terms:"First week is $13.99, then $43.20 every 4 weeks."},
+    {name:"4-Week Plan",  full:"$43.20", perDay:"1.44", popular:true,  terms:"First 4 weeks are $43.20, then $43.20 every 4 weeks."},
+    {name:"12-Week Plan", full:"$86.40", perDay:"0.96", popular:false, terms:"First 12 weeks are $86.40, then $86.40 every 12 weeks."}
+  ],
+  planNote: "A 4-week plan gives you enough time to turn reading the Bible into a lasting <span class=\"hl\">daily habit</span>.",
+  weeks: [
+    ["Step into Light","Do I know Jesus?","Grace vs Works","Talking With God"],
+    ["Walking by Faith","When God Feels Silent","Forgiveness That Frees","The Power of Rest"],
+    ["Fear Not","Love in Action","Hearing God's Voice","Strength in Weakness"],
+    ["Your Calling","Living Generously","Hope That Holds","Walking It Out Daily"]
+  ],
+  benefits: [
+    {icon:"book",  lead:"You grow confident in your faith", text:"enough to share it and stand by it"},
+    {icon:"chart", lead:"You build a daily Bible habit that sticks", text:"with a simple plan made for your life"},
+    {icon:"heart", lead:"You feel closer to God every day", text:"through a rhythm of reading, prayer, and reflection"},
+    {icon:"spark", lead:"You understand Scripture deeply", text:"with clear guidance through every chapter"},
+    {icon:"home",  lead:"You stay consistent without burnout", text:"at your own pace, even on busy days"}
+  ],
+  faq: [
+    {q:"What if I don't understand what I'm reading?", a:"Every reading comes with a plain-language explanation and key takeaways, so you always know what the passage means and why it matters for your life today."},
+    {q:"What if I can't stay consistent?", a:"Sessions take about 10 minutes and fit any time of day. Gentle reminders and a clear next step help you keep going, and missing a day never resets your progress."},
+    {q:"Do I need to know the Bible already?", a:"Not at all. The plan starts where you are, whether you're opening the Bible for the first time or coming back after a long time."}
+  ],
+  // ===== SOCIAL PROOF — replace every [ ] placeholder with YOUR real data before running ads =====
+  // Leave a field empty ("" or []) to hide that block.
+  social: { count: "[XXK]", rating: "[4.X]", ratingSource: "Rating in App Stores" },
+  endorsements: ["[Partner / ministry 1]","[Partner / ministry 2]","[Partner / ministry 3]","[Partner / ministry 4]","[Partner / ministry 5]"],
+  endorsementsNote: "[Disclaimer about the relationship with the partners above]",
+  stats: [
+    {value:"[XX]", text:"[Result from your own user survey]"},
+    {value:"[XX]", text:"[Result from your own user survey]"},
+    {value:"[XX]", text:"[Result from your own user survey]"}
+  ],
+  statsSource: "[Based on a survey of N VEREDA users, month/year]",
+  reviews: [
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]"},
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]"},
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]"}
   ],
   defaultPlan: 1,
   timerSeconds: 600
@@ -302,11 +415,24 @@ const STEPS = [
 ];
 const QUESTION_STEPS = STEPS.filter(s=>["age","q","multi","yn"].includes(s.type)).length;
 
+const ICON={
+ book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v16H5.5A2.5 2.5 0 0 0 3 21.5z"/><path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H13v16h5.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg>',
+ chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 16v-3M12 16V9M16 16v-5"/></svg>',
+ heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+ spark:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>',
+ home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10l8-6 8 6v10H4z"/><path d="M10 20v-6h4v6"/></svg>',
+ alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v5M12 16.5v.5"/></svg>',
+ bulb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
+ shield:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+ smile:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4 4 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg>',
+ note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+ bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>'
+};
 /* ===================================================================== */
 const $ = id=>document.getElementById(id);
 const view = $('view');
 const state = {i:0, gender:null, answers:{}, email:"", name:"", archetype:null, plan:CONFIG.defaultPlan, history:[]};
-$('logo').textContent = CONFIG.brand;
+$('logo').innerHTML = `<img src="${CONFIG.img}logo.svg" alt="${CONFIG.brand}" style="height:18px;display:block;margin:0 auto">`;
 $('menuBtn').onclick=()=>$('menu').classList.add('open');
 $('menu').onclick=e=>{if(e.target.id==='menu')$('menu').classList.remove('open');};
 $('backBtn').onclick=()=>{ if(state.history.length){ state.i=state.history.pop(); render(); } };
@@ -347,7 +473,7 @@ function render(){
 
 const R = {
   gender(){
-    const so = CONFIG.social.rating ? `<div class="social"><div class="rate">${esc(CONFIG.social.rating)}<small>★★★★★</small></div><p>${esc(CONFIG.social.text)}</p></div>` : "";
+    const so = CONFIG.social.rating ? `<div class="social"><div class="rate">${esc(CONFIG.social.rating)}<small>★★★★★</small></div><p>${esc(CONFIG.social.count)} believers already grow with the ${esc(CONFIG.brandName)} app</p></div>` : "";
     view.innerHTML = `<section class="screen">${so}
       <h1 class="big-title">Discover your<br>spiritual archetype</h1>
       <p class="big-sub">and how to develop it with God</p>
@@ -449,41 +575,54 @@ const R = {
     step(); setTimeout(()=>go(),2900*cs.length+300);
   },
   offer(){
-    const a=ARCH_INFO[state.archetype]||ARCH_INFO.esther, nm=(state.archetype||"esther").replace(/^./,c=>c.toUpperCase());
-    const planBlock = ()=>`<h3 class="sec-title">Your Plan is ready!</h3><div class="plans">${CONFIG.plans.map((p,i)=>`
-      <div class="plan ${p.popular?'popular':''}" data-i="${i}"><div class="badge">MOST POPULAR</div><div class="body"><span class="radio"></span>
-      <div class="info"><div class="name">${p.name}</div><div class="price"><b>${p.now}</b> now, then <b>${p.then}</b> every ${p.every}</div>${p.off?`<span class="off">${p.off}</span>`:""}</div>
-      <div class="day"><small>*Breakdown</small><strong>${p.perDay}</strong><strong>per day</strong></div></div></div>`).join("")}</div>
-      <p class="terms">By clicking “Subscribe”, you agree to automatic subscription renewal. <span class="tdyn"></span> Cancel via the app or email: <a href="mailto:${CONFIG.supportEmail}">${CONFIG.supportEmail}</a>. See <a href="#">Subscription Terms</a> for details.</p>
-      <button class="btn sub">Subscribe</button>
-      <div class="safe"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Pay safe and secure</div>
+    const C=CONFIG, P=C.plans;
+    const challenge=({Sensitive:"Overthinking",Overwhelmed:"Overthinking",Calm:"Staying consistent",Hopeful:"Staying consistent",Focused:"Finding time",Energetic:"Finding focus"})[state.answers.feelDuring]||"Overthinking";
+    const goal=state.answers.currentRelationship==="In need of renewal"?"Renewed faith":"Closer to God";
+    const price=v=>{const [i,c]=String(v).replace('$','').split('.');return `<span class="pd"><span class="cur">$</span><span class="int">${i}</span><span class="dec"><b>${c||'00'}</b><small>per day</small></span></span>`;};
+    const plansBlock=()=>`<h3 class="o-h2">Your <span class="hl">Personalized Bible Study Plan</span> is ready!</h3>
+      <div class="o-plans">${P.map((p,i)=>`<div class="o-plan ${p.popular?'pop':''}" data-i="${i}">${p.popular?`<div class="rib">${ICON.spark} MOST POPULAR</div>`:''}
+        <div class="o-pb"><span class="radio"></span><div class="o-pn"><b>${p.name}</b><s>${p.full}</s></div><div class="o-pp">${price(p.perDay)}</div></div></div>`).join('')}</div>
+      <div class="o-note">${C.planNote}</div>
+      <button class="btn sub">Get my plan</button>
+      <p class="o-terms">By clicking “Get my plan”, you agree to automatic subscription renewal. <span class="tdyn"></span> Cancel via the app or email: <a href="mailto:${C.supportEmail}">${C.supportEmail}</a>. See <a href="${C.links.subscription}">Subscription Terms</a> for details.</p>
+      <div class="safe">${ICON.shield}Pay safe and secure</div>
       <div class="pay"><span>PayPal</span><span>Apple Pay</span><span>G Pay</span><span>VISA</span><span>MC</span><span>Maestro</span><span>AMEX</span></div>`;
-    const check='<svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#19b56b" stroke-width="1.8"/><path d="M7.5 12.3l3 3 6-6.3" stroke="#19b56b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    view.innerHTML = `<div class="topbar"><div class="timer"><div class="digits"><b id="mm">10</b><span>:</span><b id="ss">00</b></div><div class="lbl"><span>minutes</span><span>seconds</span></div></div><button class="btn" id="getPlan">Get my plan</button></div>
-      <div class="offer">
-        <div class="arch-mini"><span class="av">${a.emoji}</span><div><b>${state.name?esc(state.name)+", your":"Your"} archetype: ${nm}</b><span>${a.role} — plan personalized for you</span></div></div>
-        <h3 class="sec-title">Highlights of your plan</h3>
-        <ul class="highlights">
-          <li>${check}Daily guided readings built around your ${nm} archetype</li>
-          <li>${check}Short 10-minute sessions that fit a busy day</li>
-          <li>${check}Reflections, prayers and quizzes to deepen understanding</li>
-          <li>${check}Reminders and streaks to keep you consistent</li>
-        </ul>
-        <div id="pA">${planBlock()}</div>
-        <h3 class="sec-title">People often ask</h3>
-        <div class="faq">
-          <details><summary>What if I struggle with consistency?</summary><p>The plan is designed around small daily steps. Sessions are short, you can open them at any time of day, and gentle reminders help you build the habit gradually.</p></details>
-          <details><summary>What if I feel too overwhelmed to start?</summary><p>You never have to figure out what to read next. Each day gives you one clear, manageable step, so you can grow at your own pace without pressure.</p></details>
-          <details><summary>Do I need any special tools or resources to follow the plan?</summary><p>No. Everything you need is included and works on your phone or computer — just a few minutes a day and an open heart.</p></details>
-        </div>
-        <div id="pB">${planBlock()}</div>
+    const social = C.social.count ? `<div class="o-card o-social"><h3>${esc(C.social.count)} believers already <span class="hl">grow</span><br>with the ${esc(C.brandName)} app</h3>${C.social.rating?`<div class="o-rate"><span class="st">★</span><b>${esc(C.social.rating)}</b> out of 5<br><small>${esc(C.social.ratingSource)}</small></div>`:''}</div>` : '';
+    const stats = C.stats.length ? `<h3 class="o-h2">People just like you achieved great results with ${esc(C.brandName)}!</h3><div class="o-stats">${C.stats.map(x=>`<div class="srow"><span class="big">${esc(x.value)}<sup>%</sup></span><span>${esc(x.text)}</span></div>`).join('')}<small>${esc(C.statsSource)}</small></div>` : '';
+    const reviews = C.reviews.length ? `<h3 class="o-h2">Users love ${esc(C.brandName)}!</h3><p class="o-sub">Become a member of our global community</p>${C.reviews.map(r=>`<div class="o-card o-rev"><div class="stars">${'★'.repeat(r.stars||5)}</div><b>${esc(r.title)}</b><p>${esc(r.text)}</p><span>${esc(r.name)}</span></div>`).join('')}` : '';
+    const endorse = C.endorsements.length ? `<div class="o-card"><h3 class="o-h2" style="margin-top:0">Our Bible study plan is based on approaches used by experts from:</h3><div class="o-end">${C.endorsements.map(e=>`<div>${esc(e)}</div>`).join('')}</div><p class="o-disc">${esc(C.endorsementsNote)}</p></div>` : '';
+    view.innerHTML = `<div class="o-top"><img src="${C.img}logo.svg" alt="${esc(C.brandName)}" class="o-logo"><button class="btn o-cta" id="getPlan">Get my plan</button></div>
+    <div class="offer">
+      <h1 class="o-h1">Your Personalized<br><b>Bible Study Plan is ready!</b></h1>
+      <div class="o-chips"><div>${ICON.alert}<span><small>Main challenge</small>${challenge}</span></div><div>${ICON.bulb}<span><small>Goal</small>${goal}</span></div></div>
+      <div class="o-bubble"><b>You’re ready to begin</b><span>Your plan keeps it simple — Scripture in plain words, one small step at a time</span></div>
+      <div class="o-journey">
+        <div class="tabs">${C.weeks.map((w,i)=>`<button class="${i===0?'on':''}" data-w="${i}">Week ${i+1}</button>`).join('')}</div>
+        <div class="tl" id="tl"></div>
+        <img class="coach" src="${C.img}${C.images.coach}" alt="" onerror="this.style.display='none'">
+        <div class="jf"><b>Keep growing closer to God</b><span>Unlock your complete devotional journey</span></div>
       </div>
-      <footer class="addr">${esc(CONFIG.companyAddress)}</footer>`;
-    const sync=()=>{view.querySelectorAll('.plan').forEach(p=>p.classList.toggle('sel',+p.dataset.i===state.plan));view.querySelectorAll('.tdyn').forEach(t=>t.textContent=CONFIG.plans[state.plan].terms);};
-    view.querySelectorAll('.plan').forEach(p=>p.onclick=()=>{state.plan=+p.dataset.i;sync();});
+      <div class="o-card o-get"><h3>What You get with <span class="hl">${esc(C.brandName)}</span></h3>
+        ${C.benefits.map((b,i)=>`<div class="gi"><span class="gic c${i}">${ICON[b.icon]}</span><p><b>${b.lead}</b> ${b.text}</p></div>`).join('')}</div>
+      ${social}
+      <div id="pA">${plansBlock()}</div>
+      ${endorse}${stats}
+      <div class="o-guide"><b>Study the Bible with clear guidance — not on your own</b>
+        <div>${ICON.smile}Simple explanations for every chapter</div><div>${ICON.note}Key takeaways so nothing gets missed</div><div>${ICON.bolt}A daily action to live out what you read</div></div>
+      <h3 class="o-h2">People often ask</h3>
+      <div class="faq">${C.faq.map(f=>`<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}</div>
+      ${reviews}
+      <div id="pB">${plansBlock()}</div>
+    </div>
+    <footer class="addr">${esc(C.companyAddress)}</footer>`;
+    const tl=$('tl');
+    const showWeek=w=>{tl.innerHTML=C.weeks[w].map((d,i)=>`<div class="day ${i===3?'fade':''}"><span class="dl">Day ${w*4+i+1}</span><span class="bar k${i}">${esc(d)}</span></div>`).join('');view.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',+b.dataset.w===w));};
+    view.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showWeek(+b.dataset.w)); showWeek(0);
+    const sync=()=>{view.querySelectorAll('.o-plan').forEach(p=>p.classList.toggle('sel',+p.dataset.i===state.plan));view.querySelectorAll('.tdyn').forEach(t=>t.textContent=P[state.plan].terms);};
+    view.querySelectorAll('.o-plan').forEach(p=>p.onclick=()=>{state.plan=+p.dataset.i;sync();});
     view.querySelectorAll('.sub').forEach(b=>b.onclick=checkout);
     $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
-    sync(); startTimer();
+    sync();
   }
 };
 
