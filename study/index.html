@@ -15,13 +15,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#2E5E4E;--blue-d:#234A3D;--blue-soft:#E6EFEA;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
+:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#0E5F95;--blue-d:#0A4A75;--blue-soft:#E8F0F7;--cream:#FDF7EF;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:#fff;-webkit-font-smoothing:antialiased}
+body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:var(--cream);-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 input{font:inherit}
 .app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;display:flex;flex-direction:column}
-header{height:56px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;position:sticky;top:0;background:#fff;z-index:10}
+header{height:56px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;position:sticky;top:0;background:var(--cream);z-index:10}
 header.transparent{background:transparent}
 .hbtn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px}
 .hbtn.hidden{visibility:hidden}
@@ -47,7 +47,7 @@ p.s{font-size:14px;line-height:20px;text-align:center;color:var(--muted);margin-
 .opt .c{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
 .opt.multi .c{border-radius:6px}
 .opt:hover{border-color:#cfd3da}
-.opt.sel{border-color:var(--blue);background:#f3f7ff}
+.opt.sel{border-color:var(--blue);background:#EEF4FA}
 .opt.sel .c{background:var(--blue);border-color:var(--blue)}
 .opt.sel .c::after{content:"";width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
 /* image tiles */
@@ -188,8 +188,8 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .pay span svg{width:100%;height:100%;display:block}
 
 .hl{color:var(--blue)}
-.o-top{position:sticky;top:0;z-index:20;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
-.o-logo{height:16px}
+.o-top{position:sticky;top:0;z-index:20;background:var(--cream);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
+.o-logo{height:24px}
 .o-cta{width:auto;height:44px;padding:0 26px;font-size:15px}
 .offer{padding:8px 16px 24px}
 .o-h1{font-size:22px;font-weight:400;text-align:center;line-height:1.3;margin:22px 0 14px;color:var(--title)}
@@ -245,7 +245,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .o-note{background:var(--soft);border-radius:12px;padding:12px 14px;margin:16px 0;text-align:center;font-size:13px;line-height:1.5;color:#3d4046}
 .o-terms{font-size:11.5px;color:#6b6f76;text-align:center;line-height:1.5;margin:12px 4px}
 .o-terms a{color:#55585e}
-.o-stats{border-radius:16px;padding:16px;background:linear-gradient(135deg,#E6EFEA,#F6ECD6)}
+.o-stats{border-radius:16px;padding:16px;background:linear-gradient(135deg,#E8F0F7,#FDF7EF)}
 .o-stats .srow{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px dashed rgba(0,0,0,.12);font-size:13px;color:#3d4046}
 .o-stats .big{font-size:34px;font-weight:600;color:var(--title);min-width:72px}
 .o-stats small{display:block;text-align:center;font-size:10.5px;color:#888;margin-top:8px}
@@ -285,7 +285,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .st-sub{text-transform:none;letter-spacing:0;color:var(--muted)}
 .pf{border:1px solid var(--line);border-radius:14px;padding:16px 16px 0;margin-top:8px;overflow:hidden}
 .pf-h{display:block;font-size:16px;margin-bottom:14px}
-.pf-bar{position:relative;height:8px;border-radius:8px;background:linear-gradient(90deg,#E08A68,#E3C27F 50%,#2E5E4E)}
+.pf-bar{position:relative;height:8px;border-radius:8px;background:linear-gradient(90deg,#E08A68,#E3C27F 50%,#0E5F95)}
 .pf-bar i{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid var(--ink);transform:translate(-50%,-50%)}
 .pf-lv{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:#9aa0a6;margin:8px 0 12px}.pf-lv .on{color:var(--ink)}
 .pf-st{display:flex;gap:12px;align-items:center;background:var(--blue-soft);border-radius:12px;padding:12px;margin-bottom:12px}
@@ -307,7 +307,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .gr-d,.gr-tag{opacity:0;animation:gra .4s 1.5s ease forwards}
 @keyframes grd{to{stroke-dashoffset:0}}@keyframes gra{to{opacity:1}}
 .gr-x{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);padding:6px 10px 0}
-.cp{background:#E6EFEA;border-radius:14px;padding:12px;margin:-4px 0 14px}
+.cp{background:#E8F0F7;border-radius:14px;padding:12px;margin:-4px 0 14px}
 .cp-h{display:flex;gap:10px;align-items:flex-start}.cp-h svg{width:22px;height:22px;color:#19b56b;flex:none;margin-top:2px}
 .cp-h b{display:block;font-size:15px}.cp-h small{font-size:12px;color:var(--muted);line-height:1.35}
 .cp-row{display:flex;gap:10px;margin-top:10px}
@@ -546,7 +546,7 @@ const $ = id=>document.getElementById(id);
 const view = $('view');
 const state = {i:0, gender:null, answers:{}, email:"", name:"", archetype:null, plan:CONFIG.defaultPlan, history:[]};
 document.querySelectorAll('#menu a[data-l]').forEach(a=>a.href=CONFIG.links[a.dataset.l]||'#');
-$('logo').innerHTML = `<img src="${CONFIG.img}logo.svg" alt="${CONFIG.brand}" style="height:18px;display:block;margin:0 auto">`;
+$('logo').innerHTML = `<img src="${CONFIG.img}logo.svg" alt="${CONFIG.brand}" style="height:26px;display:block;margin:0 auto">`;
 $('menuBtn').onclick=()=>$('menu').classList.add('open');
 $('menu').onclick=e=>{if(e.target.id==='menu')$('menu').classList.remove('open');};
 $('backBtn').onclick=()=>{ if(state.history.length){ state.i=state.history.pop(); render(); } };
@@ -644,7 +644,7 @@ const R = {
     const pops=[[25,"Do you believe God created you with a unique purpose?"],[50,"Are you ready to see how your faith shapes who you are?"],[75,"Your archetype is almost ready. Want to reveal it?"]];
     const C=2*Math.PI*74;
     view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:10px">Revealing your spiritual archetype</h2>
-      <div class="ring"><svg width="170" height="170"><circle cx="85" cy="85" r="74" stroke="#edeef0" stroke-width="12" fill="none"/><circle id="arc" cx="85" cy="85" r="74" stroke="#2E5E4E" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="pct" id="pct">0%</div></div>
+      <div class="ring"><svg width="170" height="170"><circle cx="85" cy="85" r="74" stroke="#edeef0" stroke-width="12" fill="none"/><circle id="arc" cx="85" cy="85" r="74" stroke="#0E5F95" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="pct" id="pct">0%</div></div>
       <ul class="steps">${steps.map(t=>`<li><span class="d"></span>${t}</li>`).join("")}</ul></section>`;
     let p=0, paused=false; const li=view.querySelectorAll('.steps li');
     const tick=()=>{
@@ -747,12 +747,12 @@ const R = {
     const d=new Date(Date.now()+28*864e5).toLocaleDateString("en",{month:"long",day:"numeric"});
     view.innerHTML=`<section class="screen"><div class="gr-b">Ready to get your plan?</div>
       <h2 class="info-title" style="margin-top:14px">See your spiritual life<br>transform by <span class="hl">${d}</span></h2>
-      <div class="gr"><svg viewBox="0 0 320 200" class="gr-s"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E5E4E" stop-opacity=".28"/><stop offset="1" stop-color="#2E5E4E" stop-opacity="0"/></linearGradient></defs>
+      <div class="gr"><svg viewBox="0 0 320 200" class="gr-s"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E5F95" stop-opacity=".28"/><stop offset="1" stop-color="#0E5F95" stop-opacity="0"/></linearGradient></defs>
         <g stroke="#ECEEF1">${[40,80,120,160].map(y=>`<line x1="10" x2="310" y1="${y}" y2="${y}"/>`).join('')}</g>
         <path class="gr-a" d="M20 165 C 90 160, 150 135, 200 100 S 280 40, 300 32 L300 180 L20 180Z" fill="url(#ga)"/>
-        <path class="gr-l" d="M20 165 C 90 160, 150 135, 200 100 S 280 40, 300 32" fill="none" stroke="#2E5E4E" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="20" cy="165" r="7" fill="#fff" stroke="#E08A68" stroke-width="4"/><circle class="gr-d" cx="300" cy="32" r="8" fill="#2E5E4E" stroke="#fff" stroke-width="3"/>
-        <g class="gr-tag"><rect x="210" y="2" width="96" height="22" rx="11" fill="#2E5E4E"/><text x="258" y="17" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Closer to God</text></g>
+        <path class="gr-l" d="M20 165 C 90 160, 150 135, 200 100 S 280 40, 300 32" fill="none" stroke="#0E5F95" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="20" cy="165" r="7" fill="#fff" stroke="#E08A68" stroke-width="4"/><circle class="gr-d" cx="300" cy="32" r="8" fill="#0E5F95" stroke="#fff" stroke-width="3"/>
+        <g class="gr-tag"><rect x="210" y="2" width="96" height="22" rx="11" fill="#0E5F95"/><text x="258" y="17" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Closer to God</text></g>
         <g><rect x="4" y="128" width="40" height="20" rx="10" fill="#fdebe3"/><text x="24" y="142" text-anchor="middle" font-size="11" font-weight="700" fill="#B05A3A">Now</text></g></svg>
         <div class="gr-x">${["Week 1","Week 2","Week 3","Week 4"].map(w=>`<span>${w}</span>`).join('')}</div></div></section>`;
     setCTA("Continue",()=>go());

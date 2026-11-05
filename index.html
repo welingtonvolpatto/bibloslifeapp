@@ -15,13 +15,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#2E5E4E;--blue-d:#234A3D;--blue-soft:#E6EFEA;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
+:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#0E5F95;--blue-d:#0A4A75;--blue-soft:#E8F0F7;--cream:#FDF7EF;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:#fff;-webkit-font-smoothing:antialiased}
+body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:var(--cream);-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 input{font:inherit}
 .app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;display:flex;flex-direction:column}
-header{height:56px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;position:sticky;top:0;background:#fff;z-index:10}
+header{height:56px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;position:sticky;top:0;background:var(--cream);z-index:10}
 header.transparent{background:transparent}
 .hbtn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px}
 .hbtn.hidden{visibility:hidden}
@@ -47,7 +47,7 @@ p.s{font-size:14px;line-height:20px;text-align:center;color:var(--muted);margin-
 .opt .c{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
 .opt.multi .c{border-radius:6px}
 .opt:hover{border-color:#cfd3da}
-.opt.sel{border-color:var(--blue);background:#f3f7ff}
+.opt.sel{border-color:var(--blue);background:#EEF4FA}
 .opt.sel .c{background:var(--blue);border-color:var(--blue)}
 .opt.sel .c::after{content:"";width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
 /* image tiles */
@@ -188,8 +188,8 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .pay span svg{width:100%;height:100%;display:block}
 
 .hl{color:var(--blue)}
-.o-top{position:sticky;top:0;z-index:20;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
-.o-logo{height:16px}
+.o-top{position:sticky;top:0;z-index:20;background:var(--cream);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
+.o-logo{height:24px}
 .o-cta{width:auto;height:44px;padding:0 26px;font-size:15px}
 .offer{padding:8px 16px 24px}
 .o-h1{font-size:22px;font-weight:400;text-align:center;line-height:1.3;margin:22px 0 14px;color:var(--title)}
@@ -245,7 +245,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .o-note{background:var(--soft);border-radius:12px;padding:12px 14px;margin:16px 0;text-align:center;font-size:13px;line-height:1.5;color:#3d4046}
 .o-terms{font-size:11.5px;color:#6b6f76;text-align:center;line-height:1.5;margin:12px 4px}
 .o-terms a{color:#55585e}
-.o-stats{border-radius:16px;padding:16px;background:linear-gradient(135deg,#E6EFEA,#F6ECD6)}
+.o-stats{border-radius:16px;padding:16px;background:linear-gradient(135deg,#E8F0F7,#FDF7EF)}
 .o-stats .srow{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px dashed rgba(0,0,0,.12);font-size:13px;color:#3d4046}
 .o-stats .big{font-size:34px;font-weight:600;color:var(--title);min-width:72px}
 .o-stats small{display:block;text-align:center;font-size:10.5px;color:#888;margin-top:8px}
@@ -279,7 +279,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .em-sug{list-style:none;margin-top:6px;background:var(--soft);border-radius:12px;max-height:176px;overflow-y:auto;padding:4px 0}
 .em-sug li{padding:12px 16px;font-size:15px;color:#2b2d30;cursor:pointer}
 .em-sug li:hover{background:var(--blue-soft)}
-.cp{background:#E6EFEA;border-radius:14px;padding:12px;margin:-4px 0 14px}
+.cp{background:#E8F0F7;border-radius:14px;padding:12px;margin:-4px 0 14px}
 .cp-h{display:flex;gap:10px;align-items:flex-start}.cp-h svg{width:22px;height:22px;color:#19b56b;flex:none;margin-top:2px}
 .cp-h b{display:block;font-size:15px}.cp-h small{font-size:12px;color:var(--muted);line-height:1.35}
 .cp-row{display:flex;gap:10px;margin-top:10px}
@@ -529,7 +529,7 @@ const $ = id=>document.getElementById(id);
 const view = $('view');
 const state = {i:0, gender:null, answers:{}, email:"", name:"", archetype:null, plan:CONFIG.defaultPlan, history:[]};
 document.querySelectorAll('#menu a[data-l]').forEach(a=>a.href=CONFIG.links[a.dataset.l]||'#');
-$('logo').innerHTML = `<img src="${CONFIG.img}logo.svg" alt="${CONFIG.brand}" style="height:18px;display:block;margin:0 auto">`;
+$('logo').innerHTML = `<img src="${CONFIG.img}logo.svg" alt="${CONFIG.brand}" style="height:26px;display:block;margin:0 auto">`;
 $('menuBtn').onclick=()=>$('menu').classList.add('open');
 $('menu').onclick=e=>{if(e.target.id==='menu')$('menu').classList.remove('open');};
 $('backBtn').onclick=()=>{ if(state.history.length){ state.i=state.history.pop(); render(); } };
@@ -627,7 +627,7 @@ const R = {
     const pops=[[25,"Do you believe God created you with a unique purpose?"],[50,"Are you ready to see how your faith shapes who you are?"],[75,"Your archetype is almost ready. Want to reveal it?"]];
     const C=2*Math.PI*74;
     view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:10px">Revealing your spiritual archetype</h2>
-      <div class="ring"><svg width="170" height="170"><circle cx="85" cy="85" r="74" stroke="#edeef0" stroke-width="12" fill="none"/><circle id="arc" cx="85" cy="85" r="74" stroke="#2E5E4E" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="pct" id="pct">0%</div></div>
+      <div class="ring"><svg width="170" height="170"><circle cx="85" cy="85" r="74" stroke="#edeef0" stroke-width="12" fill="none"/><circle id="arc" cx="85" cy="85" r="74" stroke="#0E5F95" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="pct" id="pct">0%</div></div>
       <ul class="steps">${steps.map(t=>`<li><span class="d"></span>${t}</li>`).join("")}</ul></section>`;
     let p=0, paused=false; const li=view.querySelectorAll('.steps li');
     const tick=()=>{
