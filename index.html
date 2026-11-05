@@ -288,6 +288,9 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .o-tp b{display:block;font-size:17px;color:var(--title)}.o-tp s{font-size:11.5px;color:#a2a6ad}
 .o-free{text-align:center}.o-free b{display:block;font-size:20px;font-weight:800;color:var(--blue);line-height:1.1}.o-free small{font-size:11px;color:var(--muted)}
 .o-pn .off{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:6px;background:#19b56b;color:#fff}
+.o-exp .o-card{margin-top:12px}.o-exp .ex{position:relative;padding:18px 16px 16px}
+.ex .exn{display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:14px;align-items:center;justify-content:center;margin-bottom:8px}
+.ex b{display:block;font-size:16px;color:var(--title);margin-bottom:6px}.ex p{font-size:14px;line-height:1.6;color:#3d4046}
 </style>
 </head>
 <body>
@@ -381,11 +384,15 @@ const CONFIG = {
   ],
   statsSource: "Based on a voluntary survey of VEREDA users",
   // photo: file in images/ (e.g. "review_ana.webp") — a real customer's photo, with permission; empty = initial letter
-  reviews: [
-    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""},
-    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""},
-    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""}
+  // "What a day with VEREDA feels like" — brand copy (not testimonials)
+  experience: [
+    {title:"See yourself in the story", text:"You may know which Bible stories move you. Have you ever paused to ask why? Maybe you see yourself in Peter, ready to take the first step, then afraid of what comes next. VEREDA gives you room to explore that connection and recognize both the courage you already have and the places where you still need God\u2019s guidance."},
+    {title:"Carry it into your day", text:"It\u2019s easy to read about patience in the morning. It\u2019s harder to choose your words carefully when someone hurts you that afternoon. With VEREDA, you can carry one passage into that moment, remember what you read, and ask yourself, \u201cHow do I want to respond this time?\u201d"},
+    {title:"Slow down and stay", text:"Maybe you know the feeling. You finish reading, close your Bible, and realize your mind was somewhere else. VEREDA invites you to slow down. Listen to the passage. Picture where it happened. Stay with the detail you used to read right past. Then carry one thought from that quiet moment with God into the rest of your day."}
   ],
+  // Real customer reviews only (with permission). Empty = block hidden. Example:
+  // {stars:5, title:"...", text:"...", name:"First name", photo:"review_ana.webp"}
+  reviews: [],
   defaultPlan: 1,
   timerSeconds: 600
 };
@@ -710,6 +717,7 @@ const R = {
       ${endorse}${stats}
       <div class="o-guide"><b>Study the Bible with clear guidance — not on your own</b>
         <div>${ICON.smile}Simple explanations for every chapter</div><div>${ICON.note}Key takeaways so nothing gets missed</div><div>${ICON.bolt}A daily action to live out what you read</div></div>
+      ${C.experience&&C.experience.length?`<h3 class="o-h2">What a day with <span class="hl">${esc(C.brandName)}</span> feels like</h3><div class="o-exp">${C.experience.map((e,i)=>`<div class="o-card ex"><span class="exn">${i+1}</span><b>${esc(e.title)}</b><p>${esc(e.text)}</p></div>`).join('')}</div>`:''}
       <h3 class="o-h2">People often ask</h3>
       <div class="faq">${C.faq.map(f=>`<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}</div>
       ${reviews}
