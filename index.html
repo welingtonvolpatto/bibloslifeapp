@@ -49,6 +49,8 @@ p.s{font-size:14px;line-height:20px;text-align:center;color:var(--muted);margin-
 .tile.sel{border-color:#2b2d30}
 .tile .img{width:100%;display:block;object-fit:cover}
 .tile .lbl{position:absolute;left:10px;right:10px;bottom:10px;height:44px;border-radius:10px;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 14px;font-size:17px;font-weight:600;color:#111}
+.tile.wide .lbl{height:34px;left:6px;right:6px;bottom:6px;font-size:15px;padding:0 6px 0 12px}
+.tile.wide .arr{width:22px;height:22px}
 .tile .arr{width:26px;height:26px;border-radius:50%;background:#2b2d30;display:flex;align-items:center;justify-content:center}
 /* gender intro */
 .social{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 14px}
@@ -360,7 +362,7 @@ const R = {
   age(s){
     const files = CONFIG.images.age[state.gender==="male"?"male":"female"];
     view.innerHTML = `<section class="screen"><h1 class="t">${s.title}</h1><p class="s">${s.sub}</p>
-      <div class="tiles">${s.options.map((o,i)=>`<button class="tile ${state.answers.age===o?'sel':''}" data-v="${o}">${img(files[i],"img","","168/240")}<span class="lbl">${o}<span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>`).join("")}</div></section>`;
+      <div class="tiles">${s.options.map((o,i)=>`<button class="tile wide ${state.answers.age===o?'sel':''}" data-v="${o}">${img(files[i],"img","","345/311")}<span class="lbl">${o}<span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>`).join("")}</div></section>`;
     view.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{view.querySelectorAll('.tile').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');state.answers.age=t.dataset.v;setTimeout(()=>go(),250);});
   },
   info(s){
