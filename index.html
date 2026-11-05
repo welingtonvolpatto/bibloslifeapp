@@ -273,6 +273,21 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .em-sug{list-style:none;margin-top:6px;background:var(--soft);border-radius:12px;max-height:176px;overflow-y:auto;padding:4px 0}
 .em-sug li{padding:12px 16px;font-size:15px;color:#2b2d30;cursor:pointer}
 .em-sug li:hover{background:var(--blue-soft)}
+.cp{background:#E6EFEA;border-radius:14px;padding:12px;margin:-4px 0 14px}
+.cp-h{display:flex;gap:10px;align-items:flex-start}.cp-h svg{width:22px;height:22px;color:#19b56b;flex:none;margin-top:2px}
+.cp-h b{display:block;font-size:15px}.cp-h small{font-size:12px;color:var(--muted);line-height:1.35}
+.cp-row{display:flex;gap:10px;margin-top:10px}
+.cp-code{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:10px 12px;font-weight:600;font-size:14px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cp-code svg{width:16px;height:16px;color:#19b56b;flex:none}
+.cp-t{background:#fff;border-radius:10px;padding:6px 12px;text-align:center}
+.cp-t b{display:block;font-size:22px;color:var(--blue);line-height:1.1}.cp-t small{display:flex;gap:10px;font-size:9.5px;color:var(--muted)}.cp-t i{font-style:normal}
+.o-ps{display:block;font-size:12px;color:#55585e;margin-top:2px}
+.o-tp{text-align:right;background:#f3f4f6;border-radius:10px;padding:6px 10px;min-width:74px}
+.o-plan.sel .o-tp{background:var(--blue-soft)}
+.o-tp em{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;background:#19b56b;color:#fff;border-radius:4px;padding:1px 5px;margin-bottom:2px}
+.o-tp b{display:block;font-size:17px;color:var(--title)}.o-tp s{font-size:11.5px;color:#a2a6ad}
+.o-free{text-align:center}.o-free b{display:block;font-size:20px;font-weight:800;color:var(--blue);line-height:1.1}.o-free small{font-size:11px;color:var(--muted)}
+.o-pn .off{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:6px;background:#19b56b;color:#fff}
 </style>
 </head>
 <body>
@@ -318,13 +333,20 @@ const CONFIG = {
   },
   brandName: "VEREDA",
   links: { terms: "#", privacy: "#", subscription: "#", cookies: "#", contact: "#" },
+  // Offer variant: "coupon" (reserved offer + timer, total prices) or "perday" (price per day)
+  offerVariant: "perday",
+  coupon: { percent: 0, minutes: 7, suffix: "" },   // percent > 0 only if your checkout really applies that discount
   // Offer page — plans (edit prices here)
   plans: [
-    {name:"1-Week Plan",  full:"$13.99", perDay:"1.99", popular:false, terms:"First week is $13.99, then $43.20 every 4 weeks."},
-    {name:"4-Week Plan",  full:"$43.20", perDay:"1.44", popular:true,  terms:"First 4 weeks are $43.20, then $43.20 every 4 weeks."},
-    {name:"12-Week Plan", full:"$86.40", perDay:"0.96", popular:false, terms:"First 12 weeks are $86.40, then $86.40 every 12 weeks."}
+    {name:"7-Day Free Trial", price:29.90, every:"month",    days:30, trialDays:7, popular:false,
+     terms:"Free for 7 days, then $29.90 every month until you cancel. Cancel anytime before the trial ends and you won\u2019t be charged."},
+    {name:"Monthly Plan",     price:29.90, every:"month",    days:30, popular:true,
+     terms:"$29.90 today, then $29.90 every month until you cancel."},
+    {name:"3-Month Plan",     price:59.90, every:"3 months", days:90, popular:false, compareAt:89.70,
+     terms:"$59.90 today, then $59.90 every 3 months until you cancel."}
   ],
-  planNote: "A 4-week plan gives you enough time to turn reading the Bible into a lasting <span class=\"hl\">daily habit</span>.",
+  currency: "$",
+  planNote: "A 3-month plan gives you enough time to turn reading the Bible into a lasting <span class=\"hl\">daily habit</span> \u2014 and costs 33% less than paying monthly.",
   weeks: [
     ["Step into Light","Do I know Jesus?","Grace vs Works","Talking With God"],
     ["Walking by Faith","When God Feels Silent","Forgiveness That Frees","The Power of Rest"],
@@ -469,6 +491,8 @@ const ICON={
  note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
  apple:'<svg viewBox="0 0 24 24" fill="#000"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9s-2-.9-3.3-.9C6.1 6.9 4.5 7.9 3.6 9.4c-1.8 3.1-.5 7.7 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1.1-2.8-4.3zM14 5.1c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4z"/></svg>',
  play:'<svg viewBox="0 0 24 24"><path d="M4 2.8 13.4 12 4 21.2c-.3-.2-.5-.6-.5-1V3.8c0-.4.2-.8.5-1z" fill="#00C3FF"/><path d="M16.6 8.8 13.4 12 4 2.8c.3-.2.8-.2 1.2 0z" fill="#00E676"/><path d="M16.6 15.2 5.2 21.1c-.4.2-.9.2-1.2 0l9.4-9.2z" fill="#FF3A44"/><path d="m20.3 10.8-3.7-2-3.2 3.2 3.2 3.2 3.7-2c.9-.5.9-1.9 0-2.4z" fill="#FFD400"/></svg>',
+ tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
  bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>'
 };
 /* ===================================================================== */
@@ -638,10 +662,27 @@ const R = {
     const C=CONFIG, P=C.plans;
     const challenge=({Sensitive:"Overthinking",Overwhelmed:"Overthinking",Calm:"Staying consistent",Hopeful:"Staying consistent",Focused:"Finding time",Energetic:"Finding focus"})[state.answers.feelDuring]||"Overthinking";
     const goal=state.answers.currentRelationship==="In need of renewal"?"Renewed faith":"Closer to God";
-    const price=v=>{const [i,c]=String(v).replace('$','').split('.');return `<span class="pd"><span class="cur">$</span><span class="int">${i}</span><span class="dec"><b>${c||'00'}</b><small>per day</small></span></span>`;};
-    const plansBlock=()=>`<h3 class="o-h2">Your <span class="hl">Personalized Bible Study Plan</span> is ready!</h3>
+    const isC=C.offerVariant==="coupon", $c=C.currency||"$";
+    const money=v=>$c+Number(v).toFixed(2);
+    const perDay=p=>Number(p.price)/p.days;
+    const save=p=>p.compareAt?Math.round((1-p.price/p.compareAt)*100):0;
+    const code=((state.name||"FRIEND").replace(/[^A-Za-z]/g,"")||"FRIEND").toUpperCase()+"_"+new Date().toLocaleString("en",{month:"short"}).toUpperCase()+((C.coupon&&C.coupon.suffix)||"");
+    const trialP=P.find(p=>p.trialDays);
+    const couponBox=()=>!isC?'':(C.coupon.percent>0
+      ?`<div class="cp"><div class="cp-h">${ICON.tag}<div><b>Your promo code applied!</b><small>${C.coupon.percent}% off your first purchase. Standard pricing applies on renewal</small></div></div><div class="cp-row"><span class="cp-code">${ICON.check}${esc(code)}</span><span class="cp-t"><b class="tm">0${C.coupon.minutes}:00</b><small><i>minutes</i><i>seconds</i></small></span></div></div>`
+      :`<div class="cp"><div class="cp-h">${ICON.tag}<div><b>Your ${trialP?trialP.trialDays+'-day free trial is reserved!':'personal offer is reserved!'}</b><small>${trialP?'Start today for '+money(0)+'. Cancel anytime before the trial ends.':'Your plan is held for you for a few minutes.'}</small></div></div><div class="cp-row"><span class="cp-code">${ICON.check}${esc(code)}</span><span class="cp-t"><b class="tm">0${C.coupon.minutes}:00</b><small><i>minutes</i><i>seconds</i></small></span></div></div>`);
+    const badge=p=>save(p)?`<span class="off">SAVE ${save(p)}%</span>`:'';
+    const sub=p=>p.trialDays?`<small class="o-ps">${p.trialDays} days free, then ${money(p.price)}/${p.every}</small>`
+      :`<small class="o-ps">${money(p.price)} ${isC?'':'billed '}every ${p.every}</small>`;
+    const pd=v=>{const [i,c]=v.toFixed(2).split('.');return `<span class="pd"><span class="cur">${$c}</span><span class="int">${i}</span><span class="dec"><b>${c}</b><small>per day</small></span></span>`;};
+    const right=p=>{
+      if(p.trialDays) return `<div class="${isC?'o-tp':'o-pp'} o-free"><b>FREE</b><small>${p.trialDays} days</small></div>`;
+      if(isC) return `<div class="o-tp">${save(p)?`<em>SAVE ${save(p)}%</em>`:''}<b>${money(p.price)}</b>${p.compareAt?`<s>${money(p.compareAt)}</s>`:''}</div>`;
+      return `<div class="o-pp">${pd(perDay(p))}</div>`;
+    };
+    const plansBlock=()=>`<h3 class="o-h2">Your <span class="hl">Personalized Bible Study Plan</span> is ready!</h3>${couponBox()}
       <div class="o-plans">${P.map((p,i)=>`<div class="o-plan ${p.popular?'pop':''}" data-i="${i}">${p.popular?`<div class="rib">${ICON.spark} MOST POPULAR</div>`:''}
-        <div class="o-pb"><span class="radio"></span><div class="o-pn"><b>${p.name}</b><s>${p.full}</s></div><div class="o-pp">${price(p.perDay)}</div></div></div>`).join('')}</div>
+        <div class="o-pb"><span class="radio"></span><div class="o-pn"><b>${p.name}</b>${sub(p)}${isC?'':badge(p)}</div>${right(p)}</div></div>`).join('')}</div>
       <div class="o-note">${C.planNote}</div>
       <button class="btn sub">Get my plan</button>
       <p class="o-terms">By clicking “Get my plan”, you agree to automatic subscription renewal. <span class="tdyn"></span> Cancel via the app or email: <a href="mailto:${C.supportEmail}">${C.supportEmail}</a>. See <a href="${C.links.subscription}">Subscription Terms</a> for details.</p>
@@ -683,6 +724,7 @@ const R = {
     view.querySelectorAll('.sub').forEach(b=>b.onclick=checkout);
     $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
     sync();
+    if(isC){let t=C.coupon.minutes*60;const tk=()=>{const m=String(Math.floor(t/60)).padStart(2,'0'),ss=String(t%60).padStart(2,'0');view.querySelectorAll('.tm').forEach(e=>e.textContent=m+':'+ss);if(t>0)t--;};tk();clearInterval(window.__cpT);window.__cpT=setInterval(tk,1000);}
   }
 };
 
