@@ -297,6 +297,21 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .o-exp .o-card{margin-top:12px}.o-exp .ex{position:relative;padding:18px 16px 16px}
 .ex .exn{display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:14px;align-items:center;justify-content:center;margin-bottom:8px}
 .ex b{display:block;font-size:16px;color:var(--title);margin-bottom:6px}.ex p{font-size:14px;line-height:1.6;color:#3d4046}
+.rb{position:relative;margin-top:28px;height:190px;display:flex;align-items:center;justify-content:center}
+.rb-map{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.rb-card{position:relative;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.88);backdrop-filter:blur(4px);border-radius:14px;padding:12px 18px;box-shadow:0 6px 24px rgba(30,36,48,.08)}
+.rb-l svg{width:38px;height:60px;display:block}.rb-r{transform:scaleX(-1)}
+.rb-c{text-align:center}.rb-c b{display:block;font-size:40px;font-weight:600;line-height:1;color:var(--title)}
+.rb-s{display:block;color:#E3A92E;letter-spacing:2px;font-size:14px;margin-top:4px}.rb-c small{font-size:12px;font-weight:600;color:var(--title)}
+.rb-h{font-size:20px;font-weight:600;text-align:center;line-height:1.35;margin:4px 12px 16px;color:var(--title)}
+.rc{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:0}.rc::-webkit-scrollbar{display:none}
+.rc-i{flex:0 0 100%;scroll-snap-align:center;background:var(--soft);border-radius:14px;padding:16px;box-sizing:border-box}
+.rc-top{display:flex;gap:10px;align-items:flex-start}.rc-top>div{flex:1}.rc-top b{display:block;font-size:14px;line-height:1.3}
+.rc-top em{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;color:var(--blue);overflow:hidden;flex:none}
+.rc-top em img{width:100%;height:100%;object-fit:cover}.rc-top small{font-size:11px;color:var(--muted);max-width:70px;text-align:right}
+.rc-st{display:flex;gap:2px;margin-top:4px}.rc-st i{width:14px;height:14px;background:#00B67A;color:#fff;font-style:normal;font-size:9px;display:flex;align-items:center;justify-content:center}
+.rc-i p{font-size:13px;line-height:1.55;color:#3d4046;margin-top:10px}
+.rc-dots{display:flex;justify-content:center;gap:6px;margin-top:10px}.rc-dots i{width:6px;height:6px;border-radius:3px;background:#d4d7dc;transition:all .2s}.rc-dots i.on{width:18px;background:var(--blue)}
 </style>
 </head>
 <body>
@@ -377,6 +392,7 @@ const CONFIG = {
   // ===== SOCIAL PROOF — replace every [ ] placeholder with YOUR real data before running ads =====
   // Leave a field empty ("" or []) to hide that block.
   social: { count: "950K", rating: "4.8", ratingSource: "Rating in App Stores" },
+  ratingBadge: true,   // world map + laurels + rating block (shown after the stats)
   endorsements: [
     {top:"UNIVERSITY OF", name:"OXFORD"}, {top:"UNIVERSITY OF", name:"CAMBRIDGE"},
     {name:"HARVARD", bottom:"UNIVERSITY"}, {name:"YALE", bottom:"UNIVERSITY"},
@@ -705,6 +721,10 @@ const R = {
     const stats = C.stats.length ? `<h3 class="o-h2">People just like you achieved great results with ${esc(C.brandName)}!</h3><div class="o-stats">${C.stats.map((x,i)=>`${i?'<div class="sdiv"><i></i><span>✦</span><i></i></div>':''}<div class="srow"><span class="big">${esc(x.value)}<sup>%</sup></span><span>${esc(x.text)}</span></div>`).join('')}<small>${esc(C.statsSource)}</small></div>` : '';
     const reviews = C.reviews.length ? `<h3 class="o-h2">Users love ${esc(C.brandName)}!</h3><p class="o-sub">Become a member of our global community</p>${C.reviews.map(r=>`<div class="o-card o-rev"><div class="stars">${'<i>★</i>'.repeat(r.stars||5)}</div><b>${esc(r.title)}</b><p>${esc(r.text)}</p><div class="who"><span>${esc(r.name)}</span>${r.photo?`<img src="${C.img}${esc(r.photo)}" alt="">`:`<em>${esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em>`}</div></div>`).join('')}` : '';
     const endorse = C.endorsements.length ? `<div class="o-card"><h3 class="o-h2" style="margin-top:0">Our Bible study plan is based on approaches used by experts from:</h3><div class="o-end">${C.endorsements.map(e=>typeof e==='string'?`<div><b>${esc(e)}</b></div>`:`<div>${e.top?`<small>${esc(e.top)}</small>`:''}<b>${esc(e.name)}</b>${e.bottom?`<small>${esc(e.bottom)}</small>`:''}</div>`).join('')}</div><p class="o-disc">${esc(C.endorsementsNote)}</p></div>` : '';
+    const laurel=`<svg viewBox="0 0 70 110" xmlns="http://www.w3.org/2000/svg"><path d="M56 104 C 22 92, 10 60, 22 14" fill="none" stroke="#5E8C6E" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="16" cy="22" rx="5" ry="11" transform="rotate(-25 16 22)" fill="#7FA886"/><ellipse cx="28" cy="26" rx="5" ry="11" transform="rotate(35 28 26)" fill="#5E8C6E"/><ellipse cx="12" cy="40" rx="5" ry="11" transform="rotate(-15 12 40)" fill="#5E8C6E"/><ellipse cx="25" cy="44" rx="5" ry="11" transform="rotate(45 25 44)" fill="#7FA886"/><ellipse cx="12" cy="58" rx="5" ry="11" transform="rotate(-5 12 58)" fill="#7FA886"/><ellipse cx="26" cy="62" rx="5" ry="11" transform="rotate(55 26 62)" fill="#5E8C6E"/><ellipse cx="16" cy="76" rx="5" ry="11" transform="rotate(10 16 76)" fill="#5E8C6E"/><ellipse cx="31" cy="78" rx="5" ry="11" transform="rotate(65 31 78)" fill="#7FA886"/><ellipse cx="25" cy="92" rx="5" ry="11" transform="rotate(25 25 92)" fill="#7FA886"/><ellipse cx="40" cy="92" rx="5" ry="11" transform="rotate(75 40 92)" fill="#5E8C6E"/></svg>`;
+    const ratingBlock = (C.ratingBadge && C.social.rating) ? `<div class="rb"><img class="rb-map" src="${C.img}worldmap.svg" alt=""><div class="rb-card"><span class="rb-l">${laurel}</span><div class="rb-c"><b>${esc(C.social.rating)}</b><span class="rb-s">${'\u2605'.repeat(5)}</span><small>${esc(C.social.ratingSource)}</small></div><span class="rb-l rb-r">${laurel}</span></div></div>
+      ${C.social.count?`<h3 class="rb-h">${esc(C.social.count)} believers already grow with the ${esc(C.brandName)} app</h3>`:''}
+      ${C.reviews.length?`<div class="rc" id="rc">${C.reviews.map(r=>`<div class="rc-i"><div class="rc-top"><em>${r.photo?`<img src="${C.img}${esc(r.photo)}" alt="">`:esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em><div><b>${esc(r.title)}</b><span class="rc-st">${'<i>\u2605</i>'.repeat(r.stars||5)}</span></div><small>${esc(r.name)}</small></div><p>${esc(r.text)}</p></div>`).join('')}</div><div class="rc-dots">${C.reviews.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}` : '';
     view.innerHTML = `<div class="o-top"><img src="${C.img}logo.svg" alt="${esc(C.brandName)}" class="o-logo"><button class="btn o-cta" id="getPlan">Get my plan</button></div>
     <div class="offer">
       <h1 class="o-h1">Your Personalized<br><b>Bible Study Plan is ready!</b></h1>
@@ -720,13 +740,12 @@ const R = {
         ${C.benefits.map((b,i)=>`<div class="gi"><span class="gic c${i}">${ICON[b.icon]}</span><p><b>${b.lead}</b> ${b.text}</p></div>`).join('')}</div>
       ${social}
       <div id="pA">${plansBlock()}</div>
-      ${endorse}${stats}
+      ${endorse}${stats}${ratingBlock}
       <div class="o-guide"><b>Study the Bible with clear guidance — not on your own</b>
         <div>${ICON.smile}Simple explanations for every chapter</div><div>${ICON.note}Key takeaways so nothing gets missed</div><div>${ICON.bolt}A daily action to live out what you read</div></div>
       ${C.experience&&C.experience.length?`<h3 class="o-h2">What a day with <span class="hl">${esc(C.brandName)}</span> feels like</h3><div class="o-exp">${C.experience.map((e,i)=>`<div class="o-card ex"><span class="exn">${i+1}</span><b>${esc(e.title)}</b><p>${esc(e.text)}</p></div>`).join('')}</div>`:''}
       <h3 class="o-h2">People often ask</h3>
       <div class="faq">${C.faq.map(f=>`<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}</div>
-      ${reviews}
       <div id="pB">${plansBlock()}</div>
     </div>
     <footer class="addr">${esc(C.companyAddress)}</footer>`;
@@ -736,6 +755,9 @@ const R = {
     const sync=()=>{view.querySelectorAll('.o-plan').forEach(p=>p.classList.toggle('sel',+p.dataset.i===state.plan));view.querySelectorAll('.tdyn').forEach(t=>t.textContent=P[state.plan].terms);};
     view.querySelectorAll('.o-plan').forEach(p=>p.onclick=()=>{state.plan=+p.dataset.i;sync();});
     view.querySelectorAll('.sub').forEach(b=>b.onclick=checkout);
+    const rc=$('rc'); if(rc){const dots=view.querySelectorAll('.rc-dots i');const n=dots.length;let idx=0;
+      rc.addEventListener('scroll',()=>{idx=Math.round(rc.scrollLeft/rc.clientWidth);dots.forEach((d,j)=>d.classList.toggle('on',j===idx));},{passive:true});
+      clearInterval(window.__rcT);window.__rcT=setInterval(()=>{if(!document.body.contains(rc))return clearInterval(window.__rcT);idx=(idx+1)%n;rc.scrollTo({left:idx*rc.clientWidth,behavior:'smooth'});},5000);}
     $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
     sync();
     if(isC){let t=C.coupon.minutes*60;const tk=()=>{const m=String(Math.floor(t/60)).padStart(2,'0'),ss=String(t%60).padStart(2,'0');view.querySelectorAll('.tm').forEach(e=>e.textContent=m+':'+ss);if(t>0)t--;};tk();clearInterval(window.__cpT);window.__cpT=setInterval(tk,1000);}
