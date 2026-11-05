@@ -265,6 +265,14 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .o-rev .who span{font-size:13px}
 .o-rev .who img,.o-rev .who em{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none}
 .o-rev .who em{background:var(--blue-soft);color:var(--blue);font-style:normal;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.em-wrap{position:relative;margin-top:18px}
+.em-field{position:relative}
+.em-field input{width:100%;height:56px;border:1.5px solid #dfe1e5;border-radius:12px;padding:0 48px 0 16px;font-size:16px;outline:none;background:#fff}
+.em-field input:focus{border-color:var(--blue)}
+.em-field svg{position:absolute;right:16px;top:50%;width:22px;height:22px;transform:translateY(-50%);color:#7a7f87;pointer-events:none}
+.em-sug{list-style:none;margin-top:6px;background:var(--soft);border-radius:12px;max-height:176px;overflow-y:auto;padding:4px 0}
+.em-sug li{padding:12px 16px;font-size:15px;color:#2b2d30;cursor:pointer}
+.em-sug li:hover{background:var(--blue-soft)}
 </style>
 </head>
 <body>
@@ -588,12 +596,28 @@ const R = {
     setCTA("Continue",()=>go());
   },
   email(){
-    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:12px">Enter your email to access your archetype and personalized plan</h2><p class="info-text">Where should we send your results?</p>
-      <input class="field" id="em" type="email" placeholder="Enter your email" autocomplete="email" value="${esc(state.email)}"><div class="err" id="er"></div>
-      <div class="privacy"><span>🔒</span><span>We respect your privacy and are committed to protecting your personal data. Your data will be processed according to our <a href="#">Privacy policy</a>.</span></div></section>`;
+    const DOMAINS=["gmail.com","icloud.com","yahoo.com","hotmail.com","outlook.com","aol.com","live.com","msn.com","me.com","protonmail.com"];
+    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:12px">Enter your email to get your <span class="hl">Personalized Bible Study Plan</span></h2>
+      <div class="em-wrap"><div class="em-field"><input id="em" type="email" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Enter your email" value="${esc(state.email)}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg></div>
+        <ul class="em-sug" id="sug" hidden></ul></div>
+      <div class="err" id="er"></div>
+      <div class="privacy"><span>🔒</span><span>We respect your privacy and are committed to protecting your personal data. Your data will be processed according to our <a href="${CONFIG.links.privacy}">Privacy policy</a>.</span></div></section>`;
+    const inp=$('em'), sug=$('sug');
     const ok=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-    const upd=()=>setCTA("Continue",()=>{const v=$('em').value.trim();if(!ok(v)){$('er').textContent="Please enter a valid email";return;}state.email=v;go();},!$('em').value.trim());
-    $('em').oninput=()=>{$('er').textContent="";upd();}; upd();
+    const showSug=()=>{
+      const v=inp.value.trim(); if(!v){sug.hidden=true;return;}
+      const [user,dom='']=v.split('@'); if(!user){sug.hidden=true;return;}
+      const list=v.includes('@')?DOMAINS.filter(d=>d.startsWith(dom)&&d!==dom):DOMAINS;
+      if(!list.length){sug.hidden=true;return;}
+      sug.innerHTML=list.map(d=>`<li data-v="${esc(user)}@${d}">${esc(user)}@${d}</li>`).join('');
+      sug.hidden=false;
+      sug.querySelectorAll('li').forEach(li=>li.onmousedown=e=>{e.preventDefault();inp.value=li.dataset.v;sug.hidden=true;$('er').textContent='';upd();});
+    };
+    const upd=()=>setCTA("Continue",()=>{const v=inp.value.trim();if(!ok(v)){$('er').textContent="Please enter a valid email";return;}state.email=v;go();},!inp.value.trim());
+    inp.oninput=()=>{$('er').textContent="";showSug();upd();};
+    inp.onfocus=showSug; inp.onblur=()=>setTimeout(()=>sug.hidden=true,150);
+    upd();
   },
   name(){
     view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:12px">What's your first name?</h2>
