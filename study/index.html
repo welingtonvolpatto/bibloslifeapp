@@ -332,7 +332,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 
 <div class="menu" id="menu"><div class="panel">
   <h4>Docs</h4>
-  <a href="#">Terms and Conditions of use</a><a href="#">Privacy Policy</a><a href="#">Subscription Policy</a><a href="#">Cookie Policy</a><a href="#">Contact Us</a><a href="#">Do Not Sell or Share My Personal Information</a>
+  <a data-l="terms">Terms and Conditions of use</a><a data-l="privacy">Privacy Policy</a><a data-l="subscription">Subscription Policy</a><a data-l="cookies">Cookie Policy</a><a data-l="contact">Contact Us</a><a data-l="privacy">Do Not Sell or Share My Personal Information</a>
 </div></div>
 
 <script>
@@ -526,6 +526,7 @@ const ICON={
 const $ = id=>document.getElementById(id);
 const view = $('view');
 const state = {i:0, gender:null, answers:{}, email:"", name:"", archetype:null, plan:CONFIG.defaultPlan, history:[]};
+document.querySelectorAll('#menu a[data-l]').forEach(a=>a.href=CONFIG.links[a.dataset.l]||'#');
 $('logo').innerHTML = `<img src="${CONFIG.img}logo.svg" alt="${CONFIG.brand}" style="height:18px;display:block;margin:0 auto">`;
 $('menuBtn').onclick=()=>$('menu').classList.add('open');
 $('menu').onclick=e=>{if(e.target.id==='menu')$('menu').classList.remove('open');};
@@ -575,7 +576,7 @@ const R = {
         <button class="tile" data-g="male">${img(CONFIG.images.gender_male,"img","","168/240")}<span class="lbl">Male <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
         <button class="tile" data-g="female">${img(CONFIG.images.gender_female,"img","","168/240")}<span class="lbl">Female <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
       </div>
-      <div class="legal">By continuing you agree to our<br><a href="#">Terms of Service</a> | <a href="#">Privacy Policy</a> | <a href="#">Subscription Policy</a><br><a href="#">Cookie Policy</a><p style="margin-top:12px">Please review before continuing</p></div>
+      <div class="legal">By continuing you agree to our<br><a href="${CONFIG.links.terms}">Terms of Service</a> | <a href="${CONFIG.links.privacy}">Privacy Policy</a> | <a href="${CONFIG.links.subscription}">Subscription Policy</a><br><a href="${CONFIG.links.cookies}">Cookie Policy</a><p style="margin-top:12px">Please review before continuing</p></div>
     </section>`;
     view.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{t.classList.add('sel');state.gender=t.dataset.g;state.answers.gender=t.dataset.g;setTimeout(()=>go(),250);});
   },
