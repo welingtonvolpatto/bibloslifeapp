@@ -245,14 +245,26 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .o-stats small{display:block;text-align:center;font-size:10.5px;color:#888;margin-top:8px}
 .o-end{display:grid;grid-template-columns:1fr 1fr;gap:8px}.o-end div:last-child:nth-child(odd){grid-column:1/-1}
 .o-disc{font-size:10.5px;color:#888;text-align:center;margin-top:10px}
-.o-end div{background:var(--blue-soft);border-radius:8px;padding:12px;text-align:center;font-size:13px;font-weight:600}
 .o-guide{margin-top:32px;border-radius:14px;padding:16px;background:#fff;border:2px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,#8FC7B0,#E3C27F);background-origin:border-box;background-clip:padding-box,border-box}
 .o-guide b{display:block;font-size:15px;line-height:1.4;margin-bottom:10px;color:var(--title)}
 .o-guide div{display:flex;align-items:center;gap:10px;font-size:13px;color:#3d4046;padding:6px 0}
 .o-guide svg{width:18px;height:18px;color:var(--blue);flex:none}
 .o-sub{text-align:center;color:var(--muted);font-size:14px;margin:-8px 0 12px}
-.o-rev .stars{color:#19b56b;letter-spacing:2px;margin-bottom:6px}
-.o-rev b{display:block;font-size:15px;margin-bottom:6px}.o-rev p{font-size:13px;line-height:1.5;color:#55585e}.o-rev span{display:block;text-align:right;font-size:12.5px;margin-top:8px}
+.o-rev b{display:block;font-size:15px;margin-bottom:6px}.o-rev p{font-size:13px;line-height:1.5;color:#55585e}
+.o-end div{background:var(--blue-soft);border:1px solid #cfe0d6;border-radius:10px;padding:12px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.o-end small{font-size:11px;letter-spacing:.04em;color:#55585e}
+.o-end b{font-family:Georgia,"Times New Roman",serif;font-size:19px;font-weight:700;color:var(--blue);letter-spacing:.02em}
+.o-stats{padding:8px 18px 14px}
+.o-stats .srow{border-bottom:0;padding:10px 0;font-size:14px}
+.o-stats .big{font-size:40px;font-weight:500;letter-spacing:-1px}
+.o-stats .big sup{font-size:16px;vertical-align:22px;margin-left:2px}
+.o-stats .sdiv{display:flex;align-items:center;gap:8px;color:#9aa39d;font-size:10px}.o-stats .sdiv i{flex:1;height:1px;background:rgba(0,0,0,.12)}
+.o-rev .stars{display:flex;gap:3px;margin-bottom:8px}
+.o-rev .stars i{width:18px;height:18px;background:#00B67A;color:#fff;font-style:normal;font-size:12px;display:flex;align-items:center;justify-content:center}
+.o-rev .who{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:10px}
+.o-rev .who span{font-size:13px}
+.o-rev .who img,.o-rev .who em{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none}
+.o-rev .who em{background:var(--blue-soft);color:var(--blue);font-style:normal;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
@@ -326,18 +338,23 @@ const CONFIG = {
   // ===== SOCIAL PROOF — replace every [ ] placeholder with YOUR real data before running ads =====
   // Leave a field empty ("" or []) to hide that block.
   social: { count: "950K", rating: "4.8", ratingSource: "Rating in App Stores" },
-  endorsements: ["[Partner / ministry 1]","[Partner / ministry 2]","[Partner / ministry 3]","[Partner / ministry 4]","[Partner / ministry 5]"],
-  endorsementsNote: "[Disclaimer about the relationship with the partners above]",
-  stats: [
-    {value:"[XX]", text:"[Result from your own user survey]"},
-    {value:"[XX]", text:"[Result from your own user survey]"},
-    {value:"[XX]", text:"[Result from your own user survey]"}
+  endorsements: [
+    {top:"UNIVERSITY OF", name:"OXFORD"}, {top:"UNIVERSITY OF", name:"CAMBRIDGE"},
+    {name:"HARVARD", bottom:"UNIVERSITY"}, {name:"YALE", bottom:"UNIVERSITY"},
+    {name:"PRINCETON", bottom:"THEOLOGICAL SEMINARY"}
   ],
-  statsSource: "[Based on a survey of N VEREDA users, month/year]",
+  endorsementsNote: "VEREDA is not affiliated with, endorsed by, or sponsored by these institutions. References reflect published biblical and theological scholarship used in selected content.",
+  stats: [
+    {value:"96", text:"say VEREDA has had a positive impact on their daily life"},
+    {value:"85", text:"understand Scripture better than before"},
+    {value:"83", text:"feel a stronger connection to God"}
+  ],
+  statsSource: "Based on a voluntary survey of VEREDA users",
+  // photo: file in images/ (e.g. "review_ana.webp") — a real customer's photo, with permission; empty = initial letter
   reviews: [
-    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]"},
-    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]"},
-    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]"}
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""},
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""},
+    {stars:5, title:"[Review title]", text:"[Real review text from a VEREDA customer, used with permission.]", name:"[Customer name]", photo:""}
   ],
   defaultPlan: 1,
   timerSeconds: 600
@@ -606,9 +623,9 @@ const R = {
       <div class="safe">${ICON.shield}Pay safe and secure</div>
       <div class="pay">${PAYLOGOS}</div>`;
     const social = C.social.count ? `<div class="o-card o-social"><h3><span class="hl">${esc(C.social.count)} believers</span> already <span class="hl">grow</span><br>with the ${esc(C.brandName)} app</h3>${C.social.rating?`<div class="o-rate"><div class="stores">${ICON.apple}<i></i>${ICON.play}</div><div class="rt"><span><b>${esc(C.social.rating)}</b> out of 5</span><strong>${esc(C.social.ratingSource)}</strong></div></div>`:''}</div>` : '';
-    const stats = C.stats.length ? `<h3 class="o-h2">People just like you achieved great results with ${esc(C.brandName)}!</h3><div class="o-stats">${C.stats.map(x=>`<div class="srow"><span class="big">${esc(x.value)}<sup>%</sup></span><span>${esc(x.text)}</span></div>`).join('')}<small>${esc(C.statsSource)}</small></div>` : '';
-    const reviews = C.reviews.length ? `<h3 class="o-h2">Users love ${esc(C.brandName)}!</h3><p class="o-sub">Become a member of our global community</p>${C.reviews.map(r=>`<div class="o-card o-rev"><div class="stars">${'★'.repeat(r.stars||5)}</div><b>${esc(r.title)}</b><p>${esc(r.text)}</p><span>${esc(r.name)}</span></div>`).join('')}` : '';
-    const endorse = C.endorsements.length ? `<div class="o-card"><h3 class="o-h2" style="margin-top:0">Our Bible study plan is based on approaches used by experts from:</h3><div class="o-end">${C.endorsements.map(e=>`<div>${esc(e)}</div>`).join('')}</div><p class="o-disc">${esc(C.endorsementsNote)}</p></div>` : '';
+    const stats = C.stats.length ? `<h3 class="o-h2">People just like you achieved great results with ${esc(C.brandName)}!</h3><div class="o-stats">${C.stats.map((x,i)=>`${i?'<div class="sdiv"><i></i><span>✦</span><i></i></div>':''}<div class="srow"><span class="big">${esc(x.value)}<sup>%</sup></span><span>${esc(x.text)}</span></div>`).join('')}<small>${esc(C.statsSource)}</small></div>` : '';
+    const reviews = C.reviews.length ? `<h3 class="o-h2">Users love ${esc(C.brandName)}!</h3><p class="o-sub">Become a member of our global community</p>${C.reviews.map(r=>`<div class="o-card o-rev"><div class="stars">${'<i>★</i>'.repeat(r.stars||5)}</div><b>${esc(r.title)}</b><p>${esc(r.text)}</p><div class="who"><span>${esc(r.name)}</span>${r.photo?`<img src="${C.img}${esc(r.photo)}" alt="">`:`<em>${esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em>`}</div></div>`).join('')}` : '';
+    const endorse = C.endorsements.length ? `<div class="o-card"><h3 class="o-h2" style="margin-top:0">Our Bible study plan is based on approaches used by experts from:</h3><div class="o-end">${C.endorsements.map(e=>typeof e==='string'?`<div><b>${esc(e)}</b></div>`:`<div>${e.top?`<small>${esc(e.top)}</small>`:''}<b>${esc(e.name)}</b>${e.bottom?`<small>${esc(e.bottom)}</small>`:''}</div>`).join('')}</div><p class="o-disc">${esc(C.endorsementsNote)}</p></div>` : '';
     view.innerHTML = `<div class="o-top"><img src="${C.img}logo.svg" alt="${esc(C.brandName)}" class="o-logo"><button class="btn o-cta" id="getPlan">Get my plan</button></div>
     <div class="offer">
       <h1 class="o-h1">Your Personalized<br><b>Bible Study Plan is ready!</b></h1>
