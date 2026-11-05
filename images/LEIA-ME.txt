@@ -1,0 +1,20 @@
+Coloque nesta pasta as SUAS imagens, com exatamente estes nomes.
+Se um arquivo não existir, o quiz mostra um fundo neutro no lugar (nada quebra).
+
+TELA 1 – escolha de gênero (retrato vertical, ~336x480 px)
+  gender_male.webp
+  gender_female.webp
+
+TELA 2 – faixa etária (retrato vertical, ~336x480 px)
+  Mulher: f_age_18_34.webp  f_age_35_44.webp  f_age_45_54.webp  f_age_55_plus.webp
+  Homem:  m_age_18_34.webp  m_age_35_44.webp  m_age_45_54.webp  m_age_55_plus.webp
+
+TELAS DE PAUSA (paisagem, ~684x440 px)
+  break1.webp  – "Ready to discover who you are?"
+  break2.webp  – "Your answers are building your profile"
+  break3.webp  – "We've put together part of your profile"
+  break4.webp  – "We've gathered most of your spiritual profile"
+
+Dica: dá para gerar todas com IA (Midjourney, DALL·E, Ideogram) no estilo
+"biblical figure portrait, soft warm light, realistic painting".
+Pode usar .jpg ou .png também, basta trocar a extensão no CONFIG do index.html.
