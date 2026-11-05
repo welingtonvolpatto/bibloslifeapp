@@ -286,7 +286,7 @@ const CONFIG = {
     gender_male: "gender_male.webp", gender_female: "gender_female.webp",
     age: { female: ["f_age_18_34.webp","f_age_35_44.webp","f_age_45_54.webp","f_age_55_plus.webp"],
            male:   ["m_age_18_34.webp","m_age_35_44.webp","m_age_45_54.webp","m_age_55_plus.webp"] },
-    break1: "break1.webp", break2: "break2.webp", break3: "break3.webp", break4: "break4.webp",
+    break1: {male:"break1_m.webp", female:"break1_f.webp"}, break2: "break2.webp", break3: "break3.webp", break4: "break4.webp",
     coach: "coach.webp"
   },
   brandName: "VEREDA",
@@ -492,7 +492,7 @@ const R = {
     view.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{view.querySelectorAll('.tile').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');state.answers.age=t.dataset.v;setTimeout(()=>go(),250);});
   },
   info(s){
-    view.innerHTML = `<section class="screen">${img(CONFIG.images[s.img],"hero-img","")}
+    view.innerHTML = `<section class="screen">${img((v=>typeof v==="object"?v[state.gender==="male"?"male":"female"]:v)(CONFIG.images[s.img]),"hero-img","")}
       <h2 class="info-title">${s.title}</h2><p class="info-text">${s.text}</p>
       ${s.banner?`<div class="banner"><span class="pi">🙏</span><span>${s.banner}</span></div>`:""}</section>`;
     setCTA("Continue",()=>go());
