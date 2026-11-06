@@ -85,7 +85,7 @@ const P = {
  text:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>', flame:'<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-5 5-5 8-1-1-2-2-2-4-2 2-2 5-2 8 0 4 3 7 7 7Z"/>', gift:'<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9c-2-4-7-5-7-2s4 2 7 2c3 0 7 1 7-2s-5-2-7 2"/>', sprout:'<path d="M12 21v-9"/><path d="M12 13C12 8 8 6 4 6c0 4 3 7 8 7ZM12 11c0-4 3-7 8-7 0 4-3 7-8 7Z"/>', hands:'<path d="M12 3c-1 4-4 7-5 11-.6 2.4.8 4 3 4h2Z"/><path d="M12 3c1 4 4 7 5 11 .6 2.4-.8 4-3 4h-2Z"/><path d="M5 21h14"/>', mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/>', trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>', edit:'<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
 };
 const ic = (n, cls="") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${P[n]||""}</svg>`;
-const LOGO = `<img src="../images/logo.svg" alt="VEREDA" style="height:30px">`;
+const LOGO = `<img src="images/logo.svg" alt="VEREDA" style="height:30px">`;
 
 /* ---------- illustrations (original SVG) ---------- */
 function art(kind){
@@ -129,7 +129,7 @@ function splash(){
   if(sessionStorage.getItem("vsplash")) return; sessionStorage.setItem("vsplash","1");
   const s=document.createElement("div"); s.className="splash";
   const layer=(bottom,fill,dur,seed,delay)=>`<div class="sp-layer" style="bottom:0;height:calc(${bottom} + 120px);animation-delay:${delay}s"><div class="clouds" style="--ch:120px;top:0;bottom:auto"><div class="cl" style="animation-duration:${dur}s">${cloudBand(seed,fill)}</div></div><div style="position:absolute;left:0;right:0;top:119px;bottom:0;background:${fill}"></div></div>`;
-  s.innerHTML=`${layer("44vh","#3C7FB4",60,7,0)}${layer("30vh","#7DAAD2",44,31,.12)}${layer("16vh","#E8F1F9",32,77,.24)}<div class="lgw"><img src="../images/logo-stacked.svg" alt="VEREDA"></div><div class="tag">Your daily path closer to God</div>`;
+  s.innerHTML=`${layer("44vh","#3C7FB4",60,7,0)}${layer("30vh","#7DAAD2",44,31,.12)}${layer("16vh","#E8F1F9",32,77,.24)}<div class="lgw"><img src="images/logo-stacked.svg" alt="VEREDA"></div><div class="tag">Your daily path closer to God</div>`;
   document.body.appendChild(s);
   setTimeout(()=>{ s.classList.add("out"); setTimeout(()=>s.remove(),620); },2400);
 }
@@ -216,7 +216,7 @@ function renderWelcome(step){
     return;
   }
   $app.innerHTML = `<div class="welcome">
-    <img src="../images/logo-stacked.svg" alt="VEREDA" style="width:150px">
+    <img src="images/logo-stacked.svg" alt="VEREDA" style="width:150px">
     <h1 style="margin-top:26px;font-size:24px;line-height:1.3">Find daily peace and grow closer to God</h1>
     <div class="laurel" style="margin-top:22px"><span class="stars">★★★★★</span> 4.8 rating</div>
     <div class="laurel" style="margin-top:6px">Join 950K believers</div>
