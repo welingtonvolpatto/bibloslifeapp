@@ -27,7 +27,7 @@ try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem(KEY)||"{}")); }
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} };
 if (/[?&]dev=1/.test(location.search)) { S.dev = true; save(); }
 if (/[?&]dev=0/.test(location.search)) { S.dev = false; save(); }
-document.documentElement.dataset.theme = S.theme;
+S.theme="light";
 let tab = "journey";
 
 /* ---------- lessons ---------- */
@@ -185,8 +185,9 @@ const Music = {
 };
 
 /* ---------- render root ---------- */
+function applyTheme(){ document.documentElement.dataset.theme = (tab==="bible" && S.bibleDark) ? "dark" : "light"; document.querySelector('meta[name=theme-color]')?.setAttribute("content", (tab==="bible"&&S.bibleDark)?"#141922":"#FFFFFF"); }
 function render(){
-  N.onupdate=null;
+  N.onupdate=null; applyTheme();
   if(!S.user){ renderWelcome(); return; }
   const view = {journey:viewJourney, explore:viewExplore, journal:viewJournal, community:viewCommunity, bible:viewBible}[tab]();
   $app.innerHTML = view + tabbar();
@@ -530,9 +531,8 @@ function openProfile(){
     el.querySelector("[data-jr]").onclick=()=>{ el.remove(); tab="journal"; render(); };
     el.querySelector("[data-edit]").onclick=()=>sheet(`<h3>Edit profile</h3><input class="field" id="pn" value="${esc(S.user.name)}"><button class="btn" data-ok style="margin-top:14px">Save</button>`,(s,c)=>s.querySelector("[data-ok]").onclick=()=>{ const v=s.querySelector("#pn").value.trim(); if(v){ S.user.name=v; save(); } c(); el.remove(); openProfile(); });
     el.querySelector("[data-faq]").onclick=()=>page("FAQ",[["How does the Journey work?","A new devotional unlocks every day. Complete today’s prayer, word, quiz and action to unlock tomorrow’s day."],["Can I skip ahead?","No — the Journey is designed to build a daily habit, one step at a time."],["Which Bible version is used?","The World English Bible (WEB), a modern English translation in the public domain."],["How do I listen instead of reading?","Tap “Listen” on any prayer or devotional. You can change the narrator and speed."],["How do I cancel?","Tap Manage subscription in your profile, or contact support."]].map(([q,a])=>`<div class="jentry"><div class="q">${q}</div><div class="a">${a}</div></div>`).join(""));
-    el.querySelector("[data-set]").onclick=()=>page("Settings",`<div class="list" style="margin-bottom:16px"><div class="li">${ic("mail")}<span>Email<small>${esc(S.user.email)}</small></span></div><button class="li" data-th>${ic(S.theme==="dark"?"sun":"moon")}Theme<span class="chev muted" style="font-size:14px">${S.theme==="dark"?"Dark":"Light"}</span></button><button class="li" data-fs>${ic("text")}Bible text size<span class="chev muted" style="font-size:14px">${S.bfs}px</span></button><button class="li" data-nr>${ic("mic")}Narrator speed<span class="chev muted" style="font-size:14px">${S.rate||1}×</span></button></div>
+    el.querySelector("[data-set]").onclick=()=>page("Settings",`<div class="list" style="margin-bottom:16px"><div class="li">${ic("mail")}<span>Email<small>${esc(S.user.email)}</small></span></div><button class="li" data-fs>${ic("text")}Bible text size<span class="chev muted" style="font-size:14px">${S.bfs}px</span></button><button class="li" data-nr>${ic("mic")}Narrator speed<span class="chev muted" style="font-size:14px">${S.rate||1}×</span></button></div>
       <div class="list"><button class="li" data-lo>${ic("out")}Sign out</button><button class="li" data-del style="color:var(--bad)">${ic("trash")}Delete my data</button></div><p class="muted" style="text-align:center;font-size:12px;margin-top:18px">VEREDA v1.0</p>`,p=>{
-        p.querySelector("[data-th]").onclick=()=>{ S.theme=S.theme==="dark"?"light":"dark"; document.documentElement.dataset.theme=S.theme; save(); p.remove(); el.querySelector("[data-set]").click(); };
         p.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); p.remove(); el.querySelector("[data-set]").click(); };
         p.querySelector("[data-nr]").onclick=()=>{ const r=[0.75,1,1.25,1.5]; S.rate=r[(r.indexOf(S.rate||1)+1)%r.length]; save(); p.remove(); el.querySelector("[data-set]").click(); };
         p.querySelector("[data-lo]").onclick=()=>{ if(S.user.admin) S.dev=false; S.user=null; save(); p.remove(); el.remove(); render(); };
@@ -788,7 +788,7 @@ let BIDX=null; const BCACHE={}; let bibleListening=false;
 async function loadIdx(){ if(!BIDX) BIDX=await fetch("bible/index.json").then(r=>r.json()); return BIDX; }
 async function loadBook(i){ const v=S.bver||"web"; const k=v+i; if(!BCACHE[k]) BCACHE[k]=await fetch(`${VERSIONS[v].path}${String(i).padStart(2,"0")}.json`).then(r=>r.json()); return BCACHE[k]; }
 function viewBible(){
-  return `<div class="screen bible-screen"><div class="b-head" id="bhead"><button class="icon-btn" id="bset">${ic("lines")}</button><div class="seg ${bibleListening?"listen":""}" id="bseg" style="transform:scale(.92)"><span class="knob"></span><button class="${bibleListening?"":"on"}" data-bm="read">${ic("lines")}Read</button><button class="${bibleListening?"on":""}" data-bm="listen">${ic("head")}Listen</button></div><button class="chip" id="bver" style="font-size:12px">${VERSIONS[S.bver||"web"].code}</button></div>
+  return `<div class="screen bible-screen"><div class="b-head" id="bhead"><button class="icon-btn" id="bset">${ic("lines")}</button><div class="seg ${bibleListening?"listen":""}" id="bseg" style="transform:scale(.92)"><span class="knob"></span><button class="${bibleListening?"":"on"}" data-bm="read">${ic("lines")}Read</button><button class="${bibleListening?"on":""}" data-bm="listen">${ic("head")}Listen</button></div><div style="display:flex;gap:8px;align-items:center"><button class="icon-btn" id="bth" title="Light / dark">${ic(S.bibleDark?"sun":"moon")}</button><button class="chip" id="bver" style="font-size:12px">${VERSIONS[S.bver||"web"].code}</button></div></div>
     <div class="pad" id="bwrap"><div class="bible-txt" id="btxt" style="--bfs:${S.bfs}px"><p class="muted" style="font-family:inherit">Loading…</p></div>
     <button class="btn ghost sm" id="bnext" style="margin:26px 0 8px"></button>
     <p class="muted" style="font-size:11.5px;text-align:center;margin:14px 0 30px">Scripture: ${VERSIONS[S.bver||"web"].name} (${VERSIONS[S.bver||"web"].code}), public domain.</p></div>
@@ -831,7 +831,8 @@ afterRender.bible=async()=>{
       el.querySelectorAll("[data-c]").forEach(x=>x.onclick=()=>{ el.remove(); go(openB,+x.dataset.c,1); }); };
       paint(); setTimeout(()=>el.querySelector(".chgrid")?.scrollIntoView({block:"center"}),50); }); };
   document.getElementById("bver").onclick=openVersions;
-  document.getElementById("bset").onclick=()=>sheet(`<h3 style="text-align:left">Bible settings</h3><div class="list" style="box-shadow:none;border:1px solid var(--line)"><button class="li" data-vr>${ic("bible")}<span>Version<small>${VERSIONS[S.bver||"web"].code}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-bk>${ic("book")}<span>Book<small>${esc(b.name)}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-fs>${ic("text")}<span>Text size<small>${S.bfs}px</small></span><span class="chev">${ic("right")}</span></button></div>`,(s,c)=>{ s.querySelector("[data-vr]").onclick=()=>{ c(); openVersions(); }; s.querySelector("[data-bk]").onclick=()=>{ c(); openBooks(); }; s.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); c(); render(); }; });
+  document.getElementById("bth").onclick=()=>{ S.bibleDark=!S.bibleDark; save(); const y=window.scrollY; const wasListening=bibleListening; render(); window.scrollTo(0,y); };
+  document.getElementById("bset").onclick=()=>sheet(`<h3 style="text-align:left">Bible settings</h3><div class="list" style="box-shadow:none;border:1px solid var(--line)"><button class="li" data-vr>${ic("bible")}<span>Version<small>${VERSIONS[S.bver||"web"].code}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-bk>${ic("book")}<span>Book<small>${esc(b.name)}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-fs>${ic("text")}<span>Text size<small>${S.bfs}px</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-dm>${ic(S.bibleDark?"sun":"moon")}<span>Reading mode<small>${S.bibleDark?"Dark":"Light"}</small></span><span class="chev">${ic("right")}</span></button></div>`,(s,c)=>{ s.querySelector("[data-dm]").onclick=()=>{ S.bibleDark=!S.bibleDark; save(); c(); render(); }; s.querySelector("[data-vr]").onclick=()=>{ c(); openVersions(); }; s.querySelector("[data-bk]").onclick=()=>{ c(); openBooks(); }; s.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); c(); render(); }; });
   document.querySelectorAll(".bible-txt [data-v]").forEach(sp=>sp.onclick=()=>{
     const v=+sp.dataset.v; const t=ch[v-1]; const vref=`${b.name} ${S.bibleCh+1}:${v}`; sp.classList.add("sel");
     const isH=S.highlights.some(h=>h.b===S.bibleBook&&h.c===S.bibleCh&&h.v===v);
