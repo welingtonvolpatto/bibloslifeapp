@@ -41,7 +41,9 @@ const STEPS = [
   {k:"action", label:"One action", icon:"spark"}
 ];
 function currentIndex(){ let i=0; while(i<LESSONS.length && S.completed[LESSONS[i].key]) i++; return i; }
+const isAdmin=()=>!!(S.user&&S.user.admin);
 function isAvailable(i){
+  if (isAdmin()) return true;
   if (i < currentIndex()) return true;
   if (i > currentIndex()) return false;
   if (i === 0 || S.dev) return true;
@@ -271,15 +273,15 @@ function viewJourney(){
     }
   });
   function nodeHTML(l){
-    const done=!!S.completed[l.key], current=l.idx===cur && isAvailable(l.idx), open=done||current;
-    const hx = current ? HEX("#9CCBEE","#2F7DB8","#1D5F92",.45) : done ? HEX("#C9E0F2","#6FA8D4","#4C86B4",.5) : HEX("#F3F5F7","#C9CFD7","#A9B1BC",.55);
+    const done=!!S.completed[l.key], current=l.idx===cur && isAvailable(l.idx), open=done||current||isAdmin();
+    const hx = current ? HEX("#9CCBEE","#2F7DB8","#1D5F92",.45) : done ? HEX("#C9E0F2","#6FA8D4","#4C86B4",.5) : open ? HEX("#DCEBF7","#8FBCE0","#6A9CC4",.5) : HEX("#F3F5F7","#C9CFD7","#A9B1BC",.55);
     const kind=C.lessons[l.key]?.image; const icon = open ? (GLY[kind]||"path") : "lock";
     return `<button class="node ${open?"open":"locked"} ${current?"current":""}" data-node="${l.idx}"><div class="hex">${hx}${ic(icon,"ico")}</div><span>${esc(l.title)}</span></button>`;
   }
   const next = C.modules[1];
   html += `<div class="next-mod"><span class="tag">UP NEXT</span><b>Module 2: ${esc(next.title)} ${ic("lock").replace('<svg ','<svg style="width:16px;height:16px;vertical-align:-2px" ')}</b><span class="muted" style="font-size:14px">The next modules unlock after you finish the current one</span></div>`;
   return `<div class="screen journey"><div class="safe-top"></div>
-    <div class="j-top"><button class="chip" id="mod">Module 1</button><div style="display:flex;gap:8px"><button class="icon-btn" id="hl">${ic("bookmark")}</button><button class="icon-btn" id="me">${initials(S.user.name)}</button></div></div>
+    <div class="j-top"><button class="chip" id="mod">Module 1${isAdmin()?' <span style="color:var(--gold);font-weight:800">· ADMIN</span>':""}</button><div style="display:flex;gap:8px"><button class="icon-btn" id="hl">${ic("bookmark")}</button><button class="icon-btn" id="me">${initials(S.user.name)}</button></div></div>
     ${card}<div style="position:relative;height:84px">${clouds(96,"bg","bottom:-2px")}</div><div class="path">${html}</div></div><button class="fab-top hidden" id="top">${ic("up")}</button>
     <div class="j-mini" id="jmini"><button>${esc(L.title)}${ic("chev")}</button></div>`;
 }
@@ -288,6 +290,7 @@ afterRender.journey = () => {
   document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{ const L=todayLesson().L; openLesson(L.key, b.dataset.open); });
   document.querySelectorAll("[data-node]").forEach(b=>b.onclick=()=>{
     const l=LESSONS[+b.dataset.node];
+    if(isAdmin()){ if(C.lessons[l.key]) openLesson(l.key,"read",0); else sheet(`<h3>${esc(l.title)}</h3><p>Day ${l.idx+1} · Chapter ${l.ci+1}: ${esc(MOD.chapters[l.ci].title)}<br><br>The content for this day hasn’t been written yet.</p><button class="btn" data-x>Got it</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c); return; }
     if(S.completed[l.key]){ if(C.lessons[l.key]) openLesson(l.key,"read",0,true); return; }
     if(l.idx===currentIndex() && isAvailable(l.idx)){ if(C.lessons[l.key]) openLesson(l.key,"read"); else toast("This lesson is being prepared"); return; }
     if(l.idx===currentIndex()) sheet(`<h3>Come back tomorrow</h3><p>New activities unlock tomorrow if you complete today’s devotional.</p><button class="btn" data-x>Got it</button>`,(s,close)=>s.querySelector("[data-x]").onclick=close);
