@@ -82,7 +82,7 @@ const P = {
  out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>', refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/>',
  dots:'<circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/>',
  music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>', sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
- text:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/>', trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>', edit:'<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
+ text:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>', flame:'<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-5 5-5 8-1-1-2-2-2-4-2 2-2 5-2 8 0 4 3 7 7 7Z"/>', gift:'<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9c-2-4-7-5-7-2s4 2 7 2c3 0 7 1 7-2s-5-2-7 2"/>', sprout:'<path d="M12 21v-9"/><path d="M12 13C12 8 8 6 4 6c0 4 3 7 8 7ZM12 11c0-4 3-7 8-7 0 4-3 7-8 7Z"/>', hands:'<path d="M12 3c-1 4-4 7-5 11-.6 2.4.8 4 3 4h2Z"/><path d="M12 3c1 4 4 7 5 11 .6 2.4-.8 4-3 4h-2Z"/><path d="M5 21h14"/>', mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/>', trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>', edit:'<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
 };
 const ic = (n, cls="") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${P[n]||""}</svg>`;
 const LOGO = `<img src="../images/logo.svg" alt="VEREDA" style="height:30px">`;
@@ -101,7 +101,38 @@ function art(kind){
   }[kind] || "";
   return `<svg viewBox="0 0 320 213" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="ag${kind}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${g[0]}"/><stop offset="1" stop-color="${g[1]}"/></linearGradient></defs><rect width="320" height="213" fill="url(#ag${kind})"/><g fill="#fff" opacity=".8"><ellipse cx="40" cy="190" rx="70" ry="26"/><ellipse cx="290" cy="196" rx="80" ry="28"/><ellipse cx="262" cy="48" rx="40" ry="14"/><ellipse cx="60" cy="40" rx="30" ry="10"/></g>${glyph}</svg>`;
 }
-const HEX = (a,b)=>`<svg class="shape" viewBox="0 0 74 80"><defs><linearGradient id="h${a.slice(1)}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><path d="M31 3.5a12 12 0 0 1 12 0l21.5 12.4a12 12 0 0 1 6 10.4v27.4a12 12 0 0 1-6 10.4L43 76.5a12 12 0 0 1-12 0L9.5 64.1a12 12 0 0 1-6-10.4V26.3a12 12 0 0 1 6-10.4Z" fill="url(#h${a.slice(1)})"/></svg>`;
+const HEX = (face1,face2,side,gloss=.35)=>{ const id="h"+face1.slice(1)+side.slice(1); const pth="M33 3.5a12 12 0 0 1 12 0l23 13.3a12 12 0 0 1 6 10.4v26.6a12 12 0 0 1-6 10.4L45 77.5a12 12 0 0 1-12 0L10 64.2a12 12 0 0 1-6-10.4V27.2a12 12 0 0 1 6-10.4Z";
+  return `<svg class="shape" viewBox="0 0 78 88"><defs><linearGradient id="${id}" x1="0" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="${face1}"/><stop offset="1" stop-color="${face2}"/></linearGradient></defs><path d="${pth}" transform="translate(0 7)" fill="${side}"/><path d="${pth}" fill="url(#${id})"/><path d="M33 3.5a12 12 0 0 1 12 0l23 13.3a12 12 0 0 1 3.4 3L39 38 6.6 19.8a12 12 0 0 1 3.4-3Z" fill="#fff" opacity="${gloss}"/></svg>`; };
+
+
+/* ---------- clouds (original, generated) ---------- */
+function cloudBand(seed, fill){
+  // two identical halves so translateX(-50%) loops seamlessly
+  let r=seed, rnd=()=>{ r=(r*9301+49297)%233280; return r/233280; };
+  const circles=[]; let x=0;
+  while(x<420){ const rad=26+rnd()*34; circles.push([x,rad]); x+=rad*1.05; }
+  const half=circles.map(([cx,rad])=>`<circle cx="${cx.toFixed(1)}" cy="${(120-rad*0.55).toFixed(1)}" r="${rad.toFixed(1)}"/>`).join("");
+  let op=1; const m=/rgba\(([^)]+),\s*([\d.]+)\)/.exec(fill); if(m){ fill=`rgb(${m[1]})`; op=+m[2]; }
+  return `<svg viewBox="0 0 800 120" preserveAspectRatio="none"><g opacity="${op}"><g fill="${fill}">${half}<rect x="0" y="95" width="400" height="25"/></g><g fill="${fill}" transform="translate(400 0)">${half}<rect x="0" y="95" width="400" height="25"/></g></g></svg>`;
+}
+function clouds(h=150, tone="white", extra=""){
+  const f = tone==="white" ? ["rgba(255,255,255,.45)","rgba(255,255,255,.7)","rgba(255,255,255,.95)"] : tone==="sky" ? ["rgba(214,232,245,.6)","rgba(225,238,248,.85)","#EAF3FA"] : tone;
+  const dark = document.documentElement.dataset.theme==="dark";
+  if(tone==="bg"){ const c=dark?["#182532","#162029","#141922"]:["#E6EEF3","#F2F3F0","#FDF7EF"]; return `<div class="clouds" style="--ch:${h}px;${extra}"><div class="cl" style="animation-duration:80s;bottom:34%">${cloudBand(11,c[0])}</div><div class="cl" style="animation-duration:55s;bottom:16%">${cloudBand(41,c[1])}</div><div class="cl" style="animation-duration:38s">${cloudBand(97,c[2])}</div></div>`; }
+  const ff = dark && tone!=="blue" ? ["rgba(255,255,255,.05)","rgba(255,255,255,.08)","rgba(255,255,255,.11)"] : f;
+  return `<div class="clouds" style="--ch:${h}px;${extra}"><div class="cl" style="animation-duration:70s;bottom:28%;opacity:.9">${cloudBand(7,ff[0])}</div><div class="cl" style="animation-duration:48s;bottom:12%">${cloudBand(31,ff[1])}</div><div class="cl" style="animation-duration:34s">${cloudBand(77,ff[2])}</div></div>`;
+}
+function puff(x,y,w,dur=9,op=.9,delay=0){
+  return `<div class="puff" style="left:${x};top:${y};width:${w}px;opacity:${op};animation-duration:${dur}s;animation-delay:-${delay}s"><svg viewBox="0 0 120 50"><g fill="#fff"><circle cx="35" cy="32" r="18"/><circle cx="60" cy="22" r="22"/><circle cx="86" cy="32" r="17"/><rect x="18" y="32" width="86" height="18" rx="9"/></g></svg></div>`;
+}
+function splash(){
+  if(sessionStorage.getItem("vsplash")) return; sessionStorage.setItem("vsplash","1");
+  const s=document.createElement("div"); s.className="splash";
+  const layer=(bottom,fill,dur,seed,delay)=>`<div class="sp-layer" style="bottom:0;height:calc(${bottom} + 120px);animation-delay:${delay}s"><div class="clouds" style="--ch:120px;top:0;bottom:auto"><div class="cl" style="animation-duration:${dur}s">${cloudBand(seed,fill)}</div></div><div style="position:absolute;left:0;right:0;top:119px;bottom:0;background:${fill}"></div></div>`;
+  s.innerHTML=`${layer("44vh","#3C7FB4",60,7,0)}${layer("30vh","#7DAAD2",44,31,.12)}${layer("16vh","#E8F1F9",32,77,.24)}<div class="lgw"><img src="../images/logo-stacked.svg" alt="VEREDA"></div><div class="tag">Your daily path closer to God</div>`;
+  document.body.appendChild(s);
+  setTimeout(()=>{ s.classList.add("out"); setTimeout(()=>s.remove(),620); },2400);
+}
 
 /* ---------- ui helpers ---------- */
 let toastT;
@@ -198,6 +229,7 @@ function renderWelcome(step){
 }
 
 /* ---------- JOURNEY ---------- */
+const GLY={lamp:"flame",name:"heart",gift:"gift",prayer:"hands",wait:"sprout",shield:"shield",tree:"sprout"};
 let todayCollapsed=false, cdTimer=null;
 function msToMidnight(){ const n=new Date(), m=new Date(n); m.setHours(24,0,0,0); return m-n; }
 const hms = ms => { const s=Math.floor(ms/1000); return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":"); };
@@ -218,6 +250,7 @@ function viewJourney(){
   let html = "";
   MOD.chapters.forEach((ch,ci)=>{
     html += `<div class="ch-head"><small>Chapter ${ci+1}:</small><b>${esc(ch.title)}</b></div>`;
+    if(ci>0) html += `<div style="position:relative;height:0">${puff("-30px","-80px",140,11,.8,ci*2)}${puff("72%","-40px",120,13,.7,ci*3)}</div>`;
     const items = LESSONS.filter(l=>l.ci===ci);
     for(let k=0;k<items.length;k+=3){
       const pair=items.slice(k,k+2), mid=items[k+2];
@@ -227,15 +260,16 @@ function viewJourney(){
   });
   function nodeHTML(l){
     const done=!!S.completed[l.key], current=l.idx===cur && isAvailable(l.idx), open=done||current;
-    const [a,b]= open ? ["#4B97CF","#0E5F95"] : ["#E1E5EA","#B9C0CA"];
-    const icon = done ? "check" : current ? "path" : "lock";
-    return `<button class="node ${open?"open":"locked"} ${current?"current":""}" data-node="${l.idx}"><div class="hex">${HEX(a,b)}${ic(icon,"ico")}</div><span>${esc(l.title)}</span></button>`;
+    const hx = current ? HEX("#9CCBEE","#2F7DB8","#1D5F92",.45) : done ? HEX("#C9E0F2","#6FA8D4","#4C86B4",.5) : HEX("#F3F5F7","#C9CFD7","#A9B1BC",.55);
+    const kind=C.lessons[l.key]?.image; const icon = open ? (GLY[kind]||"path") : "lock";
+    return `<button class="node ${open?"open":"locked"} ${current?"current":""}" data-node="${l.idx}"><div class="hex">${hx}${ic(icon,"ico")}</div><span>${esc(l.title)}</span></button>`;
   }
   const next = C.modules[1];
   html += `<div class="next-mod"><span class="tag">UP NEXT</span><b>Module 2: ${esc(next.title)} ${ic("lock").replace('<svg ','<svg style="width:16px;height:16px;vertical-align:-2px" ')}</b><span class="muted" style="font-size:14px">The next modules unlock after you finish the current one</span></div>`;
   return `<div class="screen journey"><div class="safe-top"></div>
     <div class="j-top"><button class="chip" id="mod">Module 1</button><div style="display:flex;gap:8px"><button class="icon-btn" id="hl">${ic("bookmark")}</button><button class="icon-btn" id="me">${initials(S.user.name)}</button></div></div>
-    ${card}<div class="path">${html}</div></div><button class="fab-top hidden" id="top">${ic("up")}</button>`;
+    ${card}<div style="position:relative;height:84px">${clouds(96,"bg","bottom:-2px")}</div><div class="path">${html}</div></div><button class="fab-top hidden" id="top">${ic("up")}</button>
+    <div class="j-mini" id="jmini"><button>${esc(L.title)}${ic("chev")}</button></div>`;
 }
 afterRender.journey = () => {
   document.getElementById("tgl").onclick=()=>{ todayCollapsed=!todayCollapsed; document.getElementById("today").classList.toggle("collapsed",todayCollapsed); };
@@ -254,114 +288,191 @@ afterRender.journey = () => {
   document.getElementById("me").onclick=openProfile;
   document.getElementById("hl").onclick=openHighlights;
   const top=document.getElementById("top"); top.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
-  window.onscroll=()=>top.classList.toggle("hidden",window.scrollY<500);
+  const jm=document.getElementById("jmini"); jm.querySelector("button").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+  window.onscroll=()=>{ top.classList.toggle("hidden",window.scrollY<500); jm.classList.toggle("show",window.scrollY>330); };
+  if(sessionStorage.getItem("vjust")){ sessionStorage.removeItem("vjust"); document.querySelectorAll(".today .st .ck").forEach((c,i)=>c.style.animationDelay=(0.25+i*0.18)+"s"); } else document.querySelectorAll(".today .st .ck").forEach(c=>c.style.animation="none");
   clearInterval(cdTimer); cdTimer=setInterval(()=>{ const e=document.getElementById("cd"); if(!e){ clearInterval(cdTimer); return; } const ms=msToMidnight(); e.textContent=hms(ms); if(ms<1500) setTimeout(render,1600); },1000);
   if(!S.seen.notif && "Notification" in window && Notification.permission==="default"){ S.seen.notif=1; save();
     setTimeout(()=>sheet(`<h3>Daily reminder</h3><p>Allow notifications so VEREDA can remind you when your next day unlocks.</p><button class="btn" data-y>Allow</button><button class="btn ghost" data-x style="margin-top:10px">Not now</button>`,(s,close)=>{ s.querySelector("[data-x]").onclick=close; s.querySelector("[data-y]").onclick=()=>{ Notification.requestPermission(); close(); }; }),700); }
 };
 
 /* ---------- LESSON PLAYER ---------- */
+function laurel(){
+  let L="";
+  for(const side of [-1,1]) for(let i=0;i<9;i++){
+    const a=side<0? 100+i*14 : 80-i*14, r=a*Math.PI/180, x=80+52*Math.cos(r), y=58+52*Math.sin(r), rot=a+(side<0?25:-25);
+    L+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="5.5" ry="11.5" transform="rotate(${rot.toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`;
+    if(i%2===1) L+=`<circle cx="${(x+(side<0?9:-9)).toFixed(1)}" cy="${(y-4).toFixed(1)}" r="3.6" fill="#8A9A3A"/>`;
+  }
+  return `<svg class="laurel-w" viewBox="0 0 160 130" width="200"><g fill="#6E8F3A">${L}</g></svg>`;
+}
+function artBox(kind){ return `<div class="art">${art(kind)}${puff("6%","12%",86,10,.85,1)}${puff("62%","6%",64,13,.75,5)}${puff("30%","62%",110,12,.6,3)}</div>`; }
 function openLesson(key, mode="read", startStep, review){
   const D = C.lessons[key]; const L = LESSONS.find(l=>l.key===key); if(!D) return;
   const st=stepsOf(key);
   let step = startStep ?? STEPS.findIndex(s=>!st[s.k]); if(step<0) step=0;
-  let quiz = {i:-1, answers:[]};
+  let quiz = {i:-1, answers:[]}; let audioStep=-1;
   const el=document.createElement("div"); el.className="player"; document.body.appendChild(el); document.body.style.overflow="hidden";
   const close=()=>{ N.stop(); el.remove(); document.body.style.overflow=""; render(); };
   const prayerText = D.prayer.join(" ");
   const devText = D.devotional.map(b=>b.h? b.h+"." : b.v? `${b.v} ${b.r}.` : b.p.replace(/\*/g,"")).join(" ");
-  function top(title, sub, showSeg=true){
-    return `<div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button>${showSeg?`<div class="seg"><button class="${mode==="read"?"on":""}" data-mode="read">${ic("lines")}Read</button><button class="${mode==="listen"?"on":""}" data-mode="listen">${ic("head")}Listen</button></div>`:`<div class="p-title">${esc(title)}<small>${esc(sub||"")}</small></div>`}<button class="icon-btn" data-close>${ic("x")}</button></div>
-      <div class="prog">${STEPS.map((s,i)=>`<i class="${i<=step?"on":""}"></i>`).join("")}</div>`;
+  const sk = () => STEPS[step].k;
+  const audible = () => sk()==="prayer"||sk()==="devotional";
+  const subOf = s => s==="prayer"?"Daily Prayer":"Today’s Word";
+  function head(){
+    const seg = audible();
+    return `<div class="p-head"><div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button>${seg?`<div class="seg ${mode==="listen"?"listen":""}"><span class="knob"></span><button class="${mode==="read"?"on":""}" data-mode="read">${ic("lines")}Read</button><button class="${mode==="listen"?"on":""}" data-mode="listen">${ic("head")}Listen</button></div>`:`<div class="p-title">${esc(L.title)}<small>${esc(STEPS[step].label==="Scripture & today’s word"?"":({quiz:"Quiz",action:"One action"})[sk()]||"")}</small></div>`}<button class="icon-btn" data-close>${ic("x")}</button></div>
+      <div class="prog">${STEPS.map((s,i)=>`<i class="${i<=step?"on":""}"></i>`).join("")}</div></div>`;
   }
-  function audioUI(title,sub){
+  function audioUI(){
     const vs=N.voices(); const vname=(vs.find(v=>v.name===S.voice)||vs[0]||{name:"Default"}).name.split(/[ (]/)[0];
-    const tot=N.total(), el2=N.elapsed(), pct=tot?Math.min(100,el2/tot*100):0;
-    return `<div class="aud"><div class="art">${art(D.image)}</div><h2>${esc(L.title)}</h2><div class="sub">${esc(sub)}</div>
-      <div class="bar"><i style="width:${pct}%"></i><b style="left:${pct}%"></b></div><div class="times"><span>${mmss(el2)}</span><span>${Math.max(0,Math.round(tot-el2))} sec remaining</span><span>${mmss(tot)}</span></div>
+    const tot=N.total(), e2=N.elapsed(), pct=tot?Math.min(100,e2/tot*100):0;
+    return `<div class="aud">${artBox(D.image)}<h2>${esc(L.title)}</h2><div class="sub">${esc(subOf(sk()))}</div>
+      <div class="bar"><i style="width:${pct}%;transition:width .4s"></i><b style="left:${pct}%;transition:left .4s"></b></div><div class="times"><span>${mmss(e2)}</span><span>${Math.max(0,Math.round(tot-e2))} sec remaining</span><span>${mmss(tot)}</span></div>
       <div class="ctrls"><button class="spd" data-rate>${S.rate||1}×</button><button class="sk" data-sk="-10">${ic("rw")}</button><button class="play" data-pp>${ic(N.playing?"pause":"play")}</button><button class="sk" data-sk="10">${ic("fw")}</button><span style="width:44px"></span></div>
-      <div class="pills"><button class="pill" data-voice>${ic("wave")} ${esc(vname)}</button></div></div>`;
+      <div class="pills"><button class="pill" data-voice>${N.playing?'<span class="wavebars" style="margin:0"><i></i><i></i><i></i><i></i><i></i></span>':ic("wave")} ${esc(vname)}</button></div></div>`;
   }
-  function body(){
-    const s=STEPS[step].k;
-    if(s==="prayer"){
-      if(mode==="listen") return top()+`<div class="p-body">${audioUI(L.title,"Daily Prayer")}</div>`;
-      return top()+`<div class="p-body"><div class="art">${art(D.image)}</div><div class="prose">${D.prayer.map(p=>`<p>${md(p)}</p>`).join("")}</div></div>`;
-    }
-    if(s==="devotional"){
-      if(mode==="listen") return top()+`<div class="p-body">${audioUI(L.title,"Today’s Word")}</div>`;
-      return top()+`<div class="p-body"><div class="prose">${D.devotional.map(b=> b.h?`<h2>${esc(b.h)}</h2>` : b.v?`<div class="verse"><q>${esc(b.v)}</q><div class="ref">${esc(b.r)}</div><div class="va"><button data-copy="${esc(b.v+" — "+b.r)}">${ic("copy")}Copy</button><button data-share="${esc(b.v+" — "+b.r)}">${ic("share")}Share the wisdom</button></div></div>` : `<p>${md(b.p)}</p>`).join("")}</div></div>`;
-    }
+  function miniUI(){
+    if(!(mode==="read" && audioStep===step && (N.playing || N.i>0))) return "";
+    const tot=N.total(), pct=tot?Math.min(100,N.elapsed()/tot*100):0;
+    return `<div class="mini"><div class="th">${art(D.image)}</div><div style="flex:1"><b>${esc(L.title)}</b><div class="bar"><i style="width:${pct}%"></i></div></div><button data-mpp>${ic(N.playing?"pause":"play").replace("<svg ",'<svg style="width:22px;height:22px" ')}</button></div>`;
+  }
+  function content(){
+    const s=sk();
+    if(s==="prayer") return mode==="listen" ? audioUI() : `${artBox(D.image)}<div class="prose">${D.prayer.map(p=>`<p>${md(p)}</p>`).join("")}</div>`;
+    if(s==="devotional") return mode==="listen" ? audioUI() : `<div class="prose">${D.devotional.map(b=> b.h?`<h2>${esc(b.h)}</h2>` : b.v?`<div class="verse"><q>${esc(b.v)}</q><div class="ref">${esc(b.r)}</div><div class="va"><button data-copy="${esc(b.v+" — "+b.r)}">${ic("copy")}Copy</button><button data-share="${esc(b.v+" — "+b.r)}">${ic("share")}Share the wisdom</button></div></div>` : `<p>${md(b.p)}</p>`).join("")}</div>`;
     if(s==="quiz") return quizUI();
-    if(s==="action") return top(L.title,"One action",false)+`<div class="p-body"><div class="action"><p>${esc(D.action)}</p><button class="tap ${st.action?"done":""}" data-tap>${st.action?ic("check"):""}</button><div class="tap-l">${st.action?"Great job!":"Tap to complete"}</div></div></div>`;
+    if(s==="action") return `<div class="action">${clouds(170,"white","opacity:.8")}<button class="remind" data-remind>${ic("bell")} Remind me later</button><p>${esc(D.action)}</p><button class="tap ${st.action?"done":""}" data-tap>${st.action?ic("check"):""}</button><div class="tap-l">${st.action?"Great job!":"Tap to complete"}</div><div style="margin-top:auto"></div></div>`;
   }
   function quizUI(){
     const Q=D.quiz;
-    if(quiz.i===-1) return top(L.title,"Quiz",false)+`<div class="p-body"><div class="center-hero" style="padding-top:40px"><svg viewBox="0 0 120 120" width="150" height="150"><circle cx="60" cy="60" r="56" fill="var(--soft)"/><path d="M42 48a18 18 0 1 1 26 16c-5 3-8 6-8 12" stroke="var(--blue)" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="60" cy="92" r="5.5" fill="var(--blue)"/></svg><div class="k" style="color:var(--blue)">You made space for God</div><h2>Let’s make it stick</h2></div></div>`;
-    if(quiz.i>=Q.length) return top(L.title,"Quiz",false)+`<div class="p-body" style="background:linear-gradient(180deg,#FCEFD8,var(--bg) 60%);margin:0 -16px;padding:4px 16px 120px"><div class="center-hero"><svg viewBox="0 0 120 120" width="120" height="120"><path d="m60 10 14 30 32 4-24 22 6 32-28-16-28 16 6-32-24-22 32-4Z" fill="#F4C46A"/></svg><div class="k">Good job!</div><h2>This is taking root in you</h2></div>${Q.map((q,i)=>`<div class="sum"><small>${esc(q.q)}</small><div>${esc(q.o[q.a])}</div><button data-why="${i}">?</button></div>`).join("")}</div>`;
+    if(quiz.i===-1) return `<div class="scene sky" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">${clouds(220,"white")}${puff("4%","10%",120,10,.8,2)}${puff("66%","18%",90,12,.7,6)}
+      <svg class="floaty-ico" viewBox="0 0 140 140" width="160" height="160" style="margin-top:-60px"><defs><radialGradient id="qb" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".7" stop-color="#E4EAF1"/><stop offset="1" stop-color="#C5D0DC"/></radialGradient></defs><path d="M70 14c31 0 54 21 54 50s-23 50-54 50c-7 0-13-1-19-3l-22 13 6-21C22 94 16 80 16 64c0-29 23-50 54-50Z" fill="url(#qb)"/><path d="M56 52a14 14 0 1 1 20 13c-4 2-6 5-6 10" stroke="#B6C2CF" stroke-width="9" fill="none" stroke-linecap="round"/><circle cx="70" cy="90" r="5.5" fill="#B6C2CF"/></svg>
+      <div class="k st1" style="color:var(--blue);font-weight:700;margin-top:18px">You made space for God</div><h2 class="st2" style="font-size:28px;color:var(--ink);margin-top:6px">Let’s make it stick</h2></div>`;
+    if(quiz.i>=Q.length) return `<div class="scene peach" style="padding-bottom:130px">${clouds(160,"white","top:120px;bottom:auto;opacity:.8")}<div class="center-hero">
+      <svg class="floaty-ico" viewBox="0 0 140 140" width="130" height="130"><defs><radialGradient id="sg" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#FFF3C4"/><stop offset="1" stop-color="#F2B544"/></radialGradient></defs><circle cx="70" cy="62" r="46" fill="#FFE7A3" opacity=".35"/><path d="m70 18 14 29 32 4-23 22 6 32-29-15-29 15 6-32-23-22 32-4Z" fill="url(#sg)"/><path d="M40 112c8-14 20-20 30-18s16 8 26 6c8-2 12 4 6 10-10 10-30 14-46 12-8-1-14-4-16-10Z" fill="#E9958A"/></svg>
+      <div class="k st1">Good job!</div><h2 class="st2">This is taking root in you</h2></div><div class="stagger">${Q.map((q,i)=>`<div class="sum" style="animation-delay:${0.6+i*0.12}s"><small>${esc(q.q)}</small><div>${esc(q.o[q.a])}</div><button data-why="${i}">?</button></div>`).join("")}</div></div>`;
     const q=Q[quiz.i]; const ans=quiz.answers[quiz.i];
-    return top(L.title,"Quiz",false)+`<div class="p-body"><div class="qcard"><div class="n">Question ${quiz.i+1} of ${Q.length}</div><h3>${esc(q.q)}</h3>${q.o.map((o,j)=>`<button class="opt ${ans!==undefined&&j===q.a?"ok":""} ${ans===j&&j!==q.a?"no":""}" data-opt="${j}">${esc(o)}</button>`).join("")}</div></div>`;
+    return `<div class="qwrap"><div class="qcard"><div class="n">Question ${quiz.i+1} of ${Q.length}</div><h3>${esc(q.q)}</h3>${q.o.map((o,j)=>`<button class="opt ${ans!==undefined&&j===q.a?"ok":""} ${ans===j&&j!==q.a?"no":""}" data-opt="${j}">${esc(o)}</button>`).join("")}</div></div>`;
   }
   function foot(){
-    const s=STEPS[step].k;
-    if(s==="quiz"){ if(quiz.i>=0 && quiz.i<D.quiz.length) return ""; }
+    const s=sk();
+    if(s==="quiz" && quiz.i>=0 && quiz.i<D.quiz.length) return "";
     if(s==="action" && !st.action) return `<div class="p-foot"><button class="btn" disabled>Continue</button></div>`;
     return `<div class="p-foot"><button class="btn" data-next>Continue</button></div>`;
   }
-  function paint(){
-    el.innerHTML = body()+foot();
-    el.querySelector("[data-back]").onclick=()=>{ if(STEPS[step].k==="quiz" && quiz.i>0){ quiz.i--; paint(); return; } if(step>0){ step--; N.stop(); paint(); } else close(); };
+  function paint(anim=true){
+    el.classList.remove("immersive");
+    const bg = (sk()==="quiz" && (quiz.i===-1||quiz.i>=D.quiz.length)) ? (quiz.i===-1?"#CFE3F4":"#FCE6CC") : "";
+    el.style.background = bg && document.documentElement.dataset.theme!=="dark" ? bg : "";
+    el.innerHTML = head()+`<div class="p-body"><div class="${anim?"stepin":""}">${content()}</div></div>${miniUI()}${foot()}`;
+    bind();
+  }
+  function bind(){
+    el.querySelector("[data-back]").onclick=()=>{ if(sk()==="quiz" && quiz.i>0 && quiz.i<D.quiz.length){ quiz.i--; paint(); return; } if(step>0){ step--; if(sk()==="quiz") quiz.i=D.quiz.length; paint(); } else close(); };
     el.querySelector("[data-close]").onclick=close;
-    el.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{ mode=b.dataset.mode; N.stop(); prepAudio(); paint(); });
+    el.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{ if(mode===b.dataset.mode) return; mode=b.dataset.mode; el.querySelector(".seg")?.classList.toggle("listen",mode==="listen");
+      setTimeout(()=>{ if(mode==="listen"){ if(audioStep!==step){ loadAudio(); } paint(); if(!N.playing) N.play(); } else paint(); },180); });
     el.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>copyText(b.dataset.copy));
     el.querySelectorAll("[data-share]").forEach(b=>b.onclick=()=>shareText(b.dataset.share+"\n\n— shared from VEREDA"));
-    const pp=el.querySelector("[data-pp]"); if(pp) pp.onclick=()=>{ N.playing?N.pause():N.play(); };
-    el.querySelectorAll("[data-sk]").forEach(b=>b.onclick=()=>N.seek(+b.dataset.sk));
-    const rt=el.querySelector("[data-rate]"); if(rt) rt.onclick=()=>{ const r=[0.75,1,1.25,1.5]; S.rate=r[(r.indexOf(S.rate||1)+1)%r.length]; save(); if(N.playing) N.speak(); paint(); };
-    const vc=el.querySelector("[data-voice]"); if(vc) vc.onclick=()=>{ const vs=N.voices(); if(!vs.length){ toast("No extra voices on this device"); return; }
-      sheet(`<h3 style="text-align:left">Choose a narrator</h3>${vs.map(v=>`<button class="opt ${((S.voice||vs[0].name)===v.name)?"ok":""}" data-v="${esc(v.name)}"><b>${esc(v.name.split(/[ (]/)[0])}</b><div class="muted" style="font-size:12.5px">${esc(v.name)}</div></button>`).join("")}`,(s,c)=>s.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{ S.voice=b.dataset.v; save(); c(); if(N.playing) N.speak(); paint(); })); };
-    el.querySelectorAll("[data-opt]").forEach(b=>b.onclick=()=>{ if(quiz.answers[quiz.i]!==undefined) return; const j=+b.dataset.opt; quiz.answers[quiz.i]=j; paint(); const q=D.quiz[quiz.i]; const ok=j===q.a;
-      const f=document.createElement("div"); f.className="feedback"; f.innerHTML=`<b class="${ok?"ok":""}">${ok?ic("check").replace("<svg ",'<svg style="width:20px;height:20px" '):"✕"} ${ok?["Well done!","That’s right!","Exactly!","Great answer!"][quiz.i%4]:"Almost there!"}</b><p>${esc(q.e)}</p><button class="btn ${ok?"":"white"}" style="${ok?"":"border:1px solid var(--line)"}">Next</button>`;
-      el.appendChild(f); f.querySelector("button").onclick=()=>{ quiz.i++; if(quiz.i>=D.quiz.length){ st.quiz=true; save(); } paint(); }; });
-    el.querySelectorAll("[data-why]").forEach(b=>b.onclick=()=>sheet(`<p style="text-align:left">${esc(D.quiz[+b.dataset.why].e)}</p><button class="btn" data-x>Got it</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c));
-    const tap=el.querySelector("[data-tap]"); if(tap) tap.onclick=()=>{ st.action=true; save(); paint(); };
+    bindAudio();
+    const body=el.querySelector(".p-body"); let lastY=0;
+    body.onscroll=()=>{ const y=body.scrollTop; if(y>80 && y>lastY+4) el.classList.add("immersive"); else if(y<lastY-4 || y<40) el.classList.remove("immersive"); lastY=y; };
+    el.querySelectorAll("[data-opt]").forEach(b=>b.onclick=()=>answer(+b.dataset.opt));
+    el.querySelectorAll("[data-why]").forEach(b=>b.onclick=()=>sheet(`<p style="text-align:left">${esc(D.quiz[+b.dataset.why].e)}</p><button class="btn" data-x>Got it!</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c));
+    const tap=el.querySelector("[data-tap]"); if(tap) tap.onclick=()=>{ if(st.action) return; st.action=true; save(); navigator.vibrate&&navigator.vibrate(18);
+      tap.classList.add("done"); tap.innerHTML=ic("check")+'<span class="rp"></span>'; el.querySelector(".tap-l").textContent="Great job!"; el.querySelector(".p-foot").outerHTML=`<div class="p-foot"><button class="btn" data-next>Continue</button></div>`; el.querySelector("[data-next]").onclick=next; };
+    const rm=el.querySelector("[data-remind]"); if(rm) rm.onclick=remindSheet;
     const nx=el.querySelector("[data-next]"); if(nx) nx.onclick=next;
-    N.onupdate = () => { if(mode==="listen" && (STEPS[step].k==="prayer"||STEPS[step].k==="devotional")){ const a=el.querySelector(".aud"); if(a){ const tmp=document.createElement("div"); tmp.innerHTML=audioUI(L.title, STEPS[step].k==="prayer"?"Daily Prayer":"Today’s Word"); a.replaceWith(tmp.firstElementChild); paintAudioBind(); } } };
   }
-  function paintAudioBind(){ const pp=el.querySelector("[data-pp]"); if(pp) pp.onclick=()=>{ N.playing?N.pause():N.play(); }; el.querySelectorAll("[data-sk]").forEach(b=>b.onclick=()=>N.seek(+b.dataset.sk)); const rt=el.querySelector("[data-rate]"); if(rt) rt.onclick=()=>{ const r=[0.75,1,1.25,1.5]; S.rate=r[(r.indexOf(S.rate||1)+1)%r.length]; save(); if(N.playing) N.speak(); N.emit(); }; const vc=el.querySelector("[data-voice]"); if(vc) vc.onclick=()=>paint(); }
-  function prepAudio(){ const s=STEPS[step].k; if(mode!=="listen") return; if(s==="prayer") N.load(prayerText,"Daily Prayer"); else if(s==="devotional") N.load(devText,"Today’s Word"); }
+  function bindAudio(){
+    const pp=el.querySelector("[data-pp]"); if(pp) pp.onclick=()=>{ N.playing?N.pause():N.play(); };
+    const mp=el.querySelector("[data-mpp]"); if(mp) mp.onclick=()=>{ N.playing?N.pause():N.play(); };
+    el.querySelectorAll("[data-sk]").forEach(b=>b.onclick=()=>N.seek(+b.dataset.sk));
+    const rt=el.querySelector("[data-rate]"); if(rt) rt.onclick=()=>{ const r=[0.75,1,1.25,1.5]; S.rate=r[(r.indexOf(S.rate||1)+1)%r.length]; save(); if(N.playing) N.speak(); N.emit(); };
+    const vc=el.querySelector("[data-voice]"); if(vc) vc.onclick=voiceSheet;
+  }
+  function voiceSheet(){
+    const vs=N.voices(); if(!vs.length){ toast("No extra voices on this device"); return; }
+    const cur=S.voice||vs[0].name;
+    sheet(`<h3 style="text-align:left">Choose a narrator</h3>${vs.map(v=>`<button class="opt ${cur===v.name?"ok":""}" data-v="${esc(v.name)}" style="display:flex;align-items:center"><span><b>${esc(v.name.split(/[ (]/)[0])}</b><div class="muted" style="font-size:12.5px">${esc(v.name)}</div></span>${cur===v.name?'<span class="wavebars"><i></i><i></i><i></i><i></i><i></i></span>':""}</button>`).join("")}<button class="btn" data-ok style="margin-top:6px">Continue</button>`,(s,c)=>{
+      let pick=cur; s.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{ pick=b.dataset.v; s.querySelectorAll("[data-v]").forEach(x=>{ x.classList.toggle("ok",x===b); x.querySelector(".wavebars")?.remove(); }); b.insertAdjacentHTML("beforeend",'<span class="wavebars"><i></i><i></i><i></i><i></i><i></i></span>');
+        if(window.speechSynthesis){ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance("Hello, I’ll be reading with you today."); u.voice=vs.find(v=>v.name===pick); u.rate=S.rate||1; speechSynthesis.speak(u); } });
+      s.querySelector("[data-ok]").onclick=()=>{ S.voice=pick; save(); c(); if(N.playing) N.speak(); N.emit(); }; });
+  }
+  function loadAudio(){ if(sk()==="prayer") N.load(prayerText,"Daily Prayer"); else if(sk()==="devotional") N.load(devText,"Today’s Word"); audioStep=step; }
+  N.onupdate = () => {
+    if(!el.isConnected) return;
+    const a=el.querySelector(".aud");
+    if(a && audioStep===step){ const pct=N.total()?Math.min(100,N.elapsed()/N.total()*100):0; a.querySelector(".bar i").style.width=pct+"%"; a.querySelector(".bar b").style.left=pct+"%";
+      const tm=a.querySelectorAll(".times span"); tm[0].textContent=mmss(N.elapsed()); tm[1].textContent=Math.max(0,Math.round(N.total()-N.elapsed()))+" sec remaining"; tm[2].textContent=mmss(N.total());
+      a.querySelector("[data-pp]").innerHTML=ic(N.playing?"pause":"play"); a.querySelector("[data-rate]").textContent=(S.rate||1)+"×";
+      const vs=N.voices(); const vname=(vs.find(v=>v.name===S.voice)||vs[0]||{name:"Default"}).name.split(/[ (]/)[0];
+      a.querySelector("[data-voice]").innerHTML=(N.playing?'<span class="wavebars" style="margin:0"><i></i><i></i><i></i><i></i><i></i></span>':ic("wave"))+" "+esc(vname); bindAudio(); }
+    const m=el.querySelector(".mini");
+    if(m){ const pct=N.total()?Math.min(100,N.elapsed()/N.total()*100):0; m.querySelector(".bar i").style.width=pct+"%"; m.querySelector("[data-mpp]").innerHTML=ic(N.playing?"pause":"play").replace("<svg ",'<svg style="width:22px;height:22px" '); }
+  };
+  function answer(j){
+    if(quiz.answers[quiz.i]!==undefined) return; quiz.answers[quiz.i]=j; const q=D.quiz[quiz.i]; const ok=j===q.a;
+    el.querySelectorAll("[data-opt]").forEach((b,k)=>{ if(k===q.a) b.classList.add("ok"); if(k===j && !ok) b.classList.add("no"); });
+    navigator.vibrate && navigator.vibrate(ok?15:[10,40,10]);
+    const f=document.createElement("div"); f.className="feedback"+(ok?" ok":"");
+    f.innerHTML=`<b class="${ok?"ok":""}"><span class="bi" style="background:${ok?"var(--ok)":"var(--ink)"}">${ok?"✓":"✕"}</span>${ok?["Well done!","That’s right!","Exactly!","Great answer!"][quiz.i%4]:"Almost there!"}</b><p>${esc(q.e)}</p><button class="btn white" style="border:1px solid var(--line)">Next</button>`;
+    el.appendChild(f);
+    f.querySelector("button").onclick=()=>{ f.style.transition="transform .2s"; f.style.transform="translate(-50%,100%)"; const card=el.querySelector(".qcard"); card&&card.classList.add("out");
+      setTimeout(()=>{ f.remove(); quiz.i++; if(quiz.i>=D.quiz.length){ st.quiz=true; save(); } paint(); },220); };
+  }
+  function remindSheet(){
+    const now=new Date(); let hh=now.getHours(), mm=Math.ceil(now.getMinutes()/5)*5%60;
+    const col=(n,step2,sel)=>`<div class="col" data-col><div class="pad"></div>${Array.from({length:n},(_,i)=>`<div data-val="${i*step2}">${String(i*step2).padStart(2,"0")}</div>`).join("")}<div class="pad"></div></div>`;
+    const v=C.verses[3];
+    sheet(`<h3>Want to come back later?</h3><p style="font-size:14px">Pick a time that works for you — we’ll remind you to come back and complete this step when you’re ready.</p>
+      <div class="wheel">${col(24,1)}${col(12,5)}</div>
+      <div class="verse" style="margin:0 0 14px"><q>Delight yourself also in Yahweh, and he will give you the desires of your heart.</q><div class="ref" style="margin-bottom:0">Psalm 37:4</div></div>
+      <button class="btn" data-set>Set reminder</button>`,(s,c)=>{
+      const cols=s.querySelectorAll("[data-col]"); setTimeout(()=>{ cols[0].scrollTop=hh*40; cols[1].scrollTop=(mm/5)*40; },30);
+      s.querySelector("[data-set]").onclick=async()=>{ const h=Math.round(cols[0].scrollTop/40), m=Math.round(cols[1].scrollTop/40)*5; const when=new Date(); when.setHours(h,m,0,0); if(when<new Date()) when.setDate(when.getDate()+1);
+        let perm="denied"; if("Notification" in window){ perm = Notification.permission==="default" ? await Notification.requestPermission() : Notification.permission; }
+        S.reminder={key, at:when.getTime()}; save(); c();
+        if(perm==="granted"){ setTimeout(()=>{ try{ new Notification("VEREDA",{body:`Your “${L.title}” step is waiting for you.`, icon:"icons/icon-192.png"}); }catch(e){} }, when-new Date()); }
+        toast(perm==="granted"?`We’ll remind you at ${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`:"Turn on notifications in your settings to get reminders"); };
+    });
+  }
   function next(){
-    const s=STEPS[step].k;
+    const s=sk();
     if(s==="quiz" && quiz.i===-1){ quiz.i=0; paint(); return; }
-    st[s]=true; save(); N.stop();
-    if(step<STEPS.length-1){ step++; if(STEPS[step].k==="quiz") quiz={i:-1,answers:[]}; prepAudio(); paint(); el.querySelector(".p-body")?.scrollTo(0,0); return; }
+    st[s]=true; save();
+    if(N.playing && audible()){ N.stop(); toast(`Want to keep listening? Go back to ${subOf(s)}`); } else N.stop();
+    if(step<STEPS.length-1){ step++; if(sk()==="quiz") quiz={i:-1,answers:[]}; if(mode==="listen" && audible()){ loadAudio(); paint(); N.play(); } else paint(); return; }
     finish();
   }
   function finish(){
     const firstTime = !S.completed[key];
-    if(firstTime){ S.completed[key]=todayStr(); save(); }
-    el.innerHTML = `<div class="p-body" style="background:linear-gradient(180deg,#E3F0E2,var(--bg) 70%);display:flex;flex-direction:column;justify-content:center;padding-bottom:0;margin:0"><div class="center-hero">
-      <svg viewBox="0 0 160 130" width="190"><g fill="#6E8F3A"><ellipse cx="67.1" cy="106.3" rx="5.5" ry="11" transform="rotate(130 67.1 106.3)"/><ellipse cx="55.8" cy="101.7" rx="5.5" ry="11" transform="rotate(144 55.8 101.7)"/><ellipse cx="45.9" cy="94.6" rx="5.5" ry="11" transform="rotate(158 45.9 94.6)"/><ellipse cx="38.1" cy="85.2" rx="5.5" ry="11" transform="rotate(172 38.1 85.2)"/><ellipse cx="32.7" cy="74.3" rx="5.5" ry="11" transform="rotate(186 32.7 74.3)"/><ellipse cx="30.2" cy="62.4" rx="5.5" ry="11" transform="rotate(200 30.2 62.4)"/><ellipse cx="30.6" cy="50.2" rx="5.5" ry="11" transform="rotate(214 30.6 50.2)"/><ellipse cx="34.0" cy="38.5" rx="5.5" ry="11" transform="rotate(228 34.0 38.5)"/><ellipse cx="92.9" cy="106.3" rx="5.5" ry="11" transform="rotate(50 92.9 106.3)"/><ellipse cx="104.2" cy="101.7" rx="5.5" ry="11" transform="rotate(36 104.2 101.7)"/><ellipse cx="114.1" cy="94.6" rx="5.5" ry="11" transform="rotate(22 114.1 94.6)"/><ellipse cx="121.9" cy="85.2" rx="5.5" ry="11" transform="rotate(8 121.9 85.2)"/><ellipse cx="127.3" cy="74.3" rx="5.5" ry="11" transform="rotate(-6 127.3 74.3)"/><ellipse cx="129.8" cy="62.4" rx="5.5" ry="11" transform="rotate(-20 129.8 62.4)"/><ellipse cx="129.4" cy="50.2" rx="5.5" ry="11" transform="rotate(-34 129.4 50.2)"/><ellipse cx="126.0" cy="38.5" rx="5.5" ry="11" transform="rotate(-48 126.0 38.5)"/></g></svg>
-      <h2 style="margin-top:6px">You did great today!</h2><p class="muted" style="margin-top:8px">Before you finish, pause and reflect</p></div></div>
-      <div class="p-foot"><button class="btn" data-ref>Write my reflection</button><button class="btn ghost" data-fin style="margin-top:10px">Finish for today</button></div>`;
+    if(firstTime){ S.completed[key]=todayStr(); save(); sessionStorage.setItem("vjust","1"); }
+    navigator.vibrate && navigator.vibrate([15,60,25]);
+    el.style.background = document.documentElement.dataset.theme==="dark" ? "" : "#E3EEDF";
+    el.innerHTML = `<div class="p-body" style="padding:0;display:flex"><div class="done-scene scene green" style="margin:0;width:100%">${clouds(200,"white")}<div class="rays"></div>${puff("8%","18%",110,11,.8,2)}${puff("64%","10%",90,13,.7,6)}
+      ${laurel()}<h2 class="st2" style="font-size:28px;color:var(--ink);text-align:center;margin-top:10px;line-height:1.2">You did great today!</h2><p class="muted st3" style="margin-top:8px;text-align:center">Before you finish, pause and reflect</p>
+      <div class="refl"><small>${ic("journal").replace("<svg ",'<svg style="width:14px;height:14px" ')} Your daily reflection</small><div>${esc(D.journal)}</div></div></div></div>
+      <div class="p-foot st4" style="background:none"><button class="btn" data-ref>Write my reflection</button><button class="btn ghost" data-fin style="margin-top:10px;background:rgba(255,255,255,.75)">Finish for today</button></div>`;
     el.querySelector("[data-ref]").onclick=()=>{ el.remove(); document.body.style.overflow=""; tab="journal"; render(); openJournalEditor(D.journal, true); };
     el.querySelector("[data-fin]").onclick=()=>{ if(firstTime && !S.ratings[key]) rate(); else close(); };
   }
   function rate(){
-    let v=0;
-    el.innerHTML = `<div class="p-top"><span></span><span></span><button class="icon-btn" data-close>${ic("x")}</button></div><div class="p-body center-hero" style="padding-top:40px">
-      <svg viewBox="0 0 120 80" width="150"><path d="M10 50c20-30 50-40 70-30 10-14 26-16 34-10-8 2-12 8-12 14 0 24-30 40-62 30C30 58 18 60 10 50Z" fill="#B8D4EC"/><circle cx="92" cy="22" r="3" fill="#1E2430"/><path d="M104 18l12-4-8 10" fill="#6DBA78"/></svg>
+    let v=0; el.style.background="";
+    el.innerHTML = `<div class="p-top"><span></span><span></span><button class="icon-btn" data-close>${ic("x")}</button></div><div class="p-body center-hero" style="padding-top:40px"><div class="stepin">
+      <svg class="floaty-ico" viewBox="0 0 120 80" width="150"><path d="M10 50c20-30 50-40 70-30 10-14 26-16 34-10-8 2-12 8-12 14 0 24-30 40-62 30C30 58 18 60 10 50Z" fill="#B8D4EC"/><circle cx="92" cy="22" r="3" fill="#1E2430"/><path d="M104 18l12-4-8 10" fill="#6DBA78"/></svg>
       <h2 style="font-size:22px;margin-top:10px">How would you rate this devotional?</h2>
       <div class="rate-stars">${[1,2,3,4,5].map(i=>`<button data-s="${i}">★</button>`).join("")}</div>
-      <textarea class="field" id="rt" placeholder="Your thoughts (optional)" style="min-height:100px"></textarea></div>
+      <textarea class="field" id="rt" placeholder="Your thoughts (optional)" style="min-height:100px"></textarea></div></div>
       <div class="p-foot"><button class="btn" data-send disabled>Send feedback</button></div>`;
     el.querySelector("[data-close]").onclick=close;
-    el.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ v=+b.dataset.s; el.querySelectorAll("[data-s]").forEach(x=>x.classList.toggle("on",+x.dataset.s<=v)); el.querySelector("[data-send]").disabled=false; });
+    el.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ v=+b.dataset.s; el.querySelectorAll("[data-s]").forEach(x=>{ const on=+x.dataset.s<=v; x.classList.toggle("on",on); if(on){ x.style.animation="none"; x.offsetWidth; x.style.animation=`popIn .35s ${(+x.dataset.s)*0.05}s both`; } }); el.querySelector("[data-send]").disabled=false; });
     el.querySelector("[data-send]").onclick=()=>{ S.ratings[key]={v, t:el.querySelector("#rt").value.trim()}; save(); close(); toast("Thank you for your feedback!");
-      setTimeout(()=>sheet(`<h3>Come back tomorrow</h3><p>New activities unlock tomorrow if you complete your devotional for the day.</p><button class="btn" data-x>Got it!</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c),400); };
+      setTimeout(()=>sheet(`<h3>Come back tomorrow</h3><p>New activities unlock tomorrow if you complete your devotional for the day.</p><button class="btn" data-x>Got it!</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c),900); };
   }
-  if(!S.seen.listenTip && mode==="read"){ S.seen.listenTip=1; save(); setTimeout(()=>toast("Tip: switch to Listen anytime to hear it read aloud"),600); }
-  prepAudio(); paint();
+  if(mode==="listen" && audible()){ loadAudio(); paint(); N.play(); } else paint();
+  if(!S.seen.listenTip && mode==="read"){ S.seen.listenTip=1; save(); setTimeout(()=>{ const sg=el.querySelector(".seg"); if(!sg) return; const r=sg.getBoundingClientRect(); const tp=document.createElement("div"); tp.className="tip"; tp.style.top=(r.bottom+10)+"px"; tp.style.left=Math.max(12,r.left-20)+"px"; tp.innerHTML="<b>Read or Listen</b>Tap here to choose how you want to experience today’s word"; tp.style.setProperty("--x","40px"); el.appendChild(tp); tp.querySelector; const st2=document.createElement("style"); tp.onclick=()=>tp.remove(); setTimeout(()=>tp.remove(),4200); },700); }
 }
 
 /* ---------- PROFILE / HIGHLIGHTS ---------- */
@@ -409,15 +520,19 @@ function viewExplore(){
 }
 afterRender.explore=()=>document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>openStory(+b.dataset.st));
 function openStory(i){
+  document.querySelector(".storyview")?.remove();
   const v=verseOfDay(i); const el=document.createElement("div"); el.className="storyview"; el.style.background=STORY_BG[i%7];
-  el.innerHTML=`<div style="position:absolute;top:calc(env(safe-area-inset-top) + 14px);left:16px;right:16px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;opacity:.85">${v.d.toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span><button data-x style="color:#fff">${ic("x").replace("<svg ",'<svg style="width:26px;height:26px" ')}</button></div>
-    <div class="brand">VEREDA</div><q>${esc(v.t)}</q><div style="opacity:.8">${esc(v.r)}</div>
-    <div style="position:absolute;left:24px;right:24px;bottom:calc(30px + env(safe-area-inset-bottom))"><button class="btn white" data-sh>Share the wisdom</button><button data-cp style="color:#fff;font-weight:600;margin-top:16px;width:100%">Copy verse</button></div>`;
+  el.innerHTML=`${clouds(220,"white")}<div class="story-bars">${Array.from({length:7},(_,k)=>`<i class="${k<i?"done":k===i?"run":""}"><b></b></i>`).join("")}</div><div style="position:absolute;top:calc(env(safe-area-inset-top) + 22px);left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2"><span style="font-size:13px;opacity:.85">${v.d.toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span><button data-x style="color:#fff">${ic("x").replace("<svg ",'<svg style="width:26px;height:26px" ')}</button></div>
+    <div class="brand st1">VEREDA</div><q class="st2">${esc(v.t)}</q><div class="st3" style="opacity:.8">${esc(v.r)}</div>
+    <div style="position:absolute;left:24px;right:24px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:2" class="st4"><button class="btn white" data-sh>Share the wisdom</button><button data-cp style="color:#fff;font-weight:600;margin-top:16px;width:100%">Copy verse</button></div>`;
   document.body.appendChild(el);
-  el.querySelector("[data-x]").onclick=()=>el.remove();
-  el.querySelector("[data-sh]").onclick=()=>shareText(`“${v.t}” — ${v.r}\n\nshared from VEREDA`);
-  el.querySelector("[data-cp]").onclick=()=>copyText(`${v.t} — ${v.r}`);
-  let x0=null; el.addEventListener("touchstart",e=>x0=e.touches[0].clientX); el.addEventListener("touchend",e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50){ el.remove(); const n=i+(dx<0?1:-1); if(n>=0&&n<7) openStory(n); } x0=null; });
+  const go=n=>{ clearTimeout(tm); if(n>=0&&n<7) openStory(n); else el.remove(); };
+  let tm=setTimeout(()=>go(i+1),7000);
+  el.querySelector("[data-x]").onclick=()=>{ clearTimeout(tm); el.remove(); };
+  el.querySelector("[data-sh]").onclick=()=>{ clearTimeout(tm); shareText(`“${v.t}” — ${v.r}\n\nshared from VEREDA`); };
+  el.querySelector("[data-cp]").onclick=()=>{ clearTimeout(tm); copyText(`${v.t} — ${v.r}`); };
+  el.addEventListener("click",e=>{ if(e.target.closest("button")) return; go(e.clientX<innerWidth/3?i-1:i+1); });
+  let x0=null; el.addEventListener("touchstart",e=>x0=e.touches[0].clientX,{passive:true}); el.addEventListener("touchend",e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50) go(i+(dx<0?1:-1)); x0=null; });
 }
 
 /* ---------- JOURNAL ---------- */
@@ -449,7 +564,7 @@ function journalOnboarding(){
 function openJournalEditor(q, isNew, entry){
   let prompt=q; const el=document.createElement("div"); el.className="player";
   const paint=()=>{ el.innerHTML=`<div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button><span></span><button class="icon-btn" data-new title="New question">${ic("refresh")}</button></div>
-    <div class="p-body"><span class="chip" style="background:var(--soft);color:var(--blue);height:26px;font-size:12px">${ic("spark").replace("<svg ",'<svg style="width:13px" ')} ${prompt===todaysPrompt()?"Today’s reflection":"A question to help you grow"}</span>
+    <div class="p-body"><span class="chip st1" style="background:var(--soft);color:var(--blue);height:26px;font-size:12px">${ic("spark").replace("<svg ",'<svg style="width:13px" ')} ${prompt===todaysPrompt()?"Today’s reflection":"A question to help you grow"}</span>
     <h2 style="font-size:21px;color:var(--ink);line-height:1.35;margin:14px 0 12px">${esc(prompt)}</h2>
     <textarea class="field" id="ja" placeholder="Feel free to go into detail…" style="background:transparent;border:0;padding:0;min-height:40vh;font-size:17px">${esc(entry?.a||"")}</textarea></div>
     <div class="p-foot"><button class="btn" data-ok ${entry?.a?"":"disabled"}>Done</button></div>`;
@@ -459,7 +574,7 @@ function openJournalEditor(q, isNew, entry){
     ok.onclick=()=>{ const a=ta.value.trim(); if(entry){ entry.a=a; entry.q=prompt; } else S.journal.push({id:uid(), date:todayStr(), ts:Date.now(), q:prompt, a}); save(); el.remove(); tab="journal"; render(); toast("Your journal was updated"); };
   };
   document.body.appendChild(el); paint();
-  if(!S.seen.newQ){ S.seen.newQ=1; save(); setTimeout(()=>toast("Need a different question? Tap ↻ for a new journaling prompt"),700); }
+  if(!S.seen.newQ){ S.seen.newQ=1; save(); setTimeout(()=>{ const b=el.querySelector("[data-new]"); if(!b) return; const r=b.getBoundingClientRect(); const tp=document.createElement("div"); tp.className="tip"; tp.style.top=(r.bottom+10)+"px"; tp.style.right="12px"; tp.innerHTML="<b>Need a new question?</b>Tap here for another journaling suggestion."; tp.onclick=()=>tp.remove(); el.appendChild(tp); setTimeout(()=>tp.remove(),4500); },600); }
 }
 
 /* ---------- COMMUNITY ---------- */
@@ -495,7 +610,7 @@ function openPray(r){
   const prayed = r ? !!S.prayed[r.id] : false;
   const el=document.createElement("div"); el.className="player pray-screen";
   el.innerHTML=`<div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button><div class="p-title">Prayer request</div><span class="muted" style="width:36px;text-align:right;font-size:13px">${count}</span></div>
-    <div class="p-body" style="padding-top:20px"><div style="text-align:center"><span class="chip" id="pc">${r? (prayed?`You and ${Math.max(0,count-1)} others prayed`:`${count} ${count===1?"person has":"people have"} prayed`) : `Praying for ${count} ${count===1?"heart":"hearts"}`}</span></div>
+    ${clouds(240,"white")}${puff("6%","22%",120,11,.8,2)}${puff("62%","34%",90,13,.7,5)}<div class="p-body" style="padding-top:20px;position:relative;z-index:1"><div style="text-align:center"><span class="chip" id="pc">${r? (prayed?`You and ${Math.max(0,count-1)} others prayed`:`${count} ${count===1?"person has":"people have"} prayed`) : `Praying for ${count} ${count===1?"heart":"hearts"}`}</span></div>
     <div class="pray-text" style="margin-top:24px">${esc(text)}</div>${r?`<div class="muted" style="padding:0 8px;font-size:14px">— ${esc(r.name)}</div>`:""}</div>
     <div class="p-foot"><div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:12px"><div class="i" style="width:36px;height:36px;border-radius:10px;background:var(--soft);display:grid;place-items:center;color:var(--blue)">${ic("music").replace("<svg ",'<svg style="width:18px" ')}</div><div style="flex:1;font-weight:600;font-size:14px;color:var(--ink)">Soft music for prayer<div class="bar" style="height:3px;margin-top:8px"><i id="mb" style="width:0"></i></div></div><button data-mu style="color:var(--ink)">${ic("play").replace("<svg ",'<svg style="width:22px;height:22px" ')}</button></div>
     <button class="btn" data-amen ${prayed?"disabled":""}>Amen</button></div>`;
@@ -551,6 +666,7 @@ afterRender.bible=async()=>{
 };
 
 /* ---------- boot ---------- */
+splash();
 render();
 if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 window.__vereda = {S, render, LESSONS, openLesson}; // for testing
