@@ -6,8 +6,11 @@ const CONFIG = {
   supportEmail: "support@vereda.app",
   manageSubscriptionUrl: "https://consumer.hotmart.com/",
   privacyUrl: "#", termsUrl: "#",
-  communityApi: "" // set to a backend URL to share prayer requests between users
+  communityApi: "", // set to a backend URL to share prayer requests between users
+  adminEmail: "admin@vereda.app",
+  adminHash: "78d1d967273777381e1f8f33b2a69e2deba9125f5eee7eec34f3f32f4a0376ec" // SHA-256 of the admin password (demo access only; real auth comes with the backend)
 };
+async function sha256(s){ const b=await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
 const $app = document.getElementById("app");
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const md = s => esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>");
@@ -205,12 +208,21 @@ function renderWelcome(step){
       <p class="muted" style="margin-bottom:26px">${login?"Sign in with the email you used to purchase.":"Use the same email you used at checkout."}</p>
       ${login?"":`<input class="field" id="nm" placeholder="Your first name" autocomplete="given-name" style="margin-bottom:12px">`}
       <input class="field" id="em" type="email" placeholder="Email" autocomplete="email" inputmode="email">
+      <input class="field hidden" id="pw" type="password" placeholder="Password" autocomplete="current-password" style="margin-top:12px">
       <button class="btn" id="go" style="margin-top:20px">${login?"Sign in":"Start my journey"}</button>
       <p class="muted" style="font-size:12.5px;margin-top:16px">By continuing you agree to our <a class="link" href="${CONFIG.termsUrl}">Terms</a> and <a class="link" href="${CONFIG.privacyUrl}">Privacy Policy</a>.</p></div>`;
     document.getElementById("bk").onclick=()=>renderWelcome();
-    document.getElementById("go").onclick=()=>{
-      const em=document.getElementById("em").value.trim(); const nm=login? (em.split("@")[0]) : document.getElementById("nm").value.trim();
+    const emI=document.getElementById("em"), pwI=document.getElementById("pw");
+    const isAdmin=()=>emI.value.trim().toLowerCase()===CONFIG.adminEmail;
+    emI.oninput=()=>pwI.classList.toggle("hidden",!isAdmin());
+    document.getElementById("go").onclick=async()=>{
+      const em=emI.value.trim();
       if(!/^\S+@\S+\.\S+$/.test(em)){ toast("Please enter a valid email"); return; }
+      if(isAdmin()){
+        if(await sha256(pwI.value)!==CONFIG.adminHash){ toast("Incorrect password"); pwI.value=""; return; }
+        S.user={name:"Admin", email:em, admin:true}; S.dev=true; save(); tab="journey"; render(); toast("Signed in as admin — all days unlocked"); return;
+      }
+      const nm=login? (em.split("@")[0]) : document.getElementById("nm").value.trim();
       if(!login && !nm){ toast("Please enter your name"); return; }
       S.user={name:nm.charAt(0).toUpperCase()+nm.slice(1), email:em}; save(); tab="journey"; render(); };
     return;
@@ -482,10 +494,12 @@ function page(title, inner, onMount){
 }
 function openProfile(){
   page("", `<div style="display:flex;align-items:center;gap:14px;margin:4px 0 22px"><div class="icon-btn" style="width:56px;height:56px;font-size:18px;background:var(--soft);color:var(--blue)">${initials(S.user.name)}</div><div><div style="font-size:22px;font-weight:700;color:var(--ink)">${esc(S.user.name)}</div><button class="muted" data-edit style="font-size:14px">Edit profile ✎</button></div></div>
+   ${S.user.admin?`<div class="list" style="margin-bottom:16px;border:1.5px solid var(--gold)"><button class="li" data-admin>${ic("shield")}<span>Admin panel<small>Test tools for the app</small></span><span class="chev">${ic("right")}</span></button></div>`:""}
    <div class="list" style="margin-bottom:16px"><button class="li" data-hl>${ic("bookmark")}Highlights &amp; notes<span class="chev">${ic("right")}</span></button><button class="li" data-jr>${ic("journal")}My journal<span class="chev">${ic("right")}</span></button></div>
    <div class="list"><button class="li" data-set>${ic("settings")}Settings<span class="chev">${ic("right")}</span></button><a class="li" href="${CONFIG.manageSubscriptionUrl}" target="_blank">${ic("heart")}Manage subscription<span class="chev">${ic("right")}</span></a><a class="li" href="${CONFIG.privacyUrl}">${ic("shield")}Privacy Policy<span class="chev">${ic("right")}</span></a><a class="li" href="${CONFIG.termsUrl}">${ic("doc")}Terms &amp; Conditions<span class="chev">${ic("right")}</span></a><button class="li" data-faq>${ic("help")}FAQ<span class="chev">${ic("right")}</span></button><a class="li" href="mailto:${CONFIG.supportEmail}">${ic("mail")}<span>Support<small>${CONFIG.supportEmail}</small></span><span class="chev">${ic("right")}</span></a></div>`,
   el=>{
     el.querySelector("[data-hl]").onclick=openHighlights;
+    const ad=el.querySelector("[data-admin]"); if(ad) ad.onclick=()=>openAdmin(el);
     el.querySelector("[data-jr]").onclick=()=>{ el.remove(); tab="journal"; render(); };
     el.querySelector("[data-edit]").onclick=()=>sheet(`<h3>Edit profile</h3><input class="field" id="pn" value="${esc(S.user.name)}"><button class="btn" data-ok style="margin-top:14px">Save</button>`,(s,c)=>s.querySelector("[data-ok]").onclick=()=>{ const v=s.querySelector("#pn").value.trim(); if(v){ S.user.name=v; save(); } c(); el.remove(); openProfile(); });
     el.querySelector("[data-faq]").onclick=()=>page("FAQ",[["How does the Journey work?","A new devotional unlocks every day. Complete today’s prayer, word, quiz and action to unlock tomorrow’s day."],["Can I skip ahead?","No — the Journey is designed to build a daily habit, one step at a time."],["Which Bible version is used?","The World English Bible (WEB), a modern English translation in the public domain."],["How do I listen instead of reading?","Tap “Listen” on any prayer or devotional. You can change the narrator and speed."],["How do I cancel?","Tap Manage subscription in your profile, or contact support."]].map(([q,a])=>`<div class="jentry"><div class="q">${q}</div><div class="a">${a}</div></div>`).join(""));
@@ -494,10 +508,45 @@ function openProfile(){
         p.querySelector("[data-th]").onclick=()=>{ S.theme=S.theme==="dark"?"light":"dark"; document.documentElement.dataset.theme=S.theme; save(); p.remove(); el.querySelector("[data-set]").click(); };
         p.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); p.remove(); el.querySelector("[data-set]").click(); };
         p.querySelector("[data-nr]").onclick=()=>{ const r=[0.75,1,1.25,1.5]; S.rate=r[(r.indexOf(S.rate||1)+1)%r.length]; save(); p.remove(); el.querySelector("[data-set]").click(); };
-        p.querySelector("[data-lo]").onclick=()=>{ S.user=null; save(); p.remove(); el.remove(); render(); };
+        p.querySelector("[data-lo]").onclick=()=>{ if(S.user.admin) S.dev=false; S.user=null; save(); p.remove(); el.remove(); render(); };
         p.querySelector("[data-del]").onclick=()=>sheet(`<h3>Delete all data?</h3><p>This removes your progress, journal and highlights from this device.</p><button class="btn" style="background:var(--bad)" data-y>Delete</button><button class="btn ghost" data-x style="margin-top:10px">Cancel</button>`,(s,c)=>{ s.querySelector("[data-x]").onclick=c; s.querySelector("[data-y]").onclick=()=>{ localStorage.removeItem(KEY); location.reload(); }; });
       });
   });
+}
+
+function openAdmin(prof, again){
+  const shiftDays=n=>{ for(const k in S.completed){ const d=new Date(S.completed[k]+"T12:00:00"); d.setDate(d.getDate()-n); S.completed[k]=todayStr(d); } };
+  const done=Object.keys(S.completed).length;
+  const ratings=Object.entries(S.ratings);
+  const p=page("Admin panel",`
+    <div class="card" style="padding:14px;margin-bottom:16px;box-shadow:none;border:1px solid var(--line);font-size:13.5px"><b style="color:var(--ink)">Progress:</b> ${done} of ${LESSONS.length} days completed · Unlock mode: <b style="color:var(--ink)">${S.dev?"ON":"OFF"}</b></div>
+    <div class="list" style="margin-bottom:16px">
+      <button class="li" data-a="dev">${ic("lock")}<span>${S.dev?"Turn off":"Turn on"} unlock-all mode<small>${S.dev?"Days follow the real daily schedule when off":"Open every available day without waiting"}</small></span></button>
+      <button class="li" data-a="complete">${ic("check")}<span>Complete the current day<small>Marks today’s devotional as done</small></span></button>
+      <button class="li" data-a="nextday">${ic("sun")}<span>Simulate a new day<small>Moves your progress one day back so the next day unlocks</small></span></button>
+      <button class="li" data-a="tips">${ic("help")}<span>Show onboarding & tips again</span></button>
+      <button class="li" data-a="splash">${ic("spark")}<span>Replay the opening animation</span></button>
+    </div>
+    <div class="list" style="margin-bottom:16px">
+      <button class="li" data-a="reset">${ic("refresh")}<span>Reset Journey progress</span></button>
+      <button class="li" data-a="community">${ic("community")}<span>Clear prayer requests</span></button>
+      <button class="li" data-a="journal">${ic("journal")}<span>Clear journal</span></button>
+    </div>
+    <h3 style="font-size:16px;color:var(--ink);margin:6px 0 10px">Devotional ratings (this device)</h3>
+    ${ratings.length?ratings.map(([k,r])=>`<div class="jentry"><div class="q">${esc(LESSONS.find(l=>l.key===k)?.title||k)} · ${"★".repeat(r.v)}${"☆".repeat(5-r.v)}</div>${r.t?`<div class="a">${esc(r.t)}</div>`:""}</div>`).join(""):`<p class="muted" style="font-size:14px">No ratings yet.</p>`}
+    <p class="muted" style="font-size:12px;margin-top:18px">Demo admin access. Data lives on this device until the backend is connected.</p>`,
+  el=>{ if(again) el.style.animation="none"; el.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{
+    const a=b.dataset.a;
+    if(a==="dev"){ S.dev=!S.dev; toast(S.dev?"All days unlocked":"Daily schedule restored"); }
+    if(a==="complete"){ const i=currentIndex(); if(i<LESSONS.length){ const k=LESSONS[i].key; S.completed[k]=todayStr(); STEPS.forEach(s=>stepsOf(k)[s.k]=true); toast(`Completed: ${LESSONS[i].title}`); } }
+    if(a==="nextday"){ shiftDays(1); toast("Simulated a new day — the next devotional is open"); }
+    if(a==="tips"){ S.seen={notif:1}; toast("Tips will show again"); }
+    if(a==="splash"){ sessionStorage.removeItem("vsplash"); save(); el.remove(); prof.remove(); render(); splash(); return; }
+    if(a==="reset"){ S.completed={}; S.steps={}; S.ratings={}; toast("Journey progress reset"); }
+    if(a==="community"){ S.requests=[]; S.prayed={}; toast("Prayer requests cleared"); }
+    if(a==="journal"){ S.journal=[]; toast("Journal cleared"); }
+    save(); el.remove(); openAdmin(prof, true);
+  }); });
 }
 function openHighlights(){
   const items=S.highlights.slice().reverse();
