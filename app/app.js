@@ -193,7 +193,7 @@ function tabbar(){
   const jdot = !S.journal.some(j=>j.date===todayStr());
   return `<nav class="tabbar">${t.map(([k,i,l])=>`<button data-tab="${k}" class="${tab===k?"on":""}">${ic(i)}${l}${k==="journal"&&jdot?'<span class="dot"></span>':""}</button>`).join("")}</nav>`;
 }
-function bindTabbar(){ document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{ tab=b.dataset.tab; Music.stop(); render(); window.scrollTo(0,0); }); }
+function bindTabbar(){ document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{ if(tab===b.dataset.tab) return; tab=b.dataset.tab; Music.stop(); N.stop(); bibleListening=false; window.onscroll=null; render(); window.scrollTo(0,0); }); }
 
 /* ---------- welcome / auth ---------- */
 function renderWelcome(step){
@@ -536,6 +536,8 @@ function openStory(i){
 }
 
 /* ---------- JOURNAL ---------- */
+const EXTRA_PROMPTS=["Which verse is hard for you to live out — and why?","What does an ‘abundant life’ mean to you beyond your circumstances?","Where did you see God’s faithfulness this week?","What would change today if you truly believed you are fully known by God?","What is one thing you want to surrender to God tonight?","Who has God placed in your life to love better?","What promise of God do you need to hold on to this week?","When did you feel closest to God recently?","What habit is helping your faith grow — and which one is getting in the way?","What would you say to God right now if no one else could hear?"];
+const ALL_PROMPTS=()=>[...C.prompts,...EXTRA_PROMPTS];
 function todaysPrompt(){
   const ci=currentIndex(); const last = ci>0?LESSONS[ci-1]:null; const T=todayLesson();
   const L = T.done ? T.L : (last && S.completed[last.key]===todayStr() ? last : T.L);
@@ -543,127 +545,228 @@ function todaysPrompt(){
 }
 function viewJournal(){
   const groups={}; S.journal.slice().sort((a,b)=>b.ts-a.ts).forEach(j=>(groups[j.date]=groups[j.date]||[]).push(j));
-  const body = Object.keys(groups).length ? Object.entries(groups).map(([d,arr])=>`<div class="muted" style="font-size:13px;margin:16px 0 8px">${fmtDate(d)}</div>${arr.map(j=>`<div class="jentry"><div class="q">${esc(j.q)}</div><div class="a">${esc(j.a)}</div><button data-jm="${j.id}" style="position:absolute;right:12px;top:12px;color:var(--muted)">${ic("dots").replace("<svg ",'<svg style="width:20px" ')}</button></div>`).join("")}`).join("")
-    : `<div class="empty"><svg viewBox="0 0 120 100" width="140"><ellipse cx="60" cy="70" rx="52" ry="20" fill="var(--soft)"/><rect x="34" y="22" width="52" height="60" rx="8" fill="var(--card)" stroke="var(--blue)" stroke-width="3"/><path d="M44 40h32M44 50h32M44 60h20" stroke="var(--blue)" stroke-width="3" stroke-linecap="round"/></svg><b>Your reflections will appear here</b><p class="muted">Write a few lines each day and see how far God has brought you.</p></div>`;
-  return `<div class="screen"><div class="safe-top"></div><div class="pad"><h1>Journal</h1><div class="muted" style="font-size:13px;margin-top:4px">${fmtDate(todayStr())}</div>${body}</div>
+  const body = Object.keys(groups).length ? Object.entries(groups).map(([d,arr])=>`<div class="muted" style="font-size:12.5px;margin:16px 0 8px">${fmtDate(d)}</div>${arr.map(j=>`<div class="jentry" data-jv="${j.id}"><div class="q">${esc(j.q)}</div><div class="a" style="display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden">${esc(j.a)}</div><button data-jm="${j.id}" style="position:absolute;right:8px;top:8px;width:34px;height:34px;color:var(--muted);display:grid;place-items:center">${ic("dots").replace("<svg ",'<svg style="width:20px" ')}</button></div>`).join("")}`).join("")
+    : `<div class="empty"><svg class="floaty-ico" viewBox="0 0 140 110" width="150"><g fill="#fff"><circle cx="50" cy="62" r="22"/><circle cx="76" cy="50" r="28"/><circle cx="102" cy="64" r="20"/><rect x="30" y="62" width="92" height="22" rx="11"/></g><g opacity=".5" fill="#CFE3F4"><circle cx="50" cy="66" r="16"/><circle cx="96" cy="68" r="14"/></g><rect x="56" y="30" width="40" height="50" rx="6" fill="var(--card)" stroke="var(--blue)" stroke-width="3" transform="rotate(-8 76 55)"/><path d="M64 46h22M63 55h22M62 64h14" stroke="var(--blue)" stroke-width="3" stroke-linecap="round" transform="rotate(-8 76 55)"/></svg><b>Your reflections will appear here</b><p class="muted">Write a few lines each day and see how far God has brought you.</p></div>`;
+  return `<div class="screen"><div class="safe-top"></div><div class="pad" style="padding-bottom:90px"><h1>Journal</h1>${body}</div>
     <div style="position:fixed;left:50%;transform:translateX(-50%);width:calc(100% - 32px);max-width:448px;bottom:calc(var(--tab-h) + 22px + env(safe-area-inset-bottom));z-index:30"><button class="btn" id="wr">${ic("edit").replace("<svg ",'<svg style="width:20px;height:20px" ')} Write a reflection</button></div></div>`;
+}
+function actionMenu(items){ // centered iOS-style menu
+  const o=document.createElement("div"); o.className="overlay"; o.style.alignItems="center";
+  o.innerHTML=`<div class="amenu">${items.map((it,i)=>`<button data-i="${i}" style="${it.danger?"color:var(--bad)":""}">${esc(it.label)}</button>`).join("")}<button data-i="x">Cancel</button></div>`;
+  o.onclick=e=>{ const b=e.target.closest("[data-i]"); if(e.target===o || (b&&b.dataset.i==="x")){ o.remove(); return; } if(b){ o.remove(); items[+b.dataset.i].fn(); } };
+  document.body.appendChild(o);
 }
 afterRender.journal=()=>{
   document.getElementById("wr").onclick=()=>openJournalEditor(todaysPrompt(), true);
+  document.querySelectorAll("[data-jv]").forEach(c=>c.onclick=e=>{ if(e.target.closest("[data-jm]")) return; viewEntry(S.journal.find(x=>x.id===c.dataset.jv)); });
   document.querySelectorAll("[data-jm]").forEach(b=>b.onclick=()=>{ const j=S.journal.find(x=>x.id===b.dataset.jm);
-    sheet(`<button class="li" data-e>${ic("edit")}Edit</button><button class="li" data-d style="color:var(--bad)">${ic("trash")}Delete</button>`,(s,c)=>{ s.querySelector("[data-e]").onclick=()=>{ c(); openJournalEditor(j.q,false,j); }; s.querySelector("[data-d]").onclick=()=>{ S.journal=S.journal.filter(x=>x!==j); save(); c(); render(); }; }); });
+    actionMenu([{label:"View",fn:()=>viewEntry(j)},{label:"Edit",fn:()=>openJournalEditor(j.q,false,j)},{label:"Delete",danger:true,fn:()=>{ S.journal=S.journal.filter(x=>x!==j); save(); render(); toast("Your journal entry was deleted"); }}]); });
   if(!S.seen.journal) journalOnboarding();
 };
+function viewEntry(j){
+  const el=document.createElement("div"); el.className="player";
+  el.innerHTML=`<div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button><span></span><button class="link" data-ed>Edit</button></div><div class="p-body"><div class="stepin"><div class="muted" style="font-size:12.5px">${fmtDate(j.date)}</div><h2 style="font-size:22px;color:var(--ink);line-height:1.35;margin:10px 0 14px">${esc(j.q)}</h2><div style="font-size:17px;line-height:1.6;white-space:pre-wrap">${esc(j.a)}</div></div></div>`;
+  document.body.appendChild(el);
+  el.querySelector("[data-back]").onclick=()=>el.remove();
+  el.querySelector("[data-ed]").onclick=()=>{ el.remove(); openJournalEditor(j.q,false,j); };
+}
 function journalOnboarding(){
   const slides=[["Record your walk with God","Where did I notice God’s presence today?","What does an abundant life in Christ look like for me?","linear-gradient(170deg,#0E5F95,#2B6F8F 50%,#7A6A4F)"],["Find peace through reflection","Each day, release your worries, notice your blessings and grow in trust.","What worry do you need to lay down today?","linear-gradient(170deg,#1E3A5F,#3C86BC 55%,#C9973F)"],["And see how far God has brought you","What small step can you take toward your calling?","How can you glorify God with your plans for tomorrow?","linear-gradient(170deg,#21503F,#0E5F95 60%,#E3B8A0)"]];
   let i=0; const el=document.createElement("div"); el.className="onb"; document.body.appendChild(el);
-  const paint=()=>{ const s=slides[i]; el.style.background=s[3]; el.innerHTML=`<div class="bars">${slides.map((_,k)=>`<i class="${k<=i?"on":""}"></i>`).join("")}</div><h2>${s[0]}</h2>${i===1?`<p>${s[1]}</p>`:""}<div style="flex:1;position:relative">${i===1?"":`<div class="floaty" style="transform:rotate(-4deg);margin-left:auto">${s[1]}</div>`}<div class="floaty" style="transform:rotate(3deg)">${s[2]}</div></div><button class="btn white">${i<2?"Continue":"Start journaling"}</button>`;
+  const paint=()=>{ const s=slides[i]; el.style.background=s[3]; el.innerHTML=`${clouds(200,"white","opacity:.35")}<div class="bars" style="position:relative">${slides.map((_,k)=>`<i class="${k<=i?"on":""}"></i>`).join("")}</div><h2 class="st1" style="position:relative">${s[0]}</h2>${i===1?`<p class="st2" style="position:relative">${s[1]}</p>`:""}<div style="flex:1;position:relative">${i===1?"":`<div class="floaty st2" style="transform:rotate(-4deg);margin-left:auto">${s[1]}</div>`}<div class="floaty st3" style="transform:rotate(3deg)">${s[2]}</div></div><button class="btn white" style="position:relative">${i<2?"Continue":"Start journaling"}</button>`;
     el.querySelector("button").onclick=()=>{ if(i<2){ i++; paint(); } else { S.seen.journal=1; save(); el.remove(); } }; };
   paint();
 }
 function openJournalEditor(q, isNew, entry){
   let prompt=q; const el=document.createElement("div"); el.className="player";
-  const paint=()=>{ el.innerHTML=`<div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button><span></span><button class="icon-btn" data-new title="New question">${ic("refresh")}</button></div>
-    <div class="p-body"><span class="chip st1" style="background:var(--soft);color:var(--blue);height:26px;font-size:12px">${ic("spark").replace("<svg ",'<svg style="width:13px" ')} ${prompt===todaysPrompt()?"Today’s reflection":"A question to help you grow"}</span>
-    <h2 style="font-size:21px;color:var(--ink);line-height:1.35;margin:14px 0 12px">${esc(prompt)}</h2>
-    <textarea class="field" id="ja" placeholder="Feel free to go into detail…" style="background:transparent;border:0;padding:0;min-height:40vh;font-size:17px">${esc(entry?.a||"")}</textarea></div>
-    <div class="p-foot"><button class="btn" data-ok ${entry?.a?"":"disabled"}>Done</button></div>`;
-    const ta=el.querySelector("#ja"), ok=el.querySelector("[data-ok]"); ta.oninput=()=>ok.disabled=!ta.value.trim(); setTimeout(()=>ta.focus(),200);
+  const paint=(keep="")=>{ const isToday=prompt===todaysPrompt();
+    el.innerHTML=`<div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button><span></span><button class="icon-btn" data-list title="More questions">${ic("spark")}</button></div>
+    <div class="p-body"><div class="stepin"><span class="chip" style="background:${isToday?"var(--blue)":"var(--card2)"};color:${isToday?"#fff":"var(--ink)"};height:26px;font-size:12px">${ic("spark").replace("<svg ",'<svg style="width:13px" ')} ${isToday?"Your daily reflection":"A question to help you grow"}</span>
+    <div style="display:flex;gap:10px;align-items:flex-start;margin:14px 0 12px"><h2 style="flex:1;font-size:21px;color:var(--ink);line-height:1.35">${esc(prompt)}</h2><button data-new style="color:var(--blue);padding-top:4px">${ic("refresh").replace("<svg ",'<svg style="width:20px;height:20px" ')}</button></div>
+    <textarea class="field" id="ja" placeholder="Feel free to go into detail…" style="background:transparent;border:0;padding:0;min-height:40vh;font-size:17px">${esc(keep||entry?.a||"")}</textarea></div></div>
+    <div class="p-foot"><button class="btn" data-ok ${(keep||entry?.a)?"":"disabled"}>Done</button></div>`;
+    const ta=el.querySelector("#ja"), ok=el.querySelector("[data-ok]"); ta.oninput=()=>ok.disabled=!ta.value.trim(); setTimeout(()=>ta.focus(),250);
     el.querySelector("[data-back]").onclick=()=>{ el.remove(); render(); };
-    el.querySelector("[data-new]").onclick=()=>{ const ps=C.prompts.filter(p=>p!==prompt); prompt=ps[Math.floor(Math.random()*ps.length)]; const v=ta.value; paint(); el.querySelector("#ja").value=v; el.querySelector("[data-ok]").disabled=!v.trim(); };
+    el.querySelector("[data-new]").onclick=()=>{ const ps=ALL_PROMPTS().filter(p=>p!==prompt); prompt=ps[Math.floor(Math.random()*ps.length)]; paint(ta.value); };
+    el.querySelector("[data-list]").onclick=()=>sheet(`<h3 style="text-align:left">More questions</h3><p style="text-align:left;font-size:14px" class="muted">Choose the one that speaks to you today.</p>${[todaysPrompt(),...ALL_PROMPTS()].filter((p,i,a)=>a.indexOf(p)===i).map(p=>`<button class="opt ${p===prompt?"ok":""}" data-p="${esc(p)}">${esc(p)}</button>`).join("")}`,(s,c)=>s.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ prompt=b.dataset.p; c(); paint(ta.value); }));
     ok.onclick=()=>{ const a=ta.value.trim(); if(entry){ entry.a=a; entry.q=prompt; } else S.journal.push({id:uid(), date:todayStr(), ts:Date.now(), q:prompt, a}); save(); el.remove(); tab="journal"; render(); toast("Your journal was updated"); };
   };
   document.body.appendChild(el); paint();
-  if(!S.seen.newQ){ S.seen.newQ=1; save(); setTimeout(()=>{ const b=el.querySelector("[data-new]"); if(!b) return; const r=b.getBoundingClientRect(); const tp=document.createElement("div"); tp.className="tip"; tp.style.top=(r.bottom+10)+"px"; tp.style.right="12px"; tp.innerHTML="<b>Need a new question?</b>Tap here for another journaling suggestion."; tp.onclick=()=>tp.remove(); el.appendChild(tp); setTimeout(()=>tp.remove(),4500); },600); }
+  if(!S.seen.newQ){ S.seen.newQ=1; save(); setTimeout(()=>{ const b=el.querySelector("[data-list]"); if(!b) return; const r=b.getBoundingClientRect(); const tp=document.createElement("div"); tp.className="tip"; tp.style.top=(r.bottom+10)+"px"; tp.style.right="12px"; tp.innerHTML="<b>More questions</b>Tap here to explore a list of suggestions and pick the one that inspires you today."; tp.onclick=()=>tp.remove(); el.appendChild(tp); setTimeout(()=>tp.remove(),5000); },600); }
 }
 
 /* ---------- COMMUNITY ---------- */
 let comTab="all";
+const WEEK=7*864e5;
+const activeReqs=()=>S.requests.filter(r=>Date.now()-r.ts<WEEK);
+function avStack(r){ const ps=(r.prayedBy||[]).slice(-3); return ps.length?`<span class="avs">${ps.map(p=>`<i>${esc(p)}</i>`).join("")}</span>`:""; }
+function reqCard(r,i){
+  return `<button class="req ${r.mine?"mine":""}" data-rq="${r.id}" style="animation-delay:${Math.min(i,8)*0.05}s">${puff("68%","-8px",110,12,.55,i*2)}<div class="t">${esc(r.text)}</div><div class="m"><span class="av">${esc(initials(r.mine?S.user.name:r.name))}</span>${r.mine?"Your request":esc(r.name)}<span class="cnt">${avStack(r)}${r.prayers?`<b>${r.prayers}</b>`:""}</span></div></button>`;
+}
 function viewCommunity(){
-  const list = comTab==="all" ? S.requests : S.requests.filter(r=>r.mine);
-  const cards = list.slice().sort((a,b)=>b.ts-a.ts).map(r=>`<button class="req" data-rq="${r.id}"><div class="t">${esc(r.text)}</div><div class="m"><span class="av">${esc(initials(r.name))}</span>${esc(r.name)}<span class="cnt">${ic("heart").replace("<svg ",'<svg style="width:15px;height:15px" ')}${r.prayers||0}</span></div></button>`).join("");
+  const all=activeReqs(); const list = comTab==="all" ? all : all.filter(r=>r.mine);
+  const cards = list.slice().sort((a,b)=>b.ts-a.ts).map(reqCard).join("");
   const empty = comTab==="all"
-    ? `<div class="empty"><svg viewBox="0 0 120 100" width="150"><ellipse cx="60" cy="72" rx="52" ry="18" fill="var(--soft)"/><path d="M60 78c-14-10-30-20-30-36a14 14 0 0 1 30-6 14 14 0 0 1 30 6c0 16-16 26-30 36Z" fill="#E58A9A"/></svg><b>This space is waiting for prayer</b><p class="muted">When a prayer request is shared, it will appear here. Share what is on your heart and let others lift you up.</p></div>`
-    : `<div class="empty"><svg viewBox="0 0 120 100" width="150"><ellipse cx="60" cy="72" rx="52" ry="18" fill="var(--soft)"/><path d="M38 70c6-22 14-38 22-46 8 8 16 24 22 46Z" fill="var(--blue)" opacity=".85"/></svg><b>Your prayer requests will appear here</b><p class="muted">When something is on your heart, you can share it. The VEREDA community will be with you in prayer.</p></div>`;
+    ? `<div class="empty"><svg class="floaty-ico" viewBox="0 0 140 110" width="160">${handsArt(false)}</svg><b>This space is waiting for prayer</b><p class="muted">When a prayer request is shared, it will appear here. Share what is on your heart and let others lift you up.</p></div>`
+    : `<div class="empty"><svg class="floaty-ico" viewBox="0 0 140 110" width="160">${handsArt(false)}</svg><b>Your prayer requests will appear here</b><p class="muted">When something is on your heart, you can share it. The VEREDA community will be with you in prayer.</p></div>`;
   return `<div class="screen"><div class="safe-top"></div><div class="pad"><h1>Community</h1>
-    <div style="display:flex;align-items:center;gap:8px;margin:14px 0 16px"><button class="chip ${comTab==="all"?"dark":""}" data-ct="all">All</button><button class="chip ${comTab==="mine"?"dark":""}" data-ct="mine">Your requests</button>${S.requests.length?`<button class="link" id="pall" style="margin-left:auto;font-size:14px">Pray for all</button>`:""}</div>
-    ${cards||empty}</div><button class="fab" id="newrq">${ic("plus")}</button></div>`;
+    <div style="display:flex;align-items:center;gap:8px;margin:14px 0 16px"><button class="chip ${comTab==="all"?"dark":""}" data-ct="all">All</button><button class="chip ${comTab==="mine"?"dark":""}" data-ct="mine">Your requests</button>${all.length?`<button class="link" id="pall" style="margin-left:auto;font-size:14px">Pray for all</button>`:""}</div>
+    <div class="stagger">${cards||empty}</div></div><button class="fab" id="newrq">${ic("plus")}</button></div>`;
+}
+function handsArt(rays=true){
+  return `${rays?`<g class="rays-g" opacity=".9">${Array.from({length:16},(_,i)=>`<rect x="68" y="-6" width="4" height="34" rx="2" fill="#F2C35B" transform="rotate(${i*22.5} 70 58)"/>`).join("")}</g>`:`<g fill="#fff"><circle cx="44" cy="80" r="18"/><circle cx="70" cy="70" r="24"/><circle cx="98" cy="82" r="17"/><rect x="26" y="80" width="90" height="20" rx="10"/></g>`}
+    <path d="M70 18c-6 16-16 26-20 44-2 9 2 18 10 20l10 2Z" fill="#F4CDB6"/><path d="M70 18c6 16 16 26 20 44 2 9-2 18-10 20l-10 2Z" fill="#EBB79C"/><path d="M48 80l22 4 22-4 6 22H42Z" fill="#3C86BC"/><path d="M42 102h56" stroke="#0E5F95" stroke-width="4" stroke-linecap="round"/>`;
 }
 afterRender.community=()=>{
   document.querySelectorAll("[data-ct]").forEach(b=>b.onclick=()=>{ comTab=b.dataset.ct; render(); });
-  document.querySelectorAll("[data-rq]").forEach(b=>b.onclick=()=>openPray(S.requests.find(r=>r.id===b.dataset.rq)));
+  const list=()=>{ const all=activeReqs(); return (comTab==="all"?all:all.filter(r=>r.mine)).slice().sort((a,b)=>b.ts-a.ts); };
+  document.querySelectorAll("[data-rq]").forEach(b=>b.onclick=()=>{ const L=list(); const r=L.find(x=>x.id===b.dataset.rq); if(r.mine && comTab==="mine") openMyRequest(r); else openPray(L, L.indexOf(r)); });
   const pa=document.getElementById("pall"); if(pa) pa.onclick=()=>openPray(null);
   document.getElementById("newrq").onclick=newRequest;
-  if(!S.seen.community){ S.seen.community=1; save(); sheet(`<svg viewBox="0 0 200 110" style="width:100%;border-radius:16px;background:var(--soft)"><path d="M70 70c10-20 30-30 50-24 6-10 18-12 24-8-6 2-8 6-8 10 0 18-22 30-46 22-8-2-14 2-20 0Z" fill="#fff"/><path d="M146 40l10-3-6 8" fill="#6DBA78"/></svg><h3 style="margin-top:14px">Introducing prayer requests!</h3><p>Share what’s on your heart and pray for others. Faith grows stronger when we carry each other.</p><button class="btn" data-x>Explore community</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c); }
+  if(!S.seen.community){ S.seen.community=1; save(); sheet(`<svg viewBox="0 0 200 110" style="width:100%;border-radius:16px;background:linear-gradient(160deg,#CFE3F4,#E6D7F3)"><g transform="translate(30 0)">${handsArt(false)}</g></svg><h3 style="margin-top:14px">Introducing prayer requests!</h3><p>Share what’s on your heart and pray for others. Faith grows stronger when we carry each other.</p><button class="btn" data-x>Explore community</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c); }
 };
 function newRequest(){
-  sheet(`<h3>Share a prayer request</h3><textarea class="field" id="rq" placeholder="What can we pray for?" maxlength="600"></textarea>
-    <label style="display:flex;align-items:center;gap:10px;margin:12px 2px;font-size:14px"><input type="checkbox" id="anon" style="width:18px;height:18px"> Post anonymously</label>
-    <button class="btn" data-ok disabled>Share request</button>${CONFIG.communityApi?"":`<p class="muted" style="font-size:12px;margin:10px 0 0">Your request is saved on this device.</p>`}`,(s,c)=>{
-    const t=s.querySelector("#rq"), ok=s.querySelector("[data-ok]"); t.oninput=()=>ok.disabled=t.value.trim().length<5;
-    ok.onclick=()=>{ S.requests.push({id:uid(), text:t.value.trim(), name:s.querySelector("#anon").checked?"Anonymous":S.user.name, ts:Date.now(), prayers:0, mine:true}); save(); c(); comTab="mine"; render(); toast("Your request was shared"); };
+  const el=document.createElement("div"); el.className="player";
+  el.innerHTML=`<div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button><span></span><button class="icon-btn" data-info>${ic("help")}</button></div>
+    <div class="p-body"><div class="stepin"><h2 style="font-size:22px;color:var(--ink)">How can we pray for you today?</h2><textarea class="field" id="rq" maxlength="400" placeholder="Feel free to go into detail…" style="background:transparent;border:0;padding:0;min-height:30vh;font-size:17px;margin-top:12px"></textarea><div class="muted" id="cc" style="font-size:12.5px">0/400 characters</div>
+    <label style="display:flex;align-items:center;gap:10px;margin:16px 0;font-size:14px"><input type="checkbox" id="anon" style="width:18px;height:18px"> Post anonymously</label></div></div>
+    <div class="p-foot"><div class="muted" style="text-align:center;font-size:12.5px;margin-bottom:10px">${ic("bell").replace("<svg ",'<svg style="width:14px;height:14px;vertical-align:-2px" ')} Your request will expire in 7 days</div><button class="btn" data-pub disabled>Publish</button></div>`;
+  document.body.appendChild(el);
+  const t=el.querySelector("#rq"), pub=el.querySelector("[data-pub]"); setTimeout(()=>t.focus(),250);
+  t.oninput=()=>{ el.querySelector("#cc").textContent=`${t.value.length}/400 characters`; pub.disabled=t.value.trim().length<3; };
+  el.querySelector("[data-back]").onclick=()=>el.remove();
+  el.querySelector("[data-info]").onclick=()=>sheet(`<h3>About prayer requests</h3><p>Share only what you’re comfortable sharing. Requests stay visible for 7 days, and you can delete yours at any time.</p><button class="btn" data-x>Got it</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c);
+  pub.onclick=()=>{ pub.innerHTML='<span class="spin"></span>'; setTimeout(()=>{ const r={id:uid(), text:t.value.trim(), name:el.querySelector("#anon").checked?"Anonymous":S.user.name, ts:Date.now(), prayers:0, prayedBy:[], mine:true}; S.requests.push(r); save(); el.remove(); comTab="mine"; render(); openMyRequest(r,true); },600); };
+}
+function openMyRequest(r, fresh){
+  const el=document.createElement("div"); el.className="player mine-screen";
+  el.innerHTML=`${clouds(200,"white","opacity:.45")}<div class="p-top" style="position:relative;z-index:2"><button class="icon-btn" data-back>${ic("back")}</button><div class="p-title">Your request</div><button class="icon-btn" data-del>${ic("trash")}</button></div>
+    <div class="p-body" style="position:relative;z-index:1;text-align:center;padding-top:30px"><div class="pray-text st1" style="text-align:center">${esc(r.text)}</div>
+    <svg class="floaty-ico" viewBox="0 0 140 120" width="210" style="margin-top:26px">${handsArt(true)}</svg>
+    <div class="muted st2" style="margin-top:10px">${r.prayers?`${r.prayers} ${r.prayers===1?"person has":"people have"} prayed for you`:"Your request is live for 7 days"}</div></div>
+    <div class="p-foot" style="background:none"><button class="btn" data-ask>Ask loved ones to pray for you</button></div>`;
+  document.body.appendChild(el);
+  if(fresh) toast("Your prayer request is active");
+  el.querySelector("[data-back]").onclick=()=>{ el.remove(); render(); };
+  el.querySelector("[data-del]").onclick=()=>sheet(`<h3>Delete this request?</h3><p>It will be removed from the community.</p><button class="btn" style="background:var(--bad)" data-y>Delete</button><button class="btn ghost" data-x style="margin-top:10px">Cancel</button>`,(s,c)=>{ s.querySelector("[data-x]").onclick=c; s.querySelector("[data-y]").onclick=()=>{ S.requests=S.requests.filter(x=>x!==r); save(); c(); el.remove(); render(); toast("Your request was deleted"); }; });
+  el.querySelector("[data-ask]").onclick=()=>shareRequest(r);
+}
+async function requestCard(r){
+  const W=1080,H=1350,cv=document.createElement("canvas"); cv.width=W; cv.height=H; const x=cv.getContext("2d");
+  const g=x.createLinearGradient(0,0,0,H); g.addColorStop(0,"#0E5F95"); g.addColorStop(.55,"#3C86BC"); g.addColorStop(1,"#CFE3F4"); x.fillStyle=g; x.fillRect(0,0,W,H);
+  x.fillStyle="rgba(255,255,255,.9)"; [[160,1180,140],[380,1150,190],[640,1190,160],[880,1160,190],[1040,1210,120]].forEach(([cx,cy,rr])=>{ x.beginPath(); x.arc(cx,cy,rr,0,7); x.fill(); }); x.fillRect(0,1200,W,150);
+  x.fillStyle="#fff"; x.textAlign="center"; x.font="800 54px 'Plus Jakarta Sans',sans-serif"; x.fillText("V E R E D A",W/2,170);
+  x.font="600 40px 'Plus Jakarta Sans',sans-serif"; x.globalAlpha=.85; x.fillText("Please pray with me",W/2,260); x.globalAlpha=1;
+  x.font="500 62px Lora, Georgia, serif"; const words=r.text.split(/\s+/); let line="",y=420; const lines=[];
+  words.forEach(w=>{ const t=line?line+" "+w:w; if(x.measureText(t).width>860){ lines.push(line); line=w; } else line=t; }); lines.push(line);
+  lines.slice(0,9).forEach((l,i)=>x.fillText(l+(i===8&&lines.length>9?"…":""),W/2,y+i*84));
+  x.fillStyle="#0E5F95"; x.font="700 38px 'Plus Jakarta Sans',sans-serif"; x.fillText("You don’t have to carry the weight alone",W/2,1290);
+  return new Promise(res=>cv.toBlob(res,"image/png"));
+}
+function shareRequest(r){
+  sheet(`<h3>You don’t have to carry the weight alone</h3><div id="pv" style="border-radius:16px;overflow:hidden;margin:6px auto 16px;width:200px;aspect-ratio:4/5;background:var(--soft)"></div><button class="btn" data-sh>Share</button>`,async(s,c)=>{
+    const blob=await requestCard(r); const url=URL.createObjectURL(blob); s.querySelector("#pv").innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover">`;
+    s.querySelector("[data-sh]").onclick=async()=>{ const file=new File([blob],"vereda-prayer.png",{type:"image/png"}); const text=`Please pray with me: “${r.text}” 🙏`;
+      if(navigator.canShare && navigator.canShare({files:[file]})){ try{ await navigator.share({files:[file],text}); }catch(e){} }
+      else if(navigator.share){ try{ await navigator.share({text}); }catch(e){} }
+      else { const a=document.createElement("a"); a.href=url; a.download="vereda-prayer.png"; a.click(); toast("Image saved — share it with someone you love"); } c(); };
   });
 }
-function openPray(r){
-  const count = r ? (r.prayers||0) : S.requests.length;
-  const text = r ? r.text : "Lord, we place all of these prayer requests in your hands. Bring peace, healing and guidance to every heart. May each person feel your presence and care today. Amen.";
-  const prayed = r ? !!S.prayed[r.id] : false;
-  const el=document.createElement("div"); el.className="player pray-screen";
-  el.innerHTML=`<div class="p-top"><button class="icon-btn" data-back>${ic("back")}</button><div class="p-title">Prayer request</div><span class="muted" style="width:36px;text-align:right;font-size:13px">${count}</span></div>
-    ${clouds(240,"white")}${puff("6%","22%",120,11,.8,2)}${puff("62%","34%",90,13,.7,5)}<div class="p-body" style="padding-top:20px;position:relative;z-index:1"><div style="text-align:center"><span class="chip" id="pc">${r? (prayed?`You and ${Math.max(0,count-1)} others prayed`:`${count} ${count===1?"person has":"people have"} prayed`) : `Praying for ${count} ${count===1?"heart":"hearts"}`}</span></div>
-    <div class="pray-text" style="margin-top:24px">${esc(text)}</div>${r?`<div class="muted" style="padding:0 8px;font-size:14px">— ${esc(r.name)}</div>`:""}</div>
-    <div class="p-foot"><div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:12px"><div class="i" style="width:36px;height:36px;border-radius:10px;background:var(--soft);display:grid;place-items:center;color:var(--blue)">${ic("music").replace("<svg ",'<svg style="width:18px" ')}</div><div style="flex:1;font-weight:600;font-size:14px;color:var(--ink)">Soft music for prayer<div class="bar" style="height:3px;margin-top:8px"><i id="mb" style="width:0"></i></div></div><button data-mu style="color:var(--ink)">${ic("play").replace("<svg ",'<svg style="width:22px;height:22px" ')}</button></div>
-    <button class="btn" data-amen ${prayed?"disabled":""}>Amen</button></div>`;
-  document.body.appendChild(el);
+function openPray(list, start=0){
+  const all = !list; let i=start;
+  const el=document.createElement("div"); el.className="player pray-screen"; document.body.appendChild(el);
   let mt=null, p0=0;
   const stopM=()=>{ Music.stop(); clearInterval(mt); };
-  el.querySelector("[data-back]").onclick=()=>{ stopM(); el.remove(); render(); };
-  const mu=el.querySelector("[data-mu]");
-  mu.onclick=()=>{ if(Music.on){ stopM(); mu.innerHTML=ic("play").replace("<svg ",'<svg style="width:22px;height:22px" '); } else { Music.start(); mu.innerHTML=ic("pause").replace("<svg ",'<svg style="width:22px;height:22px" '); mt=setInterval(()=>{ p0=(p0+0.5)%100; const b=el.querySelector("#mb"); if(b) b.style.width=p0+"%"; },300); } };
-  el.querySelector("[data-amen]").onclick=()=>{
-    const h=document.createElement("div"); h.className="hands"; h.innerHTML="<div>🙏</div>"; document.body.appendChild(h); setTimeout(()=>h.remove(),1700);
-    if(r){ r.prayers=(r.prayers||0)+1; S.prayed[r.id]=1; } else S.requests.forEach(x=>{ if(!S.prayed[x.id]){ x.prayers=(x.prayers||0)+1; S.prayed[x.id]=1; } });
-    save(); el.querySelector("[data-amen]").disabled=true; el.querySelector("#pc").textContent = r?`You and ${r.prayers-1} others prayed`:`You prayed for ${count} ${count===1?"heart":"hearts"}`;
+  const paint=(dir=0)=>{
+    const r = all? null : list[i]; const total = all? activeReqs().length : (r.prayers||0);
+    const prayed = all ? !!S.prayedAllDay && S.prayedAllDay===todayStr() : !!S.prayed[r.id];
+    const text = all ? "Lord, we place all of these prayer requests in your hands. Bring peace, healing and guidance to every heart. May each person feel your presence and care today. Amen." : r.text;
+    const chip = all ? (prayed?`Prayed for ${total} ${total===1?"heart":"hearts"}`:`Praying for ${total} ${total===1?"heart":"hearts"}`) : `${avStack(r)}${total} ${total===1?"person":"people"} prayed`;
+    el.innerHTML=`${clouds(230,"white","opacity:.8")}<div class="p-top" style="position:relative;z-index:2"><button class="icon-btn" data-back>${ic("back")}</button><div class="p-title">Prayer requests</div><span class="muted" style="width:36px;text-align:right;font-size:13px">${all?total:`${i+1}/${list.length}`}</span></div>
+      <div class="p-body" style="padding-top:24px;position:relative;z-index:1"><div class="${dir?"stepin":""}"><div style="text-align:center"><span class="chip" id="pc">${chip}</span></div>
+      <div class="pray-text" style="margin-top:24px">${esc(text)}</div>${r&&!r.mine?`<div class="muted" style="padding:0 8px;font-size:14px">— ${esc(r.name)}</div>`:""}</div></div>
+      <div class="p-foot" style="background:none"><div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E6D7F3,#CFE3F4);display:grid;place-items:center;color:var(--blue)">${ic("music").replace("<svg ",'<svg style="width:18px" ')}</div><div style="flex:1;font-weight:600;font-size:14px;color:var(--ink)">Soft music for prayer<div class="bar" style="height:3px;margin-top:8px"><i id="mb" style="width:${p0}%"></i></div></div><button data-mu style="color:var(--ink)">${ic(Music.on?"pause":"play").replace("<svg ",'<svg style="width:22px;height:22px" ')}</button></div>
+      <button class="btn" data-amen ${prayed?"disabled":""}>${prayed?"You prayed ✓":"Amen"}</button></div>`;
+    el.querySelector("[data-back]").onclick=()=>{ stopM(); el.remove(); render(); };
+    const mu=el.querySelector("[data-mu]");
+    mu.onclick=()=>{ if(Music.on){ stopM(); paint(); } else { Music.start(); mt=setInterval(()=>{ p0=(p0+0.4)%100; const b=el.querySelector("#mb"); if(b) b.style.width=p0+"%"; },300); paint(); } };
+    el.querySelector("[data-amen]").onclick=()=>{
+      navigator.vibrate&&navigator.vibrate([10,40,20]);
+      const h=document.createElement("div"); h.className="hands"; h.innerHTML=`<svg viewBox="-10 -20 160 150" width="230">${handsArt(true)}</svg>`; el.appendChild(h);
+      const me=initials(S.user.name);
+      if(all){ activeReqs().forEach(x=>{ if(!S.prayed[x.id]){ x.prayers=(x.prayers||0)+1; (x.prayedBy=x.prayedBy||[]).push(me); S.prayed[x.id]=1; } }); S.prayedAllDay=todayStr(); }
+      else { r.prayers=(r.prayers||0)+1; (r.prayedBy=r.prayedBy||[]).push(me); S.prayed[r.id]=1; }
+      save(); el.querySelector("[data-amen]").disabled=true;
+      setTimeout(()=>{ h.remove(); if(!all && i<list.length-1){ i++; paint(1); } else paint(); },1700);
+    };
+    let x0=null; const body=el.querySelector(".p-body");
+    body.ontouchstart=e=>x0=e.touches[0].clientX; body.ontouchend=e=>{ if(all||x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(dx<-50&&i<list.length-1){ i++; paint(1); } else if(dx>50&&i>0){ i--; paint(1); } x0=null; };
   };
-  if(!S.seen.prayTip){ S.seen.prayTip=1; save(); sheet(`<svg viewBox="0 0 200 110" style="width:100%;border-radius:16px;background:linear-gradient(160deg,#E6D7F3,#CFE3F4)"><path d="M100 30c-6 18-16 30-20 48-2 9 4 16 12 16h8Z" fill="#fff"/><path d="M100 30c6 18 16 30 20 48 2 9-4 16-12 16h-8Z" fill="#F4F0FF"/></svg><h3 style="margin-top:14px">How to pray for this request</h3><p>Take a quiet moment to read the request. Then ask God to meet their need. When you’ve prayed, tap “Amen” as a quiet sign of intercession.</p><button class="btn" data-x>Got it!</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c); }
+  paint();
+  if(!S.seen.prayTip){ S.seen.prayTip=1; save(); sheet(`<svg viewBox="0 0 200 120" style="width:100%;border-radius:16px;background:linear-gradient(160deg,#E6D7F3,#CFE3F4)"><g transform="translate(30 0)">${handsArt(false)}</g></svg><h3 style="margin-top:14px">How to pray for this request</h3><p>Take a quiet moment to read the request. Then ask God to meet their need. When you’ve prayed, tap “Amen” as a quiet sign of intercession.</p><button class="btn" data-x>Got it!</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c); }
 }
 
 /* ---------- BIBLE ---------- */
-let BIDX=null; const BCACHE={}; let bibleSel=null;
+const VERSIONS={web:{code:"WEB",name:"World English Bible",desc:"A modern, readable English translation, freely available in the public domain.",path:"bible/"},kjv:{code:"KJV",name:"King James Version",desc:"The classic English translation first published in 1611 (1769 edition), in the public domain.",path:"bible/kjv/"}};
+let BIDX=null; const BCACHE={}; let bibleListening=false;
 async function loadIdx(){ if(!BIDX) BIDX=await fetch("bible/index.json").then(r=>r.json()); return BIDX; }
-async function loadBook(i){ if(!BCACHE[i]) BCACHE[i]=await fetch(`bible/${String(i).padStart(2,"0")}.json`).then(r=>r.json()); return BCACHE[i]; }
+async function loadBook(i){ const v=S.bver||"web"; const k=v+i; if(!BCACHE[k]) BCACHE[k]=await fetch(`${VERSIONS[v].path}${String(i).padStart(2,"0")}.json`).then(r=>r.json()); return BCACHE[k]; }
 function viewBible(){
-  return `<div class="screen"><div class="safe-top"></div><div class="pad" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><button class="icon-btn" id="bset">${ic("lines")}</button><button class="chip" id="bref">…</button><span class="chip" style="font-size:12px">WEB</span></div>
-    <div class="pad"><div class="bible-txt" id="btxt" style="--bfs:${S.bfs}px"><p class="muted" style="font-family:inherit">Loading…</p></div>
-    <div style="display:flex;gap:10px;margin:22px 0 10px"><button class="btn ghost sm" id="bprev">‹ Previous</button><button class="btn ghost sm" id="bnext">Next ›</button></div>
-    <p class="muted" style="font-size:11.5px;text-align:center;margin:14px 0">Scripture: World English Bible (WEB), public domain.</p></div></div>`;
+  return `<div class="screen bible-screen"><div class="b-head" id="bhead"><button class="icon-btn" id="bset">${ic("lines")}</button><div class="seg ${bibleListening?"listen":""}" id="bseg" style="transform:scale(.92)"><span class="knob"></span><button class="${bibleListening?"":"on"}" data-bm="read">${ic("lines")}Read</button><button class="${bibleListening?"on":""}" data-bm="listen">${ic("head")}Listen</button></div><button class="chip" id="bver" style="font-size:12px">${VERSIONS[S.bver||"web"].code}</button></div>
+    <div class="pad" id="bwrap"><div class="bible-txt" id="btxt" style="--bfs:${S.bfs}px"><p class="muted" style="font-family:inherit">Loading…</p></div>
+    <button class="btn ghost sm" id="bnext" style="margin:26px 0 8px"></button>
+    <p class="muted" style="font-size:11.5px;text-align:center;margin:14px 0 30px">Scripture: ${VERSIONS[S.bver||"web"].name} (${VERSIONS[S.bver||"web"].code}), public domain.</p></div>
+    <div class="mini bible-mini ${bibleListening?"":"hidden"}" id="bmini"><div class="th" style="background:linear-gradient(135deg,#CFE3F4,#E6D7F3);display:grid;place-items:center;color:var(--blue)">${ic("bible").replace("<svg ",'<svg style="width:20px" ')}</div><div style="flex:1"><b id="bmt">…</b><div class="bar"><i id="bmb" style="width:0"></i></div></div><button data-bpp>${ic("pause").replace("<svg ",'<svg style="width:22px;height:22px" ')}</button></div></div>`;
+}
+function openVersions(){
+  page("Versions", Object.entries(VERSIONS).map(([k,v])=>`<button class="vcard ${(S.bver||"web")===k?"on":""}" data-ver="${k}"><span class="vbadge">${v.code}</span><span style="flex:1;text-align:left"><b>${v.name}</b><small>${v.desc}</small></span></button>`).join("")+`<div class="card" style="padding:14px;margin-top:20px;box-shadow:none;border:1px solid var(--line);font-size:13.5px" class="muted">${ic("spark").replace("<svg ",'<svg style="width:15px;vertical-align:-3px;color:var(--muted)" ')} More versions coming soon</div>`,
+  el=>el.querySelectorAll("[data-ver]").forEach(b=>b.onclick=()=>{ S.bver=b.dataset.ver; save(); N.stop(); bibleListening=false; el.remove(); render(); toast(`Now reading the ${VERSIONS[S.bver].name}`); }));
 }
 afterRender.bible=async()=>{
   const idx=await loadIdx(); const b=await loadBook(S.bibleBook); const ch=b.chapters[S.bibleCh]||b.chapters[0];
   if(tab!=="bible") return;
-  document.getElementById("bref").textContent=`${b.name} ${S.bibleCh+1}`;
+  const ref=`${b.name} ${S.bibleCh+1}`;
   const hl=new Set(S.highlights.filter(h=>h.b===S.bibleBook&&h.c===S.bibleCh).map(h=>h.v));
-  document.getElementById("btxt").innerHTML=`<h2 style="font-family:var(--serif);font-size:26px;margin:6px 0 14px">${esc(b.name)} ${S.bibleCh+1}</h2>`+ch.map((v,i)=>v?`<span class="v ${hl.has(i+1)?"hl":""}" data-v="${i+1}"><sup>${i+1}</sup>${esc(v)} </span>`:"").join("");
-  const go=(bk,c)=>{ S.bibleBook=bk; S.bibleCh=c; save(); render(); window.scrollTo(0,0); };
-  document.getElementById("bprev").onclick=()=>{ if(S.bibleCh>0) go(S.bibleBook,S.bibleCh-1); else if(S.bibleBook>0) go(S.bibleBook-1, idx[S.bibleBook-1][1]-1); };
-  document.getElementById("bnext").onclick=()=>{ if(S.bibleCh<b.chapters.length-1) go(S.bibleBook,S.bibleCh+1); else if(S.bibleBook<idx.length-1) go(S.bibleBook+1,0); };
+  const txt=document.getElementById("btxt");
+  txt.innerHTML=`<h2 style="font-family:var(--serif);font-size:26px;margin:6px 0 14px">${esc(ref)}</h2>`+ch.map((v,i)=>v?`<span class="v ${hl.has(i+1)?"hl":""}" data-v="${i+1}"><sup>${i+1}</sup>${esc(v)} </span>`:"").join("");
+  if(bibleAnim){ txt.classList.add(bibleAnim); setTimeout(()=>txt.classList.remove(bibleAnim),400); bibleAnim=""; }
+  const nextRef = S.bibleCh<b.chapters.length-1 ? `${b.name} ${S.bibleCh+2}` : (S.bibleBook<idx.length-1 ? `${idx[S.bibleBook+1][0]} 1` : "");
+  const nb=document.getElementById("bnext"); if(nextRef){ nb.innerHTML=`Next: ${esc(nextRef)} ›`; } else nb.classList.add("hidden");
+  const go=(bk,c,dir)=>{ S.bibleBook=bk; S.bibleCh=c; save(); bibleAnim=dir>0?"slideL":"slideR"; if(bibleListening){ N.stop(); } render(); window.scrollTo(0,0); if(bibleListening) setTimeout(()=>startBibleAudio(),300); };
+  const prev=()=>{ if(S.bibleCh>0) go(S.bibleBook,S.bibleCh-1,-1); else if(S.bibleBook>0) go(S.bibleBook-1, idx[S.bibleBook-1][1]-1,-1); };
+  const next=()=>{ if(S.bibleCh<b.chapters.length-1) go(S.bibleBook,S.bibleCh+1,1); else if(S.bibleBook<idx.length-1) go(S.bibleBook+1,0,1); };
+  nb.onclick=next;
+  let x0=null,y0=null; const wrap=document.getElementById("bwrap");
+  wrap.ontouchstart=e=>{ x0=e.touches[0].clientX; y0=e.touches[0].clientY; };
+  wrap.ontouchend=e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0; if(Math.abs(dx)>70 && Math.abs(dx)>Math.abs(dy)*1.5){ dx<0?next():prev(); } x0=null; };
+  // header hide on scroll
+  const head=document.getElementById("bhead"); let ly=window.scrollY;
+  window.onscroll=()=>{ const y=window.scrollY; head.classList.toggle("hide", y>80 && y>ly); ly=y; };
+  // listen
+  const mini=document.getElementById("bmini");
+  const startBibleAudio=()=>{ bibleListening=true; N.load(`${ref}. `+ch.join(" "), ref); N.play(); const sg=document.getElementById("bseg"); if(sg){ sg.classList.add("listen"); sg.querySelector('[data-bm=read]').classList.remove("on"); sg.querySelector('[data-bm=listen]').classList.add("on"); } mini?.classList.remove("hidden"); };
+  N.onupdate=()=>{ const m=document.getElementById("bmini"); if(!m) return; document.getElementById("bmt").textContent=ref; const pct=N.total()?Math.min(100,N.elapsed()/N.total()*100):0; document.getElementById("bmb").style.width=pct+"%"; m.querySelector("[data-bpp]").innerHTML=ic(N.playing?"pause":"play").replace("<svg ",'<svg style="width:22px;height:22px" '); if(!N.playing && N.i>=N.sents.length && bibleListening){ next(); } };
+  document.querySelectorAll("[data-bm]").forEach(x=>x.onclick=()=>{ if(x.dataset.bm==="listen"){ if(!bibleListening) startBibleAudio(); } else { bibleListening=false; N.stop(); const sg=document.getElementById("bseg"); sg.classList.remove("listen"); sg.querySelector('[data-bm=read]').classList.add("on"); sg.querySelector('[data-bm=listen]').classList.remove("on"); mini.classList.add("hidden"); } });
+  mini.querySelector("[data-bpp]").onclick=()=>{ N.playing?N.pause():N.play(); };
+  document.getElementById("bmt").textContent=ref;
   const openBooks=()=>{ let openB=S.bibleBook;
-    const p=page("Books","",el=>{ const paint=()=>{ el.querySelector(".p-body").innerHTML=idx.map(([n,c],i)=>`<button class="bk" data-b="${i}">${esc(n)}<span class="muted">${ic(openB===i?"chev":"right").replace("<svg ",'<svg style="width:18px" ')}</span></button>${openB===i?`<div class="chgrid">${Array.from({length:c},(_,k)=>`<button class="${i===S.bibleBook&&k===S.bibleCh?"on":""}" data-c="${k}">${k+1}</button>`).join("")}</div>`:""}`).join("");
+    page("Books","",el=>{ const paint=()=>{ el.querySelector(".p-body").innerHTML=idx.map(([n,c],i)=>`<button class="bk" data-b="${i}">${esc(n)}<span class="muted">${ic(openB===i?"chev":"right").replace("<svg ",'<svg style="width:18px" ')}</span></button>${openB===i?`<div class="chgrid">${Array.from({length:c},(_,k)=>`<button class="${i===S.bibleBook&&k===S.bibleCh?"on":""}" data-c="${k}">${k+1}</button>`).join("")}</div>`:""}`).join("");
       el.querySelectorAll("[data-b]").forEach(x=>x.onclick=()=>{ openB=openB===+x.dataset.b?-1:+x.dataset.b; paint(); });
-      el.querySelectorAll("[data-c]").forEach(x=>x.onclick=()=>{ el.remove(); go(openB,+x.dataset.c); }); };
+      el.querySelectorAll("[data-c]").forEach(x=>x.onclick=()=>{ el.remove(); go(openB,+x.dataset.c,1); }); };
       paint(); setTimeout(()=>el.querySelector(".chgrid")?.scrollIntoView({block:"center"}),50); }); };
-  document.getElementById("bref").onclick=openBooks;
-  document.getElementById("bset").onclick=()=>sheet(`<h3 style="text-align:left">Bible settings</h3><div class="list" style="box-shadow:none;border:1px solid var(--line)"><div class="li">${ic("bible")}<span>Version<small>World English Bible (WEB)</small></span></div><button class="li" data-bk>${ic("book")}<span>Book<small>${esc(b.name)}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-fs>${ic("text")}<span>Text size<small>${S.bfs}px</small></span><span class="chev">${ic("right")}</span></button></div><p class="muted" style="font-size:12.5px;margin-top:12px">More versions coming soon.</p>`,(s,c)=>{ s.querySelector("[data-bk]").onclick=()=>{ c(); openBooks(); }; s.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); c(); render(); }; });
+  document.getElementById("bver").onclick=openVersions;
+  document.getElementById("bset").onclick=()=>sheet(`<h3 style="text-align:left">Bible settings</h3><div class="list" style="box-shadow:none;border:1px solid var(--line)"><button class="li" data-vr>${ic("bible")}<span>Version<small>${VERSIONS[S.bver||"web"].code}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-bk>${ic("book")}<span>Book<small>${esc(b.name)}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-fs>${ic("text")}<span>Text size<small>${S.bfs}px</small></span><span class="chev">${ic("right")}</span></button></div>`,(s,c)=>{ s.querySelector("[data-vr]").onclick=()=>{ c(); openVersions(); }; s.querySelector("[data-bk]").onclick=()=>{ c(); openBooks(); }; s.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); c(); render(); }; });
   document.querySelectorAll(".bible-txt [data-v]").forEach(sp=>sp.onclick=()=>{
-    const v=+sp.dataset.v; const t=ch[v-1]; const ref=`${b.name} ${S.bibleCh+1}:${v}`; sp.classList.add("sel");
+    const v=+sp.dataset.v; const t=ch[v-1]; const vref=`${b.name} ${S.bibleCh+1}:${v}`; sp.classList.add("sel");
     const isH=S.highlights.some(h=>h.b===S.bibleBook&&h.c===S.bibleCh&&h.v===v);
-    const o=sheet(`<div style="font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--ink);margin-bottom:6px">${esc(t)}</div><div class="muted" style="font-size:13px;margin-bottom:14px">${esc(ref)}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><button class="pill" data-h style="justify-content:center">${ic("bookmark").replace("<svg ",'<svg style="width:15px" ')}${isH?"Remove":"Highlight"}</button><button class="pill" data-c style="justify-content:center">${ic("copy").replace("<svg ",'<svg style="width:15px" ')}Copy</button><button class="pill" data-s style="justify-content:center">${ic("share").replace("<svg ",'<svg style="width:15px" ')}Share</button></div>`,(s,c)=>{
-      s.querySelector("[data-h]").onclick=()=>{ if(isH) S.highlights=S.highlights.filter(h=>!(h.b===S.bibleBook&&h.c===S.bibleCh&&h.v===v)); else S.highlights.push({b:S.bibleBook,c:S.bibleCh,v,t,r:ref,ts:Date.now()}); save(); c(); sp.classList.remove("sel"); sp.classList.toggle("hl",!isH); toast(isH?"Highlight removed":"Saved to Highlights & notes"); };
-      s.querySelector("[data-c]").onclick=()=>{ copyText(`${t} — ${ref}`); c(); sp.classList.remove("sel"); };
-      s.querySelector("[data-s]").onclick=()=>{ shareText(`“${t}” — ${ref}\n\nshared from VEREDA`); c(); sp.classList.remove("sel"); }; });
+    const o=sheet(`<div style="font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--ink);margin-bottom:6px">${esc(t)}</div><div class="muted" style="font-size:13px;margin-bottom:14px">${esc(vref)} · ${VERSIONS[S.bver||"web"].code}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><button class="pill" data-h style="justify-content:center">${ic("bookmark").replace("<svg ",'<svg style="width:15px" ')}${isH?"Remove":"Highlight"}</button><button class="pill" data-c style="justify-content:center">${ic("copy").replace("<svg ",'<svg style="width:15px" ')}Copy</button><button class="pill" data-s style="justify-content:center">${ic("share").replace("<svg ",'<svg style="width:15px" ')}Share</button></div>`,(s,c)=>{
+      s.querySelector("[data-h]").onclick=()=>{ if(isH) S.highlights=S.highlights.filter(h=>!(h.b===S.bibleBook&&h.c===S.bibleCh&&h.v===v)); else S.highlights.push({b:S.bibleBook,c:S.bibleCh,v,t,r:vref,ts:Date.now()}); save(); c(); sp.classList.remove("sel"); sp.classList.toggle("hl",!isH); toast(isH?"Highlight removed":"Saved to Highlights & notes"); };
+      s.querySelector("[data-c]").onclick=()=>{ copyText(`${t} — ${vref}`); c(); sp.classList.remove("sel"); };
+      s.querySelector("[data-s]").onclick=()=>{ shareText(`“${t}” — ${vref}\n\nshared from VEREDA`); c(); sp.classList.remove("sel"); }; });
     o.addEventListener("click",e=>{ if(e.target===o) sp.classList.remove("sel"); });
   });
 };
+let bibleAnim="";
 
 /* ---------- boot ---------- */
 splash();
