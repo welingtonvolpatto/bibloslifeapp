@@ -123,7 +123,7 @@ function cloudBand(seed, fill){
 function clouds(h=150, tone="white", extra=""){
   const f = tone==="white" ? ["rgba(255,255,255,.45)","rgba(255,255,255,.7)","rgba(255,255,255,.95)"] : tone==="sky" ? ["rgba(214,232,245,.6)","rgba(225,238,248,.85)","#EAF3FA"] : tone;
   const dark = document.documentElement.dataset.theme==="dark";
-  if(tone==="bg"){ const c=dark?["#182532","#162029","#141922"]:["#E6EEF3","#F2F3F0","#FDF7EF"]; return `<div class="clouds" style="--ch:${h}px;${extra}"><div class="cl" style="animation-duration:80s;bottom:34%">${cloudBand(11,c[0])}</div><div class="cl" style="animation-duration:55s;bottom:16%">${cloudBand(41,c[1])}</div><div class="cl" style="animation-duration:38s">${cloudBand(97,c[2])}</div></div>`; }
+  if(tone==="bg"){ const c=dark?["#182532","#162029","#141922"]:["#E6F0F8","#F3F8FC","#FFFFFF"]; return `<div class="clouds" style="--ch:${h}px;${extra}"><div class="cl" style="animation-duration:80s;bottom:34%">${cloudBand(11,c[0])}</div><div class="cl" style="animation-duration:55s;bottom:16%">${cloudBand(41,c[1])}</div><div class="cl" style="animation-duration:38s">${cloudBand(97,c[2])}</div></div>`; }
   const ff = dark && tone!=="blue" ? ["rgba(255,255,255,.05)","rgba(255,255,255,.08)","rgba(255,255,255,.11)"] : f;
   return `<div class="clouds" style="--ch:${h}px;${extra}"><div class="cl" style="animation-duration:70s;bottom:28%;opacity:.9">${cloudBand(7,ff[0])}</div><div class="cl" style="animation-duration:48s;bottom:12%">${cloudBand(31,ff[1])}</div><div class="cl" style="animation-duration:34s">${cloudBand(77,ff[2])}</div></div>`;
 }
@@ -244,7 +244,27 @@ function renderWelcome(step){
 
 /* ---------- JOURNEY ---------- */
 const GLY={lamp:"flame",name:"heart",gift:"gift",prayer:"hands",wait:"sprout",shield:"shield",tree:"sprout"};
-let todayCollapsed=false, cdTimer=null;
+let todayCollapsed=false, cdTimer=null, ROAD=null;
+const TREE=`<svg viewBox="0 0 40 56" width="34"><rect x="18" y="38" width="4" height="14" rx="2" fill="#9A7B5B"/><path d="M20 4 34 30H6Z" fill="#8DB89A"/><path d="M20 14 37 42H3Z" fill="#7AAA88"/></svg>`;
+const BUSH=`<svg viewBox="0 0 48 30" width="38"><circle cx="14" cy="18" r="10" fill="#9CC3A6"/><circle cx="26" cy="13" r="12" fill="#8DB89A"/><circle cx="37" cy="19" r="9" fill="#A8CCB0"/><circle cx="20" cy="12" r="2" fill="#F4C46A"/><circle cx="33" cy="15" r="2" fill="#F2A3A3"/></svg>`;
+function smoothPath(P){ if(P.length<2) return ""; let d=`M${P[0][0]} ${P[0][1]}`; for(let i=0;i<P.length-1;i++){ const p0=P[i-1]||P[i], p1=P[i], p2=P[i+1], p3=P[i+2]||p2; const c1=[p1[0]+(p2[0]-p0[0])/5, p1[1]+(p2[1]-p0[1])/5], c2=[p2[0]-(p3[0]-p1[0])/5, p2[1]-(p3[1]-p1[1])/5]; d+=` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`; } return d; }
+function drawRoad(animate){
+  const road=document.getElementById("road"), svg=document.getElementById("roadsvg"); if(!road||!svg||!ROAD) return;
+  const W=road.clientWidth, H=ROAD.H; const dark=document.documentElement.dataset.theme==="dark";
+  const P=[[W/2,-30],...ROAD.items.map(it=>[it.x*W,it.cy])];
+  // walked: up to the current (or last completed) node
+  let lastIdx=0; ROAD.items.forEach((it,i)=>{ if(it.t==="n" && (S.completed[it.l.key] || it.l.idx===ROAD.cur)) lastIdx=i+1; });
+  const full=smoothPath(P), walked=smoothPath(P.slice(0,lastIdx+1));
+  const edge=dark?"#2A3442":"#DCE3EB", base=dark?"#222B37":"#EEF2F6", walk=dark?"#1F4566":"#BFDAF0", walkEdge=dark?"#2B5C85":"#9CC5E6";
+  svg.setAttribute("width",W); svg.setAttribute("height",H); svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  svg.innerHTML=`<path d="${full}" stroke="rgba(20,40,70,.06)" stroke-width="46" fill="none" stroke-linecap="round" transform="translate(0 4)"/>
+    <path d="${full}" stroke="${edge}" stroke-width="42" fill="none" stroke-linecap="round"/>
+    <path d="${full}" stroke="${base}" stroke-width="34" fill="none" stroke-linecap="round"/>
+    ${lastIdx?`<path class="walk-e" d="${walked}" stroke="${walkEdge}" stroke-width="42" fill="none" stroke-linecap="round"/><path class="walk" d="${walked}" stroke="${walk}" stroke-width="34" fill="none" stroke-linecap="round"/>`:""}
+    <path d="${full}" stroke="${dark?"rgba(255,255,255,.18)":"#fff"}" stroke-width="3" fill="none" stroke-dasharray="12 14" stroke-linecap="round"/>`;
+  if(animate) svg.querySelectorAll(".walk,.walk-e").forEach(p=>{ const L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L; p.getBoundingClientRect(); p.style.transition="stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1) .2s"; p.style.strokeDashoffset=0; });
+}
+window.addEventListener("resize",()=>drawRoad(false));
 function msToMidnight(){ const n=new Date(), m=new Date(n); m.setHours(24,0,0,0); return m-n; }
 const hms = ms => { const s=Math.floor(ms/1000); return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":"); };
 function viewJourney(){
@@ -262,16 +282,19 @@ function viewJourney(){
   // path
   const cur = currentIndex();
   let html = "";
+  // winding road layout
+  let y=20, k=0; const items=[]; const XS=[.5,.24,.5,.76];
   MOD.chapters.forEach((ch,ci)=>{
-    html += `<div class="ch-head"><small>Chapter ${ci+1}:</small><b>${esc(ch.title)}</b></div>`;
-    if(ci>0) html += `<div style="position:relative;height:0">${puff("-30px","-80px",140,11,.8,ci*2)}${puff("72%","-40px",120,13,.7,ci*3)}</div>`;
-    const items = LESSONS.filter(l=>l.ci===ci);
-    for(let k=0;k<items.length;k+=3){
-      const pair=items.slice(k,k+2), mid=items[k+2];
-      html += `<div class="row">${pair.map(nodeHTML).join("")}${pair.length===2?'<div class="dots-h"></div>':""}</div>`;
-      if(mid) html += `<div class="row center">${nodeHTML(mid)}</div>`;
-    }
+    items.push({t:"h",ci,x:.5,y,cy:y+32}); y+=112;
+    LESSONS.filter(l=>l.ci===ci).forEach(l=>{ items.push({t:"n",l,x:XS[k%4],y,cy:y+44}); y+=150; k++; });
   });
+  ROAD={items,H:y+10,cur};
+  html = `<div class="road" id="road" style="height:${y+10}px"><svg class="road-svg" id="roadsvg"></svg>`+items.map((it,i)=>{
+    if(it.t==="h"){ const ch=MOD.chapters[it.ci]; return `<div class="sign" style="top:${it.y}px"><small>Chapter ${it.ci+1}</small><b>${esc(ch.title)}</b></div>`; }
+    const side = it.x<.4 ? .82 : it.x>.6 ? .18 : null;
+    const deco = side!==null && (i%3!==0) ? `<div class="deco" style="top:${it.y+20}px;left:${side*100}%">${i%2?TREE:BUSH}</div>` : "";
+    return deco+`<div class="rnode" style="top:${it.y}px;left:${it.x*100}%">${nodeHTML(it.l)}</div>`;
+  }).join("")+`</div>`;
   function nodeHTML(l){
     const done=!!S.completed[l.key], current=l.idx===cur && isAvailable(l.idx), open=done||current||isAdmin();
     const hx = current ? HEX("#9CCBEE","#2F7DB8","#1D5F92",.45) : done ? HEX("#C9E0F2","#6FA8D4","#4C86B4",.5) : open ? HEX("#DCEBF7","#8FBCE0","#6A9CC4",.5) : HEX("#F3F5F7","#C9CFD7","#A9B1BC",.55);
@@ -286,6 +309,7 @@ function viewJourney(){
     <div class="j-mini" id="jmini"><button>${esc(L.title)}${ic("chev")}</button></div>`;
 }
 afterRender.journey = () => {
+  drawRoad(!sessionStorage.getItem("vroad")); sessionStorage.setItem("vroad","1");
   document.getElementById("tgl").onclick=()=>{ todayCollapsed=!todayCollapsed; document.getElementById("today").classList.toggle("collapsed",todayCollapsed); };
   document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{ const L=todayLesson().L; openLesson(L.key, b.dataset.open); });
   document.querySelectorAll("[data-node]").forEach(b=>b.onclick=()=>{
@@ -379,7 +403,7 @@ function openLesson(key, mode="read", startStep, review){
   function paint(anim=true){
     el.classList.remove("immersive");
     const bg = (sk()==="quiz" && (quiz.i===-1||quiz.i>=D.quiz.length)) ? (quiz.i===-1?"#CFE3F4":"#FCE6CC") : "";
-    el.style.background = bg && document.documentElement.dataset.theme!=="dark" ? bg : "";
+    el.style.background = bg && document.documentElement.dataset.theme!=="dark" ? (bg==="#FCE6CC"?"#FFF3D6":bg) : "";
     el.innerHTML = head()+`<div class="p-body"><div class="${anim?"stepin":""}">${content()}</div></div>${miniUI()}${foot()}`;
     bind();
   }
