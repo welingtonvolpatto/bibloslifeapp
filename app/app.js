@@ -53,7 +53,7 @@ function todayLesson(){
   const ci = currentIndex();
   // if today's lesson was just completed today, keep showing it as "done"
   const last = ci>0 ? LESSONS[ci-1] : null;
-  if (last && S.completed[last.key] === todayStr() && !S.dev) return {L:last, done:true};
+  if (last && S.completed[last.key] === todayStr()) return {L:last, done:true};
   if (ci >= LESSONS.length) return {L:LESSONS[LESSONS.length-1], done:true};
   return {L:LESSONS[ci], done:false, locked:!isAvailable(ci)};
 }
@@ -306,7 +306,7 @@ function viewJourney(){
   return `<div class="screen journey"><div class="safe-top"></div>
     <div class="j-top"><button class="chip" id="mod">Module 1${isAdmin()?' <span style="color:var(--gold);font-weight:800">· ADMIN</span>':""}</button><div style="display:flex;gap:8px"><button class="icon-btn" id="hl">${ic("bookmark")}</button><button class="icon-btn" id="me">${initials(S.user.name)}</button></div></div>
     ${card}<div style="position:relative;height:84px">${clouds(96,"bg","bottom:-2px")}</div><div class="path">${html}</div></div><button class="fab-top hidden" id="top">${ic("up")}</button>
-    <div class="j-mini" id="jmini"><button>${esc(L.title)}${ic("chev")}</button></div>`;
+    <div class="j-mini" id="jmini"><button>${esc(L.title)}${ic("chev")}</button>${allDone||T.locked?`<div class="countdown" style="margin:8px 0 0">New activities in <span class="cd2">${hms(msToMidnight())}</span></div>`:""}</div>`;
 }
 afterRender.journey = () => {
   const anim=!sessionStorage.getItem("vroad"); sessionStorage.setItem("vroad","1"); requestAnimationFrame(()=>drawRoad(anim)); setTimeout(()=>drawRoad(false),600); document.fonts&&document.fonts.ready.then(()=>drawRoad(false));
@@ -330,7 +330,7 @@ afterRender.journey = () => {
   const jm=document.getElementById("jmini"); jm.querySelector("button").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
   window.onscroll=()=>{ top.classList.toggle("hidden",window.scrollY<500); jm.classList.toggle("show",window.scrollY>330); };
   if(sessionStorage.getItem("vjust")){ sessionStorage.removeItem("vjust"); document.querySelectorAll(".today .st .ck").forEach((c,i)=>c.style.animationDelay=(0.25+i*0.18)+"s"); } else document.querySelectorAll(".today .st .ck").forEach(c=>c.style.animation="none");
-  clearInterval(cdTimer); cdTimer=setInterval(()=>{ const e=document.getElementById("cd"); if(!e){ clearInterval(cdTimer); return; } const ms=msToMidnight(); e.textContent=hms(ms); if(ms<1500) setTimeout(render,1600); },1000);
+  clearInterval(cdTimer); cdTimer=setInterval(()=>{ const e=document.getElementById("cd"); if(!e){ clearInterval(cdTimer); return; } const ms=msToMidnight(); e.textContent=hms(ms); document.querySelectorAll(".cd2").forEach(x=>x.textContent=hms(ms)); if(ms<1500) setTimeout(render,1600); },1000);
   if(!S.seen.notif && "Notification" in window && Notification.permission==="default"){ S.seen.notif=1; save();
     setTimeout(()=>sheet(`<h3>Daily reminder</h3><p>Allow notifications so VEREDA can remind you when your next day unlocks.</p><button class="btn" data-y>Allow</button><button class="btn ghost" data-x style="margin-top:10px">Not now</button>`,(s,close)=>{ s.querySelector("[data-x]").onclick=close; s.querySelector("[data-y]").onclick=()=>{ Notification.requestPermission(); close(); }; }),700); }
 };

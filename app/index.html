@@ -65,7 +65,8 @@ h1{font-size:28px;font-weight:800;color:var(--ink);letter-spacing:-.3px}
 .today .st.done .ck::after{content:"";width:9px;height:5px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
 .today .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .today.collapsed .steps,.today.collapsed .acts,.today.collapsed .lbl{display:none}
-.countdown{text-align:center;font-size:13px;font-weight:600;color:var(--ink);margin:14px 0 2px}
+.countdown{position:relative;z-index:3;text-align:center;font-size:13.5px;font-weight:600;color:var(--ink);margin:14px 0 2px}
+.countdown span{font-variant-numeric:tabular-nums;color:var(--blue);font-weight:800}
 .path{background:var(--bg);margin-top:0;min-height:60vh;padding:22px 0 30px;position:relative}
 .ch-head{text-align:center;margin:10px 0 18px}
 .ch-head small{display:block;font-size:13px;color:var(--muted)}
