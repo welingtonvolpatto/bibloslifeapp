@@ -251,19 +251,20 @@ const BUSH=`<svg viewBox="0 0 48 30" width="38"><circle cx="14" cy="18" r="10" f
 function smoothPath(P){ if(P.length<2) return ""; let d=`M${P[0][0]} ${P[0][1]}`; for(let i=0;i<P.length-1;i++){ const p0=P[i-1]||P[i], p1=P[i], p2=P[i+1], p3=P[i+2]||p2; const c1=[p1[0]+(p2[0]-p0[0])/5, p1[1]+(p2[1]-p0[1])/5], c2=[p2[0]-(p3[0]-p1[0])/5, p2[1]-(p3[1]-p1[1])/5]; d+=` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`; } return d; }
 function drawRoad(animate){
   const road=document.getElementById("road"), svg=document.getElementById("roadsvg"); if(!road||!svg||!ROAD) return;
-  const W=road.clientWidth, H=ROAD.H; const dark=document.documentElement.dataset.theme==="dark";
-  const P=[[W/2,-30],...ROAD.items.map(it=>[it.x*W,it.cy])];
-  // walked: up to the current (or last completed) node
-  let lastIdx=0; ROAD.items.forEach((it,i)=>{ if(it.t==="n" && (S.completed[it.l.key] || it.l.idx===ROAD.cur)) lastIdx=i+1; });
-  const full=smoothPath(P), walked=smoothPath(P.slice(0,lastIdx+1));
-  const edge=dark?"#2A3442":"#DCE3EB", base=dark?"#222B37":"#EEF2F6", walk=dark?"#1F4566":"#BFDAF0", walkEdge=dark?"#2B5C85":"#9CC5E6";
-  svg.setAttribute("width",W); svg.setAttribute("height",H); svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
-  svg.innerHTML=`<path d="${full}" stroke="rgba(20,40,70,.06)" stroke-width="46" fill="none" stroke-linecap="round" transform="translate(0 4)"/>
-    <path d="${full}" stroke="${edge}" stroke-width="42" fill="none" stroke-linecap="round"/>
-    <path d="${full}" stroke="${base}" stroke-width="34" fill="none" stroke-linecap="round"/>
-    ${lastIdx?`<path class="walk-e" d="${walked}" stroke="${walkEdge}" stroke-width="42" fill="none" stroke-linecap="round"/><path class="walk" d="${walked}" stroke="${walk}" stroke-width="34" fill="none" stroke-linecap="round"/>`:""}
-    <path d="${full}" stroke="${dark?"rgba(255,255,255,.18)":"#fff"}" stroke-width="3" fill="none" stroke-dasharray="12 14" stroke-linecap="round"/>`;
-  if(animate) svg.querySelectorAll(".walk,.walk-e").forEach(p=>{ const L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L; p.getBoundingClientRect(); p.style.transition="stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1) .2s"; p.style.strokeDashoffset=0; });
+  const R=road.getBoundingClientRect();
+  const pts=[...road.querySelectorAll("[data-node]")].sort((a,b)=>a.dataset.node-b.dataset.node).map(n=>{ const h=n.querySelector(".hex").getBoundingClientRect(); return {x:h.left+h.width/2-R.left, y:h.top+h.height/2-R.top, i:+n.dataset.node}; });
+  let lastDone=-1; LESSONS.forEach(l=>{ if(S.completed[l.key]) lastDone=l.idx; });
+  const walkedTo = Math.max(lastDone, ROAD.cur<LESSONS.length && isAvailable(ROAD.cur) ? ROAD.cur : lastDone);
+  let dGrey="", dBlue="";
+  for(let k=0;k<pts.length-1;k++){
+    const a=pts[k], b=pts[k+1]; let seg;
+    if(Math.abs(a.y-b.y)<8) seg=`M${a.x} ${a.y} L${b.x} ${b.y}`;
+    else { const dy=b.y-a.y; seg=`M${a.x} ${a.y} C${a.x} ${a.y+dy*.55} ${b.x} ${b.y-dy*.55} ${b.x} ${b.y}`; }
+    if(b.i<=walkedTo) dBlue+=seg; else dGrey+=seg;
+  }
+  svg.setAttribute("width",R.width); svg.setAttribute("height",road.scrollHeight);
+  svg.innerHTML=`<path d="${dGrey}" stroke="#C9CED6" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-dasharray="0.5 10"/><path class="walk" d="${dBlue}" stroke="#5B9BD0" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="0.5 10"/>`;
+  if(animate && dBlue){ const p=svg.querySelector(".walk"); p.style.opacity=0; p.getBoundingClientRect(); p.style.transition="opacity .8s .3s"; p.style.opacity=1; }
 }
 window.addEventListener("resize",()=>drawRoad(false));
 function msToMidnight(){ const n=new Date(), m=new Date(n); m.setHours(24,0,0,0); return m-n; }
@@ -283,19 +284,17 @@ function viewJourney(){
   // path
   const cur = currentIndex();
   let html = "";
-  // winding road layout
-  let y=20, k=0; const items=[]; const XS=[.5,.24,.5,.76];
   MOD.chapters.forEach((ch,ci)=>{
-    items.push({t:"h",ci,x:.5,y,cy:y+32}); y+=112;
-    LESSONS.filter(l=>l.ci===ci).forEach(l=>{ items.push({t:"n",l,x:XS[k%4],y,cy:y+44}); y+=150; k++; });
+    html += `<div class="ch-head"><small>Chapter ${ci+1}:</small><b>${esc(ch.title)}</b></div>`;
+    const items = LESSONS.filter(l=>l.ci===ci);
+    for(let k=0;k<items.length;k+=3){
+      const pair=items.slice(k,k+2), mid=items[k+2];
+      html += `<div class="row">${pair.map(nodeHTML).join("")}</div>`;
+      if(mid) html += `<div class="row center">${nodeHTML(mid)}</div>`;
+    }
   });
-  ROAD={items,H:y+10,cur};
-  html = `<div class="road" id="road" style="height:${y+10}px"><svg class="road-svg" id="roadsvg"></svg>`+items.map((it,i)=>{
-    if(it.t==="h"){ const ch=MOD.chapters[it.ci]; return `<div class="sign" style="top:${it.y}px"><small>Chapter ${it.ci+1}</small><b>${esc(ch.title)}</b></div>`; }
-    const side = it.x<.4 ? .82 : it.x>.6 ? .18 : null;
-    const deco = side!==null && (i%3!==0) ? `<div class="deco" style="top:${it.y+20}px;left:${side*100}%">${i%2?TREE:BUSH}</div>` : "";
-    return deco+`<div class="rnode" style="top:${it.y}px;left:${it.x*100}%">${nodeHTML(it.l)}</div>`;
-  }).join("")+`</div>`;
+  ROAD={cur};
+  html = `<div class="trail" id="road"><svg class="road-svg" id="roadsvg"></svg>${html}</div>`;
   function nodeHTML(l){
     const done=!!S.completed[l.key], current=l.idx===cur && isAvailable(l.idx), open=done||current||isAdmin();
     const hx = current ? HEX("#9CCBEE","#2F7DB8","#1D5F92",.45) : done ? HEX("#C9E0F2","#6FA8D4","#4C86B4",.5) : open ? HEX("#DCEBF7","#8FBCE0","#6A9CC4",.5) : HEX("#F3F5F7","#C9CFD7","#A9B1BC",.55);
@@ -310,7 +309,7 @@ function viewJourney(){
     <div class="j-mini" id="jmini"><button>${esc(L.title)}${ic("chev")}</button></div>`;
 }
 afterRender.journey = () => {
-  drawRoad(!sessionStorage.getItem("vroad")); sessionStorage.setItem("vroad","1");
+  const anim=!sessionStorage.getItem("vroad"); sessionStorage.setItem("vroad","1"); requestAnimationFrame(()=>drawRoad(anim)); setTimeout(()=>drawRoad(false),600); document.fonts&&document.fonts.ready.then(()=>drawRoad(false));
   document.getElementById("tgl").onclick=()=>{ todayCollapsed=!todayCollapsed; document.getElementById("today").classList.toggle("collapsed",todayCollapsed); };
   document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{ const L=todayLesson().L; openLesson(L.key, b.dataset.open); });
   document.querySelectorAll("[data-node]").forEach(b=>b.onclick=()=>{

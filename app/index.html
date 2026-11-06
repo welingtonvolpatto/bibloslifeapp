@@ -384,7 +384,10 @@ textarea.field{height:auto;min-height:140px;padding:14px 16px;resize:none;line-h
 .vbadge{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,#CFE3F4,#E6D7F3);display:grid;place-items:center;font-family:var(--serif);font-size:20px;color:var(--blue);flex:none}
 
 
-.road{position:relative;margin:0 auto;max-width:480px}
+.trail{position:relative}
+.trail .row,.trail .ch-head{position:relative;z-index:1}
+.trail .node span{background:var(--bg);border-radius:8px;padding:2px 6px;position:relative}
+.trail .ch-head small,.trail .ch-head b{background:var(--bg);padding:0 8px}
 .road-svg{position:absolute;left:0;top:0;z-index:0;overflow:visible;pointer-events:none}
 .rnode{position:absolute;transform:translateX(-50%);z-index:2}
 .rnode .node{width:124px}
