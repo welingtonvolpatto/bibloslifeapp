@@ -335,7 +335,7 @@ function viewJourney(){
   const next = C.modules[1];
   html += `<div class="next-mod"><span class="tag">UP NEXT</span><b>Module 2: ${esc(next.title)} ${ic("lock").replace('<svg ','<svg style="width:16px;height:16px;vertical-align:-2px" ')}</b><span class="muted" style="font-size:14px">The next modules unlock after you finish the current one</span></div>`;
   return `<div class="screen journey"><div class="safe-top"></div>
-    <div class="j-top"><button class="chip" id="mod">Module 1${isAdmin()?' <span style="color:var(--gold);font-weight:800">· ADMIN</span>':""}</button><div style="display:flex;gap:8px"><button class="icon-btn" id="hl">${ic("bookmark")}</button><button class="icon-btn" id="me">${initials(S.user.name)}</button></div></div>
+    <div class="j-top"><button class="chip" id="mod">Module 1${isAdmin()?' <span style="color:var(--gold);font-weight:800">· ADMIN</span>':""}</button><div style="display:flex;gap:8px">${(()=>{ const w=walkStats(); return `<button class="chip lampchip ${w.doneToday?"lit":""}" id="walk">${LAMP(w.doneToday,18)}<b>${w.cur}</b></button>`; })()}<button class="icon-btn" id="hl">${ic("bookmark")}</button><button class="icon-btn" id="me">${initials(S.user.name)}</button></div></div>
     ${card}<div style="position:relative;height:84px">${clouds(96,"bg","bottom:-2px")}</div><div class="path">${html}</div></div><button class="fab-top hidden" id="top">${ic("up")}</button>
     <div class="j-mini" id="jmini"><button>${esc(L.title)}${ic("chev")}</button>${allDone||T.locked?`<div class="countdown" style="margin:8px 0 0">New activities in <span class="cd2">${hms(msToMidnight())}</span></div>`:""}</div>`;
 }
@@ -357,6 +357,7 @@ afterRender.journey = () => {
     <div class="card" style="padding:14px;text-align:center;box-shadow:none;border:1px solid var(--line)"><span class="muted" style="font-size:13.5px">The next modules unlock after you finish the current one</span></div>`);
   document.getElementById("me").onclick=openProfile;
   document.getElementById("hl").onclick=openHighlights;
+  document.getElementById("walk").onclick=openWalk;
   const top=document.getElementById("top"); top.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
   const jm=document.getElementById("jmini"); jm.querySelector("button").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
   window.onscroll=()=>{ top.classList.toggle("hidden",window.scrollY<500); jm.classList.toggle("show",window.scrollY>330); };
@@ -483,7 +484,7 @@ function openLesson(key, mode="read", startStep, review){
     if(m){ const pct=N.total()?Math.min(100,N.elapsed()/N.total()*100):0; m.querySelector(".bar i").style.width=pct+"%"; m.querySelector("[data-mpp]").innerHTML=ic(N.playing?"pause":"play").replace("<svg ",'<svg style="width:22px;height:22px" '); }
   };
   function answer(j){
-    if(quiz.answers[quiz.i]!==undefined) return; quiz.answers[quiz.i]=j; const q=D.quiz[quiz.i]; const ok=j===q.a;
+    if(quiz.answers[quiz.i]!==undefined) return; quiz.answers[quiz.i]=j; const q=D.quiz[quiz.i]; const ok=j===q.a; if(ok) addLight(10, "quiz-"+key+"-"+quiz.i, 1);
     el.querySelectorAll("[data-opt]").forEach((b,k)=>{ if(k===q.a) b.classList.add("ok"); if(k===j && !ok) b.classList.add("no"); });
     navigator.vibrate && navigator.vibrate(ok?15:[10,40,10]);
     const f=document.createElement("div"); f.className="feedback"+(ok?" ok":"");
@@ -518,13 +519,18 @@ function openLesson(key, mode="read", startStep, review){
   }
   function finish(){
     const firstTime = !S.completed[key];
-    if(firstTime){ S.completed[key]=todayStr(); save(); sessionStorage.setItem("vjust","1"); }
+    const before=walkStats(); let earned=0, after=before;
+    if(firstTime){ S.completed[key]=todayStr(); save(); sessionStorage.setItem("vjust","1"); after=walkStats();
+      if(!before.doneToday){ const bonus=Math.round(50*0.05*Math.floor(after.cur/7)); earned=50+bonus; L_().total+=earned; L_().days[todayStr()]=(L_().days[todayStr()]||0)+earned; save(); } }
+    const msHit = earned && after.cur!==before.cur && MILESTONES.includes(after.cur) ? after.cur : 0;
     navigator.vibrate && navigator.vibrate([15,60,25]);
     el.style.background = document.documentElement.dataset.theme==="dark" ? "" : "#E3EEDF";
     el.innerHTML = `<div class="p-body" style="padding:0;display:flex"><div class="done-scene scene green" style="margin:0;width:100%">${clouds(200,"white")}<div class="rays"></div>${puff("8%","18%",110,11,.8,2)}${puff("64%","10%",90,13,.7,6)}
       ${laurel()}<h2 class="st2" style="font-size:28px;color:var(--ink);text-align:center;margin-top:10px;line-height:1.2">You did great today!</h2><p class="muted st3" style="margin-top:8px;text-align:center">Before you finish, pause and reflect</p>
+      ${earned?`<div class="earned st3"><span class="lampchip lit" style="pointer-events:none">${LAMP(true,18)}<b>${after.cur}</b></span><span>Lamp lit · <b>${after.cur} ${after.cur===1?"day":"days"}</b> in a row</span><span class="plus">+${earned} light</span></div>`:""}
       <div class="refl"><small>${ic("journal").replace("<svg ",'<svg style="width:14px;height:14px" ')} Your daily reflection</small><div>${esc(D.journal)}</div></div></div></div>
       <div class="p-foot st4" style="background:none"><button class="btn" data-ref>Write my reflection</button><button class="btn ghost" data-fin style="margin-top:10px;background:rgba(255,255,255,.75)">Finish for today</button></div>`;
+    if(msHit) setTimeout(()=>milestoneCelebrate(msHit),1400);
     el.querySelector("[data-ref]").onclick=()=>{ el.remove(); document.body.style.overflow=""; tab="journal"; render(); openJournalEditor(D.journal, true); };
     el.querySelector("[data-fin]").onclick=()=>{ if(firstTime && !S.ratings[key]) rate(); else close(); };
   }
@@ -543,6 +549,74 @@ function openLesson(key, mode="read", startStep, review){
   }
   if(mode==="listen" && audible()){ loadAudio(); paint(); N.play(); } else paint();
   if(!S.seen.listenTip && mode==="read"){ S.seen.listenTip=1; save(); setTimeout(()=>{ const sg=el.querySelector(".seg"); if(!sg) return; const r=sg.getBoundingClientRect(); const tp=document.createElement("div"); tp.className="tip"; tp.style.top=(r.bottom+10)+"px"; tp.style.left=Math.max(12,r.left-20)+"px"; tp.innerHTML="<b>Read or Listen</b>Tap here to choose how you want to experience today’s word"; tp.style.setProperty("--x","40px"); el.appendChild(tp); tp.querySelector; const st2=document.createElement("style"); tp.onclick=()=>tp.remove(); setTimeout(()=>tp.remove(),4200); },700); }
+}
+
+/* ---------- YOUR WALK (streak · light · tree · milestones) ---------- */
+const MILESTONES=[3,7,21,40,100,365];
+const MS_TEXT={3:"Three days in a row. A habit is being born.",7:"A full week walking with God!",21:"21 days — a new rhythm has taken root.",40:"40 days — like Jesus in the wilderness. Remarkable faithfulness.",100:"100 days! Your lamp has been burning for over three months.",365:"One whole year with God, day by day."};
+const dayStr=d=>todayStr(d);
+const addDays=(s,n)=>{ const d=new Date(s+"T12:00:00"); d.setDate(d.getDate()+n); return dayStr(d); };
+const weekKey=s=>{ const d=new Date(s+"T12:00:00"); const dow=(d.getDay()+6)%7; d.setDate(d.getDate()-dow); return dayStr(d); };
+function activeDays(){ return new Set(Object.values(S.completed||{})); }
+function walkStats(){
+  const act=activeDays(), today=todayStr(), list=[...act].sort();
+  const total=act.size;
+  // current streak: walk back from today (today may still be pending)
+  let cur=0, d=act.has(today)?today:addDays(today,-1), rest={}, restDays=[];
+  for(let guard=0;guard<4000;guard++){
+    if(act.has(d)){ cur++; d=addDays(d,-1); continue; }
+    const wk=weekKey(d); if(cur>0 && !rest[wk] && act.has(addDays(d,-1))){ rest[wk]=1; restDays.push(d); d=addDays(d,-1); continue; }
+    break;
+  }
+  // best streak across history (same rules)
+  let best=0;
+  if(list.length){ let run=0, r={}, x=list[0];
+    while(x<=today){ if(act.has(x)){ run++; } else { const wk=weekKey(x); if(run>0 && !r[wk] && act.has(addDays(x,1))){ r[wk]=1; } else { run=0; } } best=Math.max(best,run); x=addDays(x,1); } }
+  best=Math.max(best,cur);
+  const restLeft = rest[weekKey(today)] ? 0 : 1;
+  const months = list.length ? Math.floor((new Date(today)-new Date(list[0]))/(30*864e5)) : 0;
+  return {cur,best,total,doneToday:act.has(today),restDays,restLeft,months,first:list[0]};
+}
+const L_ = () => (S.light = S.light || {total:0, days:{}, caps:{}});
+function lightToday(){ return L_().days[todayStr()]||0; }
+function addLight(n, capKey, capMax){
+  const L=L_(), t=todayStr();
+  if(capKey){ const k=t+":"+capKey; const used=L.caps[k]||0; if(capMax!=null && used>=capMax) return 0; L.caps[k]=used+1; }
+  L.total+=n; L.days[t]=(L.days[t]||0)+n; save(); lightFly(n); return n;
+}
+function lightFly(n){ const f=document.createElement("div"); f.className="lightfly"; f.innerHTML=`${ic("spark").replace("<svg ",'<svg style="width:14px;height:14px" ')} +${n} light`; document.body.appendChild(f); setTimeout(()=>f.remove(),1600); }
+const LAMP=(lit,size=20)=>`<svg width="${size}" height="${size}" viewBox="0 0 24 24" class="lampsvg ${lit?"lit":""}"><path d="M3 15c0-2 3-3 9-3s9 1 9 3-4 3-9 3-9-1-9-3Z" fill="#C9973F"/><path d="M19 13c2-1 3 1 2 2" stroke="#C9973F" stroke-width="1.6" fill="none"/><path class="fl" d="M12 11c-2-2-1-5 0-7 1 2 3 4 1 7Z" fill="#F2B544"/></svg>`;
+const TREE_STAGES=["Seed","Sprout","Sapling","Young tree","Tree","Fruitful tree"];
+function treeSVG(m){ m=Math.min(5,m); const h=14+m*9;
+  return `<svg viewBox="0 0 120 110" width="110"><ellipse cx="60" cy="100" rx="46" ry="7" fill="#C0DD97"/>${m===0?`<ellipse cx="60" cy="96" rx="7" ry="5" fill="#8A6A44"/>`:`<path d="M60 100V${100-h}" stroke="#854F0B" stroke-width="${3+m}" stroke-linecap="round"/><circle cx="60" cy="${96-h}" r="${8+m*5}" fill="#639922"/>${m>=3?`<circle cx="${48-m}" cy="${102-h}" r="${6+m*2}" fill="#76A93A"/><circle cx="${72+m}" cy="${102-h}" r="${6+m*2}" fill="#76A93A"/>`:""}${m>=5?`<circle cx="50" cy="${92-h}" r="3.5" fill="#E24B4A"/><circle cx="68" cy="${88-h}" r="3.5" fill="#E24B4A"/><circle cx="60" cy="${100-h}" r="3.5" fill="#E24B4A"/>`:""}`}</svg>`; }
+function openWalk(){
+  const st=walkStats(), lt=lightToday(), goal=100, pct=Math.min(100,Math.round(lt/goal*100));
+  const today=todayStr(), wk=weekKey(today), act=activeDays();
+  const days=Array.from({length:7},(_,i)=>{ const d=addDays(wk,i); const lab="MTWTFSS"[i];
+    const state = act.has(d)?"done": st.restDays.includes(d)?"rest": d===today?"today": d<today?"miss":"future"; return {d,lab,state}; });
+  const nextM=MILESTONES.find(m=>m>st.cur)||null;
+  page("Your walk",`
+    <div class="walk-hero stepin">${clouds(90,"white","opacity:.35")}<div class="wh-top"><span>${st.doneToday?"Lamp lit today":"Your lamp is waiting"}</span><span>${ic("spark").replace("<svg ",'<svg style="width:14px;height:14px" ')} ${(L_().total).toLocaleString("en-US")} light</span></div>
+      <div class="walk-lamp ${st.doneToday?"lit":""}">${LAMP(st.doneToday,64)}</div>
+      <div class="walk-num">${st.cur}</div><div class="walk-lbl">${st.cur===1?"day":"days"} in a row</div>
+      <div class="wh-sub">${st.doneToday?"Beautiful. Come back tomorrow to keep it burning.":st.cur?"Complete today’s devotional to keep your lamp burning.":"Light your lamp today and start a new streak."}</div></div>
+    <div class="wcard"><div style="display:flex;justify-content:space-between;align-items:center"><div><small>Today’s goal</small><b>${lt} / ${goal} light</b><div class="muted" style="font-size:12.5px;margin-top:2px">${pct>=100?"Goal reached — you did it!":lt?`Keep going — ${goal-lt} to go`:"You can do it — start with today’s devotional"}</div></div>
+      <div class="ring" style="background:conic-gradient(var(--blue) ${pct*3.6}deg,var(--soft) 0)"><span>${pct}%</span></div></div>
+      <div class="wweek">${days.map(x=>`<div class="wd wd-${x.state}"><i>${x.state==="rest"?ic("moon").replace("<svg ",'<svg style="width:13px;height:13px" '):x.lab}</i></div>`).join("")}</div>
+      <div class="muted" style="font-size:12px;margin-top:8px">${ic("moon").replace("<svg ",'<svg style="width:13px;height:13px;vertical-align:-2px" ')} Sabbath rest: ${st.restLeft?"1 available this week — if you miss a day, your streak is protected.":"used this week."}</div></div>
+    <div class="wgrid"><div><small>Best streak</small><b>${st.best} days</b></div><div><small>Total days with God</small><b>${st.total}</b></div><div><small>Total light</small><b>${(L_().total).toLocaleString("en-US")}</b></div><div><small>${nextM?"Next milestone":"Milestones"}</small><b>${nextM?`${nextM-st.cur} ${nextM-st.cur===1?"day":"days"} to go`:"All done!"}</b></div></div>
+    <div class="wtree">${treeSVG(st.months)}<div><b>Your faith tree · ${TREE_STAGES[Math.min(5,st.months)]}</b><small>It grows a little more every month you keep walking with God.${st.months<5?` Next stage in ${30-((Date.now()-new Date((st.first||today)+"T12:00:00"))/864e5%30|0)} days.`:""}</small></div></div>
+    <div class="muted" style="font-size:13px;margin:18px 0 8px">Milestones</div>
+    <div class="wbadges">${MILESTONES.map(m=>`<div class="wb ${st.best>=m?"on":""}"><div class="wbi">${st.best>=m?LAMP(true,26):ic("lock").replace("<svg ",'<svg style="width:18px;height:18px" ')}</div><b>${m}</b><small>days</small></div>`).join("")}</div>
+    <div class="muted" style="font-size:13px;margin:18px 0 8px">How to earn light</div>
+    <div class="list" style="box-shadow:none;border:1px solid var(--line)">${[["book","Complete today’s devotional","+50"],["check","Answer a quiz question right on the first try","+10"],["journal","Write in your journal","+15"],["heart","Pray for a request (up to 5 a day)","+5"],["head","Finish a podcast episode","+20"],["bible","Read a Bible chapter","+10"],["spark","Streak bonus — every full week in a row","+5%"]].map(([i,t,p])=>`<div class="li">${ic(i)}<span style="flex:1">${t}</span><b style="color:var(--blue)">${p}</b></div>`).join("")}</div>
+    <div class="wleague">${ic("star").replace("<svg ",'<svg style="width:20px;height:20px;flex:none" ')}<span><b>Weekly leagues — coming soon</b>Climb from Seed to Lighthouse with believers around the world.</span></div>`);
+}
+function milestoneCelebrate(n){
+  const o=document.createElement("div"); o.className="overlay"; o.style.alignItems="center";
+  o.innerHTML=`<div class="mscard"><div class="walk-lamp lit">${LAMP(true,72)}</div><div class="walk-num" style="font-size:48px">${n}</div><div class="walk-lbl">days in a row</div><p>${MS_TEXT[n]||"A new milestone!"}</p><button class="btn" data-sh>Share</button><button class="btn ghost" data-x style="margin-top:10px">Continue</button></div>`;
+  document.body.appendChild(o); o.querySelector("[data-x]").onclick=()=>o.remove();
+  o.querySelector("[data-sh]").onclick=()=>{ shareText(`🪔 ${n} days in a row walking with God on VEREDA. ${MS_TEXT[n]||""}`); };
 }
 
 /* ---------- PROFILE / HIGHLIGHTS ---------- */
@@ -644,7 +718,7 @@ const Player = {
   skip(s){ this.a.currentTime=Math.max(0,Math.min(this.a.duration||0,this.a.currentTime+s)); },
   step(d){ const L=this.pod.episodes, i=L.findIndex(e=>e.id===this.ep.id)+d; if(i>=0&&i<L.length) this.load(this.pod,L[i]); },
   save(){ if(!this.ep||!this.a) return; const p=PP(); const cur=p[this.ep.id]||{}; p[this.ep.id]={...cur,t:this.a.currentTime||0}; save(); },
-  tick(e){ if(e==="ended"){ PP()[this.ep.id]={t:0,done:true}; save(); const L=this.pod.episodes, i=L.findIndex(x=>x.id===this.ep.id); if(i<L.length-1){ this.load(this.pod,L[i+1]); toast(`Up next: ${L[i+1].title}`); } }
+  tick(e){ if(e==="ended"){ if(!(PP()[this.ep.id]||{}).done) addLight(20,"pod-"+this.ep.id,1); PP()[this.ep.id]={t:0,done:true}; save(); const L=this.pod.episodes, i=L.findIndex(x=>x.id===this.ep.id); if(i<L.length-1){ this.load(this.pod,L[i+1]); toast(`Up next: ${L[i+1].title}`); } }
     else if(e==="timeupdate" && Math.floor(this.a.currentTime)%5===0) this.save();
     if(e==="pause") this.save(); this.emit(); },
   emit(){ this.onup.forEach(f=>{ try{f()}catch(e){} }); paintMini(); }
@@ -809,7 +883,7 @@ function openJournalEditor(q, isNew, entry){
     el.querySelector("[data-back]").onclick=()=>{ el.remove(); render(); };
     el.querySelector("[data-new]").onclick=()=>{ const ps=ALL_PROMPTS().filter(p=>p!==prompt); prompt=ps[Math.floor(Math.random()*ps.length)]; paint(ta.value); };
     el.querySelector("[data-list]").onclick=()=>sheet(`<h3 style="text-align:left">More questions</h3><p style="text-align:left;font-size:14px" class="muted">Choose the one that speaks to you today.</p>${[todaysPrompt(),...ALL_PROMPTS()].filter((p,i,a)=>a.indexOf(p)===i).map(p=>`<button class="opt ${p===prompt?"ok":""}" data-p="${esc(p)}">${esc(p)}</button>`).join("")}`,(s,c)=>s.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{ prompt=b.dataset.p; c(); paint(ta.value); }));
-    ok.onclick=()=>{ const a=ta.value.trim(); if(entry){ entry.a=a; entry.q=prompt; } else S.journal.push({id:uid(), date:todayStr(), ts:Date.now(), q:prompt, a}); save(); el.remove(); tab="journal"; render(); toast("Your journal was updated"); };
+    ok.onclick=()=>{ const a=ta.value.trim(); if(entry){ entry.a=a; entry.q=prompt; } else { S.journal.push({id:uid(), date:todayStr(), ts:Date.now(), q:prompt, a}); addLight(15,"journal",1); } save(); el.remove(); tab="journal"; render(); toast("Your journal was updated"); };
   };
   document.body.appendChild(el); paint();
   if(!S.seen.newQ){ S.seen.newQ=1; save(); setTimeout(()=>{ const b=el.querySelector("[data-list]"); if(!b) return; const r=b.getBoundingClientRect(); const tp=document.createElement("div"); tp.className="tip"; tp.style.top=(r.bottom+10)+"px"; tp.style.right="12px"; tp.innerHTML="<b>More questions</b>Tap here to explore a list of suggestions and pick the one that inspires you today."; tp.onclick=()=>tp.remove(); el.appendChild(tp); setTimeout(()=>tp.remove(),5000); },600); }
@@ -916,6 +990,7 @@ function openPray(list, start=0){
       const me=initials(S.user.name);
       if(all){ activeReqs().forEach(x=>{ if(!S.prayed[x.id]){ x.prayers=(x.prayers||0)+1; (x.prayedBy=x.prayedBy||[]).push(me); S.prayed[x.id]=1; } }); S.prayedAllDay=todayStr(); }
       else { r.prayers=(r.prayers||0)+1; (r.prayedBy=r.prayedBy||[]).push(me); S.prayed[r.id]=1; }
+      addLight(5,"amen",5);
       save(); el.querySelector("[data-amen]").disabled=true;
       setTimeout(()=>{ h.remove(); if(!all && i<list.length-1){ i++; paint(1); } else paint(); },1700);
     };
@@ -946,6 +1021,7 @@ afterRender.bible=async()=>{
   const idx=await loadIdx(); const b=await loadBook(S.bibleBook); const ch=b.chapters[S.bibleCh]||b.chapters[0];
   if(tab!=="bible") return;
   const ref=`${b.name} ${S.bibleCh+1}`;
+  clearTimeout(window.__bchT); window.__bchT=setTimeout(()=>{ if(tab==="bible") addLight(10,"bible-"+(S.bver||"web")+S.bibleBook+"-"+S.bibleCh,1); },20000);
   const hl=new Set(S.highlights.filter(h=>h.b===S.bibleBook&&h.c===S.bibleCh).map(h=>h.v));
   const txt=document.getElementById("btxt");
   txt.innerHTML=`<h2 style="font-family:var(--serif);font-size:26px;margin:6px 0 14px">${esc(ref)}</h2>`+ch.map((v,i)=>v?`<span class="v ${hl.has(i+1)?"hl":""}" data-v="${i+1}"><sup>${i+1}</sup>${esc(v)} </span>`:"").join("");
