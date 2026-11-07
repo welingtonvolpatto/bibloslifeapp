@@ -46,7 +46,15 @@ h1{font-size:28px;font-weight:800;color:var(--ink);letter-spacing:-.3px}
 .tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom));width:calc(100% - 24px);max-width:456px;height:64px;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:24px;box-shadow:0 8px 30px rgba(20,40,70,.14);display:grid;grid-template-columns:repeat(5,1fr);padding:6px;z-index:40}
 .tabbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:18px;font-size:11px;font-weight:600;color:var(--muted);position:relative}
 .tabbar button svg{width:22px;height:22px}
-.tabbar button.on{background:var(--soft);color:var(--blue)}
+.tabbar button.on{color:var(--blue)}
+.tabbar button{z-index:1;transition:color .2s}
+.tabbar button.ghost{color:var(--muted)}
+.tabbar button.pop svg{animation:tabPop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes tabPop{0%{transform:scale(.7)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+.lens{position:absolute;left:0;top:6px;bottom:6px;border-radius:18px;background:var(--soft);transform-origin:center;z-index:0;transition:background .25s,box-shadow .25s,backdrop-filter .25s}
+.lens.moving{background:rgba(255,255,255,.28);backdrop-filter:blur(2px) saturate(1.8) brightness(1.08);-webkit-backdrop-filter:blur(2px) saturate(1.8) brightness(1.08);box-shadow:inset 0 1px 1px rgba(255,255,255,.9),inset 0 -2px 6px rgba(14,95,149,.18),0 6px 18px rgba(14,95,149,.22),0 0 0 1px rgba(255,255,255,.6)}
+.tab-in{animation:tabIn .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes tabIn{from{opacity:0;filter:blur(6px);transform:scale(1.015)}to{opacity:1;filter:none;transform:none}}
 [data-theme=dark] .tabbar button.on{color:#8CC2EC}
 .tabbar .dot{position:absolute;top:8px;right:calc(50% - 16px);width:6px;height:6px;border-radius:50%;background:var(--gold)}
 /* journey */
@@ -250,7 +258,7 @@ textarea.field{height:auto;min-height:140px;padding:14px 16px;resize:none;line-h
 @keyframes slideOutL{to{opacity:0;transform:translateX(-60px)}}
 @keyframes ripple{from{transform:scale(1);opacity:.5}to{transform:scale(2.4);opacity:0}}
 @keyframes wave{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
-.screen{animation:fadeIn .35s ease-out}
+
 /* splash */
 .splash{position:fixed;inset:0;z-index:200;background:linear-gradient(180deg,#0A4A75 0%,#0E5F95 45%,#3C86BC 100%);display:grid;place-items:center;overflow:hidden}
 .splash .clouds{--ch:62vh;animation:rise 1.2s cubic-bezier(.2,.8,.2,1) both}

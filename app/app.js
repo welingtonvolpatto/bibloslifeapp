@@ -197,9 +197,40 @@ const afterRender = {};
 function tabbar(){
   const t=[["journey","path","Journey"],["explore","explore","Explore"],["journal","journal","Journal"],["community","community","Community"],["bible","bible","Bible"]];
   const jdot = !S.journal.some(j=>j.date===todayStr());
-  return `<nav class="tabbar">${t.map(([k,i,l])=>`<button data-tab="${k}" class="${tab===k?"on":""}">${ic(i)}${l}${k==="journal"&&jdot?'<span class="dot"></span>':""}</button>`).join("")}</nav>`;
+  return `<nav class="tabbar"><span class="lens" id="lens"></span>${t.map(([k,i,l])=>`<button data-tab="${k}" class="${tab===k?"on":""}">${ic(i)}${l}${k==="journal"&&jdot?'<span class="dot"></span>':""}</button>`).join("")}</nav>`;
 }
-function bindTabbar(){ document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{ if(tab===b.dataset.tab) return; tab=b.dataset.tab; Music.stop(); N.stop(); bibleListening=false; window.onscroll=null; render(); window.scrollTo(0,0); }); }
+let prevTab=null, tabBusy=false;
+function placeLens(from){
+  const bar=document.querySelector(".tabbar"), lens=document.getElementById("lens"); if(!bar||!lens) return;
+  const btns=[...bar.querySelectorAll("[data-tab]")], to=btns.find(b=>b.dataset.tab===tab); if(!to) return;
+  const pos=b=>({x:b.offsetLeft, w:b.offsetWidth});
+  const end=pos(to); lens.style.width=end.w+"px"; lens.style.transform=`translateX(${end.x}px)`;
+  const src=from&&btns.find(b=>b.dataset.tab===from);
+  if(!src||!lens.animate||matchMedia("(prefers-reduced-motion:reduce)").matches){ to.classList.add("on"); return; }
+  const st=pos(src), mid=(st.x+end.x)/2, dist=Math.abs(end.x-st.x);
+  to.classList.remove("on"); src.classList.add("ghost");
+  lens.classList.add("moving");
+  const a=lens.animate([
+    {transform:`translateX(${st.x}px) scale(1,1)`},
+    {transform:`translateX(${st.x+(end.x-st.x)*.15}px) scale(1.22,1.12)`,offset:.18},
+    {transform:`translateX(${mid}px) scale(${1.25+Math.min(dist/400,.25)},1.08)`,offset:.5},
+    {transform:`translateX(${end.x}px) scale(1.12,1.05)`,offset:.8},
+    {transform:`translateX(${end.x}px) scale(.96,1)`,offset:.9},
+    {transform:`translateX(${end.x}px) scale(1,1)`}
+  ],{duration:520,easing:"cubic-bezier(.3,.7,.2,1)"});
+  setTimeout(()=>{ src.classList.remove("ghost"); to.classList.add("on","pop"); },300);
+  a.onfinish=()=>{ lens.classList.remove("moving"); setTimeout(()=>to.classList.remove("pop"),400); };
+}
+function bindTabbar(){
+  placeLens(prevTab); prevTab=null;
+  document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{
+    if(tab===b.dataset.tab||tabBusy) return; tabBusy=true;
+    navigator.vibrate&&navigator.vibrate(8);
+    const from=tab, scr=document.querySelector("#app .screen");
+    const go=()=>{ prevTab=from; tab=b.dataset.tab; Music.stop(); N.stop(); bibleListening=false; window.onscroll=null; render(); window.scrollTo(0,0); const ns=document.querySelector("#app .screen"); ns&&ns.classList.add("tab-in"); tabBusy=false; };
+    if(scr&&scr.animate){ scr.animate([{opacity:1,filter:"blur(0)",transform:"scale(1)"},{opacity:0,filter:"blur(6px)",transform:"scale(.985)"}],{duration:140,easing:"ease-in",fill:"forwards"}).onfinish=go; } else go();
+  });
+}
 
 /* ---------- welcome / auth ---------- */
 function renderWelcome(step){
