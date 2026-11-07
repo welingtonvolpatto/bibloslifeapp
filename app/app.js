@@ -4,7 +4,7 @@
 const C = window.VEREDA_CONTENT;
 const CONFIG = {
   supportEmail: "support@vereda.app",
-  renewUrl: "", // Hotmart checkout link to renew (fill in)
+  renewUrl:"https://pay.hotmart.com/F108347453I?off=t5216fgc", // Hotmart checkout link to renew (fill in)
   manageSubscriptionUrl: "https://consumer.hotmart.com/",
   privacyUrl: "#", termsUrl: "#",
   communityApi: "", // set to a backend URL to share prayer requests between users

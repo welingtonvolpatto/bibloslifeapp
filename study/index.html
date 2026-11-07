@@ -354,7 +354,7 @@ const CONFIG = {
   brand: "VEREDA",
   supportEmail: "support@vereda.app",
   companyAddress: "Your Company Ltd, Address, City, Country",
-  checkoutUrl: "#",            // fallback checkout link; each plan below can have its own checkoutUrl (Hotmart link). UTMs, email and name are passed along
+  checkoutUrl: "https://pay.hotmart.com/F108347453I?off=t5216fgc",            // fallback checkout link; each plan below can have its own checkoutUrl (Hotmart link). UTMs, email and name are passed along
   leadWebhook: "",             // optional: URL that receives {email, name, archetype, answers} via POST
   // Social proof shown on the first screen. Leave rating empty to hide it.
   // Only use numbers you can prove (your own real reviews).
@@ -375,12 +375,12 @@ const CONFIG = {
   coupon: { percent: 0, minutes: 7, suffix: "" },   // percent > 0 only if your checkout really applies that discount (shows "X% off" block)
   // Offer page — plans (edit prices here)
   plans: [
-    {name:"7-Day Free Trial", checkoutUrl:"#", price:29.90, every:"month",    days:30, trialDays:7, popular:false,
-     terms:"Free for 7 days, then $29.90 every month until you cancel. Cancel anytime before the trial ends and you won\u2019t be charged."},
-    {name:"Monthly Plan",     checkoutUrl:"#", price:29.90, every:"month",    days:30, popular:true,
-     terms:"$29.90 today, then $29.90 every month until you cancel."},
-    {name:"3-Month Plan",     checkoutUrl:"#", price:59.90, every:"3 months", days:90, popular:false, compareAt:89.70,
-     terms:"$59.90 today, then $59.90 every 3 months until you cancel."}
+    {name:"7-Day Free Trial", checkoutUrl:"https://pay.hotmart.com/F108347453I?off=76tfafb3", price:19.90, every:"month",    days:30, trialDays:7, popular:false,
+     terms:"Free for 7 days, then $19.90 every month until you cancel. Cancel anytime before the trial ends and you won\u2019t be charged."},
+    {name:"Monthly Plan",     checkoutUrl:"https://pay.hotmart.com/F108347453I?off=t5216fgc", price:19.90, every:"month",    days:30, popular:true,
+     terms:"$19.90 today, then $19.90 every month until you cancel."},
+    {name:"3-Month Plan",     checkoutUrl:"https://pay.hotmart.com/F108347453I?off=ah15t54l", price:39.90, every:"3 months", days:90, popular:false, compareAt:59.70,
+     terms:"$39.90 today, then $39.90 every 3 months until you cancel."}
   ],
   currency: "$",
   planNote: "A 3-month plan gives you enough time to turn reading the Bible into a lasting <span class=\"hl\">daily habit</span> \u2014 and costs 33% less than paying monthly.",
