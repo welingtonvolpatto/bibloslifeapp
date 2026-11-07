@@ -1,6 +1,8 @@
 import json,re,sys
 sys.path.insert(0,'.')
 from content import *
+from devotionals import DEVOTIONALS
+for _k,_d in DEVOTIONALS.items(): LESSONS[_k]['devotional']=_d
 idx=json.load(open('../bible/index.json')); names=[b[0] for b in idx]
 cache={}
 def book(n):
