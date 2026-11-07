@@ -87,7 +87,7 @@ const P = {
  out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>', refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/>',
  dots:'<circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/>',
  music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>', sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
- text:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>', flame:'<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-5 5-5 8-1-1-2-2-2-4-2 2-2 5-2 8 0 4 3 7 7 7Z"/>', gift:'<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9c-2-4-7-5-7-2s4 2 7 2c3 0 7 1 7-2s-5-2-7 2"/>', sprout:'<path d="M12 21v-9"/><path d="M12 13C12 8 8 6 4 6c0 4 3 7 8 7ZM12 11c0-4 3-7 8-7 0 4-3 7-8 7Z"/>', hands:'<path d="M12 3c-1 4-4 7-5 11-.6 2.4.8 4 3 4h2Z"/><path d="M12 3c1 4 4 7 5 11 .6 2.4-.8 4-3 4h-2Z"/><path d="M5 21h14"/>', mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/>', trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>', edit:'<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
+ text:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', prev:'<path d="M6 5v14"/><path d="M19 5 9 12l10 7Z" fill="currentColor"/>', next:'<path d="M18 5v14"/><path d="M5 5l10 7-10 7Z" fill="currentColor"/>', bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>', flame:'<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-5 5-5 8-1-1-2-2-2-4-2 2-2 5-2 8 0 4 3 7 7 7Z"/>', gift:'<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9c-2-4-7-5-7-2s4 2 7 2c3 0 7 1 7-2s-5-2-7 2"/>', sprout:'<path d="M12 21v-9"/><path d="M12 13C12 8 8 6 4 6c0 4 3 7 8 7ZM12 11c0-4 3-7 8-7 0 4-3 7-8 7Z"/>', hands:'<path d="M12 3c-1 4-4 7-5 11-.6 2.4.8 4 3 4h2Z"/><path d="M12 3c1 4 4 7 5 11 .6 2.4-.8 4-3 4h-2Z"/><path d="M5 21h14"/>', mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/>', trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>', edit:'<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
 };
 const ic = (n, cls="") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${P[n]||""}</svg>`;
 const LOGO = `<img src="images/logo.svg" alt="VEREDA" style="height:30px">`;
@@ -163,7 +163,7 @@ const N = {
     const vs=this.voices(); const v=vs.find(x=>x.name===S.voice)||vs[0]; if(v) u.voice=v;
     u.onend=()=>{ if(!this.playing) return; this.i++; this.emit(); this.speak(); };
     speechSynthesis.speak(u); },
-  play(){ this.playing=true; if(this.i>=this.sents.length) this.i=0; this.speak(); this.emit(); },
+  play(){ if(typeof Player!=="undefined"&&Player.a) Player.a.pause(); this.playing=true; if(this.i>=this.sents.length) this.i=0; this.speak(); this.emit(); },
   pause(){ this.playing=false; window.speechSynthesis&&speechSynthesis.cancel(); this.emit(); },
   stop(){ this.playing=false; window.speechSynthesis&&speechSynthesis.cancel(); },
   seek(d){ let t=0, target=Math.max(0,this.elapsed()+d), j=0; while(j<this.sents.length && t+this.sents[j].length/14/(S.rate||1) <= target){ t+=this.sents[j].length/14/(S.rate||1); j++; } this.i=Math.min(j,this.sents.length-1); if(this.playing) this.speak(); this.emit(); },
@@ -191,7 +191,7 @@ function render(){
   if(!S.user){ renderWelcome(); return; }
   const view = {journey:viewJourney, explore:viewExplore, journal:viewJournal, community:viewCommunity, bible:viewBible}[tab]();
   $app.innerHTML = view + tabbar();
-  bindTabbar(); afterRender[tab] && afterRender[tab]();
+  bindTabbar(); afterRender[tab] && afterRender[tab](); paintMini();
 }
 const afterRender = {};
 function tabbar(){
@@ -612,6 +612,120 @@ function openHighlights(){
   el=>{ el.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ const h=items[+b.dataset.c]; copyText(`${h.t} — ${h.r}`); }); el.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{ const h=items[+b.dataset.d]; S.highlights=S.highlights.filter(x=>x!==h); save(); el.remove(); openHighlights(); }); });
 }
 
+/* ---------- PODCASTS ---------- */
+const PODS = () => window.VEREDA_PODCASTS || [];
+const podCover = (id, cls="") => {
+  const art = {
+   hf:`<defs><linearGradient id="pc1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCE3C8"/><stop offset="1" stop-color="#F6C9A6"/></linearGradient></defs><rect width="200" height="200" fill="url(#pc1)"/><circle cx="100" cy="70" r="46" fill="#FFF3D9" opacity=".8"/><g fill="#fff" opacity=".9"><ellipse cx="30" cy="40" rx="26" ry="9"/><ellipse cx="170" cy="30" rx="22" ry="8"/></g><rect x="28" y="140" width="144" height="10" rx="5" fill="#B9825C"/><g><path d="M52 112h34v18a12 12 0 0 1-12 12h-10a12 12 0 0 1-12-12Z" fill="#fff"/><path d="M86 118c10 0 10 14 0 14" stroke="#fff" stroke-width="5" fill="none"/><path d="M114 112h34v18a12 12 0 0 1-12 12h-10a12 12 0 0 1-12-12Z" fill="#0E5F95"/><path d="M148 118c10 0 10 14 0 14" stroke="#0E5F95" stroke-width="5" fill="none"/></g><g stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9" fill="none"><path d="M64 104c-4-6 4-10 0-16"/><path d="M126 104c-4-6 4-10 0-16"/></g>`,
+   rb:`<defs><linearGradient id="pc2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFE3F4"/><stop offset="1" stop-color="#E9F2EA"/></linearGradient></defs><rect width="200" height="200" fill="url(#pc2)"/><g fill="#fff"><ellipse cx="40" cy="44" rx="28" ry="10"/><ellipse cx="160" cy="34" rx="24" ry="9"/></g><path d="M100 40v70" stroke="#7D5A3C" stroke-width="7" stroke-linecap="round"/><circle cx="100" cy="56" r="30" fill="#6DBA78"/><circle cx="78" cy="70" r="20" fill="#5FAE6B"/><circle cx="122" cy="70" r="20" fill="#5FAE6B"/><path d="M40 128c20-8 40-8 60 0 20-8 40-8 60 0v40c-20-8-40-8-60 0-20-8-40-8-60 0Z" fill="#fff"/><path d="M100 128v40" stroke="#C9D8E6" stroke-width="3"/><path d="M100 110c-8 8-20 14-34 16M100 110c8 8 20 14 34 16M100 110v18" stroke="#7D5A3C" stroke-width="4" fill="none" stroke-linecap="round"/>`,
+   sg:`<defs><linearGradient id="pc3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E3A5F"/><stop offset="1" stop-color="#3C86BC"/></linearGradient><radialGradient id="pg3"><stop offset="0" stop-color="#FFE7A3"/><stop offset="1" stop-color="#FFE7A3" stop-opacity="0"/></radialGradient></defs><rect width="200" height="200" fill="url(#pc3)"/><g fill="#fff">${[[30,30],[60,52],[150,26],[172,64],[120,44],[40,86],[180,110]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.8"/>`).join("")}</g><circle cx="100" cy="112" r="60" fill="url(#pg3)"/><path d="M84 84h32l-4 12H88Z" fill="#C9973F"/><rect x="82" y="96" width="36" height="46" rx="6" fill="#FFF3D1" opacity=".95"/><path d="M100 104c-6 8-6 14 0 20 6-6 6-12 0-20Z" fill="#F2B544"/><rect x="80" y="140" width="40" height="8" rx="3" fill="#C9973F"/><path d="M92 84c0-12 16-12 16 0" stroke="#C9973F" stroke-width="4" fill="none"/><path d="M0 178c40-14 80-14 100-6s60 8 100-6v34H0Z" fill="#0A4A75"/>`
+  }[id.slice(0,2)] || "";
+  return `<svg class="${cls}" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">${art}</svg>`;
+};
+const fmtMin = s => `${Math.max(1,Math.round(s/60))} min`;
+const PP = () => (S.pod = S.pod || {});           // progress: {epId:{t,done}}
+const Player = {
+  a:null, pod:null, ep:null, onup:new Set(),
+  init(){ if(this.a) return; this.a=new Audio(); this.a.preload="metadata";
+    ["timeupdate","play","pause","loadedmetadata","ended"].forEach(e=>this.a.addEventListener(e,()=>this.tick(e)));
+    if("mediaSession" in navigator){ const ms=navigator.mediaSession;
+      ms.setActionHandler("play",()=>this.play()); ms.setActionHandler("pause",()=>this.pause());
+      ms.setActionHandler("seekbackward",()=>this.skip(-15)); ms.setActionHandler("seekforward",()=>this.skip(15));
+      ms.setActionHandler("previoustrack",()=>this.step(-1)); ms.setActionHandler("nexttrack",()=>this.step(1)); } },
+  load(pod, ep, autoplay=true){ this.init(); N.stop(); Music.stop();
+    if(this.ep && this.ep.id===ep.id){ if(autoplay) this.play(); return; }
+    this.save(); this.pod=pod; this.ep=ep;
+    const p=PP()[ep.id]; const startAt = p && !p.done ? p.t||0 : 0;
+    this.a.src=`podcasts/${ep.id}.mp3`+(startAt?`#t=${Math.floor(startAt)}`:""); this.a.playbackRate=S.podRate||1;
+    if("mediaSession" in navigator) navigator.mediaSession.metadata=new MediaMetadata({title:ep.title, artist:pod.title, album:"VEREDA", artwork:[{src:"icons/icon-512.png",sizes:"512x512",type:"image/png"}]});
+    if(autoplay) this.play(); this.emit(); },
+  play(){ this.a.play().catch(()=>{}); }, pause(){ this.a.pause(); },
+  toggle(){ this.a.paused?this.play():this.pause(); },
+  skip(s){ this.a.currentTime=Math.max(0,Math.min(this.a.duration||0,this.a.currentTime+s)); },
+  step(d){ const L=this.pod.episodes, i=L.findIndex(e=>e.id===this.ep.id)+d; if(i>=0&&i<L.length) this.load(this.pod,L[i]); },
+  save(){ if(!this.ep||!this.a) return; const p=PP(); const cur=p[this.ep.id]||{}; p[this.ep.id]={...cur,t:this.a.currentTime||0}; save(); },
+  tick(e){ if(e==="ended"){ PP()[this.ep.id]={t:0,done:true}; save(); const L=this.pod.episodes, i=L.findIndex(x=>x.id===this.ep.id); if(i<L.length-1){ this.load(this.pod,L[i+1]); toast(`Up next: ${L[i+1].title}`); } }
+    else if(e==="timeupdate" && Math.floor(this.a.currentTime)%5===0) this.save();
+    if(e==="pause") this.save(); this.emit(); },
+  emit(){ this.onup.forEach(f=>{ try{f()}catch(e){} }); paintMini(); }
+};
+function epState(ep){ const p=PP()[ep.id]; if(p&&p.done) return "done"; if(p&&p.t>5) return "partial"; return "new"; }
+function epMeta(ep, i){ const st=epState(ep), p=PP()[ep.id];
+  if(st==="done") return `Ep. ${i+1} • <span style="color:var(--ok);font-weight:600">Completed ✓</span>`;
+  if(st==="partial") return `Ep. ${i+1} • ${fmtMin(ep.dur-p.t)} left`;
+  return `Ep. ${i+1} • ${fmtMin(ep.dur)}`; }
+function paintMini(){
+  let m=document.getElementById("podmini");
+  if(!Player.ep || document.querySelector(".podfull")){ m&&m.remove(); return; }
+  if(!m){ m=document.createElement("div"); m.id="podmini"; m.className="podmini"; document.body.appendChild(m); m.onclick=e=>{ if(e.target.closest("[data-mt]")) { Player.toggle(); return; } openPodPlayer(); }; }
+  const pct=Player.a.duration?Player.a.currentTime/Player.a.duration*100:0;
+  m.innerHTML=`<div class="th">${podCover(Player.pod.id)}</div><div style="flex:1;min-width:0"><b>${esc(Player.ep.title)}</b><div class="bar"><i style="width:${pct}%"></i></div></div><button data-mt>${ic(Player.a.paused?"play":"pause").replace("<svg ",'<svg style="width:22px;height:22px" ')}</button>`;
+  m.classList.toggle("over-tabs", !!document.querySelector(".tabbar") && !document.querySelector(".player"));
+}
+function podsRow(){
+  const L=PODS(); if(!L.length) return "";
+  return `<div class="pad" style="display:flex;justify-content:space-between;align-items:center;margin:22px 0 10px"><div class="muted" style="font-size:14px">Audio podcasts</div><button class="link" data-allpods style="font-size:13.5px">See all</button></div>
+   <div class="podrow">${L.map(p=>`<button class="podcard" data-pod="${p.id}"><div class="cv">${podCover(p.id)}</div><b>${esc(p.title)}</b><small>${p.episodes.length} episodes</small></button>`).join("")}</div>`;
+}
+function openAllPods(){
+  page("Podcasts",`<div class="podgrid">${PODS().map(p=>`<button class="podcard" data-pod="${p.id}" style="width:auto"><div class="cv">${podCover(p.id)}</div><b>${esc(p.title)}</b><small>${p.episodes.length} episodes</small></button>`).join("")}</div>`,
+   el=>el.querySelectorAll("[data-pod]").forEach(b=>b.onclick=()=>openPod(b.dataset.pod)));
+}
+function openPod(id){
+  const pod=PODS().find(p=>p.id===id); if(!pod) return;
+  const el=document.createElement("div"); el.className="player podpage";
+  const nextEp=()=>pod.episodes.find(e=>epState(e)!=="done")||pod.episodes[0];
+  let first=true, lastKey="";
+  const paint=()=>{
+    const playingHere = Player.pod&&Player.pod.id===pod.id;
+    const key=(Player.ep?Player.ep.id:"")+"|"+(Player.a?Player.a.paused:"")+"|"+pod.episodes.map(e=>epState(e)).join(",");
+    if(!first && key===lastKey) return; lastKey=key;
+    const sc=el.querySelector(".p-body")?.scrollTop||0;
+    el.innerHTML=`<div class="p-top" style="position:absolute;left:0;right:0;z-index:3"><button class="icon-btn" data-back>${ic("back")}</button><span></span><span style="width:36px"></span></div>
+    <div class="p-body" style="padding-top:0"><div class="podhero">${podCover(pod.id)}</div>
+      <div class="${first?"stepin":""}"><div style="display:flex;gap:6px;margin:14px 0 8px">${pod.tags.map(t=>`<span class="chip" style="height:24px;font-size:11.5px;box-shadow:none;border:1px solid var(--line)">${esc(t)}</span>`).join("")}</div>
+      <h2 style="font-size:24px;color:var(--ink)">${esc(pod.title)}</h2><p class="muted" style="font-size:14px;line-height:1.5;margin:6px 0 16px">${esc(pod.desc)}</p>
+      <button class="btn" data-next>${ic("play").replace("<svg ",'<svg style="width:18px;height:18px" ')} ${pod.episodes.some(e=>epState(e)!=="new")?"Play next episode":"Play first episode"}</button>
+      <div class="muted" style="font-size:14px;margin:20px 0 10px">Episodes</div>
+      ${pod.episodes.map((ep,i)=>{ const on=playingHere&&Player.ep.id===ep.id; return `<button class="epcard ${on?"on":""}" data-ep="${ep.id}"><div style="display:flex;gap:12px;align-items:center"><div class="th">${podCover(pod.id)}</div><div style="flex:1;text-align:left"><b>${esc(ep.title)}</b><small>${epMeta(ep,i)}</small></div><span class="pbtn">${ic(on&&!Player.a.paused?"pause":"play")}</span></div><p>${esc(ep.desc)}</p></button>`; }).join("")}
+      </div></div>`;
+    first=false; el.querySelector(".p-body").scrollTop=sc;
+    el.querySelector("[data-back]").onclick=()=>{ el.remove(); paintMini(); };
+    el.querySelector("[data-next]").onclick=()=>{ Player.load(pod,nextEp()); openPodPlayer(); };
+    el.querySelectorAll("[data-ep]").forEach(b=>b.onclick=()=>{ const ep=pod.episodes.find(e=>e.id===b.dataset.ep);
+      if(Player.ep&&Player.ep.id===ep.id){ Player.toggle(); } else { Player.load(pod,ep); openPodPlayer(); } });
+  };
+  document.body.appendChild(el); paint(); Player.onup.add(()=>{ if(el.isConnected) paint(); }); paintMini();
+}
+function openPodPlayer(){
+  if(!Player.ep) return; document.querySelector(".podfull")?.remove();
+  const el=document.createElement("div"); el.className="player podfull"; document.body.appendChild(el); paintMini();
+  let dragging=false;
+  const paint=()=>{ const a=Player.a, d=a.duration||Player.ep.dur, t=a.currentTime||0, pct=d?t/d*100:0, idx=Player.pod.episodes.findIndex(e=>e.id===Player.ep.id);
+    el.innerHTML=`<div class="p-top"><span></span><span></span><button class="icon-btn" data-x>${ic("chev")}</button></div>
+    <div class="p-body"><div class="podart">${podCover(Player.pod.id)}</div>
+      <h2 style="font-size:22px;color:var(--ink);line-height:1.3;margin-top:22px">${esc(Player.ep.title)}</h2><div class="muted" style="font-size:14px;margin:4px 0 20px">${esc(Player.pod.title)} · Episode ${idx+1}</div>
+      <div class="bar seek" id="seek" style="height:6px"><i style="width:${pct}%"></i><b style="left:${pct}%"></b></div>
+      <div class="times"><span>${mmss(t)}</span><span>${mmss(Math.max(0,d-t))} left</span><span>${mmss(d)}</span></div>
+      <div class="ctrls"><button class="sk" data-pv ${idx===0?'style="opacity:.3"':""}>${ic("prev")}</button><button class="sk" data-rw>${ic("rw")}</button><button class="play" data-pp>${ic(a.paused?"play":"pause")}</button><button class="sk" data-fw>${ic("fw")}</button><button class="sk" data-nx ${idx===Player.pod.episodes.length-1?'style="opacity:.3"':""}>${ic("next")}</button></div>
+      <div class="pills"><button class="pill" data-rate>${S.podRate||1}× speed</button><button class="pill" data-list>${ic("lines").replace("<svg ",'<svg style="width:15px" ')} Episodes</button></div></div>`;
+    el.querySelector("[data-x]").onclick=close;
+    el.querySelector("[data-pp]").onclick=()=>Player.toggle();
+    el.querySelector("[data-rw]").onclick=()=>Player.skip(-15); el.querySelector("[data-fw]").onclick=()=>Player.skip(15);
+    el.querySelector("[data-pv]").onclick=()=>Player.step(-1); el.querySelector("[data-nx]").onclick=()=>Player.step(1);
+    el.querySelector("[data-rate]").onclick=()=>{ const r=[0.75,1,1.25,1.5,2]; S.podRate=r[(r.indexOf(S.podRate||1)+1)%r.length]; Player.a.playbackRate=S.podRate; save(); paint(); };
+    el.querySelector("[data-list]").onclick=()=>{ const id=Player.pod.id; close(); if(!document.querySelector(".podpage")) openPod(id); };
+    const sk=el.querySelector("#seek"); const seekTo=x=>{ const r=sk.getBoundingClientRect(); const f=Math.min(1,Math.max(0,(x-r.left)/r.width)); Player.a.currentTime=f*(Player.a.duration||0); };
+    sk.onpointerdown=e=>{ dragging=true; sk.setPointerCapture(e.pointerId); seekTo(e.clientX); }; sk.onpointermove=e=>{ if(dragging) seekTo(e.clientX); }; sk.onpointerup=()=>dragging=false;
+  };
+  const up=()=>{ if(!el.isConnected) return; const a=Player.a, d=a.duration||Player.ep.dur, t=a.currentTime||0, pct=d?t/d*100:0;
+    const bi=el.querySelector("#seek i"); if(!bi||el.dataset.ep!==Player.ep.id){ el.dataset.ep=Player.ep.id; paint(); return; }
+    bi.style.width=pct+"%"; el.querySelector("#seek b").style.left=pct+"%"; const tm=el.querySelectorAll(".times span"); tm[0].textContent=mmss(t); tm[1].textContent=mmss(Math.max(0,d-t))+" left"; tm[2].textContent=mmss(d);
+    el.querySelector("[data-pp]").innerHTML=ic(a.paused?"play":"pause"); };
+  function close(){ Player.onup.delete(up); el.classList.add("closing"); setTimeout(()=>{ el.remove(); paintMini(); },220); }
+  el.dataset.ep=Player.ep.id; paint(); Player.onup.add(up);
+}
+
 /* ---------- EXPLORE ---------- */
 function verseOfDay(offset=0){ const d=new Date(); d.setDate(d.getDate()-offset); const n=Math.floor(d/864e5); return {...C.verses[n%C.verses.length], d}; }
 const STORY_BG=["linear-gradient(160deg,#0E5F95,#3C86BC 60%,#C9973F)","linear-gradient(160deg,#1E3A5F,#0E5F95 60%,#7FB6E0)","linear-gradient(160deg,#4A3F6B,#7A6BA8 60%,#E3B8A0)","linear-gradient(160deg,#21503F,#3F8A6B 60%,#D9C27F)","linear-gradient(160deg,#5B2E48,#9A4F6E 60%,#F0B37E)","linear-gradient(160deg,#16324F,#2C5D8F 55%,#9CC4E4)","linear-gradient(160deg,#3B3024,#8A6A44 60%,#E8D3A8)"];
@@ -619,12 +733,12 @@ function viewExplore(){
   const st=Array.from({length:7},(_,i)=>verseOfDay(i));
   return `<div class="screen"><div class="safe-top"></div><div class="pad"><h1 style="margin-bottom:14px">Explore</h1><div class="muted" style="font-size:14px;margin-bottom:8px">Verses of the day</div></div>
    <div class="stories">${st.map((v,i)=>`<button class="story" data-st="${i}"><div style="background:${STORY_BG[i%7]}">${esc(v.r)}</div></button>`).join("")}</div>
-   <div class="pad" style="margin:18px 0 10px"><div class="muted" style="font-size:14px">Coming soon</div></div>
-   <div class="soon"><div class="i">${ic("head")}</div><div><b>Audio podcasts <span class="badge">Soon</span></b><span class="muted" style="font-size:13.5px">Short episodes to grow in faith on the go</span></div></div>
+   ${podsRow()}
+   <div class="pad" style="margin:22px 0 10px"><div class="muted" style="font-size:14px">Coming soon</div></div>
    <div class="soon"><div class="i">${ic("doc")}</div><div><b>Articles <span class="badge">Soon</span></b><span class="muted" style="font-size:13.5px">Quick reads on faith, prayer and everyday life</span></div></div>
    <div class="soon"><div class="i">${ic("book")}</div><div><b>Bible stories <span class="badge">Soon</span></b><span class="muted" style="font-size:13.5px">The great stories of Scripture, told simply</span></div></div></div>`;
 }
-afterRender.explore=()=>document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>openStory(+b.dataset.st));
+afterRender.explore=()=>{ document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>openStory(+b.dataset.st)); document.querySelectorAll("[data-pod]").forEach(b=>b.onclick=()=>openPod(b.dataset.pod)); const a=document.querySelector("[data-allpods]"); if(a) a.onclick=openAllPods; };
 function openStory(i){
   document.querySelector(".storyview")?.remove();
   const v=verseOfDay(i); const el=document.createElement("div"); el.className="storyview"; el.style.background=STORY_BG[i%7];
@@ -879,5 +993,5 @@ let bibleAnim="";
 splash();
 render();
 if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-window.__vereda = {S, render, LESSONS, openLesson}; // for testing
+window.__vereda = {S, render, LESSONS, openLesson, Player}; // for testing
 })();
