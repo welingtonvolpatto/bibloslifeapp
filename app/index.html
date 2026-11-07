@@ -464,6 +464,28 @@ textarea.field{height:auto;min-height:140px;padding:14px 16px;resize:none;line-h
 .earned .lampchip{background:#fff;border-radius:999px;display:inline-flex;align-items:center;height:30px}
 .mscard{width:min(340px,88vw);background:var(--card);border-radius:24px;padding:26px 22px;text-align:center;animation:popIn .4s}.mscard p{margin:12px 0 18px;line-height:1.5;color:var(--text)}
 
+
+.installbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;border-radius:14px;border:1.5px dashed var(--blue);color:var(--blue);font-weight:700;font-size:14.5px;background:rgba(255,255,255,.6)}
+.installbtn.light{border-color:rgba(255,255,255,.7);color:#fff;background:rgba(255,255,255,.1)}
+.isteps{display:grid;gap:10px;text-align:left;margin-top:6px}.istep{display:flex;gap:12px;align-items:flex-start;background:var(--card2);border-radius:14px;padding:12px}
+.istep>span{width:26px;height:26px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.istep b{display:block;font-size:14.5px;color:var(--ink)}.istep small{color:var(--muted);font-size:12.5px}
+.tour{position:fixed;inset:0;z-index:150;max-width:480px;margin:0 auto;background:linear-gradient(170deg,#0A4A75 0%,#0E5F95 50%,#3C86BC 100%);color:#fff;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 14px) 20px calc(20px + env(safe-area-inset-bottom));animation:fadeIn .35s}
+.tour.out{animation:fadeOut .3s forwards}@keyframes fadeOut{to{opacity:0;transform:scale(1.03)}}
+.tour-top{display:flex;align-items:center;justify-content:space-between}.tour-top .link{color:#fff;opacity:.85}
+.tour-dots{display:flex;gap:5px}.tour-dots i{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.3);transition:all .3s}.tour-dots i.on{width:22px;background:#fff}.tour-dots i.done{background:rgba(255,255,255,.7)}
+.tour-body{flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.tour-body h2{font-size:28px;font-weight:800;margin-top:26px;letter-spacing:-.3px}.tour-body p{font-size:16px;line-height:1.55;opacity:.9;margin-top:10px}
+.tart{position:relative;height:220px;border-radius:28px;background:rgba(255,255,255,.12);overflow:hidden;display:grid;place-items:center;border:1px solid rgba(255,255,255,.2)}
+.tart-in{position:relative;z-index:1;width:130px;height:130px;border-radius:36px;background:rgba(255,255,255,.16);display:grid;place-items:center;animation:bob 3s ease-in-out infinite}
+.tart.t-lamp .tart-in,.tart.t-welcome .tart-in{background:#fff}.tart.t-welcome .tart-in img{width:96px!important}
+.tour-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:rgba(255,255,255,.12);border-radius:20px;padding:6px;margin:18px 0}
+.tour-tabs span{height:46px;border-radius:14px;display:grid;place-items:center;opacity:.55;transition:all .3s}.tour-tabs span svg{width:22px;height:22px}
+.tour-tabs span.on{opacity:1;background:#fff;color:var(--blue);animation:popIn .4s}
+.tour-foot{display:flex;gap:10px}.tour-foot .btn{background:#fff;color:var(--blue)}.tour-foot .btn.ghost{background:rgba(255,255,255,.15);color:#fff}
+
+.auth-err{color:var(--bad);font-size:13.5px;min-height:18px;margin-top:10px;text-align:left;width:100%}
+.welcome.auth{text-align:left;align-items:stretch}
 .clouds,.puff,.done-scene .rays,.storyview>.story-bars{position:absolute!important}
 .clouds,.puff,.rays{z-index:0!important}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
@@ -473,6 +495,7 @@ textarea.field{height:auto;min-height:140px;padding:14px 16px;resize:none;line-h
 <body>
 <div id="app"></div>
 <script src="content.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="podcasts/podcasts.js"></script>
 <script src="app.js"></script>
 </body>

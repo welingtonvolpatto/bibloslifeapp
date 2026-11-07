@@ -4,6 +4,7 @@
 const C = window.VEREDA_CONTENT;
 const CONFIG = {
   supportEmail: "support@vereda.app",
+  renewUrl: "", // Hotmart checkout link to renew (fill in)
   manageSubscriptionUrl: "https://consumer.hotmart.com/",
   privacyUrl: "#", termsUrl: "#",
   communityApi: "", // set to a backend URL to share prayer requests between users
@@ -24,7 +25,7 @@ const KEY = "vereda_app_v1";
 const DEF = { user:null, theme:"light", completed:{}, steps:{}, journal:[], requests:[], prayed:{}, highlights:[], ratings:{}, seen:{}, voice:"", rate:1, bibleBook:0, bibleCh:0, bfs:19, dev:false };
 let S;
 try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem(KEY)||"{}")); } catch(e){ S = {...DEF}; }
-const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} };
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} if(typeof pushState==="function") pushState(); };
 if (/[?&]dev=1/.test(location.search)) { S.dev = true; save(); }
 if (/[?&]dev=0/.test(location.search)) { S.dev = false; save(); }
 S.theme="light";
@@ -192,6 +193,7 @@ function render(){
   const view = {journey:viewJourney, explore:viewExplore, journal:viewJournal, community:viewCommunity, bible:viewBible}[tab]();
   $app.innerHTML = view + tabbar();
   bindTabbar(); afterRender[tab] && afterRender[tab](); paintMini();
+  if(!S.seen.tour && !document.querySelector('.tour')) setTimeout(startTour,350);
 }
 const afterRender = {};
 function tabbar(){
@@ -232,33 +234,145 @@ function bindTabbar(){
   });
 }
 
+/* ---------- BACKEND (Supabase) ---------- */
+const SB_URL="https://okgqxzehlqzdmwxpjdkj.supabase.co", SB_KEY="sb_publishable_4EvJKXKLm0jrZrm7k-EnGA_u0N5nesc";
+const sbc = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:true, autoRefreshToken:true, storageKey:"vereda_auth"}}) : null;
+async function fnCall(name, body){
+  const r=await fetch(`${SB_URL}/functions/v1/${name}`,{method:"POST",headers:{"Content-Type":"application/json","apikey":SB_KEY,"Authorization":`Bearer ${SB_KEY}`},body:JSON.stringify(body)});
+  const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||"Something went wrong. Please try again."); return j;
+}
+const SYNC_KEYS=["completed","steps","journal","ratings","highlights","light","pod","seen","bver","bfs","bibleBook","bibleCh","bibleDark","rate","voice","podRate","requests","prayed"];
+let syncT=null, syncing=false;
+function pushState(){ if(!sbc||!S.user||!S.user.uid) return; clearTimeout(syncT); syncT=setTimeout(async()=>{ const data={}; SYNC_KEYS.forEach(k=>{ if(S[k]!==undefined) data[k]=S[k]; }); try{ await sbc.from("user_state").upsert({user_id:S.user.uid,data,updated_at:new Date().toISOString()}); }catch(e){} },1500); }
+async function pullState(uid){
+  try{ const {data}=await sbc.from("user_state").select("data").eq("user_id",uid).maybeSingle();
+    if(data&&data.data){ const r=data.data;
+      // merge: union of completed/journal; remote wins on settings
+      S.completed=Object.assign({}, r.completed||{}, S.completed||{});
+      const ids=new Set((S.journal||[]).map(j=>j.id)); S.journal=[...(S.journal||[]), ...((r.journal||[]).filter(j=>!ids.has(j.id)))];
+      SYNC_KEYS.forEach(k=>{ if(!["completed","journal"].includes(k) && r[k]!==undefined && (S[k]===undefined || JSON.stringify(S[k])==="{}"||JSON.stringify(S[k])==="[]")) S[k]=r[k]; });
+      if(r.light && (!S.light || (r.light.total||0)>(S.light.total||0))) S.light=r.light;
+      save(); }
+  }catch(e){}
+}
+async function checkAccess(){
+  if(!sbc||!S.user||S.user.admin||!S.user.uid||!navigator.onLine) return true;
+  try{ const {data:s}=await sbc.auth.getSession(); if(!s.session){ S.user=null; save(); render(); toast("Please sign in again"); return false; }
+    const {data,error}=await sbc.rpc("my_access"); if(error) return true;
+    const a=Array.isArray(data)?data[0]:data;
+    if(!a||!a.active){ renderBlocked(a); return false; }
+    return true; }catch(e){ return true; }
+}
+function renderBlocked(a){
+  const reason = !a ? "We couldn’t find an active subscription for this email." : ({refunded:"This purchase was refunded.",chargeback:"This purchase was disputed.",canceled:"Your subscription was canceled.",overdue:"We couldn’t process your last payment.",expired:"Your subscription has expired.",blocked:"This purchase was canceled."}[a.status]||"Your access is not active.");
+  $app.innerHTML=`<div class="welcome"><img src="images/logo-stacked.svg" style="width:120px"><div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+    <div style="font-size:54px">🕯️</div><h1 style="font-size:24px;margin-top:10px">Your lamp is waiting</h1><p class="muted" style="margin-top:10px;line-height:1.5">${reason} Renew to continue your journey — your progress is saved.</p></div>
+    ${CONFIG.renewUrl?`<a class="btn" href="${CONFIG.renewUrl}" target="_blank">Renew my access</a>`:""}<a class="link" href="mailto:${CONFIG.supportEmail}" style="margin-top:16px">Contact support</a><button class="link" id="so" style="margin-top:14px;color:var(--muted)">Sign out</button></div>`;
+  document.getElementById("so").onclick=signOut;
+}
+async function signOut(){ try{ sbc&&await sbc.auth.signOut(); }catch(e){} const keep={}; S.user=null; S.dev=false; save(); render(); }
+
+/* ---------- INSTALL (add to home screen) ---------- */
+let deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferredPrompt=e; document.querySelectorAll("[data-install]").forEach(b=>b.classList.remove("hidden")); });
+window.addEventListener("appinstalled",()=>{ deferredPrompt=null; toast("VEREDA was added to your home screen"); document.querySelectorAll("[data-install]").forEach(b=>b.classList.add("hidden")); });
+const isStandalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const installBtn=(cls="")=>isStandalone()?"":`<button class="installbtn ${cls}" data-install>${ic("plus").replace("<svg ",'<svg style="width:18px;height:18px" ')} Add VEREDA to your home screen</button>`;
+async function doInstall(){
+  if(deferredPrompt){ deferredPrompt.prompt(); const r=await deferredPrompt.userChoice; deferredPrompt=null; if(r.outcome==="accepted") toast("Installing VEREDA…"); return; }
+  const shareIc=`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#0E5F95" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-5px"><path d="M12 3v13M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>`;
+  const steps = isIOS()
+    ? [[`Tap the Share button ${shareIc}`,"at the bottom of Safari (or at the top on iPad)."],["Scroll down and tap “Add to Home Screen”","You may need to tap “More” to find it."],["Tap “Add”","VEREDA will appear on your home screen like any other app."]]
+    : [["Open your browser menu","Tap the ⋮ (three dots) in the top-right corner."],["Tap “Add to Home screen” or “Install app”",""],["Confirm with “Add” or “Install”","VEREDA will appear on your home screen."]];
+  sheet(`<div style="text-align:center"><img src="icons/icon-192.png" style="width:64px;height:64px;border-radius:16px;box-shadow:var(--shadow)"></div><h3 style="margin-top:12px">Add VEREDA to your home screen</h3><p style="font-size:14px">Open the app with one tap, full screen — just like an app from the store.</p>
+    ${isIOS()&&!/safari/i.test(navigator.userAgent.replace(/crios|fxios|edgios/i,"x"))?`<p style="font-size:13px;color:var(--bad)">On iPhone, open this page in <b>Safari</b> first.</p>`:""}
+    <div class="isteps">${steps.map((s,i)=>`<div class="istep"><span>${i+1}</span><div><b>${s[0]}</b>${s[1]?`<small>${s[1]}</small>`:""}</div></div>`).join("")}</div>
+    <button class="btn" data-x style="margin-top:14px">Got it</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c);
+}
+document.addEventListener("click",e=>{ if(e.target.closest("[data-install]")) doInstall(); });
+
+/* ---------- FIRST-TIME TUTORIAL ---------- */
+const TOUR=[
+ {tab:null, t:"Welcome to VEREDA", d:"Your daily path closer to God. Here’s a quick tour of everything inside — it takes less than a minute.", art:"welcome"},
+ {tab:"journey", t:"Your Journey", d:"One devotional unlocks every day. Each one has a prayer, today’s word, a short quiz and one action. Finish today’s to unlock tomorrow’s.", art:"journey"},
+ {tab:"journey", t:"Read or listen", d:"Every prayer and devotional can be read or listened to. Switch anytime with the Read / Listen button at the top.", art:"listen"},
+ {tab:"journey", t:"Keep your lamp burning", d:"Each day you complete a devotional, your lamp lights up and your streak grows. Tap the lamp to see your goal, your points and your faith tree.", art:"lamp"},
+ {tab:"explore", t:"Explore", d:"Daily verses and audio podcasts with Bible teaching and stories — perfect for your commute or a quiet moment.", art:"explore"},
+ {tab:"journal", t:"Journal", d:"Write a short reflection after each devotional and look back on how far God has brought you.", art:"journal"},
+ {tab:"community", t:"Community", d:"Share a prayer request and pray for believers around the world. Tap “Amen” when you’ve prayed.", art:"community"},
+ {tab:"bible", t:"The Bible", d:"The whole Bible in two versions, with highlights, sharing, light and dark reading modes and audio.", art:"bible"},
+];
+function tourArt(k){
+  const ico={welcome:"path",journey:"path",listen:"head",lamp:null,explore:"explore",journal:"journal",community:"community",bible:"bible"}[k];
+  const inner = k==="lamp" ? LAMP(true,86) : k==="welcome" ? `<img src="images/logo-stacked.svg" style="width:120px">` : ic(ico).replace("<svg ",'<svg style="width:72px;height:72px;color:#fff" ');
+  return `<div class="tart t-${k}">${clouds(90,"white","opacity:.5")}<div class="tart-in">${inner}</div></div>`;
+}
+function startTour(){
+  let i=0; const el=document.createElement("div"); el.className="tour"; document.body.appendChild(el);
+  const tabs=["journey","explore","journal","community","bible"];
+  const paint=(dir=1)=>{ const s=TOUR[i];
+    el.innerHTML=`<div class="tour-top"><div class="tour-dots">${TOUR.map((_,k)=>`<i class="${k===i?"on":k<i?"done":""}"></i>`).join("")}</div><button class="link" data-skip>Skip</button></div>
+      <div class="tour-body ${dir>0?"slideL":"slideR"}">${tourArt(s.art)}<h2>${s.t}</h2><p>${s.d}</p></div>
+      ${s.tab?`<div class="tour-tabs">${tabs.map(t=>`<span class="${t===s.tab?"on":""}">${ic({journey:"path",explore:"explore",journal:"journal",community:"community",bible:"bible"}[t])}</span>`).join("")}</div>`:`<div style="height:62px"></div>`}
+      <div class="tour-foot">${i>0?`<button class="btn ghost" data-prev style="width:auto;padding:0 22px">${ic("back").replace("<svg ",'<svg style="width:18px;height:18px" ')}</button>`:""}<button class="btn" data-next>${i===TOUR.length-1?"Start my journey":"Next"}</button></div>
+      ${i===TOUR.length-1&&!isStandalone()?`<div style="text-align:center;margin-top:10px">${installBtn("light")}</div>`:""}`;
+    el.querySelector("[data-skip]").onclick=done; el.querySelector("[data-next]").onclick=()=>{ if(i<TOUR.length-1){ i++; paint(1); } else done(); };
+    const p=el.querySelector("[data-prev]"); if(p) p.onclick=()=>{ i--; paint(-1); };
+  };
+  function done(){ S.seen.tour=1; save(); el.classList.add("out"); setTimeout(()=>el.remove(),300); }
+  let x0=null; el.addEventListener("touchstart",e=>x0=e.touches[0].clientX,{passive:true});
+  el.addEventListener("touchend",e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(dx<-50&&i<TOUR.length-1){ i++; paint(1); } else if(dx>50&&i>0){ i--; paint(-1); } x0=null; });
+  paint();
+}
+
 /* ---------- welcome / auth ---------- */
-function renderWelcome(step){
-  if(step==="form"||step==="login"){
-    const login = step==="login";
-    $app.innerHTML = `<div class="welcome" style="justify-content:flex-start;padding-top:calc(env(safe-area-inset-top) + 20px)">
+function renderWelcome(step, prefill){
+  if(step){
+    const mode = step; // "login" | "first" | "reset"
+    const isLogin = mode==="login";
+    const title = {login:"Welcome back", first:"Create your access", reset:"Reset your password"}[mode];
+    const sub = {login:"Sign in with the email you used to purchase.", first:"Use the email from your purchase and the purchase code we sent you.", reset:"Confirm your purchase to choose a new password."}[mode];
+    $app.innerHTML = `<div class="welcome auth" style="justify-content:flex-start;padding-top:calc(env(safe-area-inset-top) + 20px)">
       <button class="icon-btn" id="bk" style="align-self:flex-start">${ic("back")}</button>
-      <h1 style="margin:40px 0 8px">${login?"Welcome back":"Let’s set up your journey"}</h1>
-      <p class="muted" style="margin-bottom:26px">${login?"Sign in with the email you used to purchase.":"Use the same email you used at checkout."}</p>
-      ${login?"":`<input class="field" id="nm" placeholder="Your first name" autocomplete="given-name" style="margin-bottom:12px">`}
-      <input class="field" id="em" type="email" placeholder="Email" autocomplete="email" inputmode="email">
-      <input class="field hidden" id="pw" type="password" placeholder="Password" autocomplete="current-password" style="margin-top:12px">
-      <button class="btn" id="go" style="margin-top:20px">${login?"Sign in":"Start my journey"}</button>
-      <p class="muted" style="font-size:12.5px;margin-top:16px">By continuing you agree to our <a class="link" href="${CONFIG.termsUrl}">Terms</a> and <a class="link" href="${CONFIG.privacyUrl}">Privacy Policy</a>.</p></div>`;
-    document.getElementById("bk").onclick=()=>renderWelcome();
-    const emI=document.getElementById("em"), pwI=document.getElementById("pw");
-    const isAdmin=()=>emI.value.trim().toLowerCase()===CONFIG.adminEmail;
-    emI.oninput=()=>pwI.classList.toggle("hidden",!isAdmin());
-    document.getElementById("go").onclick=async()=>{
-      const em=emI.value.trim();
-      if(!/^\S+@\S+\.\S+$/.test(em)){ toast("Please enter a valid email"); return; }
-      if(isAdmin()){
-        if(await sha256(pwI.value)!==CONFIG.adminHash){ toast("Incorrect password"); pwI.value=""; return; }
+      <h1 style="margin:34px 0 8px">${title}</h1><p class="muted" style="margin-bottom:22px">${sub}</p>
+      ${mode==="first"?`<input class="field" id="nm" placeholder="Your first name" autocomplete="given-name" style="margin-bottom:12px">`:""}
+      <input class="field" id="em" type="email" placeholder="Email from your purchase" autocomplete="email" inputmode="email" value="${esc(prefill||"")}">
+      ${isLogin?"":`<input class="field" id="cd" placeholder="Purchase code (starts with HP)" autocapitalize="characters" style="margin-top:12px"><button class="link" id="where" style="align-self:flex-start;font-size:13px;margin-top:8px">Where do I find my purchase code?</button>`}
+      <input class="field" id="pw" type="password" placeholder="${isLogin?"Password":"Choose a password (6+ characters)"}" autocomplete="${isLogin?"current-password":"new-password"}" style="margin-top:12px">
+      <div class="auth-err" id="err"></div>
+      <button class="btn" id="go" style="margin-top:14px">${isLogin?"Sign in":mode==="first"?"Create my access":"Save new password"}</button>
+      ${isLogin?`<button class="link" id="fg" style="margin-top:16px">Forgot your password?</button><button class="link" id="fa" style="margin-top:12px">First time here? Create your access</button>`:`<button class="link" id="li" style="margin-top:16px">I already have a password</button>`}
+      <p class="muted" style="font-size:12.5px;margin-top:18px">By continuing you agree to our <a class="link" href="${CONFIG.termsUrl}">Terms</a> and <a class="link" href="${CONFIG.privacyUrl}">Privacy Policy</a>.</p></div>`;
+    const $=id=>document.getElementById(id), err=m=>{ $("err").textContent=m||""; };
+    $("bk").onclick=()=>renderWelcome();
+    $("fg")&&($("fg").onclick=()=>renderWelcome("reset",$("em").value)); $("fa")&&($("fa").onclick=()=>renderWelcome("first",$("em").value)); $("li")&&($("li").onclick=()=>renderWelcome("login",$("em").value));
+    $("where")&&($("where").onclick=()=>sheet(`<h3>Your purchase code</h3><p style="font-size:14px">After buying, Hotmart sent you an email with your purchase details. Look for the <b>transaction code</b> — it starts with <b>HP</b> (for example HP1234567890).</p><p style="font-size:14px">You can also find it at <b>consumer.hotmart.com</b> → My purchases.</p><button class="btn" data-x>Got it</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c));
+    ["em","pw","cd","nm"].forEach(id=>$(id)&&($(id).oninput=()=>err("")));
+    $("go").onclick=async()=>{
+      const em=$("em").value.trim().toLowerCase(), pw=$("pw").value, btn=$("go");
+      if(!/^\S+@\S+\.\S+$/.test(em)){ err("Please enter a valid email."); return; }
+      if(em===CONFIG.adminEmail){
+        if(await sha256(pw)!==CONFIG.adminHash){ err("Incorrect password."); return; }
         S.user={name:"Admin", email:em, admin:true}; S.dev=true; save(); tab="journey"; render(); toast("Signed in as admin — all days unlocked"); return;
       }
-      const nm=login? (em.split("@")[0]) : document.getElementById("nm").value.trim();
-      if(!login && !nm){ toast("Please enter your name"); return; }
-      S.user={name:nm.charAt(0).toUpperCase()+nm.slice(1), email:em}; save(); tab="journey"; render(); };
+      if(!sbc){ err("Can’t connect right now. Check your internet and try again."); return; }
+      if(!pw||pw.length<6){ err(isLogin?"Please enter your password.":"Your password needs at least 6 characters."); return; }
+      const label=btn.textContent; btn.disabled=true; btn.innerHTML='<span class="spin"></span>';
+      try{
+        if(!isLogin){
+          const code=$("cd").value.trim(); if(!code){ throw new Error("Please enter your purchase code."); }
+          await fnCall("member-access",{action:"claim", email:em, code, password:pw, name:$("nm")?$("nm").value.trim():undefined});
+        }
+        const {data,error}=await sbc.auth.signInWithPassword({email:em,password:pw});
+        if(error){ if(isLogin){ const c=await fnCall("member-access",{action:"check",email:em}).catch(()=>null); if(c&&c.member&&!c.hasAccount) throw new Error("This is your first time — create your access with your purchase code."); } throw new Error("Email or password is incorrect."); }
+        const uid=data.user.id, nm=(data.user.user_metadata&&data.user.user_metadata.name)||em.split("@")[0];
+        S.user={name:nm.charAt(0).toUpperCase()+nm.slice(1), email:em, uid}; S.dev=false; save();
+        await pullState(uid);
+        if(!(await checkAccess())) return;
+        tab="journey"; render(); toast(isLogin?`Welcome back, ${S.user.name}`:"Your access is ready. Welcome!");
+      }catch(e){ err(e.message); btn.disabled=false; btn.textContent=label; }
+    };
     return;
   }
   $app.innerHTML = `<div class="welcome">
@@ -269,8 +383,9 @@ function renderWelcome(step){
     <div style="flex:1"></div>
     <svg viewBox="0 0 320 120" style="width:100%;max-width:360px;margin-bottom:24px"><path d="M160 118C150 90 120 80 140 55s40-20 30-50" stroke="#0E5F95" stroke-width="18" fill="none" stroke-linecap="round" opacity=".18"/><path d="M160 118C150 90 120 80 140 55s40-20 30-50" stroke="#0E5F95" stroke-width="3" stroke-dasharray="2 9" fill="none" stroke-linecap="round"/><circle cx="170" cy="5" r="5" fill="#C9973F"/></svg>
     <button class="btn" id="start">Start my journey</button>
-    <button class="link" id="have" style="margin-top:18px">I already have an account</button></div>`;
-  document.getElementById("start").onclick=()=>renderWelcome("form");
+    <button class="link" id="have" style="margin-top:18px">I already have an account</button>
+    <div style="margin-top:16px;width:100%">${installBtn()}</div></div>`;
+  document.getElementById("start").onclick=()=>renderWelcome("first");
   document.getElementById("have").onclick=()=>renderWelcome("login");
 }
 
@@ -636,10 +751,13 @@ function openProfile(){
     el.querySelector("[data-edit]").onclick=()=>sheet(`<h3>Edit profile</h3><input class="field" id="pn" value="${esc(S.user.name)}"><button class="btn" data-ok style="margin-top:14px">Save</button>`,(s,c)=>s.querySelector("[data-ok]").onclick=()=>{ const v=s.querySelector("#pn").value.trim(); if(v){ S.user.name=v; save(); } c(); el.remove(); openProfile(); });
     el.querySelector("[data-faq]").onclick=()=>page("FAQ",[["How does the Journey work?","A new devotional unlocks every day. Complete today’s prayer, word, quiz and action to unlock tomorrow’s day."],["Can I skip ahead?","No — the Journey is designed to build a daily habit, one step at a time."],["Which Bible version is used?","The World English Bible (WEB), a modern English translation in the public domain."],["How do I listen instead of reading?","Tap “Listen” on any prayer or devotional. You can change the narrator and speed."],["How do I cancel?","Tap Manage subscription in your profile, or contact support."]].map(([q,a])=>`<div class="jentry"><div class="q">${q}</div><div class="a">${a}</div></div>`).join(""));
     el.querySelector("[data-set]").onclick=()=>page("Settings",`<div class="list" style="margin-bottom:16px"><div class="li">${ic("mail")}<span>Email<small>${esc(S.user.email)}</small></span></div><button class="li" data-fs>${ic("text")}Bible text size<span class="chev muted" style="font-size:14px">${S.bfs}px</span></button><button class="li" data-nr>${ic("mic")}Narrator speed<span class="chev muted" style="font-size:14px">${S.rate||1}×</span></button></div>
+      <div class="list" style="margin-bottom:16px"><button class="li" data-tour>${ic("help")}Replay the app tour</button>${isStandalone()?"":`<button class="li" data-inst>${ic("plus")}Add VEREDA to your home screen</button>`}</div>
       <div class="list"><button class="li" data-lo>${ic("out")}Sign out</button><button class="li" data-del style="color:var(--bad)">${ic("trash")}Delete my data</button></div><p class="muted" style="text-align:center;font-size:12px;margin-top:18px">VEREDA v1.0</p>`,p=>{
         p.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); p.remove(); el.querySelector("[data-set]").click(); };
         p.querySelector("[data-nr]").onclick=()=>{ const r=[0.75,1,1.25,1.5]; S.rate=r[(r.indexOf(S.rate||1)+1)%r.length]; save(); p.remove(); el.querySelector("[data-set]").click(); };
-        p.querySelector("[data-lo]").onclick=()=>{ if(S.user.admin) S.dev=false; S.user=null; save(); p.remove(); el.remove(); render(); };
+        p.querySelector("[data-tour]").onclick=()=>{ p.remove(); el.remove(); tab="journey"; render(); S.seen.tour=0; startTour(); };
+        const pi=p.querySelector("[data-inst]"); if(pi) pi.onclick=doInstall;
+        p.querySelector("[data-lo]").onclick=()=>{ p.remove(); el.remove(); signOut(); };
         p.querySelector("[data-del]").onclick=()=>sheet(`<h3>Delete all data?</h3><p>This removes your progress, journal and highlights from this device.</p><button class="btn" style="background:var(--bad)" data-y>Delete</button><button class="btn ghost" data-x style="margin-top:10px">Cancel</button>`,(s,c)=>{ s.querySelector("[data-x]").onclick=c; s.querySelector("[data-y]").onclick=()=>{ localStorage.removeItem(KEY); location.reload(); }; });
       });
   });
@@ -1068,6 +1186,7 @@ let bibleAnim="";
 /* ---------- boot ---------- */
 splash();
 render();
+if(S.user && S.user.uid) { checkAccess(); pullState(S.user.uid); }
 if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 window.__vereda = {S, render, LESSONS, openLesson, Player}; // for testing
 })();
