@@ -145,7 +145,7 @@ h2{font-size:21px;line-height:1.3;font-weight:700;color:var(--title);text-align:
       <div class="row"><span><span id="wpN"></span> Scripture wallpapers</span><span class="tag">Gift</span></div>
     </div>
 
-    <div class="disc">By tapping <b>“Add to my plan”</b>, you authorize a <b>one-time charge of <span class="pr"></span></b> for this add-on to the payment method you just used. This is a one-time purchase, not a subscription, and it is processed <b>immediately</b> when you tap the button.</div>
+    <div class="disc">By confirming this add-on below, you authorize a <b>one-time charge of <span class="pr"></span></b> for this add-on to the payment method you just used. This is a one-time purchase, not a subscription, and it is processed <b>immediately</b> when you tap the button.</div>
 
     <div id="hotmart-sales-funnel"></div>
     <a class="buy" id="buy" href="#">Add to my plan</a>
@@ -205,7 +205,7 @@ const CONFIG = {
   compareAt: 29.99,        // crossed-out "regular" price (set null to hide)
   wallpapers: 20,          // number of bonus wallpapers
   // Hotmart one-click upsell: paste the funnel widget code from Hotmart and set useHotmartWidget:true
-  useHotmartWidget: false,
+  useHotmartWidget: true,
   buyUrl: "#",             // fallback: Hotmart checkout link of the Audio Mode product
   noThanksUrl: "/thanks", // where "No, thank you" goes (next step / thank-you page)
   supportEmail: "institutoacademy20@gmail.com",
@@ -227,11 +227,12 @@ const pass=u=>{try{const t=new URL(u,location.href);new URLSearchParams(location
 $$('#no,[data-no]').forEach(a=>a.href=pass(CONFIG.noThanksUrl));
 
 if(CONFIG.useHotmartWidget){
-  $$('#buy,[data-buy]').forEach(a=>a.style.display='none');
-  $('#no').style.display='none';
+  // HOTMART - Sales Funnel Widget (one-click upsell)
+  $('#buy').style.display='none'; $('#no').style.display='none';
   const s=document.createElement('script');s.src='https://checkout.hotmart.com/lib/hotmart-checkout-elements.js';
   s.onload=()=>{try{checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel')}catch(e){}};
   document.body.appendChild(s);
+  $$('[data-buy]').forEach(a=>{a.href='#hotmart-sales-funnel';a.addEventListener('click',e=>{e.preventDefault();$('#hotmart-sales-funnel').scrollIntoView({behavior:'smooth',block:'center'})})});
 }else{
   $$('#buy,[data-buy]').forEach(a=>a.href=pass(CONFIG.buyUrl));
   $('[data-buy]').addEventListener('click',e=>{if(CONFIG.buyUrl==='#'){e.preventDefault();$('#buy').scrollIntoView({behavior:'smooth',block:'center'})}});
