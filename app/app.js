@@ -3,7 +3,7 @@
 "use strict";
 const C = window.VEREDA_CONTENT;
 const CONFIG = {
-  supportEmail: "support@vereda.app",
+  supportEmail: "institutoacademy20@gmail.com",
   renewUrl:"https://pay.hotmart.com/F108347453I?off=t5216fgc", // Hotmart checkout link to renew (fill in)
   manageSubscriptionUrl: "https://consumer.hotmart.com/",
   privacyUrl: "#", termsUrl: "#",
