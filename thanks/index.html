@@ -31,14 +31,20 @@ a{color:inherit}
 .st.cur i{box-shadow:0 0 0 3px #fff inset}
 .st:not(:last-child):after{content:"";position:absolute;top:40px;left:calc(50% + 10px);right:calc(-50% + 10px);height:2px;background:var(--title)}
 
-.sky{position:relative;height:200px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#3d8fd0 0%,#7db8e6 60%,#b7d8f1 100%)}
+.sky{position:relative;height:310px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#3d8fd0 0%,#7db8e6 60%,#b7d8f1 100%)}
 .cl{position:absolute;background:#fff;border-radius:999px;opacity:.95;animation:drift 14s ease-in-out infinite alternate}
 .cl:before,.cl:after{content:"";position:absolute;background:#fff;border-radius:50%}
 .c1{width:70px;height:22px;left:14px;top:46px}.c1:before{width:34px;height:34px;left:12px;top:-16px}.c1:after{width:26px;height:26px;left:36px;top:-10px}
 .c2{width:56px;height:18px;right:18px;top:24px;animation-duration:18s}.c2:before{width:26px;height:26px;left:10px;top:-12px}.c2:after{width:20px;height:20px;left:28px;top:-8px}
-.c3{width:80px;height:24px;right:-10px;top:120px;animation-duration:16s}.c3:before{width:36px;height:36px;left:14px;top:-18px}.c3:after{width:28px;height:28px;left:40px;top:-12px}
+.c3{width:80px;height:24px;right:-10px;top:170px;animation-duration:16s}.c3:before{width:36px;height:36px;left:14px;top:-18px}.c3:after{width:28px;height:28px;left:40px;top:-12px}
 @keyframes drift{to{transform:translateX(14px)}}
-.sky img{position:absolute;left:50%;bottom:-118px;width:215px;transform:translateX(-50%);filter:drop-shadow(0 10px 22px rgba(10,74,117,.3))}
+.hp{position:absolute;left:50%;bottom:0;width:250px;max-width:78%;transform:translateX(-50%);container-type:inline-size;filter:drop-shadow(0 10px 22px rgba(10,74,117,.3))}
+.hp img{display:block;width:100%;height:auto}
+.hp-trk{position:absolute;left:23.09%;width:54.31%;top:67.67%;height:.75cqw;transform:translateY(-50%);border-radius:1cqw}
+.hp-trk b{position:absolute;left:0;top:0;bottom:0;width:0;background:#0E5F95;border-radius:1cqw}
+.hp-trk i{position:absolute;top:50%;left:0;width:2.5cqw;height:2.5cqw;border-radius:50%;background:#fff;box-shadow:0 .2cqw .7cqw rgba(0,0,0,.25);transform:translate(-50%,-50%)}
+.hp-t{position:absolute;top:70.2%;transform:translateY(-50%);font:500 1.85cqw/1 -apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif;color:#6b6b70;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hp-t.l{left:23.17%}.hp-t.r{right:22.5%}.hp-t.m{left:50.24%;transform:translate(-50%,-50%)}
 
 h1{font-size:25px;font-weight:700;color:var(--title);text-align:center;margin:26px 0 8px}
 .lede{font-size:15px;line-height:1.55;color:var(--muted);text-align:center;max-width:330px;margin:0 auto}
@@ -82,7 +88,13 @@ h2{font-size:18px;font-weight:700;color:var(--title);margin:30px 0 12px}
 
   <div class="sky" aria-hidden="true">
     <div class="cl c1"></div><div class="cl c2"></div><div class="cl c3"></div>
-    <img src="/up1/img/hero-phone.webp" alt="">
+    <div class="hp">
+      <img src="/up1/img/hero-phone.webp" alt="" width="820" height="853">
+      <div class="hp-trk"><b id="hpFill"></b><i id="hpKnob"></i></div>
+      <span class="hp-t l" id="hpCur">00:41</span>
+      <span class="hp-t m" id="hpRem">2:19 remaining</span>
+      <span class="hp-t r" id="hpTot">03:00</span>
+    </div>
   </div>
 
   <h1>Activate your account</h1>
@@ -117,6 +129,11 @@ h2{font-size:18px;font-weight:700;color:var(--title);margin:30px 0 12px}
   <p class="foot">© VEREDA · Purchase processed securely by Hotmart</p>
 </main>
 <script>
+/* hero player animation: counts real seconds, loops */
+(()=>{const TOTAL=180;let t=41;const f=document.getElementById('hpFill'),k=document.getElementById('hpKnob'),c=document.getElementById('hpCur'),r=document.getElementById('hpRem');
+const mm=x=>String(Math.floor(x/60)).padStart(2,'0')+':'+String(Math.floor(x%60)).padStart(2,'0');
+const draw=()=>{const p=t/TOTAL*100;f.style.width=p+'%';k.style.left=p+'%';c.textContent=mm(t);r.textContent=(Math.floor((TOTAL-t)/60))+':'+String(Math.floor((TOTAL-t)%60)).padStart(2,'0')+' remaining';};
+draw();setInterval(()=>{t=t>=TOTAL?0:t+1;draw();},1000);})();
 const CONFIG={appUrl:"https://vereda-members.vercel.app/",supportEmail:"institutoacademy20@gmail.com"};
 document.getElementById('open').href=CONFIG.appUrl;
 const s=document.getElementById('sup');s.textContent=CONFIG.supportEmail;s.href='mailto:'+CONFIG.supportEmail;
