@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VEREDA — Unlock Audio Mode</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--text:#2b2d30;--title:#16202b;--muted:#5d6570;--line:#e7ebf0;--blue:#0E5F95;--blue-d:#0A4A75;--blue-soft:#E8F0F7;--sky:#cfe3f3;--gold:#C9973F;--soft:#f5f7fa}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:#fff;-webkit-font-smoothing:antialiased}
+button{font:inherit;border:0;background:none;cursor:pointer;color:inherit}
+a{color:inherit}
+.wrap{max-width:420px;margin:0 auto;padding:0 18px}
+
+/* hero */
+.hero{background:linear-gradient(180deg,#eef4fa 0%,#cfe3f3 38%,#8fbfe4 100%);padding-bottom:120px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;inset:auto -10% -1px -10%;height:60px;background:radial-gradient(60% 100% at 50% 100%,rgba(255,255,255,.55),transparent)}
+.top{display:flex;justify-content:center;padding:16px 0 6px}
+.top img{height:26px}
+.steps{display:flex;align-items:flex-start;justify-content:center;gap:0;margin:14px auto 22px;max-width:300px}
+.st{flex:1;text-align:center;font-size:10.5px;font-weight:700;color:var(--title);position:relative}
+.st span{display:block;height:28px;line-height:1.25}
+.st i{display:block;width:12px;height:12px;border-radius:50%;margin:6px auto 0;border:2px solid var(--title);background:#fff;position:relative;z-index:2}
+.st.done i{background:var(--title)}
+.st.done i:after{content:"";position:absolute;left:2px;top:0;width:3px;height:6px;border:solid #fff;border-width:0 1.6px 1.6px 0;transform:rotate(45deg)}
+.st.off{color:#8aa3b8}.st.off i{border-color:#b9cbdb;background:#e9f1f8}
+.st:not(:last-child):after{content:"";position:absolute;top:40px;left:calc(50% + 10px);right:calc(-50% + 10px);height:2px;background:var(--title)}
+.st.cur:after{background:#b9cbdb}
+
+/* phone mockup */
+.phone{width:116px;height:156px;margin:0 auto;border-radius:20px;background:#0f1720;padding:5px;box-shadow:0 14px 30px rgba(14,95,149,.28);animation:float 5s ease-in-out infinite}
+.phone .scr{width:100%;height:100%;border-radius:16px;background:#fff;overflow:hidden;position:relative;display:flex;flex-direction:column;align-items:center}
+.phone .nt{width:34px;height:7px;border-radius:6px;background:#0f1720;margin-top:5px}
+.phone .art{width:62px;height:62px;border-radius:16px;margin-top:12px;background:linear-gradient(145deg,#2b7bbd,#0E5F95);display:grid;place-items:center;box-shadow:0 6px 14px rgba(14,95,149,.35)}
+.phone .ttl{font-size:6.5px;font-weight:800;color:var(--title);margin-top:9px;align-self:flex-start;padding-left:10px}
+.phone .sub{font-size:5px;color:var(--muted);align-self:flex-start;padding-left:10px;margin-top:2px}
+.phone .bar{width:84%;height:2.5px;background:var(--line);border-radius:3px;margin-top:9px;position:relative}
+.phone .bar b{position:absolute;left:0;top:0;bottom:0;width:46%;background:var(--blue);border-radius:3px;animation:prog 6s linear infinite}
+.phone .ctl{display:flex;gap:9px;align-items:center;margin-top:7px}
+.phone .ctl i{width:6px;height:6px;border-radius:2px;background:#c9d3dd}
+.phone .ctl em{width:15px;height:15px;border-radius:50%;background:var(--blue);display:grid;place-items:center}
+@keyframes float{50%{transform:translateY(-6px)}}
+@keyframes prog{from{width:8%}to{width:92%}}
+
+h1{font-size:24px;line-height:1.25;font-weight:700;color:var(--title);text-align:center;margin:22px auto 8px;max-width:330px}
+.lede{font-size:14px;line-height:1.5;text-align:center;color:#3c4d5d;max-width:330px;margin:0 auto}
+
+/* offer box pulled over hero */
+.offer{margin-top:-104px;position:relative;z-index:3}
+.bens{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 30px rgba(16,40,70,.08)}
+.ben{display:flex;align-items:center;gap:12px;padding:14px 14px;font-size:14px;font-weight:600;color:var(--title)}
+.ben+.ben{border-top:1px solid var(--line)}
+.ben svg{flex:none}
+.gift{display:flex;gap:12px;align-items:center;background:var(--blue-soft);border-radius:14px;padding:12px 14px;margin-top:14px}
+.gift .gi{width:42px;height:42px;border-radius:11px;background:linear-gradient(145deg,#2b7bbd,#0E5F95);display:grid;place-items:center;flex:none}
+.gift small{display:block;color:var(--blue);font-size:11.5px;font-weight:700}
+.gift b{display:block;font-size:13.5px;line-height:1.35;color:var(--title);font-weight:700;margin-top:2px}
+.rows{margin-top:18px}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:600;color:var(--title);padding:7px 0}
+.row s{color:var(--muted);font-weight:500;margin-right:6px}
+.tag{font-size:11px;font-weight:700;color:#b7791f;background:#fdf3e1;border:1px solid #f2dcb3;border-radius:999px;padding:3px 9px}
+.disc{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.55;color:var(--muted);margin-top:12px}
+.disc b{color:var(--title)}
+.buy{display:flex;align-items:center;justify-content:center;width:100%;height:54px;border-radius:12px;background:var(--blue);color:#fff;font-size:17px;font-weight:700;margin-top:14px;box-shadow:0 8px 18px rgba(14,95,149,.25);transition:background .15s,transform .1s;text-decoration:none}
+.buy:hover{background:var(--blue-d)}.buy:active{transform:scale(.99)}
+.no{display:flex;align-items:center;justify-content:center;width:100%;height:50px;border-radius:12px;border:1.5px solid var(--blue);color:var(--blue);font-size:16px;font-weight:600;margin-top:10px;text-decoration:none;background:#fff}
+#hotmart-sales-funnel{margin-top:14px}
+
+/* sections */
+h2{font-size:21px;line-height:1.3;font-weight:700;color:var(--title);text-align:center;margin:44px auto 16px;max-width:320px}
+.card{background:var(--soft);border-radius:16px;padding:16px 16px 0;margin-bottom:12px;overflow:hidden}
+.card h3{font-size:15px;font-weight:700;color:var(--title)}
+.card p{font-size:13px;line-height:1.55;color:var(--muted);margin-top:6px}
+.ill{height:170px;margin:16px -16px 0;position:relative;overflow:hidden}
+.ill svg{display:block;width:100%;height:100%}
+
+.how{background:var(--soft);border-radius:16px;padding:16px}
+.hw{display:flex;gap:14px;position:relative;padding-bottom:16px}
+.hw:last-child{padding-bottom:0}
+.hw .n{font-style:normal;width:26px;height:26px;border-radius:8px;background:linear-gradient(145deg,#4a95cf,#0E5F95);color:#fff;font-size:13px;font-weight:800;display:grid;place-items:center;flex:none;z-index:1}
+.hw:not(:last-child):before{content:"";position:absolute;left:12px;top:28px;bottom:2px;border-left:2px dotted #b9cbdb}
+.hw b{display:block;font-size:15px;color:var(--title);font-weight:700}
+.hw span{display:block;font-size:13px;color:var(--muted);margin-top:2px;line-height:1.45}
+
+.revs{display:none}
+.revs.on{display:block}
+.rv{background:var(--soft);border-radius:16px;padding:16px;margin-bottom:10px}
+.rv .stars{display:flex;gap:3px}
+.rv .stars i{width:16px;height:16px;background:var(--gold);color:#fff;font-style:normal;font-size:10px;display:grid;place-items:center;border-radius:3px}
+.rv b{display:block;font-size:14px;color:var(--title);margin-top:10px}
+.rv p{font-size:13px;line-height:1.55;color:var(--muted);margin-top:6px}
+.rv small{display:block;text-align:right;font-size:12.5px;font-weight:600;color:var(--title);margin-top:8px}
+
+.bottom{margin:28px 0 10px}
+.foot{text-align:center;font-size:11.5px;color:#8a929b;line-height:1.6;padding:24px 0 40px}
+.foot a{color:#8a929b}
+@media (prefers-reduced-motion:reduce){.phone,.phone .bar b{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="top"><img src="/images/logo.svg" alt="VEREDA"></div>
+    <div class="steps" aria-label="Progress">
+      <div class="st done"><span>Plan<br>chosen</span><i></i></div>
+      <div class="st cur"><span>Special<br>offer</span><i></i></div>
+      <div class="st off"><span>Start your<br>journey</span><i></i></div>
+    </div>
+
+    <div class="phone" aria-hidden="true"><div class="scr">
+      <div class="nt"></div>
+      <div class="art"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13" width="4" height="7" rx="1.5" fill="#fff"/><rect x="17" y="13" width="4" height="7" rx="1.5" fill="#fff"/></svg></div>
+      <div class="ttl">Rooted &amp; Unshakable</div>
+      <div class="sub">Day 3 · Listening</div>
+      <div class="bar"><b></b></div>
+      <div class="ctl"><i></i><em><svg width="6" height="7" viewBox="0 0 6 7"><path d="M0 0l6 3.5L0 7z" fill="#fff"/></svg></em><i></i></div>
+    </div></div>
+
+    <h1>Hear God’s Word in a voice that stays with you all day</h1>
+    <p class="lede">Unlock Audio Mode: every devotional, prayer and Bible chapter read aloud — online or offline, wherever your day takes you.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="offer">
+    <div class="bens">
+      <div class="ben"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E5F95" stroke-width="2" stroke-linecap="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13" width="4" height="7" rx="1.5"/><rect x="17" y="13" width="4" height="7" rx="1.5"/></svg>Keep growing on the days reading is hard</div>
+      <div class="ben"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E5F95" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M7 8h10"/></svg>Turn down the noise, tune in to truth</div>
+      <div class="ben"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E5F95" stroke-width="2" stroke-linecap="round"><path d="M12 3a3 3 0 0 1 3 3v5a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Choose the voice that speaks to you</div>
+      <div class="ben"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E5F95" stroke-width="2" stroke-linecap="round"><path d="M12 7c-2-2-5-2.5-8-2v13c3-.5 6 0 8 2 2-2 5-2.5 8-2V5c-3-.5-6 0-8 2z"/><path d="M12 7v13"/></svg>Make your daily walk effortless</div>
+    </div>
+
+    <div class="gift">
+      <div class="gi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M3 13h18M12 9v12M12 9c-2-4-6-4-6-1.5S9 9 12 9zM12 9c2-4 6-4 6-1.5S15 9 12 9z"/></svg></div>
+      <div><small>Bonus included</small><b>Scripture wallpapers to begin each morning with God’s Word</b></div>
+    </div>
+
+    <div class="rows">
+      <div class="row"><span>VEREDA Audio Mode</span><span><s id="compare"></s><span id="price"></span></span></div>
+      <div class="row"><span><span id="wpN"></span> Scripture wallpapers</span><span class="tag">Gift</span></div>
+    </div>
+
+    <div class="disc">By tapping <b>“Add to my plan”</b>, you authorize a <b>one-time charge of <span class="pr"></span></b> for this add-on to the payment method you just used. This is a one-time purchase, not a subscription, and it is processed <b>immediately</b> when you tap the button.</div>
+
+    <div id="hotmart-sales-funnel"></div>
+    <a class="buy" id="buy" href="#">Add to my plan</a>
+    <a class="no" id="no" href="#">No, thank you</a>
+  </section>
+
+  <h2>Audio Mode goes wherever life takes you</h2>
+
+  <div class="card">
+    <h3>Stay with God on the busiest days</h3>
+    <p>When your hands are full, your time with God doesn’t have to stop. Download today’s lesson and listen on the way to work, while you cook or before you sleep — even without Wi-Fi.</p>
+    <div class="ill" aria-hidden="true"><svg viewBox="0 0 360 170" preserveAspectRatio="xMidYMid slice">
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcecf8"/><stop offset="1" stop-color="#9cc7e8"/></linearGradient></defs>
+      <rect width="360" height="170" fill="url(#g1)"/>
+      <path d="M0 130 C70 105 120 125 180 112 S300 95 360 118 V170 H0Z" fill="#7fb2da"/>
+      <path d="M0 150 C80 132 150 150 220 138 S320 128 360 140 V170 H0Z" fill="#5e98c6"/>
+      <g fill="#0E5F95" opacity=".9"><rect x="128" y="34" width="104" height="118" rx="16"/></g>
+      <rect x="135" y="41" width="90" height="104" rx="11" fill="#fff"/>
+      <rect x="160" y="54" width="40" height="40" rx="10" fill="#2b7bbd"/>
+      <path d="M170 78v-6a10 10 0 0 1 20 0v6" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <rect x="148" y="104" width="64" height="4" rx="2" fill="#e7ebf0"/><rect x="148" y="104" width="30" height="4" rx="2" fill="#0E5F95"/>
+      <circle cx="180" cy="124" r="8" fill="#0E5F95"/><path d="M177 120l7 4-7 4z" fill="#fff"/>
+      <g stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"><path d="M250 70a26 26 0 0 1 0 40"/><path d="M262 60a42 42 0 0 1 0 60"/><path d="M110 70a26 26 0 0 0 0 40"/><path d="M98 60a42 42 0 0 0 0 60"/></g>
+    </svg></div>
+  </div>
+
+  <div class="card">
+    <h3>A voice that helps you slow down</h3>
+    <p>Some days it’s hard to sit and read. Let Scripture and prayer be read to you, calmly, in the voice that feels right — no rush, no pressure.</p>
+    <div class="ill" aria-hidden="true"><svg viewBox="0 0 360 170" preserveAspectRatio="xMidYMid slice">
+      <rect width="360" height="170" fill="#eef4fa"/>
+      <g transform="translate(40 30)">
+        <rect width="280" height="40" rx="12" fill="#fff" stroke="#cfe3f3"/><circle cx="22" cy="20" r="11" fill="#0E5F95"/><rect x="42" y="13" width="90" height="6" rx="3" fill="#16202b"/><rect x="42" y="23" width="60" height="5" rx="2.5" fill="#b9cbdb"/>
+        <g fill="#0E5F95"><rect x="196" y="14" width="4" height="12" rx="2"/><rect x="204" y="9" width="4" height="22" rx="2"/><rect x="212" y="12" width="4" height="16" rx="2"/><rect x="220" y="6" width="4" height="28" rx="2"/><rect x="228" y="13" width="4" height="14" rx="2"/><rect x="236" y="10" width="4" height="20" rx="2"/><rect x="244" y="15" width="4" height="10" rx="2"/></g>
+        <circle cx="262" cy="20" r="7" fill="none" stroke="#0E5F95" stroke-width="2.5"/><path d="M258.5 20l2.5 2.5 4.5-5" stroke="#0E5F95" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(40 80)" opacity=".85">
+        <rect width="280" height="36" rx="12" fill="#fff" stroke="#e7ebf0"/><circle cx="22" cy="18" r="10" fill="#C9973F"/><rect x="42" y="12" width="80" height="6" rx="3" fill="#16202b"/><rect x="42" y="21" width="52" height="5" rx="2.5" fill="#b9cbdb"/>
+      </g>
+      <g transform="translate(40 124)" opacity=".6">
+        <rect width="280" height="36" rx="12" fill="#fff" stroke="#e7ebf0"/><circle cx="22" cy="18" r="10" fill="#4a95cf"/><rect x="42" y="12" width="70" height="6" rx="3" fill="#16202b"/><rect x="42" y="21" width="46" height="5" rx="2.5" fill="#b9cbdb"/>
+      </g>
+    </svg></div>
+  </div>
+
+  <div class="card">
+    <h3>Let His Word stay with you longer</h3>
+    <p>Hearing helps truth go deeper — from your head to your heart. Carry today’s passage through your day and let it shape your thoughts and choices.</p>
+    <div class="ill" aria-hidden="true"><svg viewBox="0 0 360 170" preserveAspectRatio="xMidYMid slice">
+      <defs><linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf3e1"/><stop offset=".6" stop-color="#f7e2bd"/><stop offset="1" stop-color="#e9c98f"/></linearGradient></defs>
+      <rect width="360" height="170" fill="url(#g3)"/>
+      <circle cx="250" cy="74" r="34" fill="#fff" opacity=".7"/>
+      <path d="M0 128 C90 108 170 120 250 102 S330 96 360 100 V170 H0Z" fill="#7fa7c9"/>
+      <path d="M0 150 C100 130 190 146 270 132 S340 126 360 128 V170 H0Z" fill="#0E5F95"/>
+      <path d="M60 170 C110 150 150 140 190 128 S240 112 250 104" stroke="#fff" stroke-width="3" stroke-dasharray="2 9" fill="none" stroke-linecap="round"/>
+      <g fill="#16202b"><rect x="248" y="70" width="4" height="36" rx="1"/><rect x="238" y="80" width="24" height="4" rx="1"/></g>
+    </svg></div>
+  </div>
+
+  <h2>How it works</h2>
+  <div class="how">
+    <div class="hw"><i class="n">1</i><div><b>Open today’s lesson</b><span>Your daily step on the trail</span></div></div>
+    <div class="hw"><i class="n">2</i><div><b>Tap “Listen”</b><span>Pick your voice, download if you want, and press play</span></div></div>
+    <div class="hw"><i class="n">3</i><div><b>Pray and reflect</b><span>Follow along with the guided prayer</span></div></div>
+    <div class="hw"><i class="n">4</i><div><b>Keep your lamp lit</b><span>Listen daily and keep your heart anchored in Scripture</span></div></div>
+  </div>
+
+  <section class="revs" id="revs">
+    <h2>What our members say</h2>
+    <div id="revList"></div>
+  </section>
+
+  <div class="bottom">
+    <a class="buy" data-buy href="#">Add Audio Mode — <span class="pr"></span></a>
+    <a class="no" data-no href="#">No, thank you</a>
+  </div>
+
+  <p class="foot">One-time purchase · Secure payment by Hotmart<br>Questions? <a id="sup" href="#"></a></p>
+</main>
+
+<script>
+/* ===== Settings — edit here ===== */
+const CONFIG = {
+  price: 14.99,            // one-time price (USD)
+  compareAt: 29.99,        // crossed-out "regular" price (set null to hide)
+  wallpapers: 20,          // number of bonus wallpapers
+  // Hotmart one-click upsell: paste the funnel widget code from Hotmart and set useHotmartWidget:true
+  useHotmartWidget: false,
+  buyUrl: "#",             // fallback: Hotmart checkout link of the Audio Mode product
+  noThanksUrl: "https://vereda-members.vercel.app/", // where "No, thank you" goes (next step / thank-you page)
+  supportEmail: "support@vereda.app",
+  // Only REAL reviews from real members (with permission). Empty = section hidden.
+  reviews: [
+    // {title:"…", text:"…", name:"Sarah M.", stars:5}
+  ]
+};
+/* ================================ */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const money=v=>'$'+Number(v).toFixed(2);
+$('#price').textContent=money(CONFIG.price);
+if(CONFIG.compareAt) $('#compare').textContent=money(CONFIG.compareAt);
+$$('.pr').forEach(e=>e.textContent=money(CONFIG.price));
+$('#wpN').textContent=CONFIG.wallpapers;
+$('#sup').textContent=CONFIG.supportEmail; $('#sup').href='mailto:'+CONFIG.supportEmail;
+
+const pass=u=>{try{const t=new URL(u,location.href);new URLSearchParams(location.search).forEach((v,k)=>{if(!t.searchParams.has(k))t.searchParams.set(k,v)});return t.toString()}catch(e){return u}};
+$$('#no,[data-no]').forEach(a=>a.href=pass(CONFIG.noThanksUrl));
+
+if(CONFIG.useHotmartWidget){
+  $$('#buy,[data-buy]').forEach(a=>a.style.display='none');
+  $('#no').style.display='none';
+  const s=document.createElement('script');s.src='https://checkout.hotmart.com/lib/hotmart-checkout-elements.js';
+  s.onload=()=>{try{checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel')}catch(e){}};
+  document.body.appendChild(s);
+}else{
+  $$('#buy,[data-buy]').forEach(a=>a.href=pass(CONFIG.buyUrl));
+  $('[data-buy]').addEventListener('click',e=>{if(CONFIG.buyUrl==='#'){e.preventDefault();$('#buy').scrollIntoView({behavior:'smooth',block:'center'})}});
+}
+
+if(CONFIG.reviews.length){
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  $('#revList').innerHTML=CONFIG.reviews.map(r=>`<div class="rv"><div class="stars">${'<i>★</i>'.repeat(r.stars||5)}</div><b>${esc(r.title||'')}</b><p>${esc(r.text)}</p><small>${esc(r.name)}</small></div>`).join('');
+  $('#revs').classList.add('on');
+}
+</script>
+</body>
+</html>
