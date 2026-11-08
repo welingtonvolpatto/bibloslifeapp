@@ -172,8 +172,6 @@ h2{font-size:21px;line-height:1.3;font-weight:700;color:var(--title);text-align:
 
     <div class="once"><span>🔒</span><div><b>You won’t see this offer again.</b> This half-price option exists only on this page, right after your purchase. Once you leave, Audio Mode returns to its regular price.</div></div>
     <div id="hotmart-sales-funnel"></div>
-    <a class="buy" id="buy" href="#">Yes! Add Audio Mode for <span class="pr"></span></a>
-    <a class="no" id="no" href="#">No thanks, I’ll keep reading only</a>
   </section>
 
   <h2>Everything you get — at half the price</h2>
@@ -210,10 +208,7 @@ h2{font-size:21px;line-height:1.3;font-weight:700;color:var(--title);text-align:
     <div id="revList"></div>
   </section>
 
-  <div class="bottom">
-    <a class="buy" data-buy href="#">Claim 50% off — <span class="pr"></span></a>
-    <a class="no" data-no href="#">No thanks, I’ll pass on this offer</a>
-  </div>
+  
 
   <p class="foot">One-time purchase · 50% off, available only on this page · Secure payment by Hotmart<br>Questions? <a id="sup" href="#"></a></p>
 </main>
@@ -253,14 +248,14 @@ $$('#no,[data-no]').forEach(a=>a.href=pass(CONFIG.noThanksUrl));
 
 if(CONFIG.useHotmartWidget){
   // HOTMART - Sales Funnel Widget (one-click upsell)
-  $('#buy').style.display='none'; $('#no').style.display='none';
+  
   const s=document.createElement('script');s.src='https://checkout.hotmart.com/lib/hotmart-checkout-elements.js';
   s.onload=()=>{try{checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel')}catch(e){}};
   document.body.appendChild(s);
-  $$('[data-buy]').forEach(a=>{a.href='#hotmart-sales-funnel';a.addEventListener('click',e=>{e.preventDefault();$('#hotmart-sales-funnel').scrollIntoView({behavior:'smooth',block:'center'})})});
+  
 }else{
   $$('#buy,[data-buy]').forEach(a=>a.href=pass(CONFIG.buyUrl));
-  $('[data-buy]').addEventListener('click',e=>{if(CONFIG.buyUrl==='#'){e.preventDefault();$('#buy').scrollIntoView({behavior:'smooth',block:'center'})}});
+  $('[data-buy]')&&$('[data-buy]').addEventListener('click',e=>{if(CONFIG.buyUrl==='#'){e.preventDefault();$('#buy').scrollIntoView({behavior:'smooth',block:'center'})}});
 }
 
 if(CONFIG.reviews.length){
