@@ -570,6 +570,18 @@ function progress(){
   $('progress').firstElementChild.style.width = Math.min(100,qIndex/QUESTION_STEPS*100)+'%';
 }
 
+
+/* ===== Funnel tracking (Supabase quiz_events) ===== */
+const TRACK={url:"https://okgqxzehlqzdmwxpjdkj.supabase.co/rest/v1/quiz_events",key:"sb_publishable_4EvJKXKLm0jrZrm7k-EnGA_u0N5nesc",quiz:"archetype"};
+TRACK.sid=(()=>{try{let v=sessionStorage.getItem('vq_sid');if(!v){v=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)).replace(/-/g,'').slice(0,24);sessionStorage.setItem('vq_sid',v);}return v;}catch(e){return Date.now().toString(36)+Math.random().toString(36).slice(2,10);}})();
+function track(step,key,event,plan){
+  try{const q=new URLSearchParams(location.search);
+    fetch(TRACK.url,{method:"POST",keepalive:true,headers:{"apikey":TRACK.key,"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,step,step_key:String(key).slice(0,40),event:event||"view",plan:plan||null,
+        utm_source:(q.get('utm_source')||'').slice(0,120)||null,utm_campaign:(q.get('utm_campaign')||'').slice(0,200)||null,
+        device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop'})}).catch(()=>{});
+  }catch(e){}
+}
 function render(){
   const s = STEPS[state.i];
   window.scrollTo(0,0);
@@ -580,6 +592,7 @@ function render(){
   $('progress').style.display = showProg?'':'none'; if(showProg) progress();
   setCTA(null);
   (R[s.type])(s);
+  track(state.i, s.key||s.type);
 }
 
 const R = {
@@ -803,6 +816,8 @@ function checkout(){
   const target=p.checkoutUrl||CONFIG.checkoutUrl;
   if(!target||target==="#") return;
   const u=new URL(target,location.href);
+  track(state.i,'checkout','checkout',p.name||String(state.plan));
+  if(!u.searchParams.has('sck')&&!new URLSearchParams(location.search).has('sck')) u.searchParams.set('sck','vq_'+TRACK.quiz+'_'+TRACK.sid);
   // keep ad tracking (utm_*, src, sck, xcod, fbclid...) from the landing URL
   new URLSearchParams(location.search).forEach((v,k)=>{ if(!u.searchParams.has(k)) u.searchParams.set(k,v); });
   if(state.email) u.searchParams.set('email',state.email);
