@@ -626,7 +626,7 @@ const R = {
         <button class="tile" data-g="male">${img(CONFIG.images.gender_male,"img","","168/240")}<span class="lbl">Male <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
         <button class="tile" data-g="female">${img(CONFIG.images.gender_female,"img","","168/240")}<span class="lbl">Female <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
       </div>
-      <div class="legal">By continuing you agree to our<br><a href="${CONFIG.links.terms}">Terms of Service</a> | <a href="${CONFIG.links.privacy}">Privacy Policy</a> | <a href="${CONFIG.links.subscription}">Subscription Policy</a><br><a href="${CONFIG.links.cookies}">Cookie Policy</a><p style="margin-top:12px">Please review before continuing</p></div>
+      <div class="legal" style="font-size:11px;opacity:.75"><a href="${CONFIG.links.terms}">Terms</a> · <a href="${CONFIG.links.privacy}">Privacy</a></div>
     </section>`;
     view.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{t.classList.add('sel');state.gender=t.dataset.g;state.answers.gender=t.dataset.g;setTimeout(()=>go(),250);});
   },
