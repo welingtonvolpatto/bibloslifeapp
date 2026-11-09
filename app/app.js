@@ -938,7 +938,7 @@ function openChat(){
   const bottom=()=>{ body.scrollTop=body.scrollHeight; };
   function paint(){
     const first=S.chat[0]?.ts||Date.now();
-    let h=`<div class="ch-date">${day(first)}</div><div class="bub a">${chatMd(CHAT_HELLO)}</div><div class="ch-note">AI assistant · it can make mistakes. Not a substitute for pastoral or professional care.</div>`;
+    let h=`<div class="ch-date">${day(first)}</div><div class="bub a">${chatMd(CHAT_HELLO)}</div><div class="ch-note">${S.chatMode==="ai"?"AI assistant · it can make mistakes.":"Prepared answers based on Scripture."} Not a substitute for pastoral or professional care.</div>`;
     if(!S.chat.length) h+=`<div class="ch-chips">${CHAT_CHIPS.map(c=>`<button class="chip">${esc(c)}</button>`).join("")}</div>`;
     S.chat.forEach(m=>{ h+=m.r==="u"?`<div class="bub u">${esc(m.t).replace(/\n/g,"<br>")}</div>`:`<div class="bub a${m.err?" err":""}">${chatMd(m.t)}${m.err?`<button class="ch-retry">Try again</button>`:""}</div>`; });
     list.innerHTML=h;
@@ -957,6 +957,7 @@ function openChat(){
       const r=await fetch(`${SB_URL}/functions/v1/spiritual-chat`,{method:"POST",headers:{"Content-Type":"application/json","apikey":SB_KEY,"Authorization":`Bearer ${tk}`},
         body:JSON.stringify({messages:S.chat.filter(m=>!m.err).slice(-20).map(m=>({role:m.r==="u"?"user":"assistant",content:m.t}))})});
       if(!r.ok){ const j=await r.json().catch(()=>({})); if(j.error) failMsg=j.error; throw new Error("http"); }
+      { const md=r.headers.get("x-chat-mode"); if(md&&md!==S.chatMode){ S.chatMode=md; save(); } }
       const rd=r.body.getReader(), dec=new TextDecoder();
       while(true){ const {value,done}=await rd.read(); if(done) break; out+=dec.decode(value,{stream:true});
         if(out.includes("\u0000ERR")) throw new Error("llm");

@@ -1,10 +1,12 @@
 // VEREDA — Spiritual Assistant chat (streams plain text back to the app)
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { kbReply } from "./engine.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Expose-Headers": "x-chat-mode",
 };
 const MAX_PER_DAY = 60;      // messages per member per day
 const MAX_TURNS = 20;        // history sent to the model
@@ -27,6 +29,23 @@ Boundaries:
 - If someone mentions wanting to harm themselves or others, being abused, or being in danger: respond with compassion, tell them they are not alone, and urge them to contact emergency services or a crisis line right now (in the US: call or text 988; elsewhere: local emergency number). Keep a path to help open.
 - Do not discuss politics, give voting advice, or write content unrelated to faith and life with God; gently steer back.
 - Never claim to be human. If asked, say you are an AI assistant created to support their walk with God.`;
+
+
+function typed(text: string): Response {
+  const enc = new TextEncoder();
+  const parts = text.match(/\S+\s*/g) || [text];
+  const stream = new ReadableStream({
+    async start(ctrl) {
+      await new Promise((r) => setTimeout(r, 450));
+      for (let i = 0; i < parts.length; i += 3) {
+        ctrl.enqueue(enc.encode(parts.slice(i, i + 3).join("")));
+        await new Promise((r) => setTimeout(r, 35));
+      }
+      ctrl.close();
+    },
+  });
+  return new Response(stream, { headers: { ...CORS, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache", "x-chat-mode": "kb" } });
+}
 
 function json(status: number, body: unknown) {
   return new Response(JSON.stringify(body), { status, headers: { ...CORS, "Content-Type": "application/json" } });
@@ -69,7 +88,7 @@ Deno.serve(async (req) => {
   const { data: cfg } = await admin.from("app_config").select("key,value").in("key", ["anthropic_api_key", "openai_api_key", "chat_model"]);
   const get = (k: string) => cfg?.find((r) => r.key === k)?.value || "";
   const akey = get("anthropic_api_key"), okey = get("openai_api_key");
-  if (!akey && !okey) return json(503, { error: "The assistant is being set up. Please try again soon." });
+  if (!akey && !okey) return typed(kbReply(msgs));
 
   const enc = new TextEncoder();
   const stream = new ReadableStream({
@@ -111,5 +130,5 @@ Deno.serve(async (req) => {
       ctrl.close();
     },
   });
-  return new Response(stream, { headers: { ...CORS, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache" } });
+  return new Response(stream, { headers: { ...CORS, "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-cache", "x-chat-mode": "ai" } });
 });
