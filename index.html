@@ -328,6 +328,34 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .rc-st{display:flex;gap:2px;margin-top:4px}.rc-st i{width:14px;height:14px;background:#00B67A;color:#fff;font-style:normal;font-size:9px;display:flex;align-items:center;justify-content:center}
 .rc-i p{font-size:13px;line-height:1.55;color:#3d4046;margin-top:10px}
 .rc-dots{display:flex;justify-content:center;gap:6px;margin-top:10px}.rc-dots i{width:6px;height:6px;border-radius:3px;background:#d4d7dc;transition:all .2s}.rc-dots i.on{width:18px;background:var(--blue)}
+
+.dx{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:14px;box-shadow:0 8px 28px rgba(14,95,149,.08)}
+.dx-tabs{display:flex;gap:6px;background:var(--soft);border-radius:999px;padding:4px}
+.dx-tab{flex:1;position:relative;overflow:hidden;border-radius:999px;padding:9px 4px;font-size:13px;font-weight:700;color:#6b6f76;transition:color .25s,background .25s}
+.dx-tab .ic{margin-right:4px}
+.dx-tab.on{background:#fff;color:var(--blue);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.dx-tab .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--blue);border-radius:3px}
+.dx-tab.on .bar{animation:dxbar 5.5s linear forwards}
+.dx.paused .dx-tab.on .bar{animation:none;width:100%}
+@keyframes dxbar{to{width:100%}}
+.dx-stage{position:relative;margin-top:14px;min-height:258px}
+.dx-pane{position:absolute;inset:0;opacity:0;transform:translateX(18px);transition:opacity .4s ease,transform .4s ease;pointer-events:none}
+.dx-pane.on{opacity:1;transform:none;pointer-events:auto;position:relative}
+.dx-clock{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.04em;text-transform:uppercase}
+.dx-t{font-size:20px;line-height:1.25;font-weight:800;color:var(--title);margin:6px 0 4px}
+.dx-p{font-size:14.5px;line-height:1.45;color:#4a4e55}
+.dx-phone{margin:14px auto 0;max-width:270px;background:linear-gradient(160deg,#0E5F95,#0A4A75);border-radius:22px;padding:12px;box-shadow:0 14px 30px rgba(14,95,149,.28)}
+.dx-card{background:#FDF7EF;border-radius:14px;padding:12px 13px;animation:dxin .5s ease both}
+.dx-pane.on .dx-card{animation:dxin .5s ease both}
+@keyframes dxin{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.dx-tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);background:var(--blue-soft);border-radius:999px;padding:3px 8px}
+.dx-h{font-size:14px;font-weight:800;color:var(--title);margin:8px 0 4px}
+.dx-b{font-family:Georgia,serif;font-size:14px;line-height:1.4;color:#33373d}
+.dx-ref{font-size:11.5px;color:#7a7e85;margin-top:5px}
+.dx-btn{margin-top:10px;text-align:center;font-size:12.5px;font-weight:800;color:#fff;background:var(--blue);border-radius:10px;padding:8px}
+.dx-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
+.dx-dots i{width:6px;height:6px;border-radius:50%;background:#d6d9de;transition:all .3s}
+.dx-dots i.on{width:18px;border-radius:3px;background:var(--blue)}
 </style>
 </head>
 <body>
@@ -425,11 +453,17 @@ const CONFIG = {
   ],
   statsSource: "Based on a voluntary survey of VEREDA users",
   // photo: file in images/ (e.g. "review_ana.webp") — a real customer's photo, with permission; empty = initial letter
-  // "What a day with VEREDA feels like" — brand copy (not testimonials)
+  // "What a day with VEREDA feels like" — interactive day timeline (brand copy, not testimonials)
   experience: [
-    {title:"See yourself in the story", text:"You may know which Bible stories move you. Have you ever paused to ask why? Maybe you see yourself in Peter, ready to take the first step, then afraid of what comes next. VEREDA gives you room to explore that connection and recognize both the courage you already have and the places where you still need God\u2019s guidance."},
-    {title:"Carry it into your day", text:"It\u2019s easy to read about patience in the morning. It\u2019s harder to choose your words carefully when someone hurts you that afternoon. With VEREDA, you can carry one passage into that moment, remember what you read, and ask yourself, \u201cHow do I want to respond this time?\u201d"},
-    {title:"Slow down and stay", text:"Maybe you know the feeling. You finish reading, close your Bible, and realize your mind was somewhere else. VEREDA invites you to slow down. Listen to the passage. Picture where it happened. Stay with the detail you used to read right past. Then carry one thought from that quiet moment with God into the rest of your day."}
+    {time:"Morning", clock:"7:30 AM", icon:"☕", title:"10 minutes with your coffee",
+     text:"Read or listen to today’s short passage — explained in plain words.",
+     mock:{tag:"Day 4 · 10 min", head:"Today’s word", body:"“Ask and it will be given to you; seek and you will find.”", ref:"Luke 11:9", btn:"Read · Listen"}},
+    {time:"Afternoon", clock:"1:00 PM", icon:"⚡", title:"One verse for the hard moment",
+     text:"Carry one passage into your day — and one small action to live it out.",
+     mock:{tag:"Today’s action", head:"Before you reply…", body:"Pause, breathe, and answer with kindness this time.", ref:"James 1:19", btn:"Mark as done"}},
+    {time:"Evening", clock:"9:00 PM", icon:"🌙", title:"Slow down and stay",
+     text:"A short quiz and a prayer to end your day close to God.",
+     mock:{tag:"Day complete", head:"Your lamp is lit 🪔", body:"Quiz done · Prayer said · Tomorrow’s step unlocked.", ref:"Day 4 of 28", btn:"See tomorrow"}}
   ],
   // Real customer reviews only (with permission). Empty = block hidden. Example:
   // {stars:5, title:"...", text:"...", name:"First name", photo:"review_ana.webp"}
@@ -795,7 +829,7 @@ const R = {
       ${endorse}${stats}${ratingBlock}
       <div class="o-guide"><b>Study the Bible with clear guidance — not on your own</b>
         <div>${ICON.smile}Simple explanations for every chapter</div><div>${ICON.note}Key takeaways so nothing gets missed</div><div>${ICON.bolt}A daily action to live out what you read</div></div>
-      ${C.experience&&C.experience.length?`<h3 class="o-h2">What a day with <span class="hl">${esc(C.brandName)}</span> feels like</h3><div class="o-exp">${C.experience.map((e,i)=>`<div class="o-card ex"><span class="exn">${i+1}</span><b>${esc(e.title)}</b><p>${esc(e.text)}</p></div>`).join('')}</div>`:''}
+      ${C.experience&&C.experience.length?`<h3 class="o-h2">What a day with <span class="hl">${esc(C.brandName)}</span> feels like</h3><div class="dx"><div class="dx-tabs">${C.experience.map((e,i)=>`<button class="dx-tab ${i?'':'on'}" data-x="${i}"><span class="ic">${e.icon}</span>${esc(e.time)}<span class="bar"></span></button>`).join('')}</div><div class="dx-stage">${C.experience.map((e,i)=>`<div class="dx-pane ${i?'':'on'}" data-x="${i}"><span class="dx-clock">${e.icon} ${esc(e.clock)}</span><div class="dx-t">${esc(e.title)}</div><p class="dx-p">${esc(e.text)}</p>${e.mock?`<div class="dx-phone"><div class="dx-card"><span class="dx-tag">${esc(e.mock.tag)}</span><div class="dx-h">${esc(e.mock.head)}</div><div class="dx-b">${esc(e.mock.body)}</div><div class="dx-ref">${esc(e.mock.ref)}</div><div class="dx-btn">${esc(e.mock.btn)}</div></div></div>`:''}</div>`).join('')}</div><div class="dx-dots">${C.experience.map((e,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div></div>`:''}
       <h3 class="o-h2">People often ask</h3>
       <div class="faq">${C.faq.map(f=>`<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}</div>
       <div id="pB">${plansBlock()}</div>
@@ -806,6 +840,18 @@ const R = {
     view.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showWeek(+b.dataset.w)); showWeek(0);
     const sync=()=>{view.querySelectorAll('.o-plan').forEach(p=>p.classList.toggle('sel',+p.dataset.i===state.plan));view.querySelectorAll('.tdyn').forEach(t=>t.textContent=VP?VP.terms(P[state.plan],state.plan):P[state.plan].terms);};
     view.querySelectorAll('.o-plan').forEach(p=>p.onclick=()=>{state.plan=+p.dataset.i;sync();});
+    // day timeline: tabs + auto-advance + swipe
+    (function(){const dx=view.querySelector('.dx'); if(!dx) return; const n=dx.querySelectorAll('.dx-tab').length; let cur=0, auto=true;
+      const show=k=>{cur=(k+n)%n; dx.querySelectorAll('[data-x]').forEach(el=>el.classList.toggle('on',+el.dataset.x===cur)); dx.querySelectorAll('.dx-dots i').forEach((d,j)=>d.classList.toggle('on',j===cur));
+        const t=dx.querySelector('.dx-tab.on .bar'); if(t){t.style.animation='none'; void t.offsetWidth; t.style.animation='';}};
+      const stop=()=>{auto=false; dx.classList.add('paused'); clearInterval(window.__dxT);};
+      clearInterval(window.__dxT); window.__dxT=setInterval(()=>{ if(!document.body.contains(dx)) return clearInterval(window.__dxT); if(auto) show(cur+1); },5500);
+      dx.querySelectorAll('.dx-tab').forEach(b=>b.onclick=()=>{stop(); show(+b.dataset.x);});
+      let x0=null; const st=dx.querySelector('.dx-stage');
+      st.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+      st.addEventListener('touchend',e=>{ if(x0==null) return; const dxp=e.changedTouches[0].clientX-x0; if(Math.abs(dxp)>40){stop(); show(cur+(dxp<0?1:-1));} x0=null;});
+    })();
+
     view.querySelectorAll('.sub').forEach(b=>b.onclick=checkout);
     const rc=$('rc'); if(rc){const dots=view.querySelectorAll('.rc-dots i');const n=dots.length;let idx=0;
       rc.addEventListener('scroll',()=>{idx=Math.round(rc.scrollLeft/rc.clientWidth);dots.forEach((d,j)=>d.classList.toggle('on',j===idx));},{passive:true});
