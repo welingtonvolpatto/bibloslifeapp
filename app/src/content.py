@@ -145,12 +145,12 @@ LESSONS = {
   {"v": "Jeremiah 33:3"}
  ],
  "quiz": [
-  {"q": "What does Psalm 62:8 invite us to do?", "o": ["Hide our feelings from God", "Pour out our hearts before him", "Pray only when things are good", "Use formal words in prayer"], "a": 1, "e": "The psalmist calls us to trust God at all times and pour out our hearts, because God is our refuge."},
-  {"q": "According to Philippians 4:6-7, what guards our hearts and minds?", "o": ["Our own planning", "The peace of God", "Avoiding hard situations", "Other people’s approval"], "a": 1, "e": "When we bring our requests to God with thanksgiving, his peace — which surpasses understanding — guards our hearts and minds."},
-  {"q": "What should accompany our requests in Philippians 4:6?", "o": ["Thanksgiving", "Fasting only", "Perfect wording", "A long list of good deeds"], "a": 0, "e": "Paul says to make our requests known “by prayer and petition with thanksgiving.”"},
-  {"q": "What simple prayer pattern did today’s devotional suggest?", "o": ["Read, repeat, rest", "Thank, tell, ask, trust", "Kneel, chant, wait", "Plan, decide, inform"], "a": 1, "e": "Thank God for something, tell him honestly how you feel, ask for what you need, and trust him with the outcome."}
+  {"q": "What does Psalm 62:8 invite us to do?", "o": ["Hide our feelings from God", "Pour out our hearts before him", "Pray only when things are good", "Use formal words in prayer"], "a": 1, "e": "The psalmist calls us to trust God at all times and pour out our hearts before him, because God is our refuge."},
+  {"q": "What did the disciples ask Jesus in Luke 11:1?", "o": ["“Lord, teach us to preach”", "“Lord, show us a miracle”", "“Lord, teach us to pray”", "“Lord, make us wise”"], "a": 2, "e": "After watching Jesus pray, a disciple asked, “Lord, teach us to pray” — and Jesus answered with the prayer in Luke 11:2-4."},
+  {"q": "What do the four words of today’s prayer pattern stand for?", "o": ["Think, Teach, Act, Try", "Thank, Tell, Ask, Trust", "Thank, Testify, Ask, Talk", "Talk, Tell, Accept, Try"], "a": 1, "e": "Thank God for what he has done, tell him honestly what’s inside you, ask for what you need, and trust him with the outcome."},
+  {"q": "What is the main message of “No Perfect Words Required”?", "o": ["Prayer needs the right words and setting", "Prayer is about rituals and formality", "Prayer is an honest conversation with God, not a performance", "Prayer only works at specific times of day"], "a": 2, "e": "Prayer is not a ceremony — it’s a conversation with your Father. Whether your words are eloquent or broken, God hears."}
  ],
- "action": "Set a 5-minute timer and pray using Thank, Tell, Ask, Trust. No perfect words — just honesty.",
+ "action": "Write down three names — people you love or people who are hurting. Pray for each one by name, out loud, using Thank, Tell, Ask, Trust.",
  "journal": "What is something you’ve been carrying but haven’t honestly brought to God? Write it here as a prayer.",
  "closing": "Philippians 4:7"
 },
