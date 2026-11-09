@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Painel dos quizzes · VEREDA</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E5F95'/%3E%3Cpath d='M9 9l7 15 7-15' stroke='white' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+:root{--ink:#1E2430;--text:#2b2d30;--muted:#6b7079;--line:#e6e8eb;--bg:#f6f7f9;--card:#fff;--blue:#0E5F95;--blue-d:#0A4A75;--blue-soft:#E8F0F7;--gold:#C9973F;--red:#c2410c;--red-soft:#fdeee6;--green:#15803d;--green-soft:#e7f6ec;--bar:#c9ced6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+button,select,input{font:inherit;color:inherit}
+.hidden{display:none!important}
+/* login */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.lbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px 28px;width:100%;max-width:360px;box-shadow:0 8px 30px rgba(20,30,50,.06)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.14em;color:var(--blue);font-size:15px}
+.brand i{width:30px;height:30px;border-radius:8px;background:var(--blue);display:grid;place-items:center}
+.lbox h1{font-size:20px;color:var(--ink);margin:22px 0 4px}
+.lbox p{color:var(--muted);margin-bottom:18px}
+.field{width:100%;height:46px;border:1.5px solid var(--line);border-radius:10px;padding:0 14px;background:#fff;outline:none}
+.field:focus{border-color:var(--blue)}
+.btn{height:46px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer;padding:0 18px}
+.btn:hover{background:var(--blue-d)}
+.btn[disabled]{opacity:.6;cursor:wait}
+.lbox .btn{width:100%;margin-top:12px}
+.err{color:var(--red);margin-top:10px;min-height:20px;font-size:13px}
+.chk{display:flex;gap:8px;align-items:center;margin-top:12px;color:var(--muted);font-size:13px}
+/* app */
+header{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.hin{max-width:1180px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hin .brand{margin-right:auto}
+.hin .brand small{font-weight:600;letter-spacing:0;color:var(--muted);font-size:13px}
+.sel{height:38px;border:1px solid var(--line);border-radius:9px;padding:0 10px;background:#fff;cursor:pointer}
+.ghost{height:38px;border:1px solid var(--line);border-radius:9px;padding:0 12px;background:#fff;cursor:pointer}
+.ghost:hover{border-color:var(--blue);color:var(--blue)}
+main{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+.lead{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.sub{color:var(--muted);margin-bottom:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h3{font-size:15px;color:var(--ink);display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.card .url{color:var(--muted);font-size:12px;margin-bottom:14px}
+.card .url a{color:inherit}
+.dot{width:10px;height:10px;border-radius:50%}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.k b{display:block;font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.2}
+.k span{color:var(--muted);font-size:12px}
+.k em{font-style:normal;font-size:12px;color:var(--muted);margin-left:4px;font-weight:600}
+.k.hi b{color:var(--blue)}
+section{margin-top:26px}
+section>h2{font-size:16px;color:var(--ink);margin-bottom:4px}
+section>p.note{color:var(--muted);margin-bottom:12px;font-size:13px}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tab{height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;color:var(--muted);font-weight:600;background:#fafbfc}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.barcell{width:42%;min-width:160px}
+.bar{height:14px;border-radius:4px;background:var(--bar)}
+.bar.first{background:var(--blue)}
+.drop{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:700}
+.drop.big{background:var(--red-soft);color:var(--red)}
+.drop.mid{background:#fff4e0;color:#a35b00}
+.drop.ok{color:var(--muted);font-weight:500}
+.stepname{color:var(--muted);font-size:12px;margin-left:6px}
+.scroll{overflow-x:auto;border-radius:14px}
+.cmp{display:grid;grid-template-columns:150px 1fr;gap:8px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.cmp .lbl{color:var(--muted);font-size:13px}
+.cmp .rows{display:flex;flex-direction:column;gap:4px}
+.cmp .r{display:flex;align-items:center;gap:8px;font-size:12px}
+.cmp .r i{display:block;height:12px;border-radius:3px}
+.cmp .r span{font-variant-numeric:tabular-nums;color:var(--text);white-space:nowrap}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px;font-size:13px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.sales{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.empty{color:var(--muted);padding:16px;text-align:center}
+.foot{color:var(--muted);font-size:12px;margin-top:30px}
+#loading{position:fixed;top:0;left:0;height:3px;background:var(--blue);width:0;transition:width .4s;z-index:9}
+@media(max-width:900px){.grid3,.sales{grid-template-columns:1fr}.cmp{grid-template-columns:1fr}.hin{gap:8px}}
+</style>
+</head>
+<body>
+<div id="loading"></div>
+
+<div id="login">
+  <form class="lbox" id="lform">
+    <div class="brand"><i><svg width="16" height="16" viewBox="0 0 32 32"><path d="M7 7l9 19 9-19" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i>VEREDA</div>
+    <h1>Painel dos quizzes</h1>
+    <p>Digite a senha de acesso.</p>
+    <input class="field" id="pw" type="password" autocomplete="current-password" placeholder="Senha" required>
+    <label class="chk"><input type="checkbox" id="remember" checked> Lembrar neste aparelho</label>
+    <button class="btn" id="lbtn" type="submit">Entrar</button>
+    <div class="err" id="lerr"></div>
+  </form>
+</div>
+
+<div id="app" class="hidden">
+  <header><div class="hin">
+    <div class="brand"><i><svg width="16" height="16" viewBox="0 0 32 32"><path d="M7 7l9 19 9-19" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i>VEREDA <small>· Painel dos quizzes</small></div>
+    <select class="sel" id="days" aria-label="Período">
+      <option value="1">Últimas 24 horas</option>
+      <option value="7">Últimos 7 dias</option>
+      <option value="14">Últimos 14 dias</option>
+      <option value="30" selected>Últimos 30 dias</option>
+      <option value="90">Últimos 90 dias</option>
+      <option value="365">Todo o período</option>
+    </select>
+    <button class="ghost" id="refresh">Atualizar</button>
+    <button class="ghost" id="logout">Sair</button>
+  </div></header>
+  <main>
+    <div class="lead" id="lead">Carregando…</div>
+    <div class="sub" id="updated"></div>
+
+    <div class="grid3" id="cards"></div>
+
+    <section>
+      <h2>Comparação das etapas principais</h2>
+      <p class="note">Percentual = parte de quem iniciou o quiz. Mostra onde cada versão perde mais gente.</p>
+      <div class="legend" id="legend"></div>
+      <div class="cmp" id="cmp"></div>
+    </section>
+
+    <section>
+      <h2>Passagem tela a tela</h2>
+      <p class="note">Pessoas diferentes que viram cada tela. "Perda" = quanto caiu em relação à tela anterior; em vermelho as maiores quedas.</p>
+      <div class="tabs" id="qtabs"></div>
+      <div class="scroll"><table id="steps"></table></div>
+    </section>
+
+    <section>
+      <h2>Vendas na Hotmart (produto principal)</h2>
+      <p class="note">Eventos recebidos pelo webhook no período. Compras por quiz aparecem nos cartões acima quando a venda chega com o código do quiz.</p>
+      <div class="sales" id="sales"></div>
+    </section>
+
+    <section>
+      <h2>Por dia</h2>
+      <p class="note">Horário de Brasília. Mais recentes primeiro.</p>
+      <div class="scroll"><table id="daily"></table></div>
+    </section>
+
+    <section>
+      <h2>Por origem do tráfego</h2>
+      <p class="note">Valor de utm_source. "(direto)" = sem UTM.</p>
+      <div class="scroll"><table id="source"></table></div>
+    </section>
+
+    <div class="foot">Os dados se atualizam sozinhos a cada 5 minutos enquanto a página estiver aberta.</div>
+  </main>
+</div>
+
+<script>
+(() => {
+const API = "https://okgqxzehlqzdmwxpjdkj.supabase.co/functions/v1/quiz-dashboard";
+const KEY = "sb_publishable_4EvJKXKLm0jrZrm7k-EnGA_u0N5nesc";
+const QUIZ = {
+  archetype: {name:"Arquétipo", url:"https://veredaapplication.vercel.app/", path:"veredaapplication.vercel.app", color:"#0E5F95"},
+  study:     {name:"Estudo A (/study)", url:"https://veredaapplication.vercel.app/study/", path:"/study", color:"#C9973F"},
+  study2:    {name:"Estudo B (/study2)", url:"https://veredaapplication.vercel.app/study2/", path:"/study2", color:"#5b8c5a"}
+};
+const ORDER = ["archetype","study","study2"];
+const OFFERS = {"76tfafb3":"Teste grátis 7 dias","t5216fgc":"Mensal $19,90","ah15t54l":"Trimestral $39,90"};
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => (n ?? 0).toLocaleString("pt-BR");
+const pct = (a, b) => b ? (a / b * 100) : 0;
+const fp = (a, b) => b ? pct(a, b).toLocaleString("pt-BR", {maximumFractionDigits:1}) + "%" : "–";
+const store = {
+  get(){ try { return localStorage.getItem("vd_pw") || sessionStorage.getItem("vd_pw"); } catch { return null; } },
+  set(v, keep){ try { (keep ? localStorage : sessionStorage).setItem("vd_pw", v); } catch {} },
+  clear(){ try { localStorage.removeItem("vd_pw"); sessionStorage.removeItem("vd_pw"); } catch {} }
+};
+let PW = null, DATA = null, TAB = "archetype", timer = null;
+
+async function fetchData(pw, days){
+  const r = await fetch(API, {method:"POST", headers:{"content-type":"application/json", apikey:KEY}, body:JSON.stringify({password:pw, days:Number(days)})});
+  if (r.status === 401) throw new Error("senha");
+  if (!r.ok) throw new Error("rede");
+  return r.json();
+}
+
+async function load(){
+  const bar = $("#loading"); bar.style.width = "60%";
+  $("#refresh").disabled = true;
+  try {
+    DATA = await fetchData(PW, $("#days").value);
+    render();
+  } catch (e) {
+    if (e.message === "senha") { logout(); $("#lerr").textContent = "A senha mudou. Entre de novo."; }
+    else $("#updated").textContent = "Não foi possível atualizar agora. Tente de novo em instantes.";
+  } finally {
+    bar.style.width = "100%"; setTimeout(() => bar.style.width = "0", 300);
+    $("#refresh").disabled = false;
+  }
+}
+
+function render(){
+  const S = Object.fromEntries((DATA.summary || []).map(s => [s.quiz, s]));
+  const days = DATA.days;
+  const label = $("#days").selectedOptions[0].textContent.toLowerCase();
+  const tot = ORDER.reduce((a, q) => a + (S[q]?.started || 0), 0);
+  $("#lead").textContent = `${fmt(tot)} pessoas iniciaram um quiz (${label})`;
+  $("#updated").textContent = "Atualizado às " + new Date(DATA.generated_at).toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"});
+
+  // cards
+  $("#cards").innerHTML = ORDER.map(q => {
+    const s = S[q] || {}, m = QUIZ[q];
+    return `<div class="card"><h3><span class="dot" style="background:${m.color}"></span>${m.name}</h3>
+      <div class="url"><a href="${m.url}" target="_blank" rel="noopener">${m.path}</a></div>
+      <div class="kpis">
+        <div class="k"><b>${fmt(s.started)}</b><span>iniciaram</span></div>
+        <div class="k hi"><b>${fp(s.passed_first, s.started)}</b><span>passaram da 1ª tela</span></div>
+        <div class="k"><b>${fmt(s.reached_offer)}<em>${fp(s.reached_offer, s.started)}</em></b><span>chegaram à oferta</span></div>
+        <div class="k"><b>${fmt(s.checkout_clicks)}<em>${fp(s.checkout_clicks, s.started)}</em></b><span>clicaram em comprar</span></div>
+        <div class="k"><b>${fmt(s.reached_email)}</b><span>chegaram ao e-mail</span></div>
+        <div class="k"><b>${fmt(s.purchases)}</b><span>compras ligadas ao quiz</span></div>
+      </div></div>`;
+  }).join("");
+
+  // comparison
+  $("#legend").innerHTML = ORDER.map(q => `<span><span class="dot" style="background:${QUIZ[q].color}"></span>${QUIZ[q].name}</span>`).join("");
+  const stages = [["Iniciou","started"],["Passou da 1ª tela","passed_first"],["Chegou ao e-mail","reached_email"],["Chegou à oferta","reached_offer"],["Clicou em comprar","checkout_clicks"]];
+  $("#cmp").innerHTML = stages.map(([l, k]) => `<div class="lbl">${l}</div><div class="rows">${ORDER.map(q => {
+    const s = S[q] || {}, v = s[k] || 0, p = pct(v, s.started);
+    return `<div class="r"><i style="width:${Math.max(p, v ? 0.6 : 0) * 0.82}%;background:${QUIZ[q].color}"></i><span>${fmt(v)} · ${fp(v, s.started)}</span></div>`;
+  }).join("")}</div>`).join("");
+
+  // tabs + steps
+  $("#qtabs").innerHTML = ORDER.map(q => `<button class="tab ${q === TAB ? "on" : ""}" data-q="${q}">${QUIZ[q].name}</button>`).join("");
+  document.querySelectorAll("#qtabs .tab").forEach(b => b.onclick = () => { TAB = b.dataset.q; render(); });
+  const rows = (DATA.steps || []).filter(r => r.quiz === TAB).sort((a, b) => a.step - b.step);
+  if (!rows.length) $("#steps").innerHTML = `<tr><td class="empty">Ainda sem visitas neste período.</td></tr>`;
+  else {
+    const first = rows[0].visitors || 1;
+    $("#steps").innerHTML = `<tr><th>Tela</th><th class="n">Pessoas</th><th class="n">% do início</th><th class="n">Perda</th><th class="barcell"></th></tr>` +
+      rows.map((r, i) => {
+        const prev = i ? rows[i - 1].visitors : r.visitors;
+        const loss = i && prev ? (prev - r.visitors) / prev * 100 : 0;
+        const cls = loss >= 30 ? "big" : loss >= 10 ? "mid" : "ok";
+        return `<tr><td><b>${r.step + 1}</b><span class="stepname">${esc(r.step_key || "")}</span></td><td class="n">${fmt(r.visitors)}</td><td class="n">${fp(r.visitors, first)}</td>
+          <td class="n">${i ? `<span class="drop ${cls}">${loss > 0 ? "−" + loss.toLocaleString("pt-BR", {maximumFractionDigits:1}) + "%" : "0%"}</span>` : ""}</td>
+          <td class="barcell"><div class="bar ${i ? "" : "first"}" style="width:${pct(r.visitors, first)}%"></div></td></tr>`;
+      }).join("");
+  }
+
+  // sales
+  const sales = DATA.sales || [];
+  const approved = sales.filter(s => s.event === "PURCHASE_APPROVED");
+  const sumEv = ev => sales.filter(s => s.event === ev).reduce((a, s) => a + s.n, 0);
+  const byOffer = Object.keys(OFFERS).map(o => `${OFFERS[o]}: <b>${fmt(approved.filter(s => s.offer === o).reduce((a, s) => a + s.n, 0))}</b>`).join("<br>");
+  $("#sales").innerHTML = `
+    <div class="card"><div class="k hi"><b>${fmt(approved.reduce((a, s) => a + s.n, 0))}</b><span>vendas aprovadas</span></div></div>
+    <div class="card" style="font-size:13px;line-height:1.7">${byOffer}</div>
+    <div class="card"><div class="k"><b>${fmt(sumEv("PURCHASE_OUT_OF_SHOPPING_CART"))}</b><span>carrinhos abandonados</span></div></div>
+    <div class="card"><div class="k"><b>${fmt(sumEv("PURCHASE_REFUNDED") + sumEv("PURCHASE_CHARGEBACK"))}</b><span>reembolsos e chargebacks</span></div></div>`;
+
+  // daily
+  const daily = (DATA.daily || []).slice().sort((a, b) => b.dia.localeCompare(a.dia) || ORDER.indexOf(a.quiz) - ORDER.indexOf(b.quiz));
+  $("#daily").innerHTML = daily.length ? `<tr><th>Dia</th><th>Quiz</th><th class="n">Iniciaram</th><th class="n">Chegaram à oferta</th><th class="n">Clicaram em comprar</th><th class="n">Conversão até o clique</th></tr>` +
+    daily.map(r => `<tr><td>${r.dia.split("-").reverse().join("/")}</td><td><span class="dot" style="display:inline-block;background:${QUIZ[r.quiz]?.color || "#999"};margin-right:6px"></span>${esc(QUIZ[r.quiz]?.name || r.quiz)}</td><td class="n">${fmt(r.started)}</td><td class="n">${fmt(r.offer)}</td><td class="n">${fmt(r.checkouts)}</td><td class="n">${fp(r.checkouts, r.started)}</td></tr>`).join("")
+    : `<tr><td class="empty">Sem dados no período.</td></tr>`;
+
+  // source
+  const src = DATA.by_source || [];
+  $("#source").innerHTML = src.length ? `<tr><th>Origem</th><th>Quiz</th><th class="n">Iniciaram</th><th class="n">Chegaram à oferta</th><th class="n">Clicaram em comprar</th><th class="n">Conversão até o clique</th></tr>` +
+    src.map(r => `<tr><td>${esc(r.source)}</td><td>${esc(QUIZ[r.quiz]?.name || r.quiz)}</td><td class="n">${fmt(r.started)}</td><td class="n">${fmt(r.offer)}</td><td class="n">${fmt(r.checkouts)}</td><td class="n">${fp(r.checkouts, r.started)}</td></tr>`).join("")
+    : `<tr><td class="empty">Sem dados no período.</td></tr>`;
+}
+
+function showApp(){
+  $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
+  load(); clearInterval(timer); timer = setInterval(load, 5 * 60 * 1000);
+}
+function logout(){
+  PW = null; store.clear(); clearInterval(timer);
+  $("#app").classList.add("hidden"); $("#login").classList.remove("hidden"); $("#pw").value = ""; $("#pw").focus();
+}
+
+$("#lform").onsubmit = async e => {
+  e.preventDefault();
+  const pw = $("#pw").value.trim(); if (!pw) return;
+  $("#lbtn").disabled = true; $("#lerr").textContent = "";
+  try {
+    DATA = await fetchData(pw, $("#days").value);
+    PW = pw; store.set(pw, $("#remember").checked);
+    $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
+    render(); clearInterval(timer); timer = setInterval(load, 5 * 60 * 1000);
+  } catch (err) {
+    $("#lerr").textContent = err.message === "senha" ? "Senha incorreta." : "Não foi possível conectar. Tente de novo.";
+  } finally { $("#lbtn").disabled = false; }
+};
+$("#days").onchange = load;
+$("#refresh").onclick = load;
+$("#logout").onclick = logout;
+
+const saved = store.get();
+if (saved) { PW = saved; showApp(); } else $("#pw").focus();
+})();
+</script>
+</body>
+</html>
