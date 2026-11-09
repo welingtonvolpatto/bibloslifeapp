@@ -422,7 +422,7 @@ const CONFIG = {
   ],
   // ===== SOCIAL PROOF — replace every [ ] placeholder with YOUR real data before running ads =====
   // Leave a field empty ("" or []) to hide that block.
-  social: { count: "950K", rating: "4.8", ratingSource: "Rating in App Stores" },
+  social: { count: "", rating: "", ratingSource: "" }, // fill only with real, verifiable numbers
   endorsements: [
     {top:"UNIVERSITY OF", name:"OXFORD"}, {top:"UNIVERSITY OF", name:"CAMBRIDGE"},
     {name:"HARVARD", bottom:"UNIVERSITY"}, {name:"YALE", bottom:"UNIVERSITY"},
@@ -620,8 +620,8 @@ const R = {
   gender(){
     const so = CONFIG.social.rating ? `<div class="social"><div class="rate">${esc(CONFIG.social.rating)}<small>★★★★★</small></div><p>${esc(CONFIG.social.count)} believers already grow with the ${esc(CONFIG.brandName)} app</p></div>` : "";
     view.innerHTML = `<section class="screen">${so}
-      <h1 class="big-title st-title">Grow closer to God<br>by discovering<br>Biblical wisdom</h1>
-      <p class="big-sub st-sub">Pass this quiz to get the right subscription plan for you</p>
+      <h1 class="big-title st-title">Why the Bible Feels Hard to Understand <span style="white-space:nowrap">(It’s Not Your Fault)</span></h1>
+      <p class="big-sub st-sub">Answer a few quick questions and get a simple, step-by-step plan that fits your level and your schedule.</p>
       <div class="tiles">
         <button class="tile" data-g="male">${img(CONFIG.images.gender_male,"img","","168/240")}<span class="lbl">Male <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
         <button class="tile" data-g="female">${img(CONFIG.images.gender_female,"img","","168/240")}<span class="lbl">Female <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
