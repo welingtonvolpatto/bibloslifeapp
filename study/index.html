@@ -12,6 +12,7 @@
   (function(){var a=document.createElement("script");a.setAttribute("async","");a.setAttribute("defer","");a.setAttribute("src","https://cdn.utmify.com.br/scripts/pixel/pixel.js");document.head.appendChild(a);})();
 </script>
 <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-subids async defer></script>
+<script src="/geo-price.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -397,6 +398,9 @@ const CONFIG = {
      terms:"$39.90 today, then $39.90 every 3 months until you cancel."}
   ],
   currency: "$",
+  // Exact local prices per currency (optional). Without an entry, USD prices are converted for display.
+  // Example: BRL: [ {price:0}, {price:49.90, checkoutUrl:"https://pay.hotmart.com/...?off=..."}, {price:99.90, checkoutUrl:"..."} ]
+  localPrices: {},
   planNote: "A 3-month plan gives you enough time to turn reading the Bible into a lasting <span class=\"hl\">daily habit</span> \u2014 and costs 33% less than paying monthly.",
   weeks: [
     ["Step into Light","Do I know Jesus?","Grace vs Works","Talking With God"],
@@ -790,8 +794,10 @@ const R = {
     const C=CONFIG, P=C.plans;
     const challenge=barrier(), goal=goalTxt();
     const isC=C.offerVariant==="coupon", $c=C.currency||"$";
-    const money=v=>$c+Number(v).toFixed(2);
-    const perDay=p=>Number(p.price)/p.days;
+    const VP=window.VPRICE; if(VP) VP.cfg=C;
+    const money=v=>VP?VP.money(v):$c+Number(v).toFixed(2);
+    const L=(p,f)=>VP?VP.plan(p,P.indexOf(p),f):Number(p[f]);
+    const perDay=p=>L(p,"price")/p.days;
     const save=p=>p.compareAt?Math.round((1-p.price/p.compareAt)*100):0;
     const code=((state.name||"FRIEND").replace(/[^A-Za-z]/g,"")||"FRIEND").toUpperCase()+"_"+new Date().toLocaleString("en",{month:"short"}).toUpperCase()+((C.coupon&&C.coupon.suffix)||"");
     const trialP=P.find(p=>p.trialDays);
@@ -799,17 +805,17 @@ const R = {
       ?`<div class="cp"><div class="cp-h">${ICON.tag}<div><b>Your promo code applied!</b><small>${C.coupon.percent}% off your first purchase. Standard pricing applies on renewal</small></div></div><div class="cp-row"><span class="cp-code">${ICON.check}${esc(code)}</span><span class="cp-t"><b class="tm">0${C.coupon.minutes}:00</b><small><i>minutes</i><i>seconds</i></small></span></div></div>`
       :`<div class="cp"><div class="cp-h">${ICON.tag}<div><b>Your ${trialP?trialP.trialDays+'-day free trial is reserved!':'personal offer is reserved!'}</b><small>${trialP?'Start today for '+money(0)+'. Cancel anytime before the trial ends.':'Your plan is held for you for a few minutes.'}</small></div></div><div class="cp-row"><span class="cp-code">${ICON.check}${esc(code)}</span><span class="cp-t"><b class="tm">0${C.coupon.minutes}:00</b><small><i>minutes</i><i>seconds</i></small></span></div></div>`);
     const badge=p=>save(p)?`<span class="off">SAVE ${save(p)}%</span>`:'';
-    const sub=p=>p.trialDays?`<small class="o-ps">${p.trialDays} days free, then ${money(p.price)}/${p.every}</small>`
-      :`<small class="o-ps">${money(p.price)} ${isC?'':'billed '}every ${p.every}</small>`;
-    const pd=v=>{const [i,c]=v.toFixed(2).split('.');return `<span class="pd"><span class="cur">${$c}</span><span class="int">${i}</span><span class="dec"><b>${c}</b><small>per day</small></span></span>`;};
+    const sub=p=>p.trialDays?`<small class="o-ps">${p.trialDays} days free, then ${money(L(p,"price"))}/${p.every}</small>`
+      :`<small class="o-ps">${money(L(p,"price"))} ${isC?'':'billed '}every ${p.every}</small>`;
+    const pd=v=>{const x=VP?VP.parts(v):{sym:$c,int:v.toFixed(2).split('.')[0],dec:v.toFixed(2).split('.')[1]};return `<span class="pd"><span class="cur">${x.sym}</span><span class="int">${x.int}</span><span class="dec"><b>${x.dec}</b><small>per day</small></span></span>`;};
     const right=p=>{
       if(p.trialDays) return `<div class="${isC?'o-tp':'o-pp'} o-free"><b>FREE</b><small>${p.trialDays} days</small></div>`;
-      if(isC) return `<div class="o-tp">${save(p)?`<em>SAVE ${save(p)}%</em>`:''}<b>${money(p.price)}</b>${p.compareAt?`<s>${money(p.compareAt)}</s>`:''}</div>`;
+      if(isC) return `<div class="o-tp">${save(p)?`<em>SAVE ${save(p)}%</em>`:''}<b>${money(L(p,"price"))}</b>${p.compareAt?`<s>${money(L(p,"compareAt"))}</s>`:''}</div>`;
       return `<div class="o-pp">${pd(perDay(p))}</div>`;
     };
     const plansBlock=()=>`<h3 class="o-h2">Your <span class="hl">Personalized Bible Study Plan</span> is ready!</h3>${couponBox()}
       <div class="o-plans">${P.map((p,i)=>`<div class="o-plan ${p.popular?'pop':''}" data-i="${i}">${p.popular?`<div class="rib">${ICON.spark} MOST POPULAR</div>`:''}
-        <div class="o-pb"><span class="radio"></span><div class="o-pn"><b>${p.name}</b>${sub(p)}${isC?'':badge(p)}</div>${right(p)}</div></div>`).join('')}</div>
+        <div class="o-pb"><span class="radio"></span><div class="o-pn"><b>${p.name}</b>${sub(p)}${isC?'':badge(p)}</div>${right(p)}</div></div>`).join('')}</div>${VP?VP.note():''}
       <div class="o-note">${C.planNote}</div>
       <button class="btn sub">Get my plan</button>
       <p class="o-terms">By clicking “Get my plan”, you agree to automatic subscription renewal. <span class="tdyn"></span> Cancel via the app or email: <a href="mailto:${C.supportEmail}">${C.supportEmail}</a>. See <a href="${C.links.subscription}">Subscription Terms</a> for details.</p>
@@ -847,7 +853,7 @@ const R = {
     const tl=$('tl');
     const showWeek=w=>{tl.innerHTML=C.weeks[w].map((d,i)=>`<div class="day ${i===3?'fade':''}"><span class="dl">Day ${w*4+i+1}</span><span class="bar k${i}">${esc(d)}</span></div>`).join('');view.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',+b.dataset.w===w));};
     view.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showWeek(+b.dataset.w)); showWeek(0);
-    const sync=()=>{view.querySelectorAll('.o-plan').forEach(p=>p.classList.toggle('sel',+p.dataset.i===state.plan));view.querySelectorAll('.tdyn').forEach(t=>t.textContent=P[state.plan].terms);};
+    const sync=()=>{view.querySelectorAll('.o-plan').forEach(p=>p.classList.toggle('sel',+p.dataset.i===state.plan));view.querySelectorAll('.tdyn').forEach(t=>t.textContent=VP?VP.terms(P[state.plan],state.plan):P[state.plan].terms);};
     view.querySelectorAll('.o-plan').forEach(p=>p.onclick=()=>{state.plan=+p.dataset.i;sync();});
     view.querySelectorAll('.sub').forEach(b=>b.onclick=checkout);
     $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
@@ -875,7 +881,7 @@ function sendLead(){
 }
 function checkout(){
   const p=CONFIG.plans[state.plan]||{};
-  const target=p.checkoutUrl||CONFIG.checkoutUrl;
+  const target=(window.VPRICE?VPRICE.checkout(p,state.plan):p.checkoutUrl)||CONFIG.checkoutUrl;
   if(!target||target==="#") return;
   const u=new URL(target,location.href);
   track(state.i,'checkout','checkout',p.name||String(state.plan));
