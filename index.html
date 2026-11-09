@@ -70,6 +70,7 @@ p.s{font-size:14px;line-height:20px;text-align:center;color:var(--muted);margin-
 .legal a{color:var(--blue)}
 /* info / break */
 .hero-img{width:100%;border-radius:12px;display:block;margin-bottom:22px;aspect-ratio:342/220;object-fit:cover}
+.hero-anim{width:100%;aspect-ratio:600/384;border:0;border-radius:12px;display:block;margin-bottom:22px;overflow:hidden;background:#f3ede4}
 .info-title{font-size:24px;font-weight:600;text-align:center;line-height:1.3;margin-bottom:12px;color:var(--title)}
 .info-text{font-size:16px;line-height:1.45;text-align:center;color:var(--muted)}
 .banner{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:12px;padding:12px;margin-top:22px;font-size:14px;line-height:1.4}
@@ -478,7 +479,7 @@ function computeArchetype(){
 const STEPS = [
   {type:"gender"},
   {type:"age", key:"age", title:"Please choose your age group", sub:"Your answers will help us create your profile summary and personalized subscription plan", options:["18-34","35-44","45-54","55+"]},
-  {type:"info", img:"break1", title:"Ready to discover who you are?", text:"Learn how to practically grow in your faith — based on how you uniquely connect with God"},
+  {type:"info", img:"break1", anim:{male:"/raspadinha-homem.html", female:"/raspadinha-mulher.html"}, title:"Ready to discover who you are?", text:"Learn how to practically grow in your faith — based on how you uniquely connect with God"},
   {type:"q", key:"BibleVerse", title:"Pick a Bible verse that speaks to your heart", options:["“Be still and know that I am God” – Psalm 46:10","“Where you go I will go” – Ruth 1:16","“For such a time as this” – Esther 4:14","“Be strong and courageous” – Joshua 1:9"]},
   {type:"q", key:"quote", title:"Pick a quote that resonates", options:["“Let go and let God”","“Faith over fear”","“You were made for this moment”","“I can do hard things through Christ”","“God's timing is perfect”"]},
   {type:"q", key:"BibleStory", title:"Pick a Bible story that inspires you", options:["Noah and the ark","Moses leading people to the promised land","Daniel and the lions' den","Jesus raising Lazarus","Jesus's birth"]},
@@ -620,6 +621,21 @@ const R = {
       <h2 class="info-title">${s.title}</h2><p class="info-text">${s.text}</p>
       ${s.banner?`<div class="banner"><span class="pi">🙏</span><span>${s.banner}</span></div>`:""}</section>`;
     setCTA("Continue",()=>go());
+    if(s.anim){ // animated archetype preview (by gender chosen in step 1); falls back to the image if the file is missing
+      const url=s.anim[state.gender==="male"?"male":"female"], at=state.i;
+      fetch(url,{method:"HEAD",cache:"no-store"}).then(r=>{
+        if(!r.ok||state.i!==at) return;
+        const old=view.querySelector('.hero-img'); if(!old) return;
+        // iframe lives inside a shadow root so tracking scripts (UTM rewriters) don't touch its src and restart the animation
+        const host=document.createElement('div'); host.className='hero-anim';
+        const root=host.attachShadow({mode:'closed'});
+        const fr=document.createElement('iframe');
+        fr.src=url; fr.title='Prévia do seu arquétipo bíblico';
+        fr.setAttribute('scrolling','no'); fr.setAttribute('loading','eager');
+        fr.style.cssText='width:100%;height:100%;border:0;display:block;overflow:hidden';
+        root.appendChild(fr); old.replaceWith(host);
+      }).catch(()=>{});
+    }
   },
   q(s){
     view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><div class="opts">${
