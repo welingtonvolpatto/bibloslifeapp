@@ -490,6 +490,39 @@ textarea.field{height:auto;min-height:140px;padding:14px 16px;resize:none;line-h
 .clouds,.puff,.rays{z-index:0!important}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
+
+/* spiritual assistant */
+.aicard{margin:0 16px;border-radius:20px;padding:16px;background:linear-gradient(160deg,#dcebf7,#a9cdeb);position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.aicard p{position:relative;z-index:1;font-size:15px;line-height:1.45;color:var(--ink);font-weight:600;margin:0 0 14px 92px;min-height:60px}
+.aicard .btn{position:relative;z-index:1}
+.ai-art{position:absolute;left:0;top:0;width:110px;height:100px}
+.ai-orb{position:absolute;left:22px;top:16px;width:56px;height:56px;border-radius:50%;background:linear-gradient(145deg,#fff,#f6e1c6);display:grid;place-items:center;color:var(--gold,#C9973F);box-shadow:0 6px 18px rgba(201,151,63,.35);animation:orb 4s ease-in-out infinite}
+.ai-orb svg{width:28px;height:28px}
+@keyframes orb{50%{transform:translateY(-4px)}}
+.chatview{position:fixed;left:0;right:0;top:0;height:100dvh;z-index:60;background:var(--bg,#fff);display:flex;flex-direction:column;animation:stepin .25s ease}
+.ch-top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 8px) 12px 8px;border-bottom:1px solid var(--line)}
+.ch-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:10px 14px 16px}
+.ch-list{display:flex;flex-direction:column;gap:10px;max-width:640px;margin:0 auto}
+.ch-date{align-self:center;font-size:12px;color:var(--muted);margin:6px 0 2px}
+.ch-note{align-self:flex-start;font-size:11.5px;color:var(--muted);margin:-4px 0 4px 4px;max-width:85%}
+.bub{max-width:84%;padding:11px 14px;border-radius:18px;font-size:15px;line-height:1.5;word-wrap:break-word}
+.bub p{margin:0}.bub p+p{margin-top:9px}
+.bub.a{align-self:flex-start;background:var(--soft,#F2F4F7);color:var(--ink);border-bottom-left-radius:6px}
+.bub.u{align-self:flex-end;background:var(--blue-soft,#E8F0F7);color:var(--ink);border-bottom-right-radius:6px}
+.bub.err{background:#fdecea}
+.ch-retry{display:block;margin-top:8px;color:var(--blue);font-weight:700;font-size:14px}
+.bub.typing{display:flex;gap:5px;align-items:center;padding:14px 16px}
+.bub.typing i{width:7px;height:7px;border-radius:50%;background:#9aa3ad;animation:tdot 1.2s infinite}
+.bub.typing i:nth-child(2){animation-delay:.15s}.bub.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tdot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+.ch-chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 2px;margin:0 -14px;padding-left:14px;scrollbar-width:none}
+.ch-chips::-webkit-scrollbar{display:none}
+.chip{flex:none;max-width:210px;text-align:left;font-size:13.5px;line-height:1.35;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:14px;padding:9px 12px}
+.ch-foot{padding:8px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg,#fff)}
+.ch-in{display:flex;align-items:flex-end;gap:8px;border:1.5px solid var(--blue);border-radius:16px;padding:6px 6px 6px 14px;max-width:640px;margin:0 auto}
+.ch-in textarea{flex:1;border:0;outline:0;resize:none;font:inherit;font-size:16px;line-height:1.4;padding:7px 0;background:transparent;color:var(--ink);max-height:120px}
+.ch-send{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:var(--blue);flex:none}
+.ch-send svg{width:20px;height:20px}.ch-send:disabled{opacity:.4}
 </style>
 </head>
 <body>

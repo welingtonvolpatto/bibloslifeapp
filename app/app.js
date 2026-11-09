@@ -88,7 +88,7 @@ const P = {
  out:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>', refresh:'<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/>',
  dots:'<circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/>',
  music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>', sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
- text:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', prev:'<path d="M6 5v14"/><path d="M19 5 9 12l10 7Z" fill="currentColor"/>', next:'<path d="M18 5v14"/><path d="M5 5l10 7-10 7Z" fill="currentColor"/>', bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>', flame:'<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-5 5-5 8-1-1-2-2-2-4-2 2-2 5-2 8 0 4 3 7 7 7Z"/>', gift:'<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9c-2-4-7-5-7-2s4 2 7 2c3 0 7 1 7-2s-5-2-7 2"/>', sprout:'<path d="M12 21v-9"/><path d="M12 13C12 8 8 6 4 6c0 4 3 7 8 7ZM12 11c0-4 3-7 8-7 0 4-3 7-8 7Z"/>', hands:'<path d="M12 3c-1 4-4 7-5 11-.6 2.4.8 4 3 4h2Z"/><path d="M12 3c1 4 4 7 5 11 .6 2.4-.8 4-3 4h-2Z"/><path d="M5 21h14"/>', mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/>', trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>', edit:'<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
+ text:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', prev:'<path d="M6 5v14"/><path d="M19 5 9 12l10 7Z" fill="currentColor"/>', next:'<path d="M18 5v14"/><path d="M5 5l10 7-10 7Z" fill="currentColor"/>', bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>', flame:'<path d="M12 22c4 0 7-3 7-7 0-5-5-7-5-12-3 2-5 5-5 8-1-1-2-2-2-4-2 2-2 5-2 8 0 4 3 7 7 7Z"/>', gift:'<rect x="3" y="9" width="18" height="12" rx="2"/><path d="M2 9h20M12 9v12M12 9c-2-4-7-5-7-2s4 2 7 2c3 0 7 1 7-2s-5-2-7 2"/>', sprout:'<path d="M12 21v-9"/><path d="M12 13C12 8 8 6 4 6c0 4 3 7 8 7ZM12 11c0-4 3-7 8-7 0 4-3 7-8 7Z"/>', hands:'<path d="M12 3c-1 4-4 7-5 11-.6 2.4.8 4 3 4h2Z"/><path d="M12 3c1 4 4 7 5 11 .6 2.4-.8 4-3 4h-2Z"/><path d="M5 21h14"/>', mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5"/>', trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>', edit:'<path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>', send:'<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/>', newchat:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>'
 };
 const ic = (n, cls="") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${P[n]||""}</svg>`;
 const LOGO = `<img src="images/logo.svg" alt="VEREDA" style="height:30px">`;
@@ -354,7 +354,9 @@ function renderWelcome(step, prefill){
       if(!/^\S+@\S+\.\S+$/.test(em)){ err("Please enter a valid email."); return; }
       if(em===CONFIG.adminEmail){
         if(await sha256(pw)!==CONFIG.adminHash){ err("Incorrect password."); return; }
-        S.user={name:"Admin", email:em, admin:true}; S.dev=true; save(); tab="journey"; render(); toast("Signed in as admin — all days unlocked"); return;
+        S.user={name:"Admin", email:em, admin:true}; S.dev=true; save(); tab="journey"; render(); toast("Signed in as admin — all days unlocked");
+        if(sbc){ sbc.auth.signInWithPassword({email:em,password:pw}).then(({data})=>{ if(data&&data.user){ S.user.uid=data.user.id; save(); } }).catch(()=>{}); }
+        return;
       }
       if(!sbc){ err("Can’t connect right now. Check your internet and try again."); return; }
       if(!pw||pw.length<6){ err(isLogin?"Please enter your password.":"Your password needs at least 6 characters."); return; }
@@ -918,6 +920,60 @@ function openPodPlayer(){
   el.dataset.ep=Player.ep.id; paint(); Player.onup.add(up);
 }
 
+
+/* ---------- SPIRITUAL ASSISTANT (AI chat) ---------- */
+const CHAT_HELLO="Hi there! I’m here to walk with you — to encourage you, pray with you and help you grow in God’s Word. Need a verse, a prayer, or just someone to listen? Just ask 🙏✨";
+const CHAT_CHIPS=["How can I stay faithful when life is hard?","I’m struggling to find peace in my heart","Can you pray for me?"];
+const chatMd=t=>t.split(/\n{2,}/).map(p=>`<p>${md(p).replace(/\n/g,"<br>")}</p>`).join("");
+function openChat(){
+  document.querySelector(".chatview")?.remove();
+  S.chat=S.chat||[]; let busy=false;
+  const el=document.createElement("div"); el.className="chatview";
+  el.innerHTML=`<div class="ch-top"><button class="icon-btn" data-back>${ic("back")}</button><div class="p-title">Spiritual Assistant</div><button class="icon-btn" data-new aria-label="New chat">${ic("newchat")}</button></div>
+    <div class="ch-body"><div class="ch-list"></div></div>
+    <div class="ch-foot"><div class="ch-in"><textarea rows="1" placeholder="Write your message" maxlength="1500"></textarea><button class="ch-send" aria-label="Send">${ic("send")}</button></div></div>`;
+  document.body.appendChild(el);
+  const list=el.querySelector(".ch-list"), body=el.querySelector(".ch-body"), ta=el.querySelector("textarea"), send=el.querySelector(".ch-send");
+  const day=ts=>{ const d=new Date(ts), t=new Date(); return d.toDateString()===t.toDateString()?"Today":d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); };
+  const bottom=()=>{ body.scrollTop=body.scrollHeight; };
+  function paint(){
+    const first=S.chat[0]?.ts||Date.now();
+    let h=`<div class="ch-date">${day(first)}</div><div class="bub a">${chatMd(CHAT_HELLO)}</div><div class="ch-note">AI assistant · it can make mistakes. Not a substitute for pastoral or professional care.</div>`;
+    if(!S.chat.length) h+=`<div class="ch-chips">${CHAT_CHIPS.map(c=>`<button class="chip">${esc(c)}</button>`).join("")}</div>`;
+    S.chat.forEach(m=>{ h+=m.r==="u"?`<div class="bub u">${esc(m.t).replace(/\n/g,"<br>")}</div>`:`<div class="bub a${m.err?" err":""}">${chatMd(m.t)}${m.err?`<button class="ch-retry">Try again</button>`:""}</div>`; });
+    list.innerHTML=h;
+    list.querySelectorAll(".chip").forEach(b=>b.onclick=()=>ask(b.textContent));
+    const rt=list.querySelector(".ch-retry"); if(rt) rt.onclick=()=>{ S.chat=S.chat.filter(m=>!m.err); const last=S.chat.pop(); save(); if(last&&last.r==="u") ask(last.t); else paint(); };
+    bottom();
+  }
+  async function token(){ if(!sbc) return null; const {data}=await sbc.auth.getSession(); return data?.session?.access_token||null; }
+  async function ask(text){
+    text=(text||"").trim(); if(!text||busy) return; busy=true; send.disabled=true;
+    S.chat.push({r:"u",t:text,ts:Date.now()}); save(); ta.value=""; ta.style.height=""; paint();
+    const b=document.createElement("div"); b.className="bub a typing"; b.innerHTML="<i></i><i></i><i></i>"; list.appendChild(b); bottom();
+    let out="", failMsg="Sorry — I couldn’t answer right now. Please check your connection and try again.";
+    try{
+      const tk=await token(); if(!tk){ failMsg="Please sign out and sign in again to use the assistant."; throw new Error("auth"); }
+      const r=await fetch(`${SB_URL}/functions/v1/spiritual-chat`,{method:"POST",headers:{"Content-Type":"application/json","apikey":SB_KEY,"Authorization":`Bearer ${tk}`},
+        body:JSON.stringify({messages:S.chat.filter(m=>!m.err).slice(-20).map(m=>({role:m.r==="u"?"user":"assistant",content:m.t}))})});
+      if(!r.ok){ const j=await r.json().catch(()=>({})); if(j.error) failMsg=j.error; throw new Error("http"); }
+      const rd=r.body.getReader(), dec=new TextDecoder();
+      while(true){ const {value,done}=await rd.read(); if(done) break; out+=dec.decode(value,{stream:true});
+        if(out.includes("\u0000ERR")) throw new Error("llm");
+        b.classList.remove("typing"); b.innerHTML=chatMd(out); bottom(); }
+      if(!out.trim()) throw new Error("empty");
+      S.chat.push({r:"a",t:out.trim(),ts:Date.now()});
+    }catch(e){ S.chat.push({r:"a",t:failMsg,ts:Date.now(),err:true}); }
+    save(); busy=false; send.disabled=false; paint();
+  }
+  ta.oninput=()=>{ ta.style.height="auto"; ta.style.height=Math.min(ta.scrollHeight,120)+"px"; };
+  ta.onkeydown=e=>{ if(e.key==="Enter"&&!e.shiftKey&&!matchMedia("(pointer:coarse)").matches){ e.preventDefault(); ask(ta.value); } };
+  send.onclick=()=>ask(ta.value);
+  el.querySelector("[data-back]").onclick=()=>{ el.remove(); render(); };
+  el.querySelector("[data-new]").onclick=()=>{ if(busy) return; sheet(`<h3>Start a new chat?</h3><p style="font-size:14.5px">Restarting will clear all previous messages in this conversation.</p><div style="display:flex;gap:10px;margin-top:16px"><button class="btn ghost" data-x style="flex:1">Not yet</button><button class="btn" data-ok style="flex:1;background:var(--red,#C0392B)">Restart chat</button></div>`,(sh,close)=>{ sh.querySelector("[data-x]").onclick=close; sh.querySelector("[data-ok]").onclick=()=>{ S.chat=[]; save(); close(); paint(); }; }); };
+  if(window.visualViewport){ const fit=()=>{ el.style.height=visualViewport.height+"px"; bottom(); }; visualViewport.addEventListener("resize",fit); fit(); }
+  paint();
+}
 /* ---------- EXPLORE ---------- */
 function verseOfDay(offset=0){ const d=new Date(); d.setDate(d.getDate()-offset); const n=Math.floor(d/864e5); return {...C.verses[n%C.verses.length], d}; }
 const STORY_BG=["linear-gradient(160deg,#0E5F95,#3C86BC 60%,#C9973F)","linear-gradient(160deg,#1E3A5F,#0E5F95 60%,#7FB6E0)","linear-gradient(160deg,#4A3F6B,#7A6BA8 60%,#E3B8A0)","linear-gradient(160deg,#21503F,#3F8A6B 60%,#D9C27F)","linear-gradient(160deg,#5B2E48,#9A4F6E 60%,#F0B37E)","linear-gradient(160deg,#16324F,#2C5D8F 55%,#9CC4E4)","linear-gradient(160deg,#3B3024,#8A6A44 60%,#E8D3A8)"];
@@ -925,12 +981,14 @@ function viewExplore(){
   const st=Array.from({length:7},(_,i)=>verseOfDay(i));
   return `<div class="screen"><div class="safe-top"></div><div class="pad"><h1 style="margin-bottom:14px">Explore</h1><div class="muted" style="font-size:14px;margin-bottom:8px">Verses of the day</div></div>
    <div class="stories">${st.map((v,i)=>`<button class="story" data-st="${i}"><div style="background:${STORY_BG[i%7]}">${esc(v.r)}</div></button>`).join("")}</div>
+   <div class="pad" style="margin:22px 0 8px"><div class="muted" style="font-size:14px">Spiritual assistant</div></div>
+   <div class="aicard"><div class="ai-art">${clouds(120,"white","opacity:.9")}<span class="ai-orb">${ic("hands")}</span></div><p>Get guidance, daily inspiration and go deeper into God’s Word — anytime you need it.</p><button class="btn white" data-chat>${(S.chat&&S.chat.length)?"Continue chat":"Start a chat"}</button></div>
    ${podsRow()}
    <div class="pad" style="margin:22px 0 10px"><div class="muted" style="font-size:14px">Coming soon</div></div>
    <div class="soon"><div class="i">${ic("doc")}</div><div><b>Articles <span class="badge">Soon</span></b><span class="muted" style="font-size:13.5px">Quick reads on faith, prayer and everyday life</span></div></div>
    <div class="soon"><div class="i">${ic("book")}</div><div><b>Bible stories <span class="badge">Soon</span></b><span class="muted" style="font-size:13.5px">The great stories of Scripture, told simply</span></div></div></div>`;
 }
-afterRender.explore=()=>{ document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>openStory(+b.dataset.st)); document.querySelectorAll("[data-pod]").forEach(b=>b.onclick=()=>openPod(b.dataset.pod)); const a=document.querySelector("[data-allpods]"); if(a) a.onclick=openAllPods; };
+afterRender.explore=()=>{ const ch=document.querySelector("[data-chat]"); if(ch) ch.onclick=openChat; document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>openStory(+b.dataset.st)); document.querySelectorAll("[data-pod]").forEach(b=>b.onclick=()=>openPod(b.dataset.pod)); const a=document.querySelector("[data-allpods]"); if(a) a.onclick=openAllPods; };
 function openStory(i){
   document.querySelector(".storyview")?.remove();
   const v=verseOfDay(i); const el=document.createElement("div"); el.className="storyview"; el.style.background=STORY_BG[i%7];
