@@ -528,8 +528,8 @@ function computeArchetype(){
 const STEPS = [
   /* ENTRADA — relatos + sintomas */
   {type:"entry", key:"StartedAndStopped",
-   headline:"Why do so many believers open the Bible full of good intentions — and quietly close it a few weeks later?",
-   sub:"Take this 1-minute quiz to find out what’s really getting in the way — and get a plan that fits your real life.",
+   headline:"Always Too Busy<br>for the Bible?",
+   sub:"Discover a 10-minute rhythm that fits between your coffee and your day.",
    before:["Reading out of guilt, then giving up","Forgetting what you read by lunch","Feeling far from God and not knowing why"],
    after:["10 minutes a day you actually look forward to","Understanding what you read — and living it","Feeling close to God again"],
    symptoms:["Feeling guilty","Too busy","Mind wanders","Hard to understand","Can’t stay consistent","God feels distant"],
@@ -726,7 +726,7 @@ const proofHTML=n=>{const r=(CONFIG.reviews||[]).slice(0,n);if(!r.length)return"
 const R = {
   entry(s){
     view.innerHTML=`<section class="screen entry">
-      <h1 class="big-title st-title" style="font-size:25px;line-height:1.25">${s.headline}</h1>
+      <h1 class="big-title st-title" style="font-size:29px;line-height:1.2">${s.headline}</h1>
       <p class="big-sub st-sub">${s.sub}</p>
       ${img("s2_before_after.webp","hero-img","Before / after","342/190")}
       <div class="ba"><div class="ba-c b"><h5>Before</h5>${s.before.map(x=>`<p>✕ ${x}</p>`).join("")}</div><div class="ba-c a"><h5>With a daily plan</h5>${s.after.map(x=>`<p>✓ ${x}</p>`).join("")}</div></div>
