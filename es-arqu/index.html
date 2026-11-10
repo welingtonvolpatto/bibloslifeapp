@@ -465,7 +465,7 @@ const REGION_PLANS = {
   latam: {checkoutUrl:"https://pay.hotmart.com/M108428983D?off=qkpp14cg&checkoutMode=6", price:9.90,
           terms:"US$9,90 hoy y luego US$9,90 cada mes hasta que canceles."}
 };
-const LATAM = ["MX","GT","SV","HN","NI","CR","PA","CU","DO","CO","VE","EC","PE","BO","CL","AR","UY","PY","BR"];
+const LATAM = ["MX","GT","SV","HN","NI","CR","PA","CU","DO","CO","VE","EC","PE","BO","CL","AR","UY","PY","BR","PR"];
 function applyRegion(cc){ cc=String(cc||"").toUpperCase(); if(LATAM.includes(cc)) Object.assign(CONFIG.plans[0], REGION_PLANS.latam); CONFIG.country=cc; }
 (function(){ try{
   const forced=new URLSearchParams(location.search).get("cc"); if(forced){ applyRegion(forced); return; }
