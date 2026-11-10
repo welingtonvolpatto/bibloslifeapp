@@ -983,10 +983,12 @@ function openChat(){
 /* ---------- EXPLORE ---------- */
 function verseOfDay(offset=0){ const d=new Date(); d.setDate(d.getDate()-offset); const n=Math.floor(d/864e5); return {...C.verses[n%C.verses.length], d}; }
 const STORY_BG=["linear-gradient(160deg,#0E5F95,#3C86BC 60%,#C9973F)","linear-gradient(160deg,#1E3A5F,#0E5F95 60%,#7FB6E0)","linear-gradient(160deg,#4A3F6B,#7A6BA8 60%,#E3B8A0)","linear-gradient(160deg,#21503F,#3F8A6B 60%,#D9C27F)","linear-gradient(160deg,#5B2E48,#9A4F6E 60%,#F0B37E)","linear-gradient(160deg,#16324F,#2C5D8F 55%,#9CC4E4)","linear-gradient(160deg,#3B3024,#8A6A44 60%,#E8D3A8)"];
+const STORY_IMG=["peak-dawn","meadow-path","pier-calm","pier-sunrise","valley-light","snow-peak","dune-sunrise","lake-autumn","sea-stacks","sea-cliffs","hill-trail"];
+const storyImg=(v,thumb)=>`images/stories/${STORY_IMG[Math.floor(v.d/864e5)%STORY_IMG.length]}${thumb?"-t":""}.webp`;
 function viewExplore(){
   const st=Array.from({length:7},(_,i)=>verseOfDay(i));
   return `<div class="screen"><div class="safe-top"></div><div class="pad"><h1 style="margin-bottom:14px">Explore</h1><div class="muted" style="font-size:14px;margin-bottom:8px">Verses of the day</div></div>
-   <div class="stories">${st.map((v,i)=>`<button class="story" data-st="${i}"><div style="background:${STORY_BG[i%7]}">${esc(v.r)}</div></button>`).join("")}</div>
+   <div class="stories">${st.map((v,i)=>`<button class="story" data-st="${i}"><div style="background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.6)),url(${storyImg(v,1)}) center/cover,${STORY_BG[i%7]}">${esc(v.r)}</div></button>`).join("")}</div>
    <div class="pad" style="margin:22px 0 8px"><div class="muted" style="font-size:14px">Spiritual assistant <span class="badge">Soon</span></div></div>
    <div class="aicard"><div class="ai-art">${clouds(120,"white","opacity:.9")}<span class="ai-orb">${ic("hands")}</span></div><p>Get guidance, daily inspiration and go deeper into God’s Word — anytime you need it.</p><button class="btn white ai-locked" data-chat aria-disabled="true">${ic("lock")}<span>Coming soon</span></button><div class="ai-soon">Available in an upcoming update</div></div>
    ${podsRow()}
@@ -997,18 +999,28 @@ function viewExplore(){
 afterRender.explore=()=>{ const ch=document.querySelector("[data-chat]"); if(ch) ch.onclick=()=>toast(window.T?T("The assistant will be available in an upcoming update."):"The assistant will be available in an upcoming update."); document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>openStory(+b.dataset.st)); document.querySelectorAll("[data-pod]").forEach(b=>b.onclick=()=>openPod(b.dataset.pod)); const a=document.querySelector("[data-allpods]"); if(a) a.onclick=openAllPods; };
 function openStory(i){
   document.querySelector(".storyview")?.remove();
-  const v=verseOfDay(i); const el=document.createElement("div"); el.className="storyview"; el.style.background=STORY_BG[i%7];
-  el.innerHTML=`${clouds(220,"white")}<div class="story-bars">${Array.from({length:7},(_,k)=>`<i class="${k<i?"done":k===i?"run":""}"><b></b></i>`).join("")}</div><div style="position:absolute;top:calc(env(safe-area-inset-top) + 22px);left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2"><span style="font-size:13px;opacity:.85">${v.d.toLocaleDateString(LOC,{month:"short",day:"numeric"})}</span><button data-x style="color:#fff">${ic("x").replace("<svg ",'<svg style="width:26px;height:26px" ')}</button></div>
+  const v=verseOfDay(i); const el=document.createElement("div"); el.className="storyview photo"; el.style.background=STORY_BG[i%7];
+  el.innerHTML=`<div class="sv-bg" style="background-image:url(${storyImg(v)})"></div><div class="sv-shade"></div><div class="story-bars">${Array.from({length:7},(_,k)=>`<i class="${k<i?"done":k===i?"run":""}"><b></b></i>`).join("")}</div><div style="position:absolute;top:calc(env(safe-area-inset-top) + 22px);left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2"><span style="font-size:13px;opacity:.85">${v.d.toLocaleDateString(LOC,{month:"short",day:"numeric"})}</span><button data-x style="color:#fff">${ic("x").replace("<svg ",'<svg style="width:26px;height:26px" ')}</button></div>
     <div class="brand st1">VEREDA</div><q class="st2">${esc(v.t)}</q><div class="st3" style="opacity:.8">${esc(v.r)}</div>
     <div style="position:absolute;left:24px;right:24px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:2" class="st4"><button class="btn white" data-sh>Share the wisdom</button><button data-cp style="color:#fff;font-weight:600;margin-top:16px;width:100%">Copy verse</button></div>`;
   document.body.appendChild(el);
-  const go=n=>{ clearTimeout(tm); if(n>=0&&n<7) openStory(n); else el.remove(); };
+  if(i<6){ const nx=new Image(); nx.src=storyImg(verseOfDay(i+1)); }
+  const go=n=>{ clearTimeout(tm); if(n>=0&&n<7) openStory(n); else if(n>=7) storiesDone(el); else el.remove(); };
   let tm=setTimeout(()=>go(i+1),7000);
   el.querySelector("[data-x]").onclick=()=>{ clearTimeout(tm); el.remove(); };
   el.querySelector("[data-sh]").onclick=()=>{ clearTimeout(tm); shareText(`“${v.t}” — ${v.r}\n\nshared from VEREDA`); };
   el.querySelector("[data-cp]").onclick=()=>{ clearTimeout(tm); copyText(`${v.t} — ${v.r}`); };
   el.addEventListener("click",e=>{ if(e.target.closest("button")) return; go(e.clientX<innerWidth/3?i-1:i+1); });
   let x0=null; el.addEventListener("touchstart",e=>x0=e.touches[0].clientX,{passive:true}); el.addEventListener("touchend",e=>{ if(x0===null) return; const dx=e.changedTouches[0].clientX-x0; if(Math.abs(dx)>50) go(i+(dx<0?1:-1)); x0=null; });
+}
+
+function storiesDone(sv){
+  const th=[0,1,2].map(k=>storyImg(verseOfDay(k),1));
+  const el=document.createElement("div"); el.className="stories-done";
+  el.innerHTML=`<div class="sd-cards">${th.map((u,k)=>`<i style="background-image:url(${u})" class="c${k}"></i>`).join("")}</div>
+   <h2>You've seen all of today's verses!</h2><p>Tomorrow brings a new verse — or go back to the one that touched you.</p><button class="btn" data-ok>Got it!</button>`;
+  document.body.appendChild(el); sv&&sv.remove();
+  el.querySelector("[data-ok]").onclick=()=>el.remove();
 }
 
 /* ---------- JOURNAL ---------- */

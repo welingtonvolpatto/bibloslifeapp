@@ -526,6 +526,23 @@ textarea.field{height:auto;min-height:140px;padding:14px 16px;resize:none;line-h
 .ch-in textarea{flex:1;border:0;outline:0;resize:none;font:inherit;font-size:16px;line-height:1.4;padding:7px 0;background:transparent;color:var(--ink);max-height:120px}
 .ch-send{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:var(--blue);flex:none}
 .ch-send svg{width:20px;height:20px}.ch-send:disabled{opacity:.4}
+
+.story div{background-size:cover;background-position:center;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.storyview.photo{justify-content:flex-start;padding-top:calc(env(safe-area-inset-top) + 18vh);background:#0d1b26}
+.storyview .sv-bg{position:absolute!important;inset:0;background-size:cover;background-position:center;animation:svZoom 9s ease-out forwards,svIn .5s ease-out;z-index:0!important}
+.storyview .sv-shade{position:absolute!important;inset:0;z-index:0!important;background:linear-gradient(180deg,rgba(6,14,22,.62) 0%,rgba(6,14,22,.42) 38%,rgba(6,14,22,.08) 62%,rgba(6,14,22,.55) 100%)}
+.storyview.photo q{font-family:Georgia,"Times New Roman",var(--serif),serif;font-size:24px;line-height:1.42;font-weight:400;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+.storyview.photo .brand{text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.storyview.photo .st3{font-size:15px;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+@keyframes svZoom{from{transform:scale(1.08)}to{transform:scale(1)}}
+@keyframes svIn{from{opacity:.4}to{opacity:1}}
+.stories-done{position:fixed;inset:0;z-index:71;max-width:480px;margin:0 auto;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;animation:svIn .3s ease-out}
+.stories-done h2{font-size:22px;margin:26px 0 8px;color:var(--ink)}
+.stories-done p{font-size:15px;color:#555;line-height:1.45;margin-bottom:26px}
+.stories-done .btn{width:100%}
+.sd-cards{position:relative;width:220px;height:200px}
+.sd-cards i{position:absolute;top:10px;left:70px;width:84px;height:150px;border-radius:12px;background-size:cover;background-position:center;box-shadow:0 8px 24px rgba(0,0,0,.18);border:3px solid #fff}
+.sd-cards .c0{transform:rotate(-14deg) translateX(-58px)}.sd-cards .c2{transform:rotate(14deg) translateX(58px)}.sd-cards .c1{z-index:2;top:0}
 </style>
 </head>
 <body>
