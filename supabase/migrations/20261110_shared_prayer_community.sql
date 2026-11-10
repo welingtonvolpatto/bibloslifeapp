@@ -1,3 +1,4 @@
 -- Applied via Supabase MCP on 2026-11-10: shared prayer community (prayer_requests, prayer_amens, prayer_reports + community_* RPCs).
 -- Tables have RLS enabled with no policies; members use the SECURITY DEFINER functions only.
 -- See git history / Supabase migration "shared_prayer_community" for the full definition.
+-- 2026-11-10: quiz_leads table + save_lead(p jsonb) (anon) + leads_export() (service role, used by quiz-dashboard action "leads").

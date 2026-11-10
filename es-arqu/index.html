@@ -748,7 +748,7 @@ const R = {
       sug.hidden=false;
       sug.querySelectorAll('li').forEach(li=>li.onmousedown=e=>{e.preventDefault();inp.value=li.dataset.v;sug.hidden=true;$('er').textContent='';upd();});
     };
-    const upd=()=>setCTA("Continue",()=>{const v=inp.value.trim();if(!ok(v)){$('er').textContent="Ingresa un correo válido";return;}state.email=v;go();},!inp.value.trim());
+    const upd=()=>setCTA("Continue",()=>{const v=inp.value.trim();if(!ok(v)){$('er').textContent="Ingresa un correo válido";return;}state.email=v;sendLead();go();},!inp.value.trim());
     inp.oninput=()=>{$('er').textContent="";showSug();upd();};
     inp.onfocus=showSug; inp.onblur=()=>setTimeout(()=>sug.hidden=true,150);
     upd();
@@ -872,6 +872,13 @@ function startTimer(){
   tick(); setInterval(tick,1000);
 }
 function sendLead(){
+  // save the lead (email list for remarketing) — Supabase quiz_leads via save_lead()
+  if(!IS_BOT && state.email){ try{ const q=new URLSearchParams(location.search);
+    fetch(TRACK.url.replace("/quiz_events","/rpc/save_lead"),{method:"POST",keepalive:true,headers:{"apikey":TRACK.key,"Content-Type":"application/json"},
+      body:JSON.stringify({p:{sid:TRACK.sid,quiz:TRACK.quiz,email:state.email,name:state.name||null,
+        newsletter:(state.answers&&typeof state.answers.newsletter==="boolean")?state.answers.newsletter:null,
+        archetype:state.archetype||null,gender:state.gender||null,lang:document.documentElement.lang||"en",
+        utm_source:q.get("utm_source"),utm_campaign:q.get("utm_campaign")}})}).catch(()=>{}); }catch(e){} }
   if(!CONFIG.leadWebhook) return;
   fetch(CONFIG.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:state.email,name:state.name,archetype:state.archetype,gender:state.gender,answers:state.answers})}).catch(()=>{});
 }

@@ -110,6 +110,7 @@ tr:last-child td{border-bottom:0}
       <option value="90">Últimos 90 dias</option>
       <option value="365">Todo o período</option>
     </select>
+    <button class="ghost" id="leadsBtn" title="Baixar a lista de e-mails (quiz + carrinhos abandonados)">Baixar leads</button>
     <button class="ghost" id="refresh">Atualizar</button>
     <button class="ghost" id="logout">Sair</button>
   </div></header>
@@ -185,6 +186,22 @@ async function fetchData(pw, days){
   if (r.status === 401) throw new Error("senha");
   if (!r.ok) throw new Error("rede");
   return r.json();
+}
+
+async function downloadLeads(){
+  const b = $("#leadsBtn"); const old = b.textContent; b.disabled = true; b.textContent = "Baixando…";
+  try {
+    const r = await fetch(API, {method:"POST", headers:{"content-type":"application/json", apikey:KEY}, body:JSON.stringify({password:PW, action:"leads"})});
+    if (!r.ok) throw new Error();
+    const rows = await r.json();
+    const cols = ["origem","email","nome","quiz","idioma","aceita_emails","comprou","utm_source","utm_campaign","data"];
+    const cell = v => { const s = String(v ?? ""); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s; };
+    const csv = "\ufeff" + cols.join(",") + "\n" + rows.map(x => cols.map(c => cell(c === "data" && x[c] ? new Date(x[c]).toLocaleString("pt-BR") : x[c])).join(",")).join("\n");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+    a.download = "vereda-leads-" + new Date().toISOString().slice(0,10) + ".csv"; a.click();
+    b.textContent = rows.length + " leads baixados";
+  } catch (e) { b.textContent = "Erro ao baixar"; }
+  setTimeout(() => { b.textContent = old; b.disabled = false; }, 2500);
 }
 
 async function load(){
@@ -299,6 +316,7 @@ $("#lform").onsubmit = async e => {
   } finally { $("#lbtn").disabled = false; }
 };
 $("#days").onchange = load;
+$("#leadsBtn").onclick = downloadLeads;
 $("#refresh").onclick = load;
 $("#logout").onclick = logout;
 
