@@ -1074,7 +1074,19 @@ function openJournalEditor(q, isNew, entry){
 /* ---------- COMMUNITY ---------- */
 let comTab="all";
 const WEEK=7*864e5;
-const activeReqs=()=>S.requests.filter(r=>Date.now()-r.ts<WEEK);
+/* Shared community (Supabase): every member, in every language, sees and prays for the same requests.
+   Falls back to on-device requests only when there is no signed-in session (e.g. demo admin offline). */
+const COMM={list:null,loading:false,t:0};
+const remoteCom=()=>!!(sbc&&S.user&&S.user.uid);
+async function loadCom(force){
+  if(!remoteCom()||COMM.loading) return; if(!force&&COMM.list&&Date.now()-COMM.t<20000) return;
+  COMM.loading=true;
+  try{ const {data,error}=await sbc.rpc("community_feed");
+    if(!error&&Array.isArray(data)){ COMM.list=data.map(x=>({id:x.id,text:x.text,name:x.name,ts:new Date(x.created_at).getTime(),prayers:x.prayers||0,prayedBy:x.prayed_by||[],mine:!!x.mine,prayedMe:!!x.prayed_me,lang:x.lang})); COMM.t=Date.now();
+      if(tab==="community"&&!document.querySelector(".player")) render(); } }catch(e){}
+  COMM.loading=false;
+}
+const activeReqs=()=>remoteCom()?(COMM.list||[]):S.requests.filter(r=>Date.now()-r.ts<WEEK);
 function avStack(r){ const ps=(r.prayedBy||[]).slice(-3); return ps.length?`<span class="avs">${ps.map(p=>`<i>${esc(p)}</i>`).join("")}</span>`:""; }
 function reqCard(r,i){
   return `<button class="req ${r.mine?"mine":""}" data-rq="${r.id}" style="animation-delay:${Math.min(i,8)*0.05}s">${puff("68%","-8px",110,12,.55,i*2)}<div class="t">${esc(r.text)}</div><div class="m"><span class="av">${esc(initials(r.mine?S.user.name:r.name))}</span>${r.mine?"Your request":esc(r.name)}<span class="cnt">${avStack(r)}${r.prayers?`<b>${r.prayers}</b>`:""}</span></div></button>`;
@@ -1082,6 +1094,7 @@ function reqCard(r,i){
 function viewCommunity(){
   const all=activeReqs(); const list = comTab==="all" ? all : all.filter(r=>r.mine);
   const cards = list.slice().sort((a,b)=>b.ts-a.ts).map(reqCard).join("");
+  if(remoteCom()&&!COMM.list&&!cards) return `<div class="screen"><div class="safe-top"></div><div class="pad"><h1>Community</h1><p class="muted" style="margin-top:30px;text-align:center">Loading…</p></div><button class="fab" id="newrq">${ic("plus")}</button></div>`;
   const empty = comTab==="all"
     ? `<div class="empty"><svg class="floaty-ico" viewBox="0 0 140 110" width="160">${handsArt(false)}</svg><b>This space is waiting for prayer</b><p class="muted">When a prayer request is shared, it will appear here. Share what is on your heart and let others lift you up.</p></div>`
     : `<div class="empty"><svg class="floaty-ico" viewBox="0 0 140 110" width="160">${handsArt(false)}</svg><b>Your prayer requests will appear here</b><p class="muted">When something is on your heart, you can share it. The VEREDA community will be with you in prayer.</p></div>`;
@@ -1094,6 +1107,7 @@ function handsArt(rays=true){
     <path d="M70 18c-6 16-16 26-20 44-2 9 2 18 10 20l10 2Z" fill="#F4CDB6"/><path d="M70 18c6 16 16 26 20 44 2 9-2 18-10 20l-10 2Z" fill="#EBB79C"/><path d="M48 80l22 4 22-4 6 22H42Z" fill="#3C86BC"/><path d="M42 102h56" stroke="#0E5F95" stroke-width="4" stroke-linecap="round"/>`;
 }
 afterRender.community=()=>{
+  loadCom();
   document.querySelectorAll("[data-ct]").forEach(b=>b.onclick=()=>{ comTab=b.dataset.ct; render(); });
   const list=()=>{ const all=activeReqs(); return (comTab==="all"?all:all.filter(r=>r.mine)).slice().sort((a,b)=>b.ts-a.ts); };
   document.querySelectorAll("[data-rq]").forEach(b=>b.onclick=()=>{ const L=list(); const r=L.find(x=>x.id===b.dataset.rq); if(r.mine && comTab==="mine") openMyRequest(r); else openPray(L, L.indexOf(r)); });
@@ -1112,7 +1126,17 @@ function newRequest(){
   t.oninput=()=>{ el.querySelector("#cc").textContent=`${t.value.length}/400 characters`; pub.disabled=t.value.trim().length<3; };
   el.querySelector("[data-back]").onclick=()=>el.remove();
   el.querySelector("[data-info]").onclick=()=>sheet(`<h3>About prayer requests</h3><p>Share only what you’re comfortable sharing. Requests stay visible for 7 days, and you can delete yours at any time.</p><button class="btn" data-x>Got it</button>`,(s,c)=>s.querySelector("[data-x]").onclick=c);
-  pub.onclick=()=>{ pub.innerHTML='<span class="spin"></span>'; setTimeout(()=>{ const r={id:uid(), text:t.value.trim(), name:el.querySelector("#anon").checked?"Anonymous":S.user.name, ts:Date.now(), prayers:0, prayedBy:[], mine:true}; S.requests.push(r); save(); el.remove(); comTab="mine"; render(); openMyRequest(r,true); },600); };
+  pub.onclick=async()=>{ pub.disabled=true; pub.innerHTML='<span class="spin"></span>';
+    const anon=el.querySelector("#anon").checked, text=t.value.trim();
+    if(remoteCom()){
+      try{ const {data,error}=await sbc.rpc("community_post",{p_text:text,p_name:(S.user.name||"").split(" ")[0],p_anonymous:anon,p_lang:window.VLANG||"en"});
+        if(error) throw error;
+        const r={id:data, text, name:anon?"Anonymous":S.user.name, ts:Date.now(), prayers:0, prayedBy:[], mine:true};
+        COMM.list=[r,...(COMM.list||[])]; el.remove(); comTab="mine"; render(); openMyRequest(r,true); loadCom(true);
+      }catch(e){ pub.disabled=false; pub.textContent="Publish"; toast(/too_many/.test(e&&e.message||"")?"You’ve shared a lot of requests today. Try again tomorrow.":"Something went wrong. Please try again."); }
+      return;
+    }
+    setTimeout(()=>{ const r={id:uid(), text, name:anon?"Anonymous":S.user.name, ts:Date.now(), prayers:0, prayedBy:[], mine:true}; S.requests.push(r); save(); el.remove(); comTab="mine"; render(); openMyRequest(r,true); },600); };
 }
 function openMyRequest(r, fresh){
   const el=document.createElement("div"); el.className="player mine-screen";
@@ -1124,7 +1148,7 @@ function openMyRequest(r, fresh){
   document.body.appendChild(el);
   if(fresh) toast("Your prayer request is active");
   el.querySelector("[data-back]").onclick=()=>{ el.remove(); render(); };
-  el.querySelector("[data-del]").onclick=()=>sheet(`<h3>Delete this request?</h3><p>It will be removed from the community.</p><button class="btn" style="background:var(--bad)" data-y>Delete</button><button class="btn ghost" data-x style="margin-top:10px">Cancel</button>`,(s,c)=>{ s.querySelector("[data-x]").onclick=c; s.querySelector("[data-y]").onclick=()=>{ S.requests=S.requests.filter(x=>x!==r); save(); c(); el.remove(); render(); toast("Your request was deleted"); }; });
+  el.querySelector("[data-del]").onclick=()=>sheet(`<h3>Delete this request?</h3><p>It will be removed from the community.</p><button class="btn" style="background:var(--bad)" data-y>Delete</button><button class="btn ghost" data-x style="margin-top:10px">Cancel</button>`,(s,c)=>{ s.querySelector("[data-x]").onclick=c; s.querySelector("[data-y]").onclick=async()=>{ if(remoteCom()){ try{ await sbc.rpc("community_delete",{p_id:r.id}); }catch(e){} COMM.list=(COMM.list||[]).filter(x=>x.id!==r.id); } else { S.requests=S.requests.filter(x=>x!==r); save(); } c(); el.remove(); render(); toast("Your request was deleted"); }; });
   el.querySelector("[data-ask]").onclick=()=>shareRequest(r);
 }
 async function requestCard(r){
@@ -1155,23 +1179,26 @@ function openPray(list, start=0){
   const stopM=()=>{ Music.stop(); clearInterval(mt); };
   const paint=(dir=0)=>{
     const r = all? null : list[i]; const total = all? activeReqs().length : (r.prayers||0);
-    const prayed = all ? !!S.prayedAllDay && S.prayedAllDay===todayStr() : !!S.prayed[r.id];
+    const prayed = all ? !!S.prayedAllDay && S.prayedAllDay===todayStr() : !!(r.prayedMe||S.prayed[r.id]);
     const text = all ? "Lord, we place all of these prayer requests in your hands. Bring peace, healing and guidance to every heart. May each person feel your presence and care today. Amen." : r.text;
     const chip = all ? (prayed?`Prayed for ${total} ${total===1?"heart":"hearts"}`:`Praying for ${total} ${total===1?"heart":"hearts"}`) : `${avStack(r)}${total} ${total===1?"person":"people"} prayed`;
     el.innerHTML=`${clouds(230,"white","opacity:.8")}<div class="p-top" style="position:relative;z-index:2"><button class="icon-btn" data-back>${ic("back")}</button><div class="p-title">Prayer requests</div><span class="muted" style="width:36px;text-align:right;font-size:13px">${all?total:`${i+1}/${list.length}`}</span></div>
       <div class="p-body" style="padding-top:24px;position:relative;z-index:1"><div class="${dir?"stepin":""}"><div style="text-align:center"><span class="chip" id="pc">${chip}</span></div>
-      <div class="pray-text" style="margin-top:24px">${esc(text)}</div>${r&&!r.mine?`<div class="muted" style="padding:0 8px;font-size:14px">— ${esc(r.name)}</div>`:""}</div></div>
+      <div class="pray-text" style="margin-top:24px">${esc(text)}</div>${r&&!r.mine?`<div class="muted" style="padding:0 8px;font-size:14px">— ${esc(r.name)}</div>${remoteCom()?`<button class="link" data-rep style="font-size:12px;margin:10px 8px 0;color:var(--muted)">Report</button>`:""}`:""}</div></div>
       <div class="p-foot" style="background:none"><div class="card" style="display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:12px"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E6D7F3,#CFE3F4);display:grid;place-items:center;color:var(--blue)">${ic("music").replace("<svg ",'<svg style="width:18px" ')}</div><div style="flex:1;font-weight:600;font-size:14px;color:var(--ink)">Soft music for prayer<div class="bar" style="height:3px;margin-top:8px"><i id="mb" style="width:${p0}%"></i></div></div><button data-mu style="color:var(--ink)">${ic(Music.on?"pause":"play").replace("<svg ",'<svg style="width:22px;height:22px" ')}</button></div>
       <button class="btn" data-amen ${prayed?"disabled":""}>${prayed?"You prayed ✓":"Amen"}</button></div>`;
     el.querySelector("[data-back]").onclick=()=>{ stopM(); el.remove(); render(); };
+    const rep=el.querySelector("[data-rep]"); if(rep) rep.onclick=()=>sheet(`<h3>Report this request?</h3><p>If it’s offensive, spam or not a prayer request, let us know. Requests reported by several people are hidden.</p><button class="btn" style="background:var(--bad)" data-y>Report</button><button class="btn ghost" data-x style="margin-top:10px">Cancel</button>`,(s,c)=>{ s.querySelector("[data-x]").onclick=c; s.querySelector("[data-y]").onclick=async()=>{ try{ await sbc.rpc("community_report",{p_id:r.id}); }catch(e){} c(); toast("Thank you. We’ll take a look."); }; });
     const mu=el.querySelector("[data-mu]");
     mu.onclick=()=>{ if(Music.on){ stopM(); paint(); } else { Music.start(); mt=setInterval(()=>{ p0=(p0+0.4)%100; const b=el.querySelector("#mb"); if(b) b.style.width=p0+"%"; },300); paint(); } };
     el.querySelector("[data-amen]").onclick=()=>{
       navigator.vibrate&&navigator.vibrate([10,40,20]);
       const h=document.createElement("div"); h.className="hands"; h.innerHTML=`<svg viewBox="-10 -20 160 150" width="230">${handsArt(true)}</svg>`; el.appendChild(h);
       const me=initials(S.user.name);
-      if(all){ activeReqs().forEach(x=>{ if(!S.prayed[x.id]){ x.prayers=(x.prayers||0)+1; (x.prayedBy=x.prayedBy||[]).push(me); S.prayed[x.id]=1; } }); S.prayedAllDay=todayStr(); }
-      else { r.prayers=(r.prayers||0)+1; (r.prayedBy=r.prayedBy||[]).push(me); S.prayed[r.id]=1; }
+      const ids=[];
+      if(all){ activeReqs().forEach(x=>{ if(!S.prayed[x.id]&&!x.prayedMe){ x.prayers=(x.prayers||0)+1; (x.prayedBy=x.prayedBy||[]).push(me); S.prayed[x.id]=1; x.prayedMe=true; ids.push(x.id); } }); S.prayedAllDay=todayStr(); }
+      else { r.prayers=(r.prayers||0)+1; (r.prayedBy=r.prayedBy||[]).push(me); S.prayed[r.id]=1; r.prayedMe=true; ids.push(r.id); }
+      if(remoteCom()&&ids.length){ sbc.rpc("community_amen",{p_ids:ids,p_initials:me}).then(()=>{},()=>{}); }
       addLight(5,"amen",5);
       save(); el.querySelector("[data-amen]").disabled=true;
       setTimeout(()=>{ h.remove(); if(!all && i<list.length-1){ i++; paint(1); } else paint(); },1700);
