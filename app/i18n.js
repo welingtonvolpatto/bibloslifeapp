@@ -194,7 +194,7 @@
     "Prepared answers based on Scripture.": "Respuestas preparadas basadas en las Escrituras.",
     "Please sign out and sign in again to use the assistant.": "Cierra sesión y vuelve a entrar para usar el asistente.",
     "Sorry — I couldn’t answer right now. Please check your connection and try again.": "Lo siento, no pude responder ahora. Revisa tu conexión e inténtalo de nuevo.",
-    "Continue chat": "Continuar el chat", "Start a chat": "Iniciar un chat", "Write your message": "Escribe tu mensaje",
+    "Continue chat": "Continuar el chat", "Available in an upcoming update": "Disponible en una próxima actualización", "The assistant will be available in an upcoming update.": "El asistente estará disponible en una próxima actualización.", "Start a chat": "Iniciar un chat", "Write your message": "Escribe tu mensaje",
     "Which verse is hard for you to live out — and why?": "¿Qué versículo te cuesta vivir, y por qué?",
     "What does an ‘abundant life’ mean to you beyond your circumstances?": "¿Qué significa para ti una «vida abundante» más allá de tus circunstancias?",
     "Where did you see God’s faithfulness this week?": "¿Dónde viste la fidelidad de Dios esta semana?",

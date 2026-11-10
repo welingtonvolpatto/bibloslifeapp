@@ -987,14 +987,14 @@ function viewExplore(){
   const st=Array.from({length:7},(_,i)=>verseOfDay(i));
   return `<div class="screen"><div class="safe-top"></div><div class="pad"><h1 style="margin-bottom:14px">Explore</h1><div class="muted" style="font-size:14px;margin-bottom:8px">Verses of the day</div></div>
    <div class="stories">${st.map((v,i)=>`<button class="story" data-st="${i}"><div style="background:${STORY_BG[i%7]}">${esc(v.r)}</div></button>`).join("")}</div>
-   <div class="pad" style="margin:22px 0 8px"><div class="muted" style="font-size:14px">Spiritual assistant</div></div>
-   <div class="aicard"><div class="ai-art">${clouds(120,"white","opacity:.9")}<span class="ai-orb">${ic("hands")}</span></div><p>Get guidance, daily inspiration and go deeper into God’s Word — anytime you need it.</p><button class="btn white" data-chat>${(S.chat&&S.chat.length)?"Continue chat":"Start a chat"}</button></div>
+   <div class="pad" style="margin:22px 0 8px"><div class="muted" style="font-size:14px">Spiritual assistant <span class="badge">Soon</span></div></div>
+   <div class="aicard"><div class="ai-art">${clouds(120,"white","opacity:.9")}<span class="ai-orb">${ic("hands")}</span></div><p>Get guidance, daily inspiration and go deeper into God’s Word — anytime you need it.</p><button class="btn white ai-locked" data-chat aria-disabled="true">${ic("lock")}<span>Coming soon</span></button><div class="ai-soon">Available in an upcoming update</div></div>
    ${podsRow()}
    <div class="pad" style="margin:22px 0 10px"><div class="muted" style="font-size:14px">Coming soon</div></div>
    <div class="soon"><div class="i">${ic("doc")}</div><div><b>Articles <span class="badge">Soon</span></b><span class="muted" style="font-size:13.5px">Quick reads on faith, prayer and everyday life</span></div></div>
    <div class="soon"><div class="i">${ic("book")}</div><div><b>Bible stories <span class="badge">Soon</span></b><span class="muted" style="font-size:13.5px">The great stories of Scripture, told simply</span></div></div></div>`;
 }
-afterRender.explore=()=>{ const ch=document.querySelector("[data-chat]"); if(ch) ch.onclick=openChat; document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>openStory(+b.dataset.st)); document.querySelectorAll("[data-pod]").forEach(b=>b.onclick=()=>openPod(b.dataset.pod)); const a=document.querySelector("[data-allpods]"); if(a) a.onclick=openAllPods; };
+afterRender.explore=()=>{ const ch=document.querySelector("[data-chat]"); if(ch) ch.onclick=()=>toast(window.T?T("The assistant will be available in an upcoming update."):"The assistant will be available in an upcoming update."); document.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>openStory(+b.dataset.st)); document.querySelectorAll("[data-pod]").forEach(b=>b.onclick=()=>openPod(b.dataset.pod)); const a=document.querySelector("[data-allpods]"); if(a) a.onclick=openAllPods; };
 function openStory(i){
   document.querySelector(".storyview")?.remove();
   const v=verseOfDay(i); const el=document.createElement("div"); el.className="storyview"; el.style.background=STORY_BG[i%7];
