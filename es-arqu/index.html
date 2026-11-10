@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>VEREDA — Descubre tu arquetipo espiritual</title>
+<meta name="description" content="Guías de estudio bíblico, oraciones y explicaciones de las Escrituras para ayudarte a crecer en la fe.">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<!-- Utmify: pixel + UTM tracking -->
+<script>
+  window.pixelId = "6999baaab6c8592bd0aec04f";
+  (function(){var a=document.createElement("script");a.setAttribute("async","");a.setAttribute("defer","");a.setAttribute("src","https://cdn.utmify.com.br/scripts/pixel/pixel.js");document.head.appendChild(a);})();
+</script>
+<script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-subids async defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#0E5F95;--blue-d:#0A4A75;--blue-soft:#E8F0F7;--cream:#FDF7EF;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:var(--cream);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit}
+.app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;display:flex;flex-direction:column}
+header{height:56px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;position:sticky;top:0;background:var(--cream);z-index:10}
+header.transparent{background:transparent}
+.hbtn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px}
+.hbtn.hidden{visibility:hidden}
+.logo{text-align:center;font-weight:800;font-size:22px;letter-spacing:.5px;color:var(--title)}
+.progress{height:4px;background:var(--line);margin:0 16px;border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--blue);transition:width .35s}
+main{flex:1;display:flex;flex-direction:column}
+.screen{flex:1;display:flex;flex-direction:column;padding:12px 16px 110px;animation:fade .35s ease}
+.screen.center{justify-content:center}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.footer-cta{position:fixed;left:0;right:0;bottom:0;padding:12px 16px 20px;background:#fff;border-top:1px solid var(--line);z-index:20}
+.footer-cta .inner{max-width:398px;margin:0 auto}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;height:56px;border-radius:12px;background:var(--blue);color:#fff;font-size:18px;font-weight:700;transition:background .15s,opacity .15s}
+.btn:hover{background:var(--blue-d)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+h1.t{font-size:23px;line-height:28px;font-weight:600;text-align:center;color:var(--text);margin-bottom:8px}
+p.s{font-size:14px;line-height:20px;text-align:center;color:var(--muted);margin-bottom:16px}
+.q-title{font-size:24px;line-height:1.3;font-weight:700;text-align:center;color:var(--title);padding:10px 8px 6px}
+.q-hint{text-align:center;color:var(--muted);font-size:14px;margin-bottom:12px}
+.opts{margin-top:12px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-radius:12px;padding:20px 16px;margin-bottom:10px;font-size:16px;font-weight:500;transition:border-color .15s,background .15s}
+.opt .ico{width:28px;height:28px;flex:none}
+.opt .c{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
+.opt.multi .c{border-radius:6px}
+.opt:hover{border-color:#cfd3da}
+.opt.sel{border-color:var(--blue);background:#EEF4FA}
+.opt.sel .c{background:var(--blue);border-color:var(--blue)}
+.opt.sel .c::after{content:"";width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+/* image tiles */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+.tile{position:relative;border-radius:14px;overflow:hidden;border:2px solid transparent;background:var(--soft);transition:border-color .15s}
+.tile.sel{border-color:#2b2d30}
+.tile .img{width:100%;display:block;object-fit:cover}
+.tile .lbl{position:absolute;left:10px;right:10px;bottom:10px;height:44px;border-radius:10px;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;padding:0 10px 0 14px;font-size:17px;font-weight:600;color:#111}
+.tile.wide .lbl{height:34px;left:6px;right:6px;bottom:6px;font-size:15px;padding:0 6px 0 12px}
+.tile.wide .arr{width:22px;height:22px}
+.tile .arr{width:26px;height:26px;border-radius:50%;background:#2b2d30;display:flex;align-items:center;justify-content:center}
+/* gender intro */
+.social{display:flex;align-items:center;justify-content:center;gap:14px;margin:4px 0 14px}
+.social .rate{display:flex;flex-direction:column;align-items:center;font-size:20px;font-weight:700;color:#444}
+.social .rate small{font-size:10px;font-weight:600;color:#19b56b}
+.social p{font-size:13px;color:#77797e;line-height:1.35;max-width:170px}
+.big-title{font-size:27px;line-height:1.25;font-weight:600;text-align:center;letter-spacing:.3px;color:#222;text-transform:uppercase}
+.big-sub{font-size:15px;text-align:center;color:#444;margin:10px 0 18px;letter-spacing:.3px;text-transform:uppercase}
+.legal{margin-top:24px;font-size:12px;color:#6b6f76;text-align:center;line-height:1.45}
+.legal a{color:var(--blue)}
+/* info / break */
+.hero-img{width:100%;border-radius:12px;display:block;margin-bottom:22px;aspect-ratio:342/220;object-fit:cover}
+.hero-anim{width:100%;aspect-ratio:600/384;border:0;border-radius:12px;display:block;margin-bottom:22px;overflow:hidden;background:#f3ede4}
+.info-title{font-size:24px;font-weight:600;text-align:center;line-height:1.3;margin-bottom:12px;color:var(--title)}
+.info-text{font-size:16px;line-height:1.45;text-align:center;color:var(--muted)}
+.banner{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:12px;padding:12px;margin-top:22px;font-size:14px;line-height:1.4}
+.banner .pi{width:44px;height:44px;border-radius:50%;flex:none;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px}
+/* reveal */
+.reveal{text-align:center;padding-top:40px}
+.reveal .glow{width:150px;height:150px;border-radius:50%;margin:30px auto;background:radial-gradient(circle,#fff6d8 0%,#ffd77a 35%,#c9c5fa 70%,transparent 72%);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.reveal .hint{font-size:13px;color:var(--muted);margin-top:10px}
+/* loader */
+.ring{width:170px;height:170px;margin:26px auto 30px;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700}
+.steps li{list-style:none;display:flex;align-items:center;gap:12px;padding:12px 0;font-size:16px;color:#9a9ca1;transition:color .3s}
+.steps li .d{width:22px;height:22px;border-radius:50%;border:2px solid #d9dbe0;flex:none;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.steps li.on{color:var(--text)}
+.steps li.done .d{background:var(--green);border-color:var(--green)}
+.steps li.done .d::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:60;padding:20px}
+.modal .box{background:#fff;border-radius:16px;padding:22px 18px;width:100%;max-width:360px;text-align:center;animation:fade .25s}
+.modal small{display:block;color:var(--muted);font-size:13px;margin-bottom:8px}
+.modal h3{font-size:19px;line-height:1.35;margin-bottom:18px;color:var(--title)}
+.modal .yn{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal .yn button{height:52px;border-radius:12px;border:1px solid var(--line);font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px}
+.modal .yn button:hover{border-color:var(--blue)}
+/* summary */
+.arch-card{border-radius:16px;padding:20px;margin-top:16px;background:linear-gradient(160deg,#f3f0ff,#e4f1fd);text-align:center}
+.arch-card .kicker{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#6b6f76;font-weight:700}
+.arch-card .name{font-size:28px;font-weight:800;color:var(--title);margin:6px 0 2px}
+.arch-card .role{font-size:15px;color:#4b4e55;font-weight:600}
+.arch-card p{font-size:14px;line-height:1.5;color:#4b4e55;margin-top:10px}
+.divider{height:1px;background:var(--line);margin:18px 0}
+.inside h4{font-size:14px;font-weight:700;margin-bottom:10px}
+.inside li{list-style:none;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;font-size:14px;line-height:1.4}
+.inside li b{display:block;font-size:14px}
+.inside li span{color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.chips span{font-size:12px;font-weight:700;background:#fff;border-radius:20px;padding:5px 10px;color:#444}
+/* email / name */
+.field{width:100%;height:56px;border:1px solid #dfe1e5;border-radius:12px;padding:0 16px;font-size:16px;margin-top:18px;outline:none}
+.field:focus{border-color:var(--blue)}
+.err{color:#e5484d;font-size:13px;margin-top:6px;min-height:18px}
+.privacy{display:flex;gap:10px;margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.45}
+.privacy a{color:var(--blue)}
+/* cards sequence */
+.cards-screen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;z-index:5;
+  background:linear-gradient(0deg,rgba(255,235,244,.7) 2.43%,rgba(201,197,250,.7) 51.21%,rgba(163,159,212,.7) 100%)}
+.stack{position:relative;width:100%;max-width:360px;height:220px}
+.stack .card{position:absolute;inset:0;border-radius:18px;display:flex;align-items:center;justify-content:center;padding:26px;text-align:center;font-size:19px;font-weight:600;line-height:1.4;box-shadow:0 10px 30px rgba(60,50,120,.15);opacity:0;transform:translateY(30px) scale(.96);transition:all .6s ease}
+.stack .card.show{opacity:1;transform:none}
+.stack .card.back{transform:translateY(-14px) scale(.94);opacity:.6}
+/* offer */
+.topbar{position:sticky;top:0;background:#fff;z-index:20;display:flex;align-items:center;gap:16px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.timer{display:flex;flex-direction:column;align-items:center;min-width:110px}
+.timer .digits{font-size:34px;font-weight:600;line-height:1;color:#000}
+.timer .digits span{margin:0 3px}
+.timer .lbl{display:flex;gap:16px;font-size:12px;color:#222;margin-top:4px}
+.topbar .btn{flex:1}
+.offer{padding:0 16px 32px}
+.sec-title{font-size:26px;font-weight:600;text-align:center;color:var(--title);margin:32px 0 20px;line-height:1.25}
+.arch-mini{display:flex;align-items:center;gap:14px;border-radius:14px;padding:14px;background:linear-gradient(160deg,#f3f0ff,#e4f1fd);margin-top:20px}
+.arch-mini .av{width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;flex:none}
+.arch-mini b{display:block;font-size:17px}
+.arch-mini span{font-size:13px;color:#55585e}
+.highlights{border:1px solid var(--line);border-radius:12px}
+.highlights li{list-style:none;display:flex;gap:16px;padding:16px;font-size:15px;line-height:1.45;color:#3d4046;border-bottom:1px solid var(--line)}
+.highlights li:last-child{border-bottom:0}
+.highlights svg{flex:none}
+.plans{display:flex;flex-direction:column;gap:12px}
+.plan{border:2px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer}
+.plan .badge{display:none;background:var(--blue);color:#fff;text-align:center;font-size:12.5px;font-weight:700;padding:4px 0}
+.plan.popular .badge{display:block}
+.plan .body{display:flex;align-items:center;gap:14px;padding:18px 14px}
+.plan .radio{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
+.plan.sel{border-color:var(--blue)}
+.plan.sel .radio{background:#2b2d30;border-color:#2b2d30}
+.plan.sel .radio::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.plan .info{flex:1}
+.plan .name{font-size:19px;font-weight:600;color:var(--title)}
+.plan .price{font-size:12.5px;color:#55585e;margin-top:2px;line-height:1.35}
+.plan .price b{font-size:14.5px;color:#222;font-weight:700}
+.plan .off{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:700;padding:5px 10px;border-radius:8px;background:#f3f4f6;color:#55585e}
+.plan.sel .off{background:var(--blue);color:#fff}
+.plan .day{background:#f5f6f7;border-radius:6px;padding:8px 10px;text-align:center;min-width:88px}
+.plan .day small{display:block;font-size:11px;color:#6b6f76;font-weight:500}
+.plan .day strong{display:block;font-size:15px;font-weight:700;color:#222;line-height:1.2}
+.terms{font-size:12px;color:#6b6f76;text-align:center;line-height:1.5;margin:18px 4px}
+.terms a{color:#55585e}
+.safe{display:flex;align-items:center;justify-content:center;gap:6px;width:max-content;margin:14px auto 10px;padding:7px 16px;border-radius:8px;background:var(--green-bg);color:var(--green);font-size:15px;font-weight:600}
+.faq{border:1px solid var(--line);border-radius:12px}
+.faq details{border-bottom:1px solid var(--line)}
+.faq details:last-child{border-bottom:0}
+.faq summary{list-style:none;display:flex;justify-content:space-between;gap:16px;padding:18px 16px;font-size:16px;line-height:1.4;color:var(--title);cursor:pointer}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:24px;color:#b6b9bf;font-weight:300;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq p{padding:0 16px 18px;font-size:14.5px;color:#55585e;line-height:1.5}
+footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 30px}
+.menu{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;z-index:70}
+.menu.open{display:block}
+.menu .panel{position:absolute;right:0;top:0;bottom:0;width:78%;max-width:320px;background:#fff;padding:24px 20px}
+.menu h4{font-size:18px;font-weight:700;margin-bottom:18px}
+.menu a{display:block;padding:12px 0;color:var(--text);text-decoration:none;border-bottom:1px solid var(--line);font-size:15px}
+
+/* ===== offer page (VEREDA) ===== */
+.o-card.o-social{background:var(--blue-soft);border:0;text-align:center;padding:22px 14px}
+.o-social h3{font-size:21px;font-weight:600;line-height:1.35;color:var(--title)}
+.o-rate{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-top:16px;padding:8px;text-align:left}
+.o-rate .stores{display:flex;align-items:center;gap:10px;background:#f3f4f6;border-radius:10px;padding:10px 12px}
+.o-rate .stores svg{width:24px;height:24px}
+.o-rate .stores i{width:1px;height:28px;background:#d9dbe0}
+.o-rate .rt span{font-size:14px;color:#3d4046}.o-rate .rt span b{font-size:22px;color:var(--blue);margin-right:2px}
+.o-rate .rt strong{display:block;font-size:14px;font-weight:700;color:var(--title)}
+.pay{display:flex;justify-content:center;gap:5px;flex-wrap:wrap}
+.pay span{width:40px;height:26px;border:1px solid #e3e4e7;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:0;min-width:0}
+.pay span svg{width:100%;height:100%;display:block}
+
+.hl{color:var(--blue)}
+.o-top{position:sticky;top:0;z-index:20;background:var(--cream);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--line)}
+.o-logo{height:24px}
+.o-cta{width:auto;height:44px;padding:0 26px;font-size:15px}
+.offer{padding:8px 16px 24px}
+.o-h1{font-size:22px;font-weight:400;text-align:center;line-height:1.3;margin:22px 0 14px;color:var(--title)}
+.o-h1 b{font-weight:700}
+.o-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.o-chips>div{display:flex;align-items:center;gap:10px;background:var(--blue-soft);border-radius:10px;padding:10px 12px;font-size:14px;font-weight:600;color:var(--title)}
+.o-chips svg{width:22px;height:22px;color:var(--blue);flex:none}
+.o-chips small{display:block;font-size:11px;font-weight:500;color:var(--muted)}
+.o-bubble{position:relative;margin:14px 0 18px;border:1.5px solid #8FD3BF;border-radius:12px;padding:10px 14px;text-align:center;background:#fff}
+.o-bubble b{display:block;font-size:14px;color:var(--title)}
+.o-bubble span{font-size:12.5px;color:var(--muted);line-height:1.45}
+.o-bubble::after{content:"";position:absolute;left:50%;bottom:-8px;width:14px;height:14px;background:#fff;border-right:1.5px solid #8FD3BF;border-bottom:1.5px solid #8FD3BF;transform:translateX(-50%) rotate(45deg)}
+.o-journey{position:relative;background:var(--soft);border-radius:16px;padding:12px 12px 14px;overflow:hidden;margin:0 6px}
+.o-journey .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#fff;border-radius:10px;padding:3px;position:relative;z-index:2}
+.o-journey .tabs button{height:32px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--blue)}
+.o-journey .tabs button.on{background:var(--blue);color:#fff}
+.o-journey .tl{padding:12px 0 6px;width:72%;position:relative;z-index:2}
+.o-journey .day{display:grid;grid-template-columns:44px 1fr;align-items:center;margin-bottom:12px}
+.o-journey .dl{font-size:12px;color:#7a7f87}
+.o-journey .bar{display:block;padding:12px 10px;border-radius:6px;font-size:12.5px;font-weight:600;color:var(--title);border-left:3px solid}
+.bar.k0{background:#d5efe7;border-color:#2f9e83}.bar.k1{background:#fde7dc;border-color:#ec8a5c}.bar.k2{background:#fde7dc;border-color:#c79be8}.bar.k3{background:#fde7dc;border-color:#ec8a5c}
+.o-journey .day.fade{opacity:.35}
+.o-journey .coach{position:absolute;right:-6px;top:58px;width:44%;z-index:1;-webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent);mask-image:linear-gradient(to bottom,#000 70%,transparent)}
+.o-journey .jf{position:relative;z-index:2;text-align:center;font-size:12.5px;line-height:1.45}
+.o-journey .jf b{display:block}
+.o-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 16px;margin-top:24px}
+.o-get h3{font-size:20px;font-weight:600;text-align:center;margin-bottom:16px}
+.gi{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.gi p{font-size:13.5px;line-height:1.4;color:var(--muted)}
+.gi p b{color:var(--title);font-weight:600}
+.gic{width:30px;height:30px;border-radius:8px;flex:none;display:flex;align-items:center;justify-content:center;color:#fff}
+.gic svg{width:18px;height:18px}
+.gic.c0{background:#F08A4B}.gic.c1{background:#9B6BD6}.gic.c2{background:var(--blue)}.gic.c3{background:#E54B7A}.gic.c4{background:#2f9e83}
+.o-h2{font-size:22px;font-weight:600;text-align:center;line-height:1.3;margin:32px 0 18px;color:var(--title)}
+.o-plans{display:flex;flex-direction:column;gap:12px}
+/* crafting: continuous reviews marquee */
+.mq{margin:28px -16px 0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.mq-h{font-size:15px;font-weight:700;text-align:center;margin:0 0 12px;color:var(--title,#1E2430)}
+.mq-t{display:flex;width:max-content;animation:mq var(--d,40s) linear infinite;will-change:transform}
+.mq:active .mq-t,.mq:hover .mq-t{animation-play-state:paused}
+.mq-c{width:264px;flex:none;margin-right:12px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-sizing:border-box;display:flex;flex-direction:column}
+.mq-top{display:flex;gap:10px;align-items:center}.mq-top>div{flex:1;min-width:0}
+.mq-top em{width:36px;height:36px;border-radius:50%;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:15px;overflow:hidden;flex:none}
+.mq-top em img{width:100%;height:100%;object-fit:cover}
+.mq-top b{display:block;font-size:14px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mq-top small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.mq-st{display:flex;gap:2px;margin-top:10px}.mq-st i{width:16px;height:16px;background:#00B67A;color:#fff;font-style:normal;font-size:10px;display:flex;align-items:center;justify-content:center}.mq-c p{font-size:13px;line-height:1.5;color:#3d4046;margin-top:8px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+@keyframes mq{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.mq-t{animation-duration:160s}}
+.o-plan{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;cursor:pointer;background:#fff}
+.o-plan.sel{border-color:var(--blue)}
+.o-plan .rib{background:var(--blue);color:#fff;text-align:center;font-size:11.5px;font-weight:700;padding:4px 0;display:flex;align-items:center;justify-content:center;gap:5px}
+.o-plan .rib svg{width:12px;height:12px}
+.o-pb{display:flex;align-items:center;gap:14px;padding:16px 12px}
+.o-plan .radio{width:24px;height:24px;border-radius:50%;border:1px solid #e3e4e7;flex:none;display:flex;align-items:center;justify-content:center}
+.o-plan.sel .radio{background:#1E2430;border-color:#1E2430}
+.o-plan.sel .radio::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.o-pn{flex:1}.o-pn b{display:block;font-size:17px;font-weight:600;color:var(--title)}.o-pn s{font-size:12px;color:#a2a6ad}
+.o-pp{background:#f3f4f6;border-radius:24px 10px 10px 24px;padding:6px 10px 6px 12px}
+.o-plan.sel .o-pp{background:var(--blue-soft)}
+.pd{display:flex;align-items:flex-start;color:var(--title);line-height:1}
+.pd .cur{font-size:12px;font-weight:700;margin-top:4px}
+.pd .int{font-size:34px;font-weight:700;letter-spacing:-1px;margin:0 2px}
+.pd .dec{display:flex;flex-direction:column;font-size:12px}
+.pd .dec b{font-size:13px;margin-top:3px}
+.pd .dec small{font-size:10.5px;font-weight:500;margin-top:2px}
+.o-note{background:var(--soft);border-radius:12px;padding:12px 14px;margin:16px 0;text-align:center;font-size:13px;line-height:1.5;color:#3d4046}
+.o-terms{font-size:11.5px;color:#6b6f76;text-align:center;line-height:1.5;margin:12px 4px}
+.o-terms a{color:#55585e}
+.o-stats{border-radius:16px;padding:16px;background:linear-gradient(135deg,#E8F0F7,#FDF7EF)}
+.o-stats .srow{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px dashed rgba(0,0,0,.12);font-size:13px;color:#3d4046}
+.o-stats .big{font-size:34px;font-weight:600;color:var(--title);min-width:72px}
+.o-stats small{display:block;text-align:center;font-size:10.5px;color:#888;margin-top:8px}
+.o-end{display:grid;grid-template-columns:1fr 1fr;gap:8px}.o-end div:last-child:nth-child(odd){grid-column:1/-1}
+.o-disc{font-size:10.5px;color:#888;text-align:center;margin-top:10px}
+.o-guide{margin-top:32px;border-radius:14px;padding:16px;background:#fff;border:2px solid transparent;background-image:linear-gradient(#fff,#fff),linear-gradient(135deg,#8FC7B0,#E3C27F);background-origin:border-box;background-clip:padding-box,border-box}
+.o-guide b{display:block;font-size:15px;line-height:1.4;margin-bottom:10px;color:var(--title)}
+.o-guide div{display:flex;align-items:center;gap:10px;font-size:13px;color:#3d4046;padding:6px 0}
+.o-guide svg{width:18px;height:18px;color:var(--blue);flex:none}
+.o-sub{text-align:center;color:var(--muted);font-size:14px;margin:-8px 0 12px}
+.o-rev b{display:block;font-size:15px;margin-bottom:6px}.o-rev p{font-size:13px;line-height:1.5;color:#55585e}
+.o-end div{background:var(--blue-soft);border:1px solid #cfe0d6;border-radius:10px;padding:12px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.o-end small{font-size:11px;letter-spacing:.04em;color:#55585e}
+.o-end b{font-family:Georgia,"Times New Roman",serif;font-size:19px;font-weight:700;color:var(--blue);letter-spacing:.02em}
+.o-stats{padding:8px 18px 14px}
+.o-stats .srow{border-bottom:0;padding:10px 0;font-size:14px}
+.o-stats .big{font-size:40px;font-weight:500;letter-spacing:-1px}
+.o-stats .big sup{font-size:16px;vertical-align:22px;margin-left:2px}
+.o-stats .sdiv{display:flex;align-items:center;gap:8px;color:#9aa39d;font-size:10px}.o-stats .sdiv i{flex:1;height:1px;background:rgba(0,0,0,.12)}
+.o-rev .stars{display:flex;gap:3px;margin-bottom:8px}
+.o-rev .stars i{width:18px;height:18px;background:#00B67A;color:#fff;font-style:normal;font-size:12px;display:flex;align-items:center;justify-content:center}
+.o-rev .who{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:10px}
+.o-rev .who span{font-size:13px}
+.o-rev .who img,.o-rev .who em{width:32px;height:32px;border-radius:50%;object-fit:cover;flex:none}
+.o-rev .who em{background:var(--blue-soft);color:var(--blue);font-style:normal;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+.em-wrap{position:relative;margin-top:18px}
+.em-field{position:relative}
+.em-field input{width:100%;height:56px;border:1.5px solid #dfe1e5;border-radius:12px;padding:0 48px 0 16px;font-size:16px;outline:none;background:#fff}
+.em-field input:focus{border-color:var(--blue)}
+.em-field svg{position:absolute;right:16px;top:50%;width:22px;height:22px;transform:translateY(-50%);color:#7a7f87;pointer-events:none}
+.em-sug{list-style:none;margin-top:6px;background:var(--soft);border-radius:12px;max-height:176px;overflow-y:auto;padding:4px 0}
+.em-sug li{padding:12px 16px;font-size:15px;color:#2b2d30;cursor:pointer}
+.em-sug li:hover{background:var(--blue-soft)}
+.cp{background:#E8F0F7;border-radius:14px;padding:12px;margin:-4px 0 14px}
+.cp-h{display:flex;gap:10px;align-items:flex-start}.cp-h svg{width:22px;height:22px;color:#19b56b;flex:none;margin-top:2px}
+.cp-h b{display:block;font-size:15px}.cp-h small{font-size:12px;color:var(--muted);line-height:1.35}
+.cp-row{display:flex;gap:10px;margin-top:10px}
+.cp-code{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border-radius:10px;padding:10px 12px;font-weight:600;font-size:14px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.cp-code svg{width:16px;height:16px;color:#19b56b;flex:none}
+.cp-t{background:#fff;border-radius:10px;padding:6px 12px;text-align:center}
+.cp-t b{display:block;font-size:22px;color:var(--blue);line-height:1.1}.cp-t small{display:flex;gap:10px;font-size:9.5px;color:var(--muted)}.cp-t i{font-style:normal}
+.o-ps{display:block;font-size:12px;color:#55585e;margin-top:2px}
+.o-tp{text-align:right;background:#f3f4f6;border-radius:10px;padding:6px 10px;min-width:74px}
+.o-plan.sel .o-tp{background:var(--blue-soft)}
+.o-tp em{display:inline-block;font-style:normal;font-size:10.5px;font-weight:700;background:#19b56b;color:#fff;border-radius:4px;padding:1px 5px;margin-bottom:2px}
+.o-tp b{display:block;font-size:17px;color:var(--title)}.o-tp s{font-size:11.5px;color:#a2a6ad}
+.o-free{text-align:center}.o-free b{display:block;font-size:20px;font-weight:800;color:var(--blue);line-height:1.1}.o-free small{font-size:11px;color:var(--muted)}
+.o-pn .off{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:6px;background:#19b56b;color:#fff}
+.o-exp .o-card{margin-top:12px}.o-exp .ex{position:relative;padding:18px 16px 16px}
+.ex .exn{display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:14px;align-items:center;justify-content:center;margin-bottom:8px}
+.ex b{display:block;font-size:16px;color:var(--title);margin-bottom:6px}.ex p{font-size:14px;line-height:1.6;color:#3d4046}
+.rb{position:relative;margin-top:28px;height:190px;display:flex;align-items:center;justify-content:center}
+.rb-map{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.rb-card{position:relative;display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.88);backdrop-filter:blur(4px);border-radius:14px;padding:12px 18px;box-shadow:0 6px 24px rgba(30,36,48,.08)}
+.rb-l svg{width:38px;height:60px;display:block}.rb-r{transform:scaleX(-1)}
+.rb-c{text-align:center}.rb-c b{display:block;font-size:40px;font-weight:600;line-height:1;color:var(--title)}
+.rb-s{display:block;color:#E3A92E;letter-spacing:2px;font-size:14px;margin-top:4px}.rb-c small{font-size:12px;font-weight:600;color:var(--title)}
+.rb-h{font-size:20px;font-weight:600;text-align:center;line-height:1.35;margin:4px 12px 16px;color:var(--title)}
+.rc{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;gap:0}.rc::-webkit-scrollbar{display:none}
+.rc-i{flex:0 0 100%;scroll-snap-align:center;background:var(--soft);border-radius:14px;padding:16px;box-sizing:border-box}
+.rc-top{display:flex;gap:10px;align-items:flex-start}.rc-top>div{flex:1}.rc-top b{display:block;font-size:14px;line-height:1.3}
+.rc-top em{width:36px;height:36px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;color:var(--blue);overflow:hidden;flex:none}
+.rc-top em img{width:100%;height:100%;object-fit:cover}.rc-top small{font-size:11px;color:var(--muted);max-width:70px;text-align:right}
+.rc-st{display:flex;gap:2px;margin-top:4px}.rc-st i{width:14px;height:14px;background:#00B67A;color:#fff;font-style:normal;font-size:9px;display:flex;align-items:center;justify-content:center}
+.rc-i p{font-size:13px;line-height:1.55;color:#3d4046;margin-top:10px}
+.rc-dots{display:flex;justify-content:center;gap:6px;margin-top:10px}.rc-dots i{width:6px;height:6px;border-radius:3px;background:#d4d7dc;transition:all .2s}.rc-dots i.on{width:18px;background:var(--blue)}
+
+.dx{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:14px;box-shadow:0 8px 28px rgba(14,95,149,.08)}
+.dx-tabs{display:flex;gap:6px;background:var(--soft);border-radius:999px;padding:4px}
+.dx-tab{flex:1;position:relative;overflow:hidden;border-radius:999px;padding:9px 4px;font-size:13px;font-weight:700;color:#6b6f76;transition:color .25s,background .25s}
+.dx-tab .ic{margin-right:4px}
+.dx-tab.on{background:#fff;color:var(--blue);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.dx-tab .bar{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--blue);border-radius:3px}
+.dx-tab.on .bar{animation:dxbar 5.5s linear forwards}
+.dx.paused .dx-tab.on .bar{animation:none;width:100%}
+@keyframes dxbar{to{width:100%}}
+.dx-stage{position:relative;margin-top:14px;min-height:258px}
+.dx-pane{position:absolute;inset:0;opacity:0;transform:translateX(18px);transition:opacity .4s ease,transform .4s ease;pointer-events:none}
+.dx-pane.on{opacity:1;transform:none;pointer-events:auto;position:relative}
+.dx-clock{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--gold);letter-spacing:.04em;text-transform:uppercase}
+.dx-t{font-size:20px;line-height:1.25;font-weight:800;color:var(--title);margin:6px 0 4px}
+.dx-p{font-size:14.5px;line-height:1.45;color:#4a4e55}
+.dx-phone{margin:14px auto 0;max-width:270px;background:linear-gradient(160deg,#0E5F95,#0A4A75);border-radius:22px;padding:12px;box-shadow:0 14px 30px rgba(14,95,149,.28)}
+.dx-card{background:#FDF7EF;border-radius:14px;padding:12px 13px;animation:dxin .5s ease both}
+.dx-pane.on .dx-card{animation:dxin .5s ease both}
+@keyframes dxin{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+.dx-tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);background:var(--blue-soft);border-radius:999px;padding:3px 8px}
+.dx-h{font-size:14px;font-weight:800;color:var(--title);margin:8px 0 4px}
+.dx-b{font-family:Georgia,serif;font-size:14px;line-height:1.4;color:#33373d}
+.dx-ref{font-size:11.5px;color:#7a7e85;margin-top:5px}
+.dx-btn{margin-top:10px;text-align:center;font-size:12.5px;font-weight:800;color:#fff;background:var(--blue);border-radius:10px;padding:8px}
+.dx-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
+.dx-dots i{width:6px;height:6px;border-radius:50%;background:#d6d9de;transition:all .3s}
+.dx-dots i.on{width:18px;border-radius:3px;background:var(--blue)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div id="hdrWrap">
+    <header id="hdr">
+      <button class="hbtn hidden" id="backBtn" aria-label="Atrás"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.7071 4.29289C12.0976 4.68342 12.0976 5.31658 11.7071 5.70711L6.41421 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H6.41421L11.7071 18.2929C12.0976 18.6834 12.0976 19.3166 11.7071 19.7071C11.3166 20.0976 10.6834 20.0976 10.2929 19.7071L3.29289 12.7071C2.90237 12.3166 2.90237 11.6834 3.29289 11.2929L10.2929 4.29289C10.6834 3.90237 11.3166 3.90237 11.7071 4.29289Z" fill="currentColor"/></svg></button>
+      <div class="logo" id="logo"></div>
+      <button class="hbtn" id="menuBtn" aria-label="Menú"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </header>
+    <div class="progress" id="progress" style="display:none"><i></i></div>
+  </div>
+  <main id="view"></main>
+  <div class="footer-cta" id="cta" style="display:none"><div class="inner"><button class="btn" id="ctaBtn">Continuar</button></div></div>
+</div>
+
+<div class="menu" id="menu"><div class="panel">
+  <h4>Documentos</h4>
+  <a data-l="terms">Términos y condiciones de uso</a><a data-l="privacy">Política de privacidad</a><a data-l="subscription">Política de suscripción</a><a data-l="cookies">Política de cookies</a><a data-l="contact">Contáctanos</a><a data-l="privacy">No vender ni compartir mi información personal</a>
+</div></div>
+
+<script>
+/* =====================================================================
+   CONFIG — edit everything here
+   ===================================================================== */
+const CONFIG = {
+  brand: "VEREDA",
+  supportEmail: "institutoacademy20@gmail.com",
+  companyAddress: "Your Company Ltd, Address, City, Country",
+  checkoutUrl: "https://pay.hotmart.com/F108347453I?off=t5216fgc",            // fallback checkout link; each plan below can have its own checkoutUrl (Hotmart link). UTMs, email and name are passed along
+  leadWebhook: "",             // optional: URL that receives {email, name, archetype, answers} via POST
+  // Social proof shown on the first screen. Leave rating empty to hide it.
+  // Only use numbers you can prove (your own real reviews).
+  // Image folder + files. Put YOUR images here with these names (webp/jpg/png).
+  // If a file is missing, a neutral placeholder is drawn automatically.
+  img: "/images/",
+  images: {
+    gender_male: "archetype_male.webp", gender_female: "archetype_female.webp",
+    age: { female: ["arch_f_age_18_34.webp","arch_f_age_35_44.webp","arch_f_age_45_54.webp","arch_f_age_55_plus.webp"],
+           male:   ["arch_m_age_18_34.webp","arch_m_age_35_44.webp","arch_m_age_45_54.webp","arch_m_age_55_plus.webp"] },
+    break1: {male:"break1_m.webp", female:"break1_f.webp"}, break2: {male:"break2_m.webp", female:"break2_f.webp"}, break3: {male:"break3_m.webp", female:"break3_f.webp"}, break4: {male:"break4_m.webp", female:"break4_f.webp"},
+    coach: "coach.webp"
+  },
+  brandName: "VEREDA",
+  links: { terms: "#", privacy: "#", subscription: "#", cookies: "#", contact: "#" },
+  // Offer variant: "coupon" (reserved offer + timer, total prices) or "perday" (price per day)
+  offerVariant: "perday",
+  coupon: { percent: 0, minutes: 7, suffix: "" },   // percent > 0 only if your checkout really applies that discount
+  // Offer page — plans (edit prices here)
+  plans: [
+    {name:"Plan mensual", checkoutUrl:"https://pay.hotmart.com/F108347453I?off=t5216fgc", price:19.90, every:"mes", days:30, popular:false,
+     terms:"US$19,90 hoy y luego US$19,90 cada mes hasta que canceles."}
+  ],
+  currency: "US$",
+  // Exact local prices per currency (optional). Without an entry, USD prices are converted for display.
+  // Example: BRL: [ {price:0}, {price:49.90, checkoutUrl:"https://pay.hotmart.com/...?off=..."}, {price:99.90, checkoutUrl:"..."} ]
+  localPrices: {},
+  planNote: "Solo 10 minutos al día para convertir la lectura de la Biblia en un <span class=\"hl\">hábito diario</span> duradero \u2014 y puedes cancelar cuando quieras.",
+  weeks: [
+    ["Entra en la luz","¿Conozco a Jesús?","Gracia y obras","Hablar con Dios"],
+    ["Caminar por fe","Cuando Dios parece en silencio","El perdón que libera","El poder del descanso"],
+    ["No temas","Amor en acción","Escuchar la voz de Dios","Fuerza en la debilidad"],
+    ["Tu llamado","Vivir con generosidad","Una esperanza firme","Vivirlo cada día"]
+  ],
+  benefits: [
+    {icon:"book",  lead:"Ganas confianza en tu fe", text:"lo suficiente para compartirla y mantenerte firme"},
+    {icon:"chart", lead:"Creas un hábito diario de lectura bíblica que perdura", text:"con un plan sencillo hecho para tu vida"},
+    {icon:"heart", lead:"Te sientes más cerca de Dios cada día", text:"con un ritmo de lectura, oración y reflexión"},
+    {icon:"spark", lead:"Entiendes las Escrituras a fondo", text:"con una guía clara en cada capítulo"},
+    {icon:"home",  lead:"Eres constante sin agotarte", text:"a tu ritmo, incluso en los días ocupados"}
+  ],
+  faq: [
+    {q:"¿Y si no entiendo lo que estoy leyendo?", a:"Cada lectura viene con una explicación en palabras sencillas y las ideas clave, para que siempre sepas qué significa el pasaje y por qué importa para tu vida hoy."},
+    {q:"¿Y si no logro ser constante?", a:"Cada sesión toma unos 10 minutos y se adapta a cualquier momento del día. Un siguiente paso claro te ayuda a seguir, y si te saltas un día no pierdes tu progreso."},
+    {q:"¿Necesito conocer la Biblia de antemano?", a:"Para nada. El plan empieza donde estás, ya sea que abras la Biblia por primera vez o que vuelvas a ella después de mucho tiempo."}
+  ],
+  // ===== SOCIAL PROOF — replace every [ ] placeholder with YOUR real data before running ads =====
+  // Leave a field empty ("" or []) to hide that block.
+  social: { count: "", rating: "", ratingSource: "" }, // fill only with real, verifiable numbers
+  ratingBadge: true,   // world map + laurels + rating block (shown after the stats)
+  endorsements: [],
+  endorsementsNote: "VEREDA is not affiliated with, endorsed by, or sponsored by these institutions. References reflect published biblical and theological scholarship used in selected content.",
+  stats: [],
+  statsSource: "Basado en una encuesta voluntaria a usuarios de VEREDA",
+  // photo: file in images/ (e.g. "review_ana.webp") — a real customer's photo, with permission; empty = initial letter
+  // "What a day with VEREDA feels like" — interactive day timeline (brand copy, not testimonials)
+  experience: [
+    {time:"Mañana", clock:"7:30 AM", icon:"☕", title:"10 minutos con tu café",
+     text:"Lee o escucha el pasaje corto de hoy, explicado en palabras sencillas.",
+     mock:{tag:"Día 4 · 10 min", head:"La palabra de hoy", body:"«Pedid, y se os dará; buscad, y hallaréis».", ref:"Lucas 11:9", btn:"Leer · Escuchar"}},
+    {time:"Tarde", clock:"1:00 PM", icon:"⚡", title:"Un versículo para el momento difícil",
+     text:"Lleva un pasaje contigo durante el día, y una pequeña acción para vivirlo.",
+     mock:{tag:"Acción de hoy", head:"Antes de responder…", body:"Haz una pausa, respira y esta vez responde con amabilidad.", ref:"Santiago 1:19", btn:"Marcar como hecho"}},
+    {time:"Noche", clock:"9:00 PM", icon:"🌙", title:"Detente y quédate",
+     text:"Un quiz corto y una oración para terminar el día cerca de Dios.",
+     mock:{tag:"Día completado", head:"Tu lámpara está encendida 🪔", body:"Quiz hecho · Oración hecha · El paso de mañana desbloqueado.", ref:"Día 4 de 28", btn:"Ver mañana"}}
+  ],
+  // Real customer reviews only (with permission). Empty = block hidden. Example:
+  // {stars:5, title:"...", text:"...", name:"First name", photo:"review_ana.webp"}
+  reviews: [],
+  defaultPlan: 0,
+  timerSeconds: 600
+};
+
+/* =====================================================================
+   ARCHETYPES — 4 per gender, same scoring as the original funnel
+   ===================================================================== */
+const ARCH = {
+  female:{ A:"mary", B:"deborah", C:"ruth", D:"esther" },
+  male:  { A:"moses", B:"david", C:"abraham", D:"paul" }
+};
+const ARCH_INFO = {
+  mary:   {emoji:"🕊️", role:"El corazón fiel", desc:"Enfrentas la vida con una confianza serena. Las personas se sienten seguras a tu lado, y tu calma es un regalo que las acerca a Dios.", traits:["Pacífica","Confiada","Protectora"]},
+  deborah:{emoji:"🔥", role:"La líder valiente", desc:"Actúas rápido, piensas en ideas e inspiras a otros a moverse. Dios usa tu energía para guiar con valentía y claridad.", traits:["Valiente","Decidida","Visionaria"]},
+  ruth:   {emoji:"🌾", role:"La compañera leal", desc:"Tu bondad es profunda y constante. Te quedas cuando otros se van, y tu fidelidad abre puertas a la bendición.", traits:["Leal","Compasiva","Entregada"]},
+  esther: {emoji:"👑", role:"La buscadora de propósito", desc:"Sientes que fuiste creada para algo más grande. Creces más cuando das un paso de fe en el momento indicado.", traits:["Valiente","Con propósito","Sabia"]},
+  moses:  {emoji:"🪨", role:"El pastor firme", desc:"Guías manteniendo la calma bajo presión. Tu paciencia y tu cuidado ayudan a otros a encontrar el camino en tiempos difíciles.", traits:["Paciente","Humilde","Firme"]},
+  david:  {emoji:"⚔️", role:"El guerrero apasionado", desc:"Corres hacia los desafíos con corazón y creatividad. Tu pasión es una herramienta poderosa cuando está anclada en Dios.", traits:["Apasionado","Creativo","Intrépido"]},
+  abraham:{emoji:"⭐", role:"El pionero confiado", desc:"Piensas a fondo y te importan las personas. Estás dispuesto a seguir a Dios hacia lo desconocido, un paso fiel a la vez.", traits:["Fiel","Reflexivo","Generoso"]},
+  paul:   {emoji:"📜", role:"El mensajero entregado", desc:"Cuando te convences de algo, lo das todo. Tu convicción puede convertir tu historia en esperanza para otros.", traits:["Decidido","Convencido","Resiliente"]}
+};
+const PLAN_INSIDE = [
+  ["Tu perfil de arquetipo","Fortalezas, puntos ciegos y cómo te conectas con Dios"],
+  ["Plan bíblico diario de 10 minutos","Lecturas según tu arquetipo y tus metas"],
+  ["Oraciones y reflexiones guiadas","Audios cortos y preguntas escritas para la vida real"],
+  ["Seguimiento de tu progreso","Crea un hábito constante y mira cómo creces"]
+];
+// Scoring rule extracted from the original mapping (feelDuring + doFirst + peopleSay)
+const A_LIST = "Calm_Trytostaycalm_P Calm_Lookathowothersfeel_P Calm_Trytounderstandwhy_P Sensitive_Stopandthink_P Sensitive_Trytostaycalm_P Sensitive_Lookathowothersfeel_P Sensitive_Trytounderstandwhy_P Hopeful_Stopandthink_P Hopeful_Trytostaycalm_P Hopeful_Lookathowothersfeel_P Hopeful_Trytounderstandwhy_P Focused_Trytostaycalm_P Focused_Lookathowothersfeel_P Overwhelmed_Trytostaycalm_P Overwhelmed_Lookathowothersfeel_P Energetic_Trytostaycalm_P Energetic_Lookathowothersfeel_P Calm_Trytostaycalm_K Calm_Lookathowothersfeel_K Sensitive_Trytostaycalm_K Sensitive_Lookathowothersfeel_K Hopeful_Trytostaycalm_K Hopeful_Lookathowothersfeel_K";
+const B_LIST = "Energetic_Reactquickly_I Energetic_Stopandthink_I Energetic_Trytostaycalm_I Energetic_Trytounderstandwhy_I Energetic_Lookathowothersfeel_I Focused_Reactquickly_I Hopeful_Reactquickly_I Calm_Reactquickly_I Sensitive_Reactquickly_I Overwhelmed_Reactquickly_I Energetic_Reactquickly_W Energetic_Trytostaycalm_W Energetic_Lookathowothersfeel_W Focused_Reactquickly_W Calm_Reactquickly_W Hopeful_Reactquickly_W Sensitive_Reactquickly_W Overwhelmed_Reactquickly_W Energetic_Reactquickly_P Energetic_Stopandthink_P Energetic_Trytounderstandwhy_P Focused_Reactquickly_P Energetic_Reactquickly_K Energetic_Stopandthink_K Energetic_Trytounderstandwhy_K Focused_Reactquickly_K";
+const C_LIST = "Calm_Trytounderstandwhy_K Focused_Trytostaycalm_K Focused_Lookathowothersfeel_K Focused_Trytounderstandwhy_K Sensitive_Stopandthink_K Sensitive_Trytounderstandwhy_K Hopeful_Stopandthink_K Hopeful_Trytounderstandwhy_K Overwhelmed_Stopandthink_K Overwhelmed_Trytostaycalm_K Overwhelmed_Lookathowothersfeel_K Overwhelmed_Trytounderstandwhy_K Calm_Reactquickly_P Sensitive_Reactquickly_P Hopeful_Reactquickly_P Overwhelmed_Stopandthink_P Overwhelmed_Trytounderstandwhy_P Overwhelmed_Reactquickly_P Hopeful_Lookathowothersfeel_W Sensitive_Lookathowothersfeel_W Overwhelmed_Lookathowothersfeel_W Hopeful_Stopandthink_I Hopeful_Trytostaycalm_I Hopeful_Lookathowothersfeel_I Hopeful_Trytounderstandwhy_I Sensitive_Stopandthink_I Sensitive_Trytostaycalm_I Sensitive_Lookathowothersfeel_I Sensitive_Trytounderstandwhy_I Calm_Trytostaycalm_I Calm_Lookathowothersfeel_I Focused_Trytostaycalm_I Focused_Lookathowothersfeel_I Overwhelmed_Stopandthink_I Overwhelmed_Trytostaycalm_I Overwhelmed_Lookathowothersfeel_I Overwhelmed_Trytounderstandwhy_I Calm_Reactquickly_K Sensitive_Reactquickly_K Hopeful_Reactquickly_K Overwhelmed_Reactquickly_K Focused_Trytounderstandwhy_P Energetic_Trytostaycalm_K Energetic_Lookathowothersfeel_K";
+const EN = {"Tranquilo(a)":"Calm","Concentrado(a)":"Focused","Sensible":"Sensitive","Esperanzado(a)":"Hopeful","Con energía":"Energetic","Abrumado(a)":"Overwhelmed","Reacciono rápido":"React quickly","Me detengo a pensar":"Stop and think","Intento mantener la calma":"Try to stay calm","Me fijo en cómo se sienten los demás":"Look at how others feel","Intento entender por qué pasó":"Try to understand why","Un espíritu en paz":"A peaceful spirit","Pensamiento sabio y práctico":"Wise and practical thinking","Un corazón amable y gentil":"A gentle, kind heart","Un don para las ideas":"A gift for ideas","Necesita renovarse":"In need of renewal"};
+const toEN=v=>EN[v]||v;
+const NM={mary:"María",deborah:"Débora",ruth:"Rut",esther:"Ester",moses:"Moisés",david:"David",abraham:"Abraham",paul:"Pablo"};
+const STRONG = {"A peaceful spirit":"P","Wise and practical thinking":"W","A gentle, kind heart":"K","A gift for ideas":"I"};
+function computeArchetype(){
+  const g = state.gender==="male"?"male":"female";
+  const s = STRONG[state.answers.peopleSay];
+  if(!s) return ARCH[g].D;
+  const key = state.answers.feelDuring+"_"+(state.answers.doFirst||"").replace(/\s/g,"")+"_"+s;
+  if(A_LIST.split(" ").includes(key)) return ARCH[g].A;
+  if(B_LIST.split(" ").includes(key)) return ARCH[g].B;
+  if(C_LIST.split(" ").includes(key)) return ARCH[g].C;
+  return ARCH[g].D;
+}
+
+/* =====================================================================
+   FUNNEL — 31 screens, same order as the original
+   ===================================================================== */
+const STEPS = [
+  {type:"gender"},
+  {type:"age", key:"age", title:"Elige tu rango de edad", sub:"Tus respuestas nos ayudarán a crear el resumen de tu perfil y tu plan personalizado", options:["18-34","35-44","45-54","55+"]},
+  {type:"info", img:"break1", anim:{male:"/raspadinha-homem.html", female:"/raspadinha-mulher.html"}, title:"¿Listo para descubrir quién eres?", text:"Aprende a crecer en tu fe de forma práctica, según la manera única en que te conectas con Dios"},
+  {type:"q", key:"BibleVerse", title:"Elige un versículo que hable a tu corazón", options:["«Estad quietos, y conoced que yo soy Dios» – Salmo 46:10","«A dondequiera que tú fueres, iré yo» – Rut 1:16","«Para esta hora has llegado» – Ester 4:14","«Esfuérzate y sé valiente» – Josué 1:9"]},
+  {type:"q", key:"quote", title:"Elige una frase que resuene contigo", options:["«Suelta y deja que Dios actúe»","«Fe por encima del miedo»","«Fuiste creado para este momento»","«Todo lo puedo en Cristo»","«El tiempo de Dios es perfecto»"]},
+  {type:"q", key:"BibleStory", title:"Elige una historia bíblica que te inspire", options:["Noé y el arca","Moisés guiando al pueblo a la tierra prometida","Daniel en el foso de los leones","Jesús resucita a Lázaro","El nacimiento de Jesús"]},
+  {type:"info", img:"break2", title:"Tus respuestas están formando tu perfil", text:"Esto nos ayuda a entender qué camino te ayudará más a partir de ahora", banner:"Veamos qué da forma a tu ritmo espiritual"},
+  {type:"q", key:"feelDuring", title:"¿Cómo te sientes normalmente durante un día común?", options:["Tranquilo(a)","Concentrado(a)","Sensible","Esperanzado(a)","Con energía","Abrumado(a)"], save:toEN},
+  {type:"q", key:"helpsRelax", title:"¿Qué te ayuda a relajarte después de un día largo?", options:["Un tiempo a solas en silencio","Conectar con alguien","Una caminata al aire libre","Aire fresco y movimiento","Tareas sencillas que me calman","Actividades creativas o acogedoras","Otro"]},
+  {type:"q", key:"peopleSay", title:"¿Qué dicen los demás que es tu punto fuerte?", options:["Un espíritu en paz","Pensamiento sabio y práctico","Un corazón amable y gentil","Un don para las ideas","Otro"], save:toEN},
+  {type:"q", key:"doFirst", title:"Cuando pasa algo inesperado, ¿qué haces primero?", options:["Reacciono rápido","Me detengo a pensar","Intento mantener la calma","Me fijo en cómo se sienten los demás","Intento entender por qué pasó"], save:toEN},
+  {type:"q", key:"givesInspiration", title:"¿Qué suele inspirarte?", options:["Las cosas bellas","Las historias de las personas","Aprender algo nuevo","Ver progreso","Las acciones valientes"]},
+  {type:"q", key:"careAboutSomeone", title:"Cuando alguien te importa, ¿qué haces primero?", options:["Escucho","Ayudo con algo práctico","Digo algo que le anime","Intento entender su problema","Llevo calma a la situación"]},
+  {type:"q", key:"describesWay", title:"¿Qué describe tu forma de pensar?", options:["Lógica","Intuitiva","Emocional","Con visión de conjunto","Práctica"]},
+  {type:"q", key:"stayOnTrack", title:"¿Qué te ayuda a mantener el rumbo durante el día?", options:["Un plan claro a seguir","Un sentido claro de propósito","Una mente tranquila","Sentirme inspirado(a)","Buena gestión del tiempo"]},
+  {type:"q", key:"challenge", title:"¿Cómo enfrentas un nuevo desafío?", options:["Lo intento de inmediato","Lo pienso bien","Sigo mi primer instinto","Lo divido en pasos","Pido consejo"]},
+  {type:"info", img:"break3", title:"Ya tenemos una parte de tu perfil", text:"Tus respuestas nos mostraron tu personalidad y tus fortalezas.", banner:"Ahora, unas preguntas sobre tu fe para completar tu perfil con precisión"},
+  {type:"q", key:"bibleExperience", title:"¿Cómo describirías tu experiencia estudiando la Biblia?", options:["Soy principiante","Conozco algunas partes","La he estudiado a fondo","No estoy seguro(a)"]},
+  {type:"q", key:"readingEmotions", title:"¿Cómo te sientes al leer la Palabra?", options:["Animado(a)","En calma","Concentrado(a)","Todavía no leo mucho","No estoy seguro(a)"]},
+  {type:"q", key:"currentRelationship", title:"Describe tu relación actual con Dios", options:["Fuerte y creciendo","Necesita renovarse","No estoy seguro(a)","Otro"], save:toEN},
+  {type:"q", key:"comfortableReading", title:"¿Dónde te sientes más cómodo(a) leyendo la Biblia?", options:["En un rincón acogedor de casa","Al aire libre, en la naturaleza","En una iglesia o un lugar tranquilo","En un escritorio, con notas","En la cama, temprano o de noche"]},
+  {type:"info", img:"break4", title:"Ya tenemos casi todo tu perfil espiritual", text:"Conocer tu arquetipo importa, pero vivirlo cada día importa aún más. Tus respuestas nos mostraron cómo te conectas con Dios de forma natural.", banner:"Ahora elijamos el tipo de apoyo práctico que encaja con tu arquetipo"},
+  {type:"multi", key:"dailySupport", title:"¿Qué área de tu vida más quieres que Dios transforme?", options:["Hábitos diarios y disciplina","Pensamientos y mentalidad","Relaciones","Matrimonio","Empezar de nuevo tras un divorcio","Emociones y paz interior","Autoestima y confianza","Finanzas y provisión","Crianza de los hijos","Carrera profesional","Otro"]},
+  {type:"q", key:"areaOfLife", title:"Cuando la vida se pone difícil, ¿dónde buscas guía?", options:["Leo la Palabra y reflexiono","Escucho a alguien que pasó por lo mismo","Encuentro paz en la oración en silencio y en audios","Busco historias reales de fe y esperanza","Otro"]},
+  {type:"yn", key:"strengthen", title:"¿Estás listo(a) para descubrir quién te creó Dios para ser?"},
+  {type:"reveal"},
+  {type:"loader"},
+  {type:"summary"},
+  {type:"email"},
+  {type:"name"},
+  {type:"cards"},
+  {type:"offer"}
+];
+const QUESTION_STEPS = STEPS.filter(s=>["age","q","multi","yn"].includes(s.type)).length;
+
+const PAYLOGOS=[
+ '<svg viewBox="0 0 48 30"><text x="24" y="19.5" text-anchor="middle" font-family="Verdana,Arial,sans-serif" font-size="10" font-weight="700" font-style="italic"><tspan fill="#253B80">Pay</tspan><tspan fill="#179BD7">Pal</tspan></text></svg>',
+ '<svg viewBox="0 0 48 30"><path fill="#000" d="M15.6 10.9c-.5.6-1.2 1-1.9 1-.1-.8.3-1.6.7-2.1.5-.6 1.3-1 1.9-1 .1.8-.2 1.6-.7 2.1zm.7 1.1c-1 0-1.9.6-2.4.6s-1.3-.6-2.1-.5c-1.1 0-2.1.6-2.6 1.6-1.1 1.9-.3 4.8.8 6.4.5.8 1.2 1.6 2 1.6.8 0 1.1-.5 2.1-.5s1.2.5 2.1.5c.9 0 1.4-.8 2-1.6.6-.9.9-1.8.9-1.8s-1.7-.7-1.7-2.7c0-1.7 1.4-2.5 1.4-2.5-.8-1.2-2-1.3-2.5-1.1z"/><text x="20.5" y="20" font-family="Arial,sans-serif" font-size="10" font-weight="600" fill="#000">Pay</text></svg>',
+ '<svg viewBox="0 0 48 30"><text x="9" y="19.5" font-family="Arial,sans-serif" font-size="11" font-weight="700"><tspan fill="#4285F4">G</tspan></text><text x="18" y="19.5" font-family="Arial,sans-serif" font-size="10" font-weight="600" fill="#5F6368">Pay</text></svg>',
+ '<svg viewBox="0 0 48 30"><text x="24" y="19.5" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="11" font-weight="900" font-style="italic" fill="#1A1F71">VISA</text></svg>',
+ '<svg viewBox="0 0 48 30"><circle cx="20" cy="15" r="7" fill="#EB001B"/><circle cx="28" cy="15" r="7" fill="#F79E1B"/><path d="M24 9.3a7 7 0 0 1 0 11.4 7 7 0 0 1 0-11.4z" fill="#FF5F00"/></svg>',
+ '<svg viewBox="0 0 48 30"><circle cx="20" cy="15" r="7" fill="#EB001B"/><circle cx="28" cy="15" r="7" fill="#00A2E5"/><path d="M24 9.3a7 7 0 0 1 0 11.4 7 7 0 0 1 0-11.4z" fill="#7375CF"/></svg>',
+ '<svg viewBox="0 0 48 30"><rect width="48" height="30" rx="3" fill="#2E77BC"/><text x="24" y="14" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="8" font-weight="900" fill="#fff">AM</text><text x="24" y="23" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="8" font-weight="900" fill="#fff">EX</text></svg>'
+].map(x=>`<span>${x}</span>`).join('');
+const ICON={
+ book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3H11v16H5.5A2.5 2.5 0 0 0 3 21.5z"/><path d="M21 5.5A2.5 2.5 0 0 0 18.5 3H13v16h5.5a2.5 2.5 0 0 1 2.5 2.5z"/></svg>',
+ chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 16v-3M12 16V9M16 16v-5"/></svg>',
+ heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+ spark:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>',
+ home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10l8-6 8 6v10H4z"/><path d="M10 20v-6h4v6"/></svg>',
+ alert:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v5M12 16.5v.5"/></svg>',
+ bulb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>',
+ shield:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z" stroke="currentColor" stroke-width="2"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+ smile:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4 4 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg>',
+ note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+ apple:'<svg viewBox="0 0 24 24" fill="#000"><path d="M16.4 12.6c0-2.5 2-3.7 2.1-3.8-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9s-2-.9-3.3-.9C6.1 6.9 4.5 7.9 3.6 9.4c-1.8 3.1-.5 7.7 1.3 10.3.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.3.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.8-1.1-2.8-4.3zM14 5.1c.7-.8 1.2-2 1-3.1-1 0-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.6 2.9-1.4z"/></svg>',
+ play:'<svg viewBox="0 0 24 24"><path d="M4 2.8 13.4 12 4 21.2c-.3-.2-.5-.6-.5-1V3.8c0-.4.2-.8.5-1z" fill="#00C3FF"/><path d="M16.6 8.8 13.4 12 4 2.8c.3-.2.8-.2 1.2 0z" fill="#00E676"/><path d="M16.6 15.2 5.2 21.1c-.4.2-.9.2-1.2 0l9.4-9.2z" fill="#FF3A44"/><path d="m20.3 10.8-3.7-2-3.2 3.2 3.2 3.2 3.7-2c.9-.5.9-1.9 0-2.4z" fill="#FFD400"/></svg>',
+ tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+ bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>'
+};
+/* ===================================================================== */
+const $ = id=>document.getElementById(id);
+const view = $('view');
+const state = {i:0, gender:null, answers:{}, email:"", name:"", archetype:null, plan:CONFIG.defaultPlan, history:[]};
+document.querySelectorAll('#menu a[data-l]').forEach(a=>a.href=CONFIG.links[a.dataset.l]||'#');
+$('logo').innerHTML = `<img src="${CONFIG.img}logo.svg" alt="${CONFIG.brand}" style="height:26px;display:block;margin:0 auto">`;
+$('menuBtn').onclick=()=>$('menu').classList.add('open');
+$('menu').onclick=e=>{if(e.target.id==='menu')$('menu').classList.remove('open');};
+$('backBtn').onclick=()=>{ if(state.history.length){ state.i=state.history.pop(); render(); } };
+
+function go(next){ state.history.push(state.i); state.i = next ?? state.i+1; render(); }
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function setCTA(label, onClick, disabled=false){
+  if(!label){ $('cta').style.display='none'; return; }
+  $('cta').style.display=''; const b=$('ctaBtn'); b.textContent=label; b.disabled=disabled; b.onclick=onClick;
+}
+// image with automatic placeholder when the file doesn't exist
+function img(file, cls, label, ratio){
+  const r = ratio||"342/220";
+  return `<img class="${cls}" src="${CONFIG.img}${file}" alt="" style="aspect-ratio:${r}" data-ph="${esc(label||"")}" data-r="${r}" onerror="imgFallback(this)">`;
+}
+function imgFallback(el){ el.onerror=null; el.src=placeholder(el.dataset.ph, el.dataset.r); }
+function placeholder(label, ratio){
+  const [w,h]=ratio.split("/").map(Number);
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#f4ecdf'/><stop offset='1' stop-color='#d9d4f5'/></linearGradient></defs><rect width='${w}' height='${h}' fill='url(#g)'/><circle cx='${w/2}' cy='${h*0.42}' r='${Math.min(w,h)*0.16}' fill='#fff' opacity='.7'/><text x='50%' y='${h*0.78}' font-family='sans-serif' font-size='${Math.round(Math.min(w,h)*0.07)}' fill='#7a7480' text-anchor='middle'>${label}</text></svg>`;
+  return "data:image/svg+xml;utf8,"+encodeURIComponent(svg);
+}
+function progress(){
+  const qIndex = STEPS.slice(0,state.i+1).filter(s=>["age","q","multi","yn"].includes(s.type)).length;
+  $('progress').firstElementChild.style.width = Math.min(100,qIndex/QUESTION_STEPS*100)+'%';
+}
+
+
+/* ===== Funnel tracking (Supabase quiz_events) ===== */
+const TRACK={url:"https://okgqxzehlqzdmwxpjdkj.supabase.co/rest/v1/quiz_events",key:"sb_publishable_4EvJKXKLm0jrZrm7k-EnGA_u0N5nesc",quiz:"es-arqu"};
+TRACK.sid=(()=>{try{let v=sessionStorage.getItem('vq_sid');if(!v){v=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)).replace(/-/g,'').slice(0,24);sessionStorage.setItem('vq_sid',v);}return v;}catch(e){return Date.now().toString(36)+Math.random().toString(36).slice(2,10);}})();
+function track(step,key,event,plan){
+  try{const q=new URLSearchParams(location.search);
+    fetch(TRACK.url,{method:"POST",keepalive:true,headers:{"apikey":TRACK.key,"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,step,step_key:String(key).slice(0,40),event:event||"view",plan:plan||null,
+        utm_source:(q.get('utm_source')||'').slice(0,120)||null,utm_campaign:(q.get('utm_campaign')||'').slice(0,200)||null,
+        device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop'})}).catch(()=>{});
+  }catch(e){}
+}
+function render(){
+  const s = STEPS[state.i];
+  window.scrollTo(0,0);
+  $('hdrWrap').style.display = s.type==="offer" ? "none" : "";
+  $('hdr').classList.toggle('transparent', s.type==="cards");
+  $('backBtn').classList.toggle('hidden', state.i===0 || ["loader","cards","offer"].includes(s.type));
+  const showProg = !["gender","reveal","loader","summary","email","name","cards","offer"].includes(s.type);
+  $('progress').style.display = showProg?'':'none'; if(showProg) progress();
+  setCTA(null);
+  (R[s.type])(s);
+  track(state.i, s.key||s.type);
+}
+
+const R = {
+  gender(){
+    const so = CONFIG.social.rating ? `<div class="social"><div class="rate">${esc(CONFIG.social.rating)}<small>★★★★★</small></div><p>${esc(CONFIG.social.count)} creyentes ya crecen con la app ${esc(CONFIG.brandName)}</p></div>` : "";
+    view.innerHTML = `<section class="screen">${so}
+      <h1 class="big-title">¿A qué héroe<br>de la Biblia<br>te pareces más?</h1>
+      <p class="big-sub" style="text-transform:none;letter-spacing:0;font-size:15px;line-height:1.4">Responde unas preguntas rápidas y descubre el personaje bíblico que comparte tus fortalezas, y cómo hacerlas crecer con Dios.</p>
+      <div class="tiles">
+        <button class="tile" data-g="male">${img(CONFIG.images.gender_male,"img","","168/240")}<span class="lbl">Hombre <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
+        <button class="tile" data-g="female">${img(CONFIG.images.gender_female,"img","","168/240")}<span class="lbl">Mujer <span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>
+      </div>
+      <div class="legal" style="font-size:11px;opacity:.75"><a href="${CONFIG.links.terms}">Términos</a> · <a href="${CONFIG.links.privacy}">Privacidad</a></div>
+    </section>`;
+    view.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{t.classList.add('sel');state.gender=t.dataset.g;state.answers.gender=t.dataset.g;setTimeout(()=>go(),250);});
+  },
+  age(s){
+    const files = CONFIG.images.age[state.gender==="male"?"male":"female"];
+    view.innerHTML = `<section class="screen"><h1 class="t">${s.title}</h1><p class="s">${s.sub}</p>
+      <div class="tiles">${s.options.map((o,i)=>`<button class="tile wide ${state.answers.age===o?'sel':''}" data-v="${o}">${img(files[i],"img","","345/311")}<span class="lbl">${o}<span class="arr"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span></span></button>`).join("")}</div></section>`;
+    view.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{view.querySelectorAll('.tile').forEach(x=>x.classList.remove('sel'));t.classList.add('sel');state.answers.age=t.dataset.v;setTimeout(()=>go(),250);});
+  },
+  info(s){
+    view.innerHTML = `<section class="screen">${img((v=>typeof v==="object"?v[state.gender==="male"?"male":"female"]:v)(CONFIG.images[s.img]),"hero-img","")}
+      <h2 class="info-title">${s.title}</h2><p class="info-text">${s.text}</p>
+      ${s.banner?`<div class="banner"><span class="pi">🙏</span><span>${s.banner}</span></div>`:""}</section>`;
+    setCTA("Continue",()=>go());
+    if(s.anim){ // animated archetype preview (by gender chosen in step 1); falls back to the image if the file is missing
+      const url=s.anim[state.gender==="male"?"male":"female"], at=state.i;
+      fetch(url,{method:"HEAD",cache:"no-store"}).then(r=>{
+        if(!r.ok||state.i!==at) return;
+        const old=view.querySelector('.hero-img'); if(!old) return;
+        // iframe lives inside a shadow root so tracking scripts (UTM rewriters) don't touch its src and restart the animation
+        const host=document.createElement('div'); host.className='hero-anim';
+        const root=host.attachShadow({mode:'closed'});
+        const fr=document.createElement('iframe');
+        fr.src=url; fr.title='Vista previa de tu arquetipo bíblico';
+        fr.setAttribute('scrolling','no'); fr.setAttribute('loading','eager');
+        fr.style.cssText='width:100%;height:100%;border:0;display:block;overflow:hidden';
+        root.appendChild(fr); old.replaceWith(host);
+      }).catch(()=>{});
+    }
+  },
+  q(s){
+    view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><div class="opts">${
+      s.options.map(o=>`<button class="opt"><span>${esc(o)}</span><span class="c"></span></button>`).join("")}</div></section>`;
+    view.querySelectorAll('.opt').forEach((b,i)=>{
+      const v=s.options[i], stored=s.save?s.save(v):v;
+      if(state.answers[s.key]===stored) b.classList.add('sel');
+      b.onclick=()=>{view.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');state.answers[s.key]=stored;setTimeout(()=>go(),300);};
+    });
+  },
+  multi(s){
+    const cur = new Set(state.answers[s.key]||[]);
+    view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><p class="q-hint">Selecciona todas las que apliquen</p><div class="opts">${
+      s.options.map(o=>`<button class="opt multi ${cur.has(o)?'sel':''}"><span>${esc(o)}</span><span class="c"></span></button>`).join("")}</div></section>`;
+    const upd=()=>setCTA("Continue",()=>{state.answers[s.key]=[...cur];go();},cur.size===0);
+    view.querySelectorAll('.opt').forEach((b,i)=>b.onclick=()=>{const v=s.options[i];cur.has(v)?cur.delete(v):cur.add(v);b.classList.toggle('sel');upd();});
+    upd();
+  },
+  yn(s){
+    view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><div class="opts">
+      <button class="opt" data-v="No"><span style="display:flex;align-items:center;gap:12px"><span class="ico">❌</span>No</span><span class="c"></span></button>
+      <button class="opt" data-v="Yes"><span style="display:flex;align-items:center;gap:12px"><span class="ico">✅</span>Sí</span><span class="c"></span></button></div></section>`;
+    view.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{b.classList.add('sel');state.answers[s.key]=b.dataset.v;setTimeout(()=>go(),300);});
+  },
+  reveal(){
+    view.innerHTML = `<section class="screen reveal"><h2 class="info-title">Tus respuestas fueron analizadas</h2><p class="info-text">Tu arquetipo espiritual está listo</p><div class="glow"></div></section>`;
+    setCTA("Revelar mi arquetipo",()=>go());
+  },
+  loader(){
+    state.archetype = computeArchetype();
+    const steps=["Analizando tus patrones espirituales","Identificando tus fortalezas principales","Encontrando tu arquetipo único","Preparando tu plan personal"];
+    const pops=[[25,"¿Crees que Dios te creó con un propósito único?"],[50,"¿Estás listo(a) para ver cómo tu fe da forma a quien eres?"],[75,"Tu arquetipo está casi listo. ¿Quieres descubrirlo?"]];
+    const C=2*Math.PI*74;
+    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:10px">Revelando tu arquetipo espiritual</h2>
+      <div class="ring"><svg width="170" height="170"><circle cx="85" cy="85" r="74" stroke="#edeef0" stroke-width="12" fill="none"/><circle id="arc" cx="85" cy="85" r="74" stroke="#0E5F95" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div class="pct" id="pct">0%</div></div>
+      <ul class="steps">${steps.map(t=>`<li><span class="d"></span>${t}</li>`).join("")}</ul><div id="crev" style="margin-top:8px"></div></section>`;
+    const revs=CONFIG.reviews;
+    const card=r=>`<div class="mq-c"><div class="mq-top"><em>${r.photo?`<img src="${CONFIG.img}${esc(r.photo)}" alt="">`:esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em><div><b>${esc(r.name)}</b></div></div><span class="mq-st">${'<i>\u2605</i>'.repeat(r.stars||5)}</span>${r.title?`<b style="font-size:14px;margin-top:8px">${esc(r.title)}</b>`:''}<p>${esc(r.text)}</p></div>`;
+    if(revs.length){const row=revs.map(card).join('');$('crev').innerHTML=`<div class="mq-h">A los usuarios les encanta ${esc(CONFIG.brandName)}</div><div class="mq"><div class="mq-t" style="--d:${Math.max(24,revs.length*8)}s">${row}${row}</div></div>`;}
+    let p=0, paused=false; const li=view.querySelectorAll('.steps li');
+    const tick=()=>{
+      if(paused) return;
+      const pop=pops.find(x=>x[0]===p);
+      if(pop && !pop.done){ pop.done=true; paused=true; return ask(pop[1],()=>{paused=false;t=setTimeout(tick,60);}); }
+      $('pct').textContent=p+'%'; $('arc').style.strokeDashoffset=C*(1-p/100);
+      li.forEach((l,i)=>{l.classList.toggle('on',p>=i*25);l.classList.toggle('done',p>=(i+1)*25);});
+      if(p>=100) return setTimeout(()=>go(),600);
+      p++; t=setTimeout(tick,60);
+    };
+    let t=setTimeout(tick,300);
+  },
+  summary(){
+    const a=ARCH_INFO[state.archetype], nm=NM[state.archetype]||state.archetype;
+    view.innerHTML = `<section class="screen"><h2 class="info-title">Identificamos tu arquetipo</h2><p class="info-text">Creamos un perfil completo y un plan personal en torno a él</p>
+      <div class="arch-card"><div style="font-size:44px">${a.emoji}</div><div class="kicker">Tu arquetipo espiritual</div><div class="name">${nm}</div><div class="role">${a.role}</div><p>${a.desc}</p><div class="chips">${a.traits.map(x=>`<span>${x}</span>`).join("")}</div></div>
+      <div class="divider"></div>
+      <div class="inside"><h4>Qué incluye tu plan de arquetipo:</h4><ul>${PLAN_INSIDE.map(([b,s])=>`<li><span>✅</span><div><b>${b}</b><span>${s}</span></div></li>`).join("")}</ul></div></section>`;
+    setCTA("Continue",()=>go());
+  },
+  email(){
+    const DOMAINS=["gmail.com","icloud.com","yahoo.com","hotmail.com","outlook.com","aol.com","live.com","msn.com","me.com","protonmail.com"];
+    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:12px">Ingresa tu correo para recibir tu <span class="hl">plan personalizado de estudio bíblico</span></h2>
+      <div class="em-wrap"><div class="em-field"><input id="em" type="email" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Ingresa tu correo" value="${esc(state.email)}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg></div>
+        <ul class="em-sug" id="sug" hidden></ul></div>
+      <div class="err" id="er"></div>
+      <div class="privacy"><span>🔒</span><span>Respetamos tu privacidad y nos comprometemos a proteger tus datos personales. Tus datos se tratarán según nuestra <a href="${CONFIG.links.privacy}">Política de privacidad</a>.</span></div></section>`;
+    const inp=$('em'), sug=$('sug');
+    const ok=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    const showSug=()=>{
+      const v=inp.value.trim(); if(!v){sug.hidden=true;return;}
+      const [user,dom='']=v.split('@'); if(!user){sug.hidden=true;return;}
+      const list=v.includes('@')?DOMAINS.filter(d=>d.startsWith(dom)&&d!==dom):DOMAINS;
+      if(!list.length){sug.hidden=true;return;}
+      sug.innerHTML=list.map(d=>`<li data-v="${esc(user)}@${d}">${esc(user)}@${d}</li>`).join('');
+      sug.hidden=false;
+      sug.querySelectorAll('li').forEach(li=>li.onmousedown=e=>{e.preventDefault();inp.value=li.dataset.v;sug.hidden=true;$('er').textContent='';upd();});
+    };
+    const upd=()=>setCTA("Continue",()=>{const v=inp.value.trim();if(!ok(v)){$('er').textContent="Ingresa un correo válido";return;}state.email=v;go();},!inp.value.trim());
+    inp.oninput=()=>{$('er').textContent="";showSug();upd();};
+    inp.onfocus=showSug; inp.onblur=()=>setTimeout(()=>sug.hidden=true,150);
+    upd();
+  },
+  name(){
+    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:12px">¿Cuál es tu nombre?</h2>
+      <input class="field" id="nm" type="text" placeholder="Nombre" autocomplete="given-name" value="${esc(state.name)}"></section>`;
+    const upd=()=>setCTA("Continue",()=>{state.name=$('nm').value.trim();sendLead();go();},!$('nm').value.trim());
+    $('nm').oninput=upd; upd();
+  },
+  cards(){
+    const texts=["La mayoría descubre su arquetipo y lo olvida al día siguiente","Pero cuando lo vives cada día, tu fe, tus decisiones y tu confianza crecen","Creamos un plan sencillo para ayudarte a hacer justamente eso"];
+    const bgs=["#FFFFFF","#F6FBFE","#E4F1FD"];
+    view.innerHTML = `<div class="cards-screen"><div class="stack">${texts.map((t,i)=>`<div class="card" style="background:${bgs[i]}">${t}</div>`).join("")}</div></div>`;
+    const cs=view.querySelectorAll('.card'); let i=0;
+    const step=()=>{ cs.forEach((c,j)=>{c.classList.toggle('show',j===i);c.classList.toggle('back',j<i);}); i++; if(i<cs.length) setTimeout(step,2900); };
+    step(); setTimeout(()=>go(),2900*cs.length+300);
+  },
+  offer(){
+    const C=CONFIG, P=C.plans;
+    const challenge=({Sensitive:"Pensar demasiado",Overwhelmed:"Pensar demasiado",Calm:"Ser constante",Hopeful:"Ser constante",Focused:"Encontrar tiempo",Energetic:"Mantener el enfoque"})[state.answers.feelDuring]||"Pensar demasiado";
+    const goal=state.answers.currentRelationship==="In need of renewal"?"Fe renovada":"Más cerca de Dios";
+    const isC=C.offerVariant==="coupon", $c=C.currency||"$";
+    const VP=window.VPRICE; if(VP) VP.cfg=C;
+    const money=v=>$c+Number(v).toFixed(2).replace('.',',');
+    const L=(p,f)=>VP?VP.plan(p,P.indexOf(p),f):Number(p[f]);
+    const perDay=p=>L(p,"price")/p.days;
+    const save=p=>p.compareAt?Math.round((1-p.price/p.compareAt)*100):0;
+    const code=((state.name||"FRIEND").replace(/[^A-Za-z]/g,"")||"FRIEND").toUpperCase()+"_"+new Date().toLocaleString("en",{month:"short"}).toUpperCase()+((C.coupon&&C.coupon.suffix)||"");
+    const trialP=P.find(p=>p.trialDays);
+    const couponBox=()=>!isC?'':(C.coupon.percent>0
+      ?`<div class="cp"><div class="cp-h">${ICON.tag}<div><b>Your promo code applied!</b><small>${C.coupon.percent}% off your first purchase. Standard pricing applies on renewal</small></div></div><div class="cp-row"><span class="cp-code">${ICON.check}${esc(code)}</span><span class="cp-t"><b class="tm">0${C.coupon.minutes}:00</b><small><i>minutes</i><i>seconds</i></small></span></div></div>`
+      :`<div class="cp"><div class="cp-h">${ICON.tag}<div><b>Your ${trialP?trialP.trialDays+'-day free trial is reserved!':'personal offer is reserved!'}</b><small>${trialP?'Start today for '+money(0)+'. Cancel anytime before the trial ends.':'Your plan is held for you for a few minutes.'}</small></div></div><div class="cp-row"><span class="cp-code">${ICON.check}${esc(code)}</span><span class="cp-t"><b class="tm">0${C.coupon.minutes}:00</b><small><i>minutes</i><i>seconds</i></small></span></div></div>`);
+    const badge=p=>save(p)?`<span class="off">AHORRA ${save(p)}%</span>`:'';
+    const sub=p=>p.trialDays?`<small class="o-ps">${p.trialDays} days free, then ${money(L(p,"price"))}/${p.every}</small>`
+      :`<small class="o-ps">${money(L(p,"price"))} ${isC?'':'facturado '}cada ${p.every}</small>`;
+    const pd=v=>{const x=VP?VP.parts(v):{sym:$c,int:v.toFixed(2).split('.')[0],dec:v.toFixed(2).split('.')[1]};return `<span class="pd"><span class="cur">${x.sym}</span><span class="int">${x.int}</span><span class="dec"><b>${x.dec}</b><small>por día</small></span></span>`;};
+    const right=p=>{
+      if(p.trialDays) return `<div class="${isC?'o-tp':'o-pp'} o-free"><b>FREE</b><small>${p.trialDays} days</small></div>`;
+      if(isC) return `<div class="o-tp">${save(p)?`<em>SAVE ${save(p)}%</em>`:''}<b>${money(L(p,"price"))}</b>${p.compareAt?`<s>${money(L(p,"compareAt"))}</s>`:''}</div>`;
+      return `<div class="o-pp">${pd(perDay(p))}</div>`;
+    };
+    const plansBlock=()=>`<h3 class="o-h2">¡Tu <span class="hl">plan personalizado de estudio bíblico</span> está listo!</h3>${couponBox()}
+      <div class="o-plans">${P.map((p,i)=>`<div class="o-plan ${p.popular?'pop':''}" data-i="${i}">${p.popular?`<div class="rib">${ICON.spark} MÁS POPULAR</div>`:''}
+        <div class="o-pb"><span class="radio"></span><div class="o-pn"><b>${p.name}</b>${sub(p)}${isC?'':badge(p)}</div>${right(p)}</div></div>`).join('')}</div>${VP?VP.note():''}
+      <div class="o-note">${C.planNote}</div>
+      <button class="btn sub">Obtener mi plan</button>
+      <p class="o-terms">Al hacer clic en «Obtener mi plan», aceptas la renovación automática de la suscripción. <span class="tdyn"></span> Cancela desde la app o por correo: <a href="mailto:${C.supportEmail}">${C.supportEmail}</a>. Consulta los <a href="${C.links.subscription}">Términos de suscripción</a> para más detalles.</p>
+      <div class="safe">${ICON.shield}Pago seguro y protegido</div>
+      <div class="pay">${PAYLOGOS}</div>`;
+    const social = C.social.count ? `<div class="o-card o-social"><h3><span class="hl">${esc(C.social.count)} creyentes</span> ya <span class="hl">crecen</span><br>con la app ${esc(C.brandName)}</h3>${C.social.rating?`<div class="o-rate"><div class="stores">${ICON.apple}<i></i>${ICON.play}</div><div class="rt"><span><b>${esc(C.social.rating)}</b> de 5</span><strong>${esc(C.social.ratingSource)}</strong></div></div>`:''}</div>` : '';
+    const stats = C.stats.length ? `<h3 class="o-h2">¡Personas como tú lograron grandes resultados con ${esc(C.brandName)}!</h3><div class="o-stats">${C.stats.map((x,i)=>`${i?'<div class="sdiv"><i></i><span>✦</span><i></i></div>':''}<div class="srow"><span class="big">${esc(x.value)}<sup>%</sup></span><span>${esc(x.text)}</span></div>`).join('')}<small>${esc(C.statsSource)}</small></div>` : '';
+    const reviews = C.reviews.length ? `<h3 class="o-h2">¡A los usuarios les encanta ${esc(C.brandName)}!</h3><p class="o-sub">Forma parte de nuestra comunidad global</p>${C.reviews.map(r=>`<div class="o-card o-rev"><div class="stars">${'<i>★</i>'.repeat(r.stars||5)}</div><b>${esc(r.title)}</b><p>${esc(r.text)}</p><div class="who"><span>${esc(r.name)}</span>${r.photo?`<img src="${C.img}${esc(r.photo)}" alt="">`:`<em>${esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em>`}</div></div>`).join('')}` : '';
+    const endorse = C.endorsements.length ? `<div class="o-card"><h3 class="o-h2" style="margin-top:0">Nuestro plan de estudio bíblico se basa en enfoques usados por expertos de:</h3><div class="o-end">${C.endorsements.map(e=>typeof e==='string'?`<div><b>${esc(e)}</b></div>`:`<div>${e.top?`<small>${esc(e.top)}</small>`:''}<b>${esc(e.name)}</b>${e.bottom?`<small>${esc(e.bottom)}</small>`:''}</div>`).join('')}</div><p class="o-disc">${esc(C.endorsementsNote)}</p></div>` : '';
+    const laurel=`<svg viewBox="0 0 70 110" xmlns="http://www.w3.org/2000/svg"><path d="M56 104 C 22 92, 10 60, 22 14" fill="none" stroke="#5E8C6E" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="16" cy="22" rx="5" ry="11" transform="rotate(-25 16 22)" fill="#7FA886"/><ellipse cx="28" cy="26" rx="5" ry="11" transform="rotate(35 28 26)" fill="#5E8C6E"/><ellipse cx="12" cy="40" rx="5" ry="11" transform="rotate(-15 12 40)" fill="#5E8C6E"/><ellipse cx="25" cy="44" rx="5" ry="11" transform="rotate(45 25 44)" fill="#7FA886"/><ellipse cx="12" cy="58" rx="5" ry="11" transform="rotate(-5 12 58)" fill="#7FA886"/><ellipse cx="26" cy="62" rx="5" ry="11" transform="rotate(55 26 62)" fill="#5E8C6E"/><ellipse cx="16" cy="76" rx="5" ry="11" transform="rotate(10 16 76)" fill="#5E8C6E"/><ellipse cx="31" cy="78" rx="5" ry="11" transform="rotate(65 31 78)" fill="#7FA886"/><ellipse cx="25" cy="92" rx="5" ry="11" transform="rotate(25 25 92)" fill="#7FA886"/><ellipse cx="40" cy="92" rx="5" ry="11" transform="rotate(75 40 92)" fill="#5E8C6E"/></svg>`;
+    const ratingBlock = (C.ratingBadge && C.social.rating) ? `<div class="rb"><img class="rb-map" src="${C.img}worldmap.svg" alt=""><div class="rb-card"><span class="rb-l">${laurel}</span><div class="rb-c"><b>${esc(C.social.rating)}</b><span class="rb-s">${'\u2605'.repeat(5)}</span><small>${esc(C.social.ratingSource)}</small></div><span class="rb-l rb-r">${laurel}</span></div></div>
+      ${C.social.count?`<h3 class="rb-h">${esc(C.social.count)} creyentes ya crecen con la app ${esc(C.brandName)}</h3>`:''}
+      ${C.reviews.length?`<div class="rc" id="rc">${C.reviews.map(r=>`<div class="rc-i"><div class="rc-top"><em>${r.photo?`<img src="${C.img}${esc(r.photo)}" alt="">`:esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em><div><b>${esc(r.title)}</b><span class="rc-st">${'<i>\u2605</i>'.repeat(r.stars||5)}</span></div><small>${esc(r.name)}</small></div><p>${esc(r.text)}</p></div>`).join('')}</div><div class="rc-dots">${C.reviews.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}` : '';
+    view.innerHTML = `<div class="o-top"><img src="${C.img}logo.svg" alt="${esc(C.brandName)}" class="o-logo"><button class="btn o-cta" id="getPlan">Obtener mi plan</button></div>
+    <div class="offer">
+      <h1 class="o-h1">¡Tu plan personalizado de<br><b>estudio bíblico está listo!</b></h1>
+      <div class="o-chips"><div>${ICON.alert}<span><small>Desafío principal</small>${challenge}</span></div><div>${ICON.bulb}<span><small>Meta</small>${goal}</span></div></div>
+      <div class="o-bubble"><b>Estás listo(a) para empezar</b><span>Tu plan es sencillo: las Escrituras en palabras claras, un pequeño paso a la vez</span></div>
+      <div class="o-journey">
+        <div class="tabs">${C.weeks.map((w,i)=>`<button class="${i===0?'on':''}" data-w="${i}">Semana ${i+1}</button>`).join('')}</div>
+        <div class="tl" id="tl"></div>
+        <img class="coach" src="${C.img}${C.images.coach}" alt="" onerror="this.style.display='none'">
+        <div class="jf"><b>Sigue acercándote a Dios</b><span>Desbloquea tu camino devocional completo</span></div>
+      </div>
+      <div class="o-card o-get"><h3>Lo que recibes con <span class="hl">${esc(C.brandName)}</span></h3>
+        ${C.benefits.map((b,i)=>`<div class="gi"><span class="gic c${i}">${ICON[b.icon]}</span><p><b>${b.lead}</b> ${b.text}</p></div>`).join('')}</div>
+      ${social}
+      <div id="pA">${plansBlock()}</div>
+      ${endorse}${stats}${ratingBlock}
+      <div class="o-guide"><b>Estudia la Biblia con una guía clara, no a solas</b>
+        <div>${ICON.smile}Explicaciones sencillas en cada capítulo</div><div>${ICON.note}Ideas clave para que nada se te escape</div><div>${ICON.bolt}Una acción diaria para vivir lo que lees</div></div>
+      ${C.experience&&C.experience.length?`<h3 class="o-h2">Así se vive un día con <span class="hl">${esc(C.brandName)}</span></h3><div class="dx"><div class="dx-tabs">${C.experience.map((e,i)=>`<button class="dx-tab ${i?'':'on'}" data-x="${i}"><span class="ic">${e.icon}</span>${esc(e.time)}<span class="bar"></span></button>`).join('')}</div><div class="dx-stage">${C.experience.map((e,i)=>`<div class="dx-pane ${i?'':'on'}" data-x="${i}"><span class="dx-clock">${e.icon} ${esc(e.clock)}</span><div class="dx-t">${esc(e.title)}</div><p class="dx-p">${esc(e.text)}</p>${e.mock?`<div class="dx-phone"><div class="dx-card"><span class="dx-tag">${esc(e.mock.tag)}</span><div class="dx-h">${esc(e.mock.head)}</div><div class="dx-b">${esc(e.mock.body)}</div><div class="dx-ref">${esc(e.mock.ref)}</div><div class="dx-btn">${esc(e.mock.btn)}</div></div></div>`:''}</div>`).join('')}</div><div class="dx-dots">${C.experience.map((e,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div></div>`:''}
+      <h3 class="o-h2">Preguntas frecuentes</h3>
+      <div class="faq">${C.faq.map(f=>`<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}</div>
+      <div id="pB">${plansBlock()}</div>
+    </div>
+    <footer class="addr">${esc(C.companyAddress)}</footer>`;
+    const tl=$('tl');
+    const showWeek=w=>{tl.innerHTML=C.weeks[w].map((d,i)=>`<div class="day ${i===3?'fade':''}"><span class="dl">Día ${w*4+i+1}</span><span class="bar k${i}">${esc(d)}</span></div>`).join('');view.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',+b.dataset.w===w));};
+    view.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showWeek(+b.dataset.w)); showWeek(0);
+    const sync=()=>{view.querySelectorAll('.o-plan').forEach(p=>p.classList.toggle('sel',+p.dataset.i===state.plan));view.querySelectorAll('.tdyn').forEach(t=>t.textContent=VP?VP.terms(P[state.plan],state.plan):P[state.plan].terms);};
+    view.querySelectorAll('.o-plan').forEach(p=>p.onclick=()=>{state.plan=+p.dataset.i;sync();});
+    // day timeline: tabs + auto-advance + swipe
+    (function(){const dx=view.querySelector('.dx'); if(!dx) return; const n=dx.querySelectorAll('.dx-tab').length; let cur=0, auto=true;
+      const show=k=>{cur=(k+n)%n; dx.querySelectorAll('[data-x]').forEach(el=>el.classList.toggle('on',+el.dataset.x===cur)); dx.querySelectorAll('.dx-dots i').forEach((d,j)=>d.classList.toggle('on',j===cur));
+        const t=dx.querySelector('.dx-tab.on .bar'); if(t){t.style.animation='none'; void t.offsetWidth; t.style.animation='';}};
+      const stop=()=>{auto=false; dx.classList.add('paused'); clearInterval(window.__dxT);};
+      clearInterval(window.__dxT); window.__dxT=setInterval(()=>{ if(!document.body.contains(dx)) return clearInterval(window.__dxT); if(auto) show(cur+1); },5500);
+      dx.querySelectorAll('.dx-tab').forEach(b=>b.onclick=()=>{stop(); show(+b.dataset.x);});
+      let x0=null; const st=dx.querySelector('.dx-stage');
+      st.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+      st.addEventListener('touchend',e=>{ if(x0==null) return; const dxp=e.changedTouches[0].clientX-x0; if(Math.abs(dxp)>40){stop(); show(cur+(dxp<0?1:-1));} x0=null;});
+    })();
+
+    view.querySelectorAll('.sub').forEach(b=>b.onclick=checkout);
+    const rc=$('rc'); if(rc){const dots=view.querySelectorAll('.rc-dots i');const n=dots.length;let idx=0;
+      rc.addEventListener('scroll',()=>{idx=Math.round(rc.scrollLeft/rc.clientWidth);dots.forEach((d,j)=>d.classList.toggle('on',j===idx));},{passive:true});
+      clearInterval(window.__rcT);window.__rcT=setInterval(()=>{if(!document.body.contains(rc))return clearInterval(window.__rcT);idx=(idx+1)%n;rc.scrollTo({left:idx*rc.clientWidth,behavior:'smooth'});},5000);}
+    $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
+    sync();
+    if(isC){let t=C.coupon.minutes*60;const tk=()=>{const m=String(Math.floor(t/60)).padStart(2,'0'),ss=String(t%60).padStart(2,'0');view.querySelectorAll('.tm').forEach(e=>e.textContent=m+':'+ss);if(t>0)t--;};tk();clearInterval(window.__cpT);window.__cpT=setInterval(tk,1000);}
+  }
+};
+
+function ask(q, done){
+  const m=document.createElement('div'); m.className='modal';
+  m.innerHTML=`<div class="box"><small>Para continuar, responde</small><h3>${q}</h3><div class="yn"><button>❌ No</button><button>✅ Sí</button></div></div>`;
+  document.body.appendChild(m);
+  m.querySelectorAll('button').forEach(b=>b.onclick=()=>{m.remove();done();});
+}
+let timerOn=false;
+function startTimer(){
+  if(timerOn) return; timerOn=true;
+  let t=CONFIG.timerSeconds;
+  const tick=()=>{const mm=$('mm'),ss=$('ss');if(!mm)return;mm.textContent=String(Math.floor(t/60)).padStart(2,'0');ss.textContent=String(t%60).padStart(2,'0');if(t>0)t--;};
+  tick(); setInterval(tick,1000);
+}
+function sendLead(){
+  if(!CONFIG.leadWebhook) return;
+  fetch(CONFIG.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:state.email,name:state.name,archetype:state.archetype,gender:state.gender,answers:state.answers})}).catch(()=>{});
+}
+function checkout(){
+  const p=CONFIG.plans[state.plan]||{};
+  const target=(window.VPRICE?VPRICE.checkout(p,state.plan):p.checkoutUrl)||CONFIG.checkoutUrl;
+  if(!target||target==="#") return;
+  const u=new URL(target,location.href);
+  track(state.i,'checkout','checkout',p.name||String(state.plan));
+  // keep ad tracking (utm_*, src, xcod, fbclid...) from the landing URL; sck always marks the Spanish funnel (sets the app language)
+  new URLSearchParams(location.search).forEach((v,k)=>{ if(!u.searchParams.has(k)) u.searchParams.set(k,v); });
+  u.searchParams.set('sck','vq_'+TRACK.quiz+'_'+TRACK.sid);
+  if(state.email) u.searchParams.set('email',state.email);
+  if(state.name)  u.searchParams.set('name',state.name);
+  location.href=u.toString();
+}
+render();
+</script>
+</body>
+</html>

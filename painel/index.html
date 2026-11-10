@@ -162,9 +162,11 @@ const KEY = "sb_publishable_4EvJKXKLm0jrZrm7k-EnGA_u0N5nesc";
 const QUIZ = {
   archetype: {name:"Arquétipo", url:"https://veredaapplication.vercel.app/", path:"veredaapplication.vercel.app", color:"#0E5F95"},
   study:     {name:"Estudo A (/study)", url:"https://veredaapplication.vercel.app/study/", path:"/study", color:"#C9973F"},
-  study2:    {name:"Estudo B (/study2)", url:"https://veredaapplication.vercel.app/study2/", path:"/study2", color:"#5b8c5a"}
+  study2:    {name:"Estudo B (/study2)", url:"https://veredaapplication.vercel.app/study2/", path:"/study2", color:"#5b8c5a"},
+  "es-arqu":   {name:"ES Arquetipo (/es-arqu)", url:"https://veredaapplication.vercel.app/es-arqu", path:"/es-arqu", color:"#8a5bb5"},
+  "es-estud2": {name:"ES Estudio (/es-estud2)", url:"https://veredaapplication.vercel.app/es-estud2", path:"/es-estud2", color:"#c2605a"}
 };
-const ORDER = ["archetype","study","study2"];
+const ORDER = ["archetype","study","study2","es-arqu","es-estud2"];
 const OFFERS = {"76tfafb3":"Teste grátis 7 dias","t5216fgc":"Mensal $19,90","ah15t54l":"Trimestral $39,90"};
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
