@@ -82,6 +82,33 @@ tr:last-child td{border-bottom:0}
 .foot{color:var(--muted);font-size:12px;margin-top:30px}
 #loading{position:fixed;top:0;left:0;height:3px;background:var(--blue);width:0;transition:width .4s;z-index:9}
 @media(max-width:900px){.grid3,.sales{grid-template-columns:1fr}.cmp{grid-template-columns:1fr}.hin{gap:8px}}
+
+.dp{position:relative}
+.pbtn{display:inline-flex;align-items:center;gap:8px;padding:0 12px;font-weight:600}
+.pbtn:hover{border-color:var(--blue);color:var(--blue)}
+.dpop{position:absolute;right:0;top:46px;z-index:20;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 40px rgba(20,30,50,.14);display:flex;overflow:hidden}
+.dpre{display:flex;flex-direction:column;padding:10px;border-right:1px solid var(--line);gap:2px;min-width:150px}
+.dpre button{text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.dpre button:hover{background:var(--blue-soft)}
+.dpre button.on{background:var(--blue);color:#fff;font-weight:600}
+.dcal{padding:12px 14px 14px;width:290px}
+.dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.dhead b{color:var(--ink)}
+.dnav{width:32px;height:32px;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:pointer;font-size:18px;line-height:1}
+.dnav:hover:not([disabled]){border-color:var(--blue);color:var(--blue)}.dnav[disabled]{opacity:.35;cursor:default}
+.dgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px 0}
+.dgrid .wd{font-size:11px;color:var(--muted);text-align:center;padding:4px 0;font-weight:600}
+.dgrid button{height:36px;border:0;background:none;cursor:pointer;font-variant-numeric:tabular-nums;position:relative}
+.dgrid button span{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%}
+.dgrid button:hover:not([disabled]) span{background:var(--blue-soft)}
+.dgrid button[disabled]{color:#c4c8cf;cursor:default}
+.dgrid button.today span{box-shadow:inset 0 0 0 1.5px var(--blue)}
+.dgrid button.in{background:var(--blue-soft)}
+.dgrid button.s,.dgrid button.e{background:var(--blue-soft)}
+.dgrid button.s{border-radius:18px 0 0 18px}.dgrid button.e{border-radius:0 18px 18px 0}.dgrid button.s.e{border-radius:18px}
+.dgrid button.s span,.dgrid button.e span{background:var(--blue)!important;color:#fff;font-weight:700}
+.dhint{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.4}
+@media (max-width:640px){.dpop{position:fixed;left:10px;right:10px;top:70px;flex-direction:column}.dpre{flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)}.dcal{width:auto}}
 </style>
 </head>
 <body>
@@ -102,14 +129,14 @@ tr:last-child td{border-bottom:0}
 <div id="app" class="hidden">
   <header><div class="hin">
     <div class="brand"><i><svg width="16" height="16" viewBox="0 0 32 32"><path d="M7 7l9 19 9-19" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i>VEREDA <small>· Painel dos quizzes</small></div>
-    <select class="sel" id="days" aria-label="Período">
-      <option value="1">Últimas 24 horas</option>
-      <option value="7">Últimos 7 dias</option>
-      <option value="14">Últimos 14 dias</option>
-      <option value="30" selected>Últimos 30 dias</option>
-      <option value="90">Últimos 90 dias</option>
-      <option value="365">Todo o período</option>
-    </select>
+    <div class="dp" id="dp">
+      <button class="sel pbtn" id="pbtn" type="button" aria-haspopup="dialog"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span id="plabel">Últimos 30 dias</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="dpop hidden" id="dpop" role="dialog" aria-label="Escolher período">
+        <div class="dpre" id="dpre"></div>
+        <div class="dcal"><div class="dhead"><button type="button" class="dnav" data-m="-1" aria-label="Mês anterior">‹</button><b id="dmonth"></b><button type="button" class="dnav" data-m="1" aria-label="Próximo mês">›</button></div>
+          <div class="dgrid" id="dgrid"></div><div class="dhint" id="dhint">Clique na data inicial e depois na final.<br>Para um dia só, clique duas vezes no mesmo dia.</div></div>
+      </div>
+    </div>
     <button class="ghost" id="leadsBtn" title="Baixar a lista de e-mails (quiz + carrinhos abandonados)">Baixar leads</button>
     <button class="ghost" id="refresh">Atualizar</button>
     <button class="ghost" id="logout">Sair</button>
@@ -181,8 +208,88 @@ const store = {
 };
 let PW = null, DATA = null, TAB = "archetype", timer = null;
 
-async function fetchData(pw, days){
-  const r = await fetch(API, {method:"POST", headers:{"content-type":"application/json", apikey:KEY}, body:JSON.stringify({password:pw, days:Number(days)})});
+/* ---------- period picker ---------- */
+const TZ = "America/Sao_Paulo";
+const todayStr = () => new Intl.DateTimeFormat("en-CA", {timeZone:TZ, year:"numeric", month:"2-digit", day:"2-digit"}).format(new Date());
+const addDays = (s, n) => { const d = new Date(s + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0,10); };
+const br = (s, y) => { const [Y,M,D] = s.split("-"); return D + "/" + M + (y ? "/" + Y : ""); };
+const PRESETS = [
+  {k:"today", label:"Hoje", get:() => ({from:todayStr(), to:todayStr()})},
+  {k:"yest", label:"Ontem", get:() => { const y = addDays(todayStr(), -1); return {from:y, to:y}; }},
+  {k:"7", label:"Últimos 7 dias", days:7},
+  {k:"14", label:"Últimos 14 dias", days:14},
+  {k:"30", label:"Últimos 30 dias", days:30},
+  {k:"90", label:"Últimos 90 dias", days:90},
+  {k:"365", label:"Todo o período", days:365}
+];
+let PERIOD = {k:"30", label:"Últimos 30 dias", days:30};
+try { const sp = JSON.parse(localStorage.getItem("vd_period") || "null"); if (sp && (sp.days || sp.from)) PERIOD = sp; } catch {}
+if (PERIOD.k === "today" || PERIOD.k === "yest") { const pp = PRESETS.find(x => x.k === PERIOD.k).get(); PERIOD = {...periodFromRangeLazy(pp.from, pp.to), k:PERIOD.k}; }
+function periodFromRangeLazy(a, b){ return periodFromRange(a, b); }
+function periodFromRange(a, b){
+  if (a > b) [a, b] = [b, a];
+  const t = todayStr(), y = addDays(t, -1);
+  let label, phrase;
+  if (a === b) { label = a === t ? "Hoje" : a === y ? "Ontem" : br(a, true); phrase = a === t ? "hoje" : a === y ? "ontem" : "em " + br(a, true); }
+  else { label = br(a) + " – " + br(b, true); phrase = "de " + br(a) + " a " + br(b, true); }
+  return {k:"custom", from:a, to:b, label, phrase};
+}
+function setPeriod(p){
+  // "Hoje"/"Ontem" are re-evaluated on reload; keep their key
+  PERIOD = p; try { localStorage.setItem("vd_period", JSON.stringify(p)); } catch {}
+  $("#plabel").textContent = p.label; closePicker(); load();
+}
+let VIEW = null, ANCHOR = null, HOVER = null;
+function openPicker(){
+  const ref = PERIOD.from ? PERIOD.to : todayStr();
+  VIEW = ref.slice(0,7); ANCHOR = null; HOVER = null;
+  $("#dpop").classList.remove("hidden"); drawPicker();
+}
+function closePicker(){ $("#dpop").classList.add("hidden"); ANCHOR = null; }
+function drawPicker(){
+  $("#dpre").innerHTML = PRESETS.map(p => `<button type="button" data-p="${p.k}" class="${PERIOD.k === p.k ? "on" : ""}">${p.label}</button>`).join("");
+  const [Y, M] = VIEW.split("-").map(Number);
+  const first = new Date(Date.UTC(Y, M - 1, 1)), dim = new Date(Date.UTC(Y, M, 0)).getUTCDate(), lead = first.getUTCDay();
+  const mt = first.toLocaleDateString("pt-BR", {month:"long", year:"numeric", timeZone:"UTC"}); $("#dmonth").textContent = mt.charAt(0).toUpperCase() + mt.slice(1);
+  const t = todayStr();
+  $(".dnav[data-m='1']").disabled = VIEW >= t.slice(0,7);
+  let a, b;
+  if (ANCHOR) { a = ANCHOR; b = HOVER || ANCHOR; if (a > b) [a, b] = [b, a]; }
+  else if (PERIOD.from) { a = PERIOD.from; b = PERIOD.to; }
+  else { a = addDays(t, -(PERIOD.days - 1)); b = t; }
+  let h = ["D","S","T","Q","Q","S","S"].map(w => `<div class="wd">${w}</div>`).join("") + "<div></div>".repeat(lead);
+  for (let d = 1; d <= dim; d++) {
+    const ds = VIEW + "-" + String(d).padStart(2, "0");
+    const cls = [ds === t ? "today" : "", ds === a ? "s" : "", ds === b ? "e" : "", ds > a && ds < b ? "in" : ""].join(" ");
+    h += `<button type="button" data-d="${ds}" class="${cls}" ${ds > t ? "disabled" : ""}><span>${d}</span></button>`;
+  }
+  $("#dgrid").innerHTML = h;
+  $("#dhint").innerHTML = ANCHOR ? `Início: <b>${br(ANCHOR, true)}</b>. Agora clique na data final<br>(ou de novo em ${br(ANCHOR)} para ver só esse dia).` : "Clique na data inicial e depois na final.<br>Para um dia só, clique duas vezes no mesmo dia.";
+}
+function initPicker(){
+  $("#plabel").textContent = PERIOD.label;
+  $("#pbtn").onclick = e => { e.stopPropagation(); $("#dpop").classList.contains("hidden") ? openPicker() : closePicker(); };
+  $("#dpop").onclick = e => {
+    e.stopPropagation();
+    const nav = e.target.closest(".dnav");
+    if (nav && !nav.disabled) { const [Y, M] = VIEW.split("-").map(Number); const d = new Date(Date.UTC(Y, M - 1 + Number(nav.dataset.m), 1)); VIEW = d.toISOString().slice(0,7); drawPicker(); return; }
+    const pr = e.target.closest("[data-p]");
+    if (pr) { const p = PRESETS.find(x => x.k === pr.dataset.p); setPeriod(p.days ? {k:p.k, label:p.label, days:p.days} : {...periodFromRange(p.get().from, p.get().to), k:p.k}); return; }
+    const day = e.target.closest("[data-d]");
+    if (day && !day.disabled) {
+      if (!ANCHOR) { ANCHOR = day.dataset.d; HOVER = null; drawPicker(); }
+      else { const p = periodFromRange(ANCHOR, day.dataset.d); setPeriod(p); }
+    }
+  };
+  $("#dgrid").onmouseover = e => { const day = e.target.closest("[data-d]"); if (ANCHOR && day && !day.disabled && HOVER !== day.dataset.d) { HOVER = day.dataset.d; drawPicker(); } };
+  document.addEventListener("click", () => { if (!$("#dpop").classList.contains("hidden")) closePicker(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closePicker(); });
+}
+
+
+async function fetchData(pw){
+  const q = PERIOD.from ? {from:PERIOD.from, to:PERIOD.to} : {days:PERIOD.days};
+  const r = await fetch(API, {method:"POST", headers:{"content-type":"application/json", apikey:KEY}, body:JSON.stringify({password:pw, ...q})});
   if (r.status === 401) throw new Error("senha");
   if (!r.ok) throw new Error("rede");
   return r.json();
@@ -208,7 +315,7 @@ async function load(){
   const bar = $("#loading"); bar.style.width = "60%";
   $("#refresh").disabled = true;
   try {
-    DATA = await fetchData(PW, $("#days").value);
+    DATA = await fetchData(PW);
     render();
   } catch (e) {
     if (e.message === "senha") { logout(); $("#lerr").textContent = "A senha mudou. Entre de novo."; }
@@ -222,7 +329,7 @@ async function load(){
 function render(){
   const S = Object.fromEntries((DATA.summary || []).map(s => [s.quiz, s]));
   const days = DATA.days;
-  const label = $("#days").selectedOptions[0].textContent.toLowerCase();
+  const label = PERIOD.phrase || PERIOD.label.toLowerCase();
   const tot = ORDER.reduce((a, q) => a + (S[q]?.started || 0), 0);
   $("#lead").textContent = `${fmt(tot)} pessoas iniciaram um quiz (${label})`;
   $("#updated").textContent = "Atualizado às " + new Date(DATA.generated_at).toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"});
@@ -307,7 +414,7 @@ $("#lform").onsubmit = async e => {
   const pw = $("#pw").value.trim(); if (!pw) return;
   $("#lbtn").disabled = true; $("#lerr").textContent = "";
   try {
-    DATA = await fetchData(pw, $("#days").value);
+    DATA = await fetchData(pw);
     PW = pw; store.set(pw, $("#remember").checked);
     $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
     render(); clearInterval(timer); timer = setInterval(load, 5 * 60 * 1000);
@@ -315,7 +422,7 @@ $("#lform").onsubmit = async e => {
     $("#lerr").textContent = err.message === "senha" ? "Senha incorreta." : "Não foi possível conectar. Tente de novo.";
   } finally { $("#lbtn").disabled = false; }
 };
-$("#days").onchange = load;
+initPicker();
 $("#leadsBtn").onclick = downloadLeads;
 $("#refresh").onclick = load;
 $("#logout").onclick = logout;
