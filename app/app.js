@@ -1,7 +1,9 @@
 /* VEREDA app — single-file PWA (local-first). */
 (function(){
 "use strict";
-const C = window.VEREDA_CONTENT;
+const ES = window.VLANG==="es";
+const C = (ES && window.VEREDA_CONTENT_ES) ? Object.assign({}, window.VEREDA_CONTENT, window.VEREDA_CONTENT_ES) : window.VEREDA_CONTENT;
+const LOC = window.VLOCALE || "en-US";
 const CONFIG = {
   supportEmail: "institutoacademy20@gmail.com",
   renewUrl:"https://pay.hotmart.com/F108347453I?off=t5216fgc", // Hotmart checkout link to renew (fill in)
@@ -16,7 +18,7 @@ const $app = document.getElementById("app");
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const md = s => esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>");
 const todayStr = (d=new Date()) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-const fmtDate = s => new Date(s+"T12:00:00").toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+const fmtDate = s => new Date(s+"T12:00:00").toLocaleDateString(LOC,{month:"long",day:"numeric",year:"numeric"});
 const initials = n => (n||"").trim().split(/\s+/).slice(0,2).map(w=>w[0]||"").join("").toUpperCase() || "V";
 const uid = () => Math.random().toString(36).slice(2,10);
 
@@ -154,13 +156,13 @@ async function shareText(t){ if(navigator.share){ try{ await navigator.share({te
 /* ---------- narrator (Web Speech) ---------- */
 const N = {
   sents:[], i:0, playing:false, onupdate:null, title:"",
-  voices(){ const v=(window.speechSynthesis?.getVoices()||[]).filter(v=>/^en/i.test(v.lang)); const pref=v.filter(x=>/natural|premium|enhanced|google|samantha|daniel|karen|moira|aria|jenny|guy/i.test(x.name)); return (pref.length?pref:v).slice(0,4); },
+  voices(){ const v=(window.speechSynthesis?.getVoices()||[]).filter(v=>(ES?/^es/i:/^en/i).test(v.lang)); const pref=v.filter(x=>/natural|premium|enhanced|google|samantha|daniel|karen|moira|aria|jenny|guy/i.test(x.name)); return (pref.length?pref:v).slice(0,4); },
   load(text,title){ this.stop(); this.title=title; this.sents=text.replace(/\s+/g," ").match(/[^.!?…]+[.!?…]+[”"’]?|[^.!?…]+$/g)||[text]; this.sents=this.sents.map(s=>s.trim()).filter(Boolean); this.i=0; this.emit(); },
   total(){ return this.sents.reduce((a,s)=>a+s.length,0)/14/(S.rate||1); },
   elapsed(){ return this.sents.slice(0,this.i).reduce((a,s)=>a+s.length,0)/14/(S.rate||1); },
   speak(){ if(!window.speechSynthesis){ toast("Audio isn’t supported on this browser"); return; }
     speechSynthesis.cancel(); if(this.i>=this.sents.length){ this.playing=false; this.i=this.sents.length; this.emit(); return; }
-    const u=new SpeechSynthesisUtterance(this.sents[this.i]); u.lang="en-US"; u.rate=S.rate||1;
+    const u=new SpeechSynthesisUtterance(this.sents[this.i]); u.lang=ES?"es-ES":"en-US"; u.rate=S.rate||1;
     const vs=this.voices(); const v=vs.find(x=>x.name===S.voice)||vs[0]; if(v) u.voice=v;
     u.onend=()=>{ if(!this.playing) return; this.i++; this.emit(); this.speak(); };
     speechSynthesis.speak(u); },
@@ -261,6 +263,8 @@ async function checkAccess(){
     const {data,error}=await sbc.rpc("my_access"); if(error) return true;
     const a=Array.isArray(data)?data[0]:data;
     if(!a||!a.active){ renderBlocked(a); return false; }
+    if(a.lang && !S.langSet && a.lang!==(S.lang||window.VLANG)){ S.lang=a.lang; save(); location.reload(); return false; }
+    if(a.lang && !S.lang){ S.lang=a.lang; save(); }
     return true; }catch(e){ return true; }
 }
 function renderBlocked(a){
@@ -752,11 +756,12 @@ function openProfile(){
     el.querySelector("[data-jr]").onclick=()=>{ el.remove(); tab="journal"; render(); };
     el.querySelector("[data-edit]").onclick=()=>sheet(`<h3>Edit profile</h3><input class="field" id="pn" value="${esc(S.user.name)}"><button class="btn" data-ok style="margin-top:14px">Save</button>`,(s,c)=>s.querySelector("[data-ok]").onclick=()=>{ const v=s.querySelector("#pn").value.trim(); if(v){ S.user.name=v; save(); } c(); el.remove(); openProfile(); });
     el.querySelector("[data-faq]").onclick=()=>page("FAQ",[["How does the Journey work?","A new devotional unlocks every day. Complete today’s prayer, word, quiz and action to unlock tomorrow’s day."],["Can I skip ahead?","No — the Journey is designed to build a daily habit, one step at a time."],["Which Bible version is used?","The World English Bible (WEB), a modern English translation in the public domain."],["How do I listen instead of reading?","Tap “Listen” on any prayer or devotional. You can change the narrator and speed."],["How do I cancel?","Tap Manage subscription in your profile, or contact support."]].map(([q,a])=>`<div class="jentry"><div class="q">${q}</div><div class="a">${a}</div></div>`).join(""));
-    el.querySelector("[data-set]").onclick=()=>page("Settings",`<div class="list" style="margin-bottom:16px"><div class="li">${ic("mail")}<span>Email<small>${esc(S.user.email)}</small></span></div><button class="li" data-fs>${ic("text")}Bible text size<span class="chev muted" style="font-size:14px">${S.bfs}px</span></button><button class="li" data-nr>${ic("mic")}Narrator speed<span class="chev muted" style="font-size:14px">${S.rate||1}×</span></button></div>
+    el.querySelector("[data-set]").onclick=()=>page("Settings",`<div class="list" style="margin-bottom:16px"><div class="li">${ic("mail")}<span>Email<small>${esc(S.user.email)}</small></span></div><button class="li" data-fs>${ic("text")}Bible text size<span class="chev muted" style="font-size:14px">${S.bfs}px</span></button><button class="li" data-nr>${ic("mic")}Narrator speed<span class="chev muted" style="font-size:14px">${S.rate||1}×</span></button><button class="li" data-lang>${ic("text")}Language<span class="chev muted" style="font-size:14px">${ES?"Español":"English"}</span></button></div>
       <div class="list" style="margin-bottom:16px"><button class="li" data-tour>${ic("help")}Replay the app tour</button>${isStandalone()?"":`<button class="li" data-inst>${ic("plus")}Add VEREDA to your home screen</button>`}</div>
       <div class="list"><button class="li" data-lo>${ic("out")}Sign out</button><button class="li" data-del style="color:var(--bad)">${ic("trash")}Delete my data</button></div><p class="muted" style="text-align:center;font-size:12px;margin-top:18px">VEREDA v1.0</p>`,p=>{
         p.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); p.remove(); el.querySelector("[data-set]").click(); };
         p.querySelector("[data-nr]").onclick=()=>{ const r=[0.75,1,1.25,1.5]; S.rate=r[(r.indexOf(S.rate||1)+1)%r.length]; save(); p.remove(); el.querySelector("[data-set]").click(); };
+        p.querySelector("[data-lang]").onclick=()=>{ S.lang=ES?"en":"es"; S.langSet=true; S.bver=undefined; save(); location.reload(); };
         p.querySelector("[data-tour]").onclick=()=>{ p.remove(); el.remove(); tab="journey"; render(); S.seen.tour=0; startTour(); };
         const pi=p.querySelector("[data-inst]"); if(pi) pi.onclick=doInstall;
         p.querySelector("[data-lo]").onclick=()=>{ p.remove(); el.remove(); signOut(); };
@@ -807,7 +812,7 @@ function openHighlights(){
 }
 
 /* ---------- PODCASTS ---------- */
-const PODS = () => window.VEREDA_PODCASTS || [];
+const PODS = () => ES ? [] : (window.VEREDA_PODCASTS || []);
 const podCover = (id, cls="") => {
   const art = {
    hf:`<defs><linearGradient id="pc1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCE3C8"/><stop offset="1" stop-color="#F6C9A6"/></linearGradient></defs><rect width="200" height="200" fill="url(#pc1)"/><circle cx="100" cy="70" r="46" fill="#FFF3D9" opacity=".8"/><g fill="#fff" opacity=".9"><ellipse cx="30" cy="40" rx="26" ry="9"/><ellipse cx="170" cy="30" rx="22" ry="8"/></g><rect x="28" y="140" width="144" height="10" rx="5" fill="#B9825C"/><g><path d="M52 112h34v18a12 12 0 0 1-12 12h-10a12 12 0 0 1-12-12Z" fill="#fff"/><path d="M86 118c10 0 10 14 0 14" stroke="#fff" stroke-width="5" fill="none"/><path d="M114 112h34v18a12 12 0 0 1-12 12h-10a12 12 0 0 1-12-12Z" fill="#0E5F95"/><path d="M148 118c10 0 10 14 0 14" stroke="#0E5F95" stroke-width="5" fill="none"/></g><g stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".9" fill="none"><path d="M64 104c-4-6 4-10 0-16"/><path d="M126 104c-4-6 4-10 0-16"/></g>`,
@@ -934,11 +939,11 @@ function openChat(){
     <div class="ch-foot"><div class="ch-in"><textarea rows="1" placeholder="Write your message" maxlength="1500"></textarea><button class="ch-send" aria-label="Send">${ic("send")}</button></div></div>`;
   document.body.appendChild(el);
   const list=el.querySelector(".ch-list"), body=el.querySelector(".ch-body"), ta=el.querySelector("textarea"), send=el.querySelector(".ch-send");
-  const day=ts=>{ const d=new Date(ts), t=new Date(); return d.toDateString()===t.toDateString()?"Today":d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); };
+  const day=ts=>{ const d=new Date(ts), t=new Date(); return d.toDateString()===t.toDateString()?"Today":d.toLocaleDateString(LOC,{month:"short",day:"numeric",year:"numeric"}); };
   const bottom=()=>{ body.scrollTop=body.scrollHeight; };
   function paint(){
     const first=S.chat[0]?.ts||Date.now();
-    let h=`<div class="ch-date">${day(first)}</div><div class="bub a">${chatMd(CHAT_HELLO)}</div><div class="ch-note">${S.chatMode==="ai"?"AI assistant · it can make mistakes.":"Prepared answers based on Scripture."} Not a substitute for pastoral or professional care.</div>`;
+    let h=`<div class="ch-date">${day(first)}</div><div class="bub a">${chatMd(window.T?T(CHAT_HELLO):CHAT_HELLO)}</div><div class="ch-note">${S.chatMode==="ai"?"AI assistant · it can make mistakes.":"Prepared answers based on Scripture."} Not a substitute for pastoral or professional care.</div>`;
     if(!S.chat.length) h+=`<div class="ch-chips">${CHAT_CHIPS.map(c=>`<button class="chip">${esc(c)}</button>`).join("")}</div>`;
     S.chat.forEach(m=>{ h+=m.r==="u"?`<div class="bub u">${esc(m.t).replace(/\n/g,"<br>")}</div>`:`<div class="bub a${m.err?" err":""}">${chatMd(m.t)}${m.err?`<button class="ch-retry">Try again</button>`:""}</div>`; });
     list.innerHTML=h;
@@ -955,7 +960,7 @@ function openChat(){
     try{
       const tk=await token(); if(!tk){ failMsg="Please sign out and sign in again to use the assistant."; throw new Error("auth"); }
       const r=await fetch(`${SB_URL}/functions/v1/spiritual-chat`,{method:"POST",headers:{"Content-Type":"application/json","apikey":SB_KEY,"Authorization":`Bearer ${tk}`},
-        body:JSON.stringify({messages:S.chat.filter(m=>!m.err).slice(-20).map(m=>({role:m.r==="u"?"user":"assistant",content:m.t}))})});
+        body:JSON.stringify({lang:ES?"es":"en",messages:S.chat.filter(m=>!m.err).slice(-20).map(m=>({role:m.r==="u"?"user":"assistant",content:m.t}))})});
       if(!r.ok){ const j=await r.json().catch(()=>({})); if(j.error) failMsg=j.error; throw new Error("http"); }
       { const md=r.headers.get("x-chat-mode"); if(md&&md!==S.chatMode){ S.chatMode=md; save(); } }
       const rd=r.body.getReader(), dec=new TextDecoder();
@@ -964,7 +969,7 @@ function openChat(){
         b.classList.remove("typing"); b.innerHTML=chatMd(out); bottom(); }
       if(!out.trim()) throw new Error("empty");
       S.chat.push({r:"a",t:out.trim(),ts:Date.now()});
-    }catch(e){ S.chat.push({r:"a",t:failMsg,ts:Date.now(),err:true}); }
+    }catch(e){ S.chat.push({r:"a",t:(window.T?T(failMsg):failMsg),ts:Date.now(),err:true}); }
     save(); busy=false; send.disabled=false; paint();
   }
   ta.oninput=()=>{ ta.style.height="auto"; ta.style.height=Math.min(ta.scrollHeight,120)+"px"; };
@@ -993,7 +998,7 @@ afterRender.explore=()=>{ const ch=document.querySelector("[data-chat]"); if(ch)
 function openStory(i){
   document.querySelector(".storyview")?.remove();
   const v=verseOfDay(i); const el=document.createElement("div"); el.className="storyview"; el.style.background=STORY_BG[i%7];
-  el.innerHTML=`${clouds(220,"white")}<div class="story-bars">${Array.from({length:7},(_,k)=>`<i class="${k<i?"done":k===i?"run":""}"><b></b></i>`).join("")}</div><div style="position:absolute;top:calc(env(safe-area-inset-top) + 22px);left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2"><span style="font-size:13px;opacity:.85">${v.d.toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span><button data-x style="color:#fff">${ic("x").replace("<svg ",'<svg style="width:26px;height:26px" ')}</button></div>
+  el.innerHTML=`${clouds(220,"white")}<div class="story-bars">${Array.from({length:7},(_,k)=>`<i class="${k<i?"done":k===i?"run":""}"><b></b></i>`).join("")}</div><div style="position:absolute;top:calc(env(safe-area-inset-top) + 22px);left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2"><span style="font-size:13px;opacity:.85">${v.d.toLocaleDateString(LOC,{month:"short",day:"numeric"})}</span><button data-x style="color:#fff">${ic("x").replace("<svg ",'<svg style="width:26px;height:26px" ')}</button></div>
     <div class="brand st1">VEREDA</div><q class="st2">${esc(v.t)}</q><div class="st3" style="opacity:.8">${esc(v.r)}</div>
     <div style="position:absolute;left:24px;right:24px;bottom:calc(30px + env(safe-area-inset-bottom));z-index:2" class="st4"><button class="btn white" data-sh>Share the wisdom</button><button data-cp style="color:#fff;font-weight:600;margin-top:16px;width:100%">Copy verse</button></div>`;
   document.body.appendChild(el);
@@ -1179,26 +1184,27 @@ function openPray(list, start=0){
 }
 
 /* ---------- BIBLE ---------- */
-const VERSIONS={web:{code:"WEB",name:"World English Bible",desc:"A modern, readable English translation, freely available in the public domain.",path:"bible/"},kjv:{code:"KJV",name:"King James Version",desc:"The classic English translation first published in 1611 (1769 edition), in the public domain.",path:"bible/kjv/"}};
-let BIDX=null; const BCACHE={}; let bibleListening=false;
-async function loadIdx(){ if(!BIDX) BIDX=await fetch("bible/index.json").then(r=>r.json()); return BIDX; }
-async function loadBook(i){ const v=S.bver||"web"; const k=v+i; if(!BCACHE[k]) BCACHE[k]=await fetch(`${VERSIONS[v].path}${String(i).padStart(2,"0")}.json`).then(r=>r.json()); return BCACHE[k]; }
+const VERSIONS={rv:{code:"RV1909",name:"Reina-Valera 1909",desc:"La clásica traducción al español de Cipriano de Valera (revisión de 1909), de dominio público.",path:"bible/rv/"},web:{code:"WEB",name:"World English Bible",desc:"A modern, readable English translation, freely available in the public domain.",path:"bible/"},kjv:{code:"KJV",name:"King James Version",desc:"The classic English translation first published in 1611 (1769 edition), in the public domain.",path:"bible/kjv/"}};
+let BIDX=null; const BIDXS={};
+const BVER=()=>{ const v=S.bver||(ES?"rv":"web"); return VERSIONS[v]?v:"web"; }; const BCACHE={}; let bibleListening=false;
+async function loadIdx(){ const p=BVER()==="rv"?"bible/rv/index.json":"bible/index.json"; if(!BIDXS[p]) BIDXS[p]=await fetch(p).then(r=>r.json()); BIDX=BIDXS[p]; return BIDX; }
+async function loadBook(i){ const v=BVER(); const k=v+i; if(!BCACHE[k]) BCACHE[k]=await fetch(`${VERSIONS[v].path}${String(i).padStart(2,"0")}.json`).then(r=>r.json()); return BCACHE[k]; }
 function viewBible(){
-  return `<div class="screen bible-screen"><div class="b-head" id="bhead"><button class="icon-btn" id="bset">${ic("lines")}</button><div class="seg ${bibleListening?"listen":""}" id="bseg" style="transform:scale(.92)"><span class="knob"></span><button class="${bibleListening?"":"on"}" data-bm="read">${ic("lines")}Read</button><button class="${bibleListening?"on":""}" data-bm="listen">${ic("head")}Listen</button></div><div style="display:flex;gap:8px;align-items:center"><button class="icon-btn" id="bth" title="Light / dark">${ic(S.bibleDark?"sun":"moon")}</button><button class="chip" id="bver" style="font-size:12px">${VERSIONS[S.bver||"web"].code}</button></div></div>
+  return `<div class="screen bible-screen"><div class="b-head" id="bhead"><button class="icon-btn" id="bset">${ic("lines")}</button><div class="seg ${bibleListening?"listen":""}" id="bseg" style="transform:scale(.92)"><span class="knob"></span><button class="${bibleListening?"":"on"}" data-bm="read">${ic("lines")}Read</button><button class="${bibleListening?"on":""}" data-bm="listen">${ic("head")}Listen</button></div><div style="display:flex;gap:8px;align-items:center"><button class="icon-btn" id="bth" title="Light / dark">${ic(S.bibleDark?"sun":"moon")}</button><button class="chip" id="bver" style="font-size:12px">${VERSIONS[BVER()].code}</button></div></div>
     <div class="pad" id="bwrap"><div class="bible-txt" id="btxt" style="--bfs:${S.bfs}px"><p class="muted" style="font-family:inherit">Loading…</p></div>
     <button class="btn ghost sm" id="bnext" style="margin:26px 0 8px"></button>
-    <p class="muted" style="font-size:11.5px;text-align:center;margin:14px 0 30px">Scripture: ${VERSIONS[S.bver||"web"].name} (${VERSIONS[S.bver||"web"].code}), public domain.</p></div>
+    <p class="muted" style="font-size:11.5px;text-align:center;margin:14px 0 30px">Scripture: ${VERSIONS[BVER()].name} (${VERSIONS[BVER()].code}), public domain.</p></div>
     <div class="mini bible-mini ${bibleListening?"":"hidden"}" id="bmini"><div class="th" style="background:linear-gradient(135deg,#CFE3F4,#E6D7F3);display:grid;place-items:center;color:var(--blue)">${ic("bible").replace("<svg ",'<svg style="width:20px" ')}</div><div style="flex:1"><b id="bmt">…</b><div class="bar"><i id="bmb" style="width:0"></i></div></div><button data-bpp>${ic("pause").replace("<svg ",'<svg style="width:22px;height:22px" ')}</button></div></div>`;
 }
 function openVersions(){
-  page("Versions", Object.entries(VERSIONS).map(([k,v])=>`<button class="vcard ${(S.bver||"web")===k?"on":""}" data-ver="${k}"><span class="vbadge">${v.code}</span><span style="flex:1;text-align:left"><b>${v.name}</b><small>${v.desc}</small></span></button>`).join("")+`<div class="card" style="padding:14px;margin-top:20px;box-shadow:none;border:1px solid var(--line);font-size:13.5px" class="muted">${ic("spark").replace("<svg ",'<svg style="width:15px;vertical-align:-3px;color:var(--muted)" ')} More versions coming soon</div>`,
+  page("Versions", Object.entries(VERSIONS).map(([k,v])=>`<button class="vcard ${BVER()===k?"on":""}" data-ver="${k}"><span class="vbadge">${v.code}</span><span style="flex:1;text-align:left"><b>${v.name}</b><small>${v.desc}</small></span></button>`).join("")+`<div class="card" style="padding:14px;margin-top:20px;box-shadow:none;border:1px solid var(--line);font-size:13.5px" class="muted">${ic("spark").replace("<svg ",'<svg style="width:15px;vertical-align:-3px;color:var(--muted)" ')} More versions coming soon</div>`,
   el=>el.querySelectorAll("[data-ver]").forEach(b=>b.onclick=()=>{ S.bver=b.dataset.ver; save(); N.stop(); bibleListening=false; el.remove(); render(); toast(`Now reading the ${VERSIONS[S.bver].name}`); }));
 }
 afterRender.bible=async()=>{
   const idx=await loadIdx(); const b=await loadBook(S.bibleBook); const ch=b.chapters[S.bibleCh]||b.chapters[0];
   if(tab!=="bible") return;
   const ref=`${b.name} ${S.bibleCh+1}`;
-  clearTimeout(window.__bchT); window.__bchT=setTimeout(()=>{ if(tab==="bible") addLight(10,"bible-"+(S.bver||"web")+S.bibleBook+"-"+S.bibleCh,1); },20000);
+  clearTimeout(window.__bchT); window.__bchT=setTimeout(()=>{ if(tab==="bible") addLight(10,"bible-"+BVER()+S.bibleBook+"-"+S.bibleCh,1); },20000);
   const hl=new Set(S.highlights.filter(h=>h.b===S.bibleBook&&h.c===S.bibleCh).map(h=>h.v));
   const txt=document.getElementById("btxt");
   txt.innerHTML=`<h2 style="font-family:var(--serif);font-size:26px;margin:6px 0 14px">${esc(ref)}</h2>`+ch.map((v,i)=>v?`<span class="v ${hl.has(i+1)?"hl":""}" data-v="${i+1}"><sup>${i+1}</sup>${esc(v)} </span>`:"").join("");
@@ -1229,11 +1235,11 @@ afterRender.bible=async()=>{
       paint(); setTimeout(()=>el.querySelector(".chgrid")?.scrollIntoView({block:"center"}),50); }); };
   document.getElementById("bver").onclick=openVersions;
   document.getElementById("bth").onclick=()=>{ S.bibleDark=!S.bibleDark; save(); const y=window.scrollY; const wasListening=bibleListening; render(); window.scrollTo(0,y); };
-  document.getElementById("bset").onclick=()=>sheet(`<h3 style="text-align:left">Bible settings</h3><div class="list" style="box-shadow:none;border:1px solid var(--line)"><button class="li" data-vr>${ic("bible")}<span>Version<small>${VERSIONS[S.bver||"web"].code}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-bk>${ic("book")}<span>Book<small>${esc(b.name)}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-fs>${ic("text")}<span>Text size<small>${S.bfs}px</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-dm>${ic(S.bibleDark?"sun":"moon")}<span>Reading mode<small>${S.bibleDark?"Dark":"Light"}</small></span><span class="chev">${ic("right")}</span></button></div>`,(s,c)=>{ s.querySelector("[data-dm]").onclick=()=>{ S.bibleDark=!S.bibleDark; save(); c(); render(); }; s.querySelector("[data-vr]").onclick=()=>{ c(); openVersions(); }; s.querySelector("[data-bk]").onclick=()=>{ c(); openBooks(); }; s.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); c(); render(); }; });
+  document.getElementById("bset").onclick=()=>sheet(`<h3 style="text-align:left">Bible settings</h3><div class="list" style="box-shadow:none;border:1px solid var(--line)"><button class="li" data-vr>${ic("bible")}<span>Version<small>${VERSIONS[BVER()].code}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-bk>${ic("book")}<span>Book<small>${esc(b.name)}</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-fs>${ic("text")}<span>Text size<small>${S.bfs}px</small></span><span class="chev">${ic("right")}</span></button><button class="li" data-dm>${ic(S.bibleDark?"sun":"moon")}<span>Reading mode<small>${S.bibleDark?"Dark":"Light"}</small></span><span class="chev">${ic("right")}</span></button></div>`,(s,c)=>{ s.querySelector("[data-dm]").onclick=()=>{ S.bibleDark=!S.bibleDark; save(); c(); render(); }; s.querySelector("[data-vr]").onclick=()=>{ c(); openVersions(); }; s.querySelector("[data-bk]").onclick=()=>{ c(); openBooks(); }; s.querySelector("[data-fs]").onclick=()=>{ const o=[17,19,21,23]; S.bfs=o[(o.indexOf(S.bfs)+1)%o.length]; save(); c(); render(); }; });
   document.querySelectorAll(".bible-txt [data-v]").forEach(sp=>sp.onclick=()=>{
     const v=+sp.dataset.v; const t=ch[v-1]; const vref=`${b.name} ${S.bibleCh+1}:${v}`; sp.classList.add("sel");
     const isH=S.highlights.some(h=>h.b===S.bibleBook&&h.c===S.bibleCh&&h.v===v);
-    const o=sheet(`<div style="font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--ink);margin-bottom:6px">${esc(t)}</div><div class="muted" style="font-size:13px;margin-bottom:14px">${esc(vref)} · ${VERSIONS[S.bver||"web"].code}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><button class="pill" data-h style="justify-content:center">${ic("bookmark").replace("<svg ",'<svg style="width:15px" ')}${isH?"Remove":"Highlight"}</button><button class="pill" data-c style="justify-content:center">${ic("copy").replace("<svg ",'<svg style="width:15px" ')}Copy</button><button class="pill" data-s style="justify-content:center">${ic("share").replace("<svg ",'<svg style="width:15px" ')}Share</button></div>`,(s,c)=>{
+    const o=sheet(`<div style="font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--ink);margin-bottom:6px">${esc(t)}</div><div class="muted" style="font-size:13px;margin-bottom:14px">${esc(vref)} · ${VERSIONS[BVER()].code}</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><button class="pill" data-h style="justify-content:center">${ic("bookmark").replace("<svg ",'<svg style="width:15px" ')}${isH?"Remove":"Highlight"}</button><button class="pill" data-c style="justify-content:center">${ic("copy").replace("<svg ",'<svg style="width:15px" ')}Copy</button><button class="pill" data-s style="justify-content:center">${ic("share").replace("<svg ",'<svg style="width:15px" ')}Share</button></div>`,(s,c)=>{
       s.querySelector("[data-h]").onclick=()=>{ if(isH) S.highlights=S.highlights.filter(h=>!(h.b===S.bibleBook&&h.c===S.bibleCh&&h.v===v)); else S.highlights.push({b:S.bibleBook,c:S.bibleCh,v,t,r:vref,ts:Date.now()}); save(); c(); sp.classList.remove("sel"); sp.classList.toggle("hl",!isH); toast(isH?"Highlight removed":"Saved to Highlights & notes"); };
       s.querySelector("[data-c]").onclick=()=>{ copyText(`${t} — ${vref}`); c(); sp.classList.remove("sel"); };
       s.querySelector("[data-s]").onclick=()=>{ shareText(`“${t}” — ${vref}\n\nshared from VEREDA`); c(); sp.classList.remove("sel"); }; });

@@ -55,6 +55,9 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
   if (req.method !== "POST") return json(405, { error: "Method not allowed" });
 
+  let body: { lang?: string; messages?: { role: string; content: string }[] } = {};
+  try { body = await req.json(); } catch { return json(400, { error: "Invalid request." }); }
+  const es = body.lang === "es";
   const url = Deno.env.get("SUPABASE_URL")!;
   const service = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const admin = createClient(url, service, { auth: { persistSession: false } });
@@ -62,33 +65,31 @@ Deno.serve(async (req) => {
   // 1) who is calling? (Supabase session token)
   const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
   const { data: u, error: ue } = await admin.auth.getUser(token);
-  if (ue || !u?.user?.email) return json(401, { error: "Please sign in again to use the assistant." });
+  if (ue || !u?.user?.email) return json(401, { error: es ? "Vuelve a iniciar sesión para usar el asistente." : "Please sign in again to use the assistant." });
   const email = u.user.email.toLowerCase();
 
   // 2) active member?
   const { data: m } = await admin.from("members").select("status,access_until").eq("email", email).maybeSingle();
   const active = !!m && (m.status === "active" || ((m.status === "canceled") && m.access_until && new Date(m.access_until) > new Date()));
-  if (!active) return json(403, { error: "The assistant is available for active members." });
+  if (!active) return json(403, { error: es ? "El asistente está disponible para miembros activos." : "The assistant is available for active members." });
 
   // 3) input
-  let body: { messages?: { role: string; content: string }[] } = {};
-  try { body = await req.json(); } catch { return json(400, { error: "Invalid request." }); }
   const msgs = (body.messages || [])
     .filter((x) => (x.role === "user" || x.role === "assistant") && typeof x.content === "string" && x.content.trim())
     .slice(-MAX_TURNS)
     .map((x) => ({ role: x.role, content: x.content.slice(0, MAX_CHARS) }));
   while (msgs.length && msgs[0].role !== "user") msgs.shift();
-  if (!msgs.length || msgs[msgs.length - 1].role !== "user") return json(400, { error: "Empty message." });
+  if (!msgs.length || msgs[msgs.length - 1].role !== "user") return json(400, { error: es ? "Mensaje vacío." : "Empty message." });
 
   // 4) daily limit
   const { data: count } = await admin.rpc("chat_bump", { uid: u.user.id, max_per_day: MAX_PER_DAY });
-  if ((count ?? 0) > MAX_PER_DAY) return json(429, { error: "You’ve reached today’s limit for the assistant. Come back tomorrow — and keep talking to God in prayer meanwhile 🙏" });
+  if ((count ?? 0) > MAX_PER_DAY) return json(429, { error: es ? "Llegaste al límite de hoy del asistente. Vuelve mañana, y mientras tanto sigue hablando con Dios en oración 🙏" : "You’ve reached today’s limit for the assistant. Come back tomorrow — and keep talking to God in prayer meanwhile 🙏" });
 
   // 5) model config (kept in app_config, never in the app)
   const { data: cfg } = await admin.from("app_config").select("key,value").in("key", ["anthropic_api_key", "openai_api_key", "chat_model"]);
   const get = (k: string) => cfg?.find((r) => r.key === k)?.value || "";
   const akey = get("anthropic_api_key"), okey = get("openai_api_key");
-  if (!akey && !okey) return typed(kbReply(msgs));
+  if (!akey && !okey) return typed(kbReply(msgs, es ? "es" : "en"));
 
   const enc = new TextEncoder();
   const stream = new ReadableStream({
