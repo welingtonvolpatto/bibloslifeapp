@@ -13,12 +13,34 @@
 
   var qs = new URLSearchParams(location.search);
   var forced = (qs.get("cur") || "").toUpperCase(); // testing: ?cur=BRL&rate=5.4
+  var forcedCC = (qs.get("cc") || "").toUpperCase(); // testing: ?cc=IN (price tier only)
+
+  /* Price tiers (English quizzes). High-income countries keep the plans in CONFIG.plans;
+     every other country gets LOW_PLANS (half price, own Hotmart offers), same order as CONFIG.plans. */
+  var HIGH = ["US","CA","GB","IE","AU","NZ","DE","FR","NL","BE","LU","AT","CH","LI","MC","DK","SE","NO","FI","IS",
+              "SG","HK","JP","KR","IL","AE","QA","KW"];
+  var LOW_PLANS = [
+    { checkoutUrl: "https://pay.hotmart.com/F108347453I?off=2wnf0nfg", price: 9.90,
+      terms: "Free for 7 days, then $9.90 every month until you cancel. Cancel anytime before the trial ends and you won\u2019t be charged." },
+    { checkoutUrl: "https://pay.hotmart.com/F108347453I?off=bajasnd1", price: 9.90,
+      terms: "$9.90 today, then $9.90 every month until you cancel." },
+    { checkoutUrl: "https://pay.hotmart.com/F108347453I?off=6t2xvgdg", price: 19.90, compareAt: 29.70,
+      terms: "$19.90 today, then $19.90 every 3 months until you cancel." }
+  ];
+  function country() { return forcedCC || D.country || ""; }
+  function isLow() { var c = country(); return !!c && c !== "TEST" && HIGH.indexOf(c) < 0; }
+  function applyTier(c) {
+    if (!c || c.__tierDone || !Array.isArray(c.plans) || c.plans.length !== LOW_PLANS.length || !isLow()) return;
+    c.plans.forEach(function (p, i) { for (var k in LOW_PLANS[i]) p[k] = LOW_PLANS[i][k]; });
+    c.__tierDone = true;
+  }
 
   var ready = (D.country && !forced) ? Promise.resolve(D) :
     fetch("/api/geo", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
       if (j && j.currency && j.rate) D = { country: j.country, currency: j.currency, rate: Number(j.rate) };
       if (forced) D = { country: "TEST", currency: forced, rate: Number(qs.get("rate")) || D.rate };
       try { sessionStorage.setItem(KEY, JSON.stringify(D)); } catch (e) {}
+      applyTier(_cfg);
       return D;
     }).catch(function () { return D; });
 
@@ -32,10 +54,14 @@
   function digits() { return nf().resolvedOptions().maximumFractionDigits; }
   function round(v) { var f = Math.pow(10, digits()); return Math.round(v * f) / f; }
 
+  var _cfg = null;
   var V = {
     ready: ready,
+    get cfg() { return _cfg; },
+    set cfg(c) { _cfg = c; applyTier(c); },
+    get tier() { return isLow() ? "low" : "high"; },
     get currency() { return D.currency; },
-    get country() { return D.country; },
+    get country() { return country() || null; },
     isLocal: function () { return D.currency !== "USD"; },
     isEstimate: function () { return D.currency !== "USD" && !exact(); },
     // Local value of a plan field ("price" | "compareAt") for plan index i.
