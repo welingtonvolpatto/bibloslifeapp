@@ -602,7 +602,14 @@ function progress(){
 /* ===== Funnel tracking (Supabase quiz_events) ===== */
 const TRACK={url:"https://okgqxzehlqzdmwxpjdkj.supabase.co/rest/v1/quiz_events",key:"sb_publishable_4EvJKXKLm0jrZrm7k-EnGA_u0N5nesc",quiz:"es-arqu"};
 TRACK.sid=(()=>{try{let v=sessionStorage.getItem('vq_sid');if(!v){v=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2)).replace(/-/g,'').slice(0,24);sessionStorage.setItem('vq_sid',v);}return v;}catch(e){return Date.now().toString(36)+Math.random().toString(36).slice(2,10);}})();
+/* Visits from robots are not recorded: Meta's link checkers (they arrive in bursts right after a campaign is
+   published, with a double-encoded utm_campaign like %255B…), Ads Manager previews ({{campaign.name}}),
+   headless/automated browsers and crawlers. */
+const IS_BOT=(()=>{try{const ua=navigator.userAgent||"", raw=location.search||"";
+  return !!navigator.webdriver || /bot\b|bot\/|crawl|spider|slurp|facebookexternalhit|facebot|meta-external|headless|lighthouse|pingdom|gtmetrix|preview/i.test(ua)
+    || /%25(5B|5D|7B|7C)/i.test(raw) || /\{\{[a-z._]+\}\}/i.test(decodeURIComponent(raw));}catch(e){return false;}})();
 function track(step,key,event,plan){
+  if(IS_BOT) return;
   try{const q=new URLSearchParams(location.search);
     fetch(TRACK.url,{method:"POST",keepalive:true,headers:{"apikey":TRACK.key,"Content-Type":"application/json","Prefer":"return=minimal"},
       body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,step,step_key:String(key).slice(0,40),event:event||"view",plan:plan||null,

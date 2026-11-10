@@ -209,6 +209,7 @@ function render(){
   const tot = ORDER.reduce((a, q) => a + (S[q]?.started || 0), 0);
   $("#lead").textContent = `${fmt(tot)} pessoas iniciaram um quiz (${label})`;
   $("#updated").textContent = "Atualizado às " + new Date(DATA.generated_at).toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"});
+  if (DATA.bots_excluded) $("#updated").textContent += " · " + DATA.bots_excluded + " visitas de robôs ignoradas";
 
   // cards
   $("#cards").innerHTML = ORDER.map(q => {
