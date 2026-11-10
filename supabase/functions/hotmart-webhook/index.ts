@@ -1,11 +1,13 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 // Hotmart Webhook 2.0 -> VEREDA access control.
-// Hottok: env HOTMART_HOTTOK, or row app_config(key='HOTMART_HOTTOK'). Products: env HOTMART_PRODUCT_IDS or default 8890091.
+// Hottok: env HOTMART_HOTTOK, or row app_config(key='HOTMART_HOTTOK').
+// Products: 8890091 (VEREDA, English) and 8935999 (VEREDA, Spanish) + any extra ids in env HOTMART_PRODUCT_IDS.
 // Language: purchases from the Spanish quizzes carry sck=vq_es-...  -> members.lang='es'; other quizzes (vq_...) -> 'en';
 // without a quiz sck, the buyer's country decides (Spanish-speaking countries -> 'es').
 const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
-const PRODUCTS = (Deno.env.get("HOTMART_PRODUCT_IDS") ?? "8890091").split(",").map((s) => s.trim()).filter(Boolean);
+const PRODUCT_EN = "8890091", PRODUCT_ES = "8935999";
+const PRODUCTS = [...new Set([PRODUCT_EN, PRODUCT_ES, ...(Deno.env.get("HOTMART_PRODUCT_IDS") ?? "").split(",").map((s) => s.trim()).filter(Boolean)])];
 const ES_COUNTRIES = new Set(["ES","MX","AR","CO","CL","PE","VE","EC","GT","CU","BO","DO","HN","PY","SV","NI","CR","PA","UY","PR","GQ"]);
 
 const json = (b: unknown, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { "Content-Type": "application/json" } });
@@ -16,6 +18,7 @@ async function hottok() {
   return data?.value ?? null;
 }
 function langOf(d: any): string | null {
+  if (String(d?.product?.id ?? "") === PRODUCT_ES) return "es";
   const sck = String(d?.purchase?.origin?.sck ?? "");
   if (/^vq_es-/i.test(sck)) return "es";
   if (/^vq_/i.test(sck)) return "en";
