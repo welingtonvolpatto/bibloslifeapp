@@ -405,7 +405,8 @@ const CONFIG = {
   coupon: { percent: 0, minutes: 7, suffix: "" },   // percent > 0 only if your checkout really applies that discount
   // Offer page — plans (edit prices here)
   plans: [
-    {name:"Plan mensual", checkoutUrl:"https://pay.hotmart.com/F108347453I?off=t5216fgc", price:19.90, every:"mes", days:30, popular:false,
+    // Spain / US / rest of the world (Latin America is switched to REGION_PLANS.latam below)
+    {name:"Plan mensual", checkoutUrl:"https://pay.hotmart.com/M108428983D?off=ei1w1h32&checkoutMode=6", price:19.90, every:"mes", days:30, popular:false,
      terms:"US$19,90 hoy y luego US$19,90 cada mes hasta que canceles."}
   ],
   currency: "US$",
@@ -458,6 +459,19 @@ const CONFIG = {
   defaultPlan: 0,
   timerSeconds: 600
 };
+/* Regional price (Hotmart product 8935999): Latin America sees US$9,90, everyone else US$19,90.
+   Country comes from /api/geo (Vercel edge). Test with ?cc=MX or ?cc=ES. */
+const REGION_PLANS = {
+  latam: {checkoutUrl:"https://pay.hotmart.com/M108428983D?off=qkpp14cg&checkoutMode=6", price:9.90,
+          terms:"US$9,90 hoy y luego US$9,90 cada mes hasta que canceles."}
+};
+const LATAM = ["MX","GT","SV","HN","NI","CR","PA","CU","DO","CO","VE","EC","PE","BO","CL","AR","UY","PY","BR"];
+function applyRegion(cc){ cc=String(cc||"").toUpperCase(); if(LATAM.includes(cc)) Object.assign(CONFIG.plans[0], REGION_PLANS.latam); CONFIG.country=cc; }
+(function(){ try{
+  const forced=new URLSearchParams(location.search).get("cc"); if(forced){ applyRegion(forced); return; }
+  const saved=sessionStorage.getItem("vq_cc"); if(saved){ applyRegion(saved); return; }
+  fetch("/api/geo",{cache:"no-store"}).then(r=>r.json()).then(j=>{ if(j&&j.country){ sessionStorage.setItem("vq_cc",j.country); applyRegion(j.country); if(typeof STEPS!=="undefined"&&STEPS[state.i]&&STEPS[state.i].type==="offer") render(); } }).catch(()=>{});
+}catch(e){} })();
 
 /* =====================================================================
    ARCHETYPES — 4 per gender, same scoring as the original funnel
