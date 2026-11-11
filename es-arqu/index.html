@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "zc74jgeagn");
+</script>
+<script>clarity("set","page","es-arqu");</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>VEREDA — Descubre tu arquetipo espiritual</title>
@@ -356,6 +366,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .dx-dots i{width:6px;height:6px;border-radius:50%;background:#d6d9de;transition:all .3s}
 .dx-dots i.on{width:18px;border-radius:3px;background:var(--blue)}
 </style>
+<script src="/offer-track.js" defer></script>
 </head>
 <body>
 <div class="app">
@@ -868,6 +879,7 @@ const R = {
       clearInterval(window.__rcT);window.__rcT=setInterval(()=>{if(!document.body.contains(rc))return clearInterval(window.__rcT);idx=(idx+1)%n;rc.scrollTo({left:idx*rc.clientWidth,behavior:'smooth'});},5000);}
     $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
     sync();
+    window.OFFER_TRACK&&OFFER_TRACK({url:TRACK.url.replace("/quiz_events","/offer_events"),key:TRACK.key,sid:TRACK.sid,quiz:TRACK.quiz,bot:IS_BOT,view:view,getPlan:()=>state.plan,getPlan0:state.plan});
     if(isC){let t=C.coupon.minutes*60;const tk=()=>{const m=String(Math.floor(t/60)).padStart(2,'0'),ss=String(t%60).padStart(2,'0');view.querySelectorAll('.tm').forEach(e=>e.textContent=m+':'+ss);if(t>0)t--;};tk();clearInterval(window.__cpT);window.__cpT=setInterval(tk,1000);}
   }
 };
