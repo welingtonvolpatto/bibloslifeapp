@@ -561,13 +561,13 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 @keyframes drift{from{transform:translateX(-120%)}to{transform:translateX(calc(100cqw + 20%))}}
 /* glass cards */
 .glass{position:absolute;z-index:3;will-change:transform}
-.gl-in{width:210px;padding:14px 16px 16px;border-radius:24px;background:linear-gradient(145deg,rgba(60,134,188,.62),rgba(14,95,149,.42));border:1px solid rgba(255,255,255,.45);box-shadow:0 20px 50px rgba(14,60,100,.22),inset 0 1px 0 rgba(255,255,255,.6);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);color:#fff;animation:bob 6s ease-in-out infinite}
-.gc-b .gl-in{animation-delay:-3s;width:196px}
+.gl-in{width:182px;padding:12px 14px 14px;border-radius:24px;background:linear-gradient(145deg,rgba(60,134,188,.62),rgba(14,95,149,.42));border:1px solid rgba(255,255,255,.45);box-shadow:0 20px 50px rgba(14,60,100,.22),inset 0 1px 0 rgba(255,255,255,.6);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);color:#fff;animation:bob 6s ease-in-out infinite}
+.gc-b .gl-in{animation-delay:-3s;width:176px}
 @keyframes bob{50%{transform:translateY(-12px)}}
 .gc-a{top:22px;left:-44px}.gc-b{bottom:30px;right:-36px}
 .gl-chip{display:inline-block;font-size:13px;font-weight:700;background:rgba(255,255,255,.22);padding:4px 10px;border-radius:9px;text-shadow:0 1px 2px rgba(0,0,0,.15)}
-.gl-ico{width:74px;height:74px;margin:12px auto 12px;border-radius:22px;display:grid;place-items:center;transform:rotate(-8deg) skewX(4deg);box-shadow:0 14px 26px rgba(20,90,160,.35),inset 0 2px 0 rgba(255,255,255,.55),inset 0 -6px 12px rgba(0,40,90,.25)}
-.gl-ico svg{width:42px;height:42px;transform:rotate(8deg);filter:drop-shadow(0 3px 4px rgba(0,40,90,.3))}
+.gl-ico{width:58px;height:58px;margin:10px auto 10px;border-radius:22px;display:grid;place-items:center;transform:rotate(-8deg) skewX(4deg);box-shadow:0 14px 26px rgba(20,90,160,.35),inset 0 2px 0 rgba(255,255,255,.55),inset 0 -6px 12px rgba(0,40,90,.25)}
+.gl-ico svg{width:34px;height:34px;transform:rotate(8deg);filter:drop-shadow(0 3px 4px rgba(0,40,90,.3))}
 .ico-head{background:linear-gradient(160deg,#9fd3ff,#3c86bc 55%,#1d5e94)}
 .ico-lock{background:linear-gradient(160deg,#ffe1a3,#f0b14a 55%,#c98822)}
 .gl-prog{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.2)}
@@ -586,6 +586,14 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 .hero-photo{will-change:transform}
 @media (max-width:900px){.gc-a{left:6px;top:10px;transform:scale(.82);transform-origin:top left}.gc-b{right:6px;bottom:-10px;transform:scale(.8);transform-origin:bottom right}.gl-in{animation-duration:7s}}
 @media (prefers-reduced-motion:reduce){.cloud{display:none}.scrub .w{opacity:1}}
+.gc-a{top:34px;right:-40px;left:auto}.gc-b{bottom:22px;right:-28px}.gc-c{top:46%;left:-58px}
+.gc-c .gl-in{width:176px;animation-delay:-1.5s}
+.ico-verse{background:linear-gradient(160deg,#e3d6ff,#a98be8 55%,#7a5cc9)}
+.gl-verse{font-family:var(--serif);font-size:15px;line-height:1.3;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.2)}
+.gl-verse small{display:block;font-family:var(--sans);font-size:11.5px;font-weight:600;opacity:.8;margin-top:6px}
+.glass,.hero-photo{transition:none}
+.hero-visual{perspective:1200px}
+@media (max-width:900px){.hero-photo{aspect-ratio:4/3!important}.gc-a{top:10px;right:8px;left:auto;transform:scale(.68);transform-origin:top right}.gc-c{top:auto;bottom:10px;left:8px;transform:scale(.66);transform-origin:bottom left}.gc-b{display:none}}
 /* order summary sheet */
 .co-wrap{position:fixed;inset:0;z-index:80;pointer-events:none}
 .co-back{position:absolute;inset:0;background:rgba(15,25,35,.45);opacity:0;transition:opacity .25s}
@@ -630,6 +638,29 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   .phone{transform:scale(.86);margin-bottom:-86px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+
+/* UVP: learn + practice */
+.uvp{background:linear-gradient(180deg,#eaf4fc,#f6fbff)}
+.uvp-split{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px;align-items:stretch}
+.uvp-col{border-radius:24px;padding:28px 26px;background:#fff;box-shadow:0 10px 30px rgba(20,60,100,.07);position:relative}
+.uvp-col.them{background:#f3f6f9;box-shadow:none;border:1.5px dashed #cfdbe6}
+.uvp-col h3{font-size:19px;margin:0 0 6px}
+.uvp-col .tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;margin-bottom:14px;background:#e2e9f0;color:#5b6b7b}
+.uvp-col.us .tag{background:var(--blue);color:#fff}
+.uvp-flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0 14px}
+.uvp-flow span{padding:10px 14px;border-radius:14px;font-weight:700;font-size:15px;background:#fff;border:1.5px solid #dbe5ee}
+.uvp-col.us .uvp-flow span{background:#eaf4fc;border-color:#bcdaf0;color:var(--ink)}
+.uvp-col.us .uvp-flow span.hot{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 8px 20px rgba(44,134,196,.35)}
+.uvp-flow b{color:#9aabba;font-size:18px}
+.uvp-col.them .uvp-flow span.fade{opacity:.45;text-decoration:line-through}
+.uvp-col p{margin:0;color:var(--muted);font-size:15.5px;line-height:1.55}
+.uvp-day{margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.uvp-day div{background:#fff;border-radius:20px;padding:20px;box-shadow:0 8px 24px rgba(20,60,100,.06)}
+.uvp-day small{display:block;font-weight:800;color:var(--blue);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.uvp-day .l{font-weight:700;color:var(--ink);font-size:15.5px}
+.uvp-day .upr{margin-top:10px;padding-top:10px;border-top:1px dashed #d6e3ee;font-size:14.5px;color:var(--muted)}
+.uvp-day .upr b{color:#e0784f}
+@media(max-width:760px){.uvp-split,.uvp-day{grid-template-columns:1fr}.uvp .btn{white-space:normal;text-align:center}}
 </style>
 </head>
 <body>
@@ -645,7 +676,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   <div>
     <span class="eyebrow">🎧 Audio Bible study for busy Christians</span>
     <h1>Why the Bible feels hard to understand <em>(and why it’s not your fault)</em></h1>
-    <p class="lead">VEREDA is <b>in-depth Bible study you can listen to in just 10 minutes a day</b> — explained so clearly you’ll understand Scripture like never before, and see your life change, one step at a time.</p>
+    <p class="lead">VEREDA is <b>in-depth Bible study you can listen to in just 10 minutes a day</b> — explained so clearly you’ll understand Scripture like never before, and see your life change, one step at a time. <b>You don’t just learn — every day you get a lesson to practice.</b></p>
     <div class="picker reveal">
       <h3>What makes the Bible hardest for you?</h3>
       <div class="hint">Tap one — we’ll show you why it happens.</div>
@@ -665,20 +696,25 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
     </div>
   </div>
   <div class="hero-visual reveal d1">
-    <div class="glass gc-a" data-par="-0.12"><div class="gl-in">
+    <div class="glass gc-a" data-par="-0.10" data-depth="26"><div class="gl-in">
       <span class="gl-chip">Listening · 10 min</span>
       <div class="gl-ico ico-head"><svg viewBox="0 0 48 48"><path d="M10 28v-4a14 14 0 0 1 28 0v4" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/><rect x="7" y="26" width="9" height="14" rx="4" fill="#fff"/><rect x="32" y="26" width="9" height="14" rx="4" fill="#fff"/></svg></div>
       <div class="gl-prog"><span id="glT">03:20</span><i><b id="glBar"></b></i><span>10:00</span></div>
       <div class="gl-ctrl"><span class="sk">5</span><span class="pp"><i></i><i></i></span><span class="sk f">10</span></div>
     </div></div>
-    <div class="glass gc-b" data-par="0.10"><div class="gl-in">
+    <div class="glass gc-c" data-par="-0.04" data-depth="-22"><div class="gl-in">
+      <span class="gl-chip">Verse of the day</span>
+      <div class="gl-ico ico-verse"><svg viewBox="0 0 48 48"><path d="M24 8l3.4 10.2L38 21l-10.6 2.8L24 34l-3.4-10.2L10 21l10.6-2.8z" fill="#fff"/><circle cx="36" cy="34" r="3" fill="#fff" opacity=".85"/><circle cx="13" cy="35" r="2" fill="#fff" opacity=".7"/></svg></div>
+      <div class="gl-verse">“This is the way. Walk in it.”<small>Isaiah 30:21</small></div>
+    </div></div>
+    <div class="glass gc-b" data-par="0.08" data-depth="18"><div class="gl-in">
       <span class="gl-chip">Lesson 7 unlocked</span>
       <div class="gl-ico ico-lock"><svg viewBox="0 0 48 48"><rect x="11" y="22" width="26" height="18" rx="5" fill="#fff"/><path d="M17 22v-5a7 7 0 0 1 13.6-2.3" fill="none" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/><circle cx="24" cy="31" r="2.6" fill="#2c86c4"/></svg></div>
       <div class="gl-dots"><i></i><i></i><i></i><i></i><i></i><i></i><i class="now"></i></div>
       <div class="gl-foot">🔥 7-day streak · <b>+50 light</b></div>
     </div></div>
-    <div class="hero-photo"><img src="/images/break3_f.webp" alt="Woman reading the Bible outdoors at sunrise">
-      <div class="hero-quote">“Your word is a lamp to my feet, and a light for my path.”<small>Psalm 119:105</small></div></div>
+    <div class="hero-photo" data-depth="-8"><img src="/images/break3_f.webp" alt="Woman reading the Bible outdoors at sunrise">
+      </div>
   </div>
 </div></section>
 
@@ -744,6 +780,29 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
     <div class="cmp-tabs"><button data-c="old" class="on">The usual way</button><button data-c="new" class="v">The VEREDA way</button></div>
     <div class="cmp-body old" id="cmp"></div>
   </div>
+</div></section>
+
+<!-- 4b. UNIQUE MECHANISM — learn AND practice -->
+<section class="uvp" data-sec="uvp"><div class="clouds" data-clouds></div><div class="wrap">
+  <div class="center narrow">
+    <span class="eyebrow reveal">What makes VEREDA different</span>
+    <h2 class="reveal">Other Bible apps teach you. <em>VEREDA makes you practice.</em></h2>
+    <p class="lead reveal scrub">Hearing a great lesson feels good — and by Thursday it’s gone. Real change happens when you <b>live</b> what you learned. That’s why every single day in VEREDA comes with one thing to learn <b>and</b> one lesson to practice.</p>
+  </div>
+  <div class="uvp-split">
+    <div class="uvp-col them reveal"><span class="tag">Most Bible apps</span><h3>Listen. Nod. Forget.</h3>
+      <div class="uvp-flow"><span>Read or listen</span><b>→</b><span class="fade">Live it</span></div>
+      <p>You consume content, but nothing asks you to do anything with it — so it never leaves the screen.</p></div>
+    <div class="uvp-col us reveal d1"><span class="tag">VEREDA</span><h3>Learn it today. Live it today.</h3>
+      <div class="uvp-flow"><span>Listen &amp; study</span><b>→</b><span>Quiz</span><b>→</b><span class="hot">Practice</span><b>→</b><span>Reflect</span></div>
+      <p>Each lesson ends with a simple, practical challenge for your home, work or relationships — and the next day you reflect on how it went.</p></div>
+  </div>
+  <div class="uvp-day">
+    <div class="reveal"><small>Day 3</small><span class="l">🎧 Learn: Joseph forgives his brothers</span><div class="upr"><b>Practice:</b> send one kind message to someone you’ve held a grudge against.</div></div>
+    <div class="reveal d1"><small>Day 4</small><span class="l">🎧 Learn: Jesus feeds the 5,000</span><div class="upr"><b>Practice:</b> offer your time or a meal to someone who needs it this week.</div></div>
+    <div class="reveal d2"><small>Day 5</small><span class="l">🎧 Learn: Martha and Mary</span><div class="upr"><b>Practice:</b> put your phone away for 10 minutes and just be with God.</div></div>
+  </div>
+  <div class="center" style="margin-top:30px"><a class="btn reveal" href="#pricing" data-cta="uvp">Start learning — and living — the Word</a></div>
 </div></section>
 
 <!-- 5. HOW IT WORKS — five steps, every day -->
@@ -946,7 +1005,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   <div class="center narrow">
     <span class="eyebrow reveal">Start today</span>
     <h2 class="reveal">Choose your plan and <em>take the first step</em></h2>
-    <p class="lead reveal">Try VEREDA free for 7 days. If it’s not for you, cancel before the trial ends and you won’t be charged.</p>
+    <p class="lead reveal">Every day: one lesson to learn, one lesson to practice. Try VEREDA free for 7 days. If it’s not for you, cancel before the trial ends and you won’t be charged.</p>
   </div>
   <div class="price-wrap">
     <div class="pc reveal">
@@ -1208,6 +1267,14 @@ const PRAY=["🙏 Share a prayer request — the community prays with you","🌎
   function size(){ const r=cv.getBoundingClientRect(); W=r.width; cv.width=W*DPR; cv.height=W*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); R=W*.335; }
   size(); addEventListener("resize",size);
   const rad=Math.PI/180; let rot=-40, tilt=-18, zoom=1, t0=performance.now(), running=false, arcs=[], lastArc=0;
+  // thousands of points that light up across the map, clustered around regions
+  const HUBS=[[33,-95,9],[40,-78,8],[19,-99,6],[4,-74,5],[-12,-77,4],[-23,-46,6],[-34,-60,4],[40,-4,6],[51,0,5],[48,8,4],[6,4,6],[-1,37,5],[-26,28,4],[7,-1,3],[14,121,6],[1,104,3],[37,127,4],[-33,151,4],[19,73,4],[18,-70,3],[14,-90,3],[45,-75,3]];
+  const tot=HUBS.reduce((a,h)=>a+h[2],0); let seed=7; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const DOTS=[]; HUBS.forEach(h=>{ const n=Math.round(2600*h[2]/tot); for(let i=0;i<n;i++){ const r=Math.pow(rnd(),.6)*9, a=rnd()*6.283; const la=h[0]+Math.sin(a)*r*.8, lo=h[1]+Math.cos(a)*r*1.2;
+    // keep only points that sit on land: snap to the nearest land dot
+    let best=null,bd=9; for(let k=0;k<LAND.length;k+=1){ const d=Math.abs(LAND[k][1]-la)+Math.abs(LAND[k][0]-lo); if(d<bd){bd=d;best=LAND[k];} }
+    if(best) DOTS.push({la:best[1]+(rnd()-.5)*1.6, lo:best[0]+(rnd()-.5)*1.6, t:Math.pow(rnd(),1.4)*9}); } });
+  DOTS.sort((a,b)=>a.t-b.t);
   function proj(lat,lon){ const l=(lon+rot)*rad, p=lat*rad, ti=tilt*rad;
     const x=Math.cos(p)*Math.sin(l), y0=Math.sin(p), z0=Math.cos(p)*Math.cos(l);
     const y=y0*Math.cos(ti)-z0*Math.sin(ti), z=y0*Math.sin(ti)+z0*Math.cos(ti);
@@ -1230,6 +1297,10 @@ const PRAY=["🙏 Share a prayer request — the community prays with you","🌎
     ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(W/2,W/2,R*zoom,0,7); ctx.fill();
     // land dots
     for(const [lo,la] of LAND){ const [x,y,z]=proj(la,lo); if(z<=0) continue; ctx.fillStyle=`rgba(170,205,235,${.25+z*.6})`; ctx.fillRect(x-1,y-1,1.9*zoom,1.9*zoom); }
+    // user dots appearing over time
+    const ap=el%26;   // replay every 26s
+    for(const d of DOTS){ if(d.t>ap) break; const [x,y,z]=proj(d.la,d.lo); if(z<=0) continue; const age=ap-d.t, pop=age<.5?1+(1-age/.5)*1.6:1;
+      ctx.fillStyle=`rgba(255,${age<.5?150:86},${age<.5?120:86},${(.35+z*.65).toFixed(2)})`; ctx.beginPath(); ctx.arc(x,y,1.25*zoom*pop,0,6.3); ctx.fill(); }
     // arcs
     if(now-lastArc>700){ addArc(); lastArc=now; }
     for(const A of arcs){ A.t=Math.min(1.6,A.t+0.012); const head=Math.min(1,A.t), tail=Math.max(0,A.t-.6);
@@ -1267,9 +1338,17 @@ const PRAY=["🙏 Share a prayer request — the community prays with you","🌎
   function onFrame(){
     const vh=innerHeight;
     scrubs.forEach(({el,ws})=>{ const r=el.getBoundingClientRect(); const p=Math.min(1,Math.max(0,(vh*.88-r.top)/(vh*.55))); const n=Math.round(p*ws.length); ws.forEach((w,i)=>w.classList.toggle("on",i<n)); });
-    if(!reduce){ const y=scrollY; pars.forEach(el=>{ el.style.translate=`0 ${(y*parseFloat(el.dataset.par)).toFixed(1)}px`; }); if(photo&&y<vh*1.2) photo.style.transform=`scale(1.08) translateY(${(y*.06).toFixed(1)}px)`; }
+    if(!reduce){ const y=scrollY; if(photo&&y<vh*1.2) photo.style.transform=`scale(1.08) translateY(${(y*.06).toFixed(1)}px)`; }
   }
   addEventListener("scroll",()=>requestAnimationFrame(onFrame),{passive:true}); onFrame();
+  // depth parallax for hero cards: follows the mouse (desktop) and the scroll, eased
+  const layers=$$("[data-depth],[data-par]").filter((el,i,a)=>a.indexOf(el)===i); let mx=0,my=0,cx=0,cy=0;
+  addEventListener("mousemove",e=>{ mx=(e.clientX/innerWidth-.5)*2; my=(e.clientY/innerHeight-.5)*2; },{passive:true});
+  (function loop(){ cx+=(mx-cx)*.06; cy+=(my-cy)*.06; const y=scrollY;
+    const touch=matchMedia('(pointer:coarse)').matches;
+    if(!reduce && !touch && y<innerHeight*1.3) layers.forEach(el=>{ const d=parseFloat(el.dataset.depth||0), p=parseFloat(el.dataset.par||0);
+      el.style.translate=`${(cx*d).toFixed(1)}px ${(cy*d+y*p).toFixed(1)}px`; });
+    requestAnimationFrame(loop); })();
   // smooth inertia scroll on desktop (Lenis)
   addEventListener("load",()=>{ if(reduce||!window.Lenis||matchMedia("(pointer:coarse)").matches) return;
     const lenis=new Lenis({lerp:.09,wheelMultiplier:1,anchors:{offset:-70}}); window.__lenis=lenis;
