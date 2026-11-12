@@ -412,7 +412,7 @@ const LPSTEPS = [
   ["s_final","CTA final","fim da página"]
 ];
 const LPINT = [["video_play","Deram play no vídeo"],["feat_any","Tocaram em alguma aba do app"],["demo_any","Testaram alguma demo do app"],["check_any","Marcaram itens em “Sound familiar?”"],["compare_new","Viram “The VEREDA way”"],["video_50","Assistiram metade do vídeo"],["video_end","Assistiram o vídeo inteiro"],["plan_change","Trocaram de plano"],["faq_open","Abriram alguma pergunta"],["buy_back","Voltaram do resumo"],["t60","Ficaram 1 min ou mais"]];
-const LPPICK = [["pick_lang","📜 Linguagem confusa"],["pick_start","🧭 Não sabe por onde começar"],["pick_consistent","⏳ Não consegue ter constância"],["pick_apply","🤔 Não sabe aplicar na vida"]];
+const LPPICK = [["pick_lang","📜 Linguagem confusa (A)"],["pick_start","🧭 Não sabe por onde começar (A)"],["pick_consistent","⏳ Não consegue ter constância (A)"],["pick_apply","🤔 Não sabe aplicar na vida (A)"],["pick_money","💼 Dinheiro e trabalho (B)"],["pick_time","⏳ Sem tempo para Deus (B)"],["pick_love","💞 Relacionamentos (B)"],["pick_anxiety","🌧️ Ansiedade (B)"],["pick_stuck","🐢 Procrastinação / travado (B)"],["pick_talk","🤐 Não entende a Bíblia para falar dela (B)"]];
 function renderOffer(){
   if (!ODATA) { $("#olead").textContent = "Carregando…"; return; }
   const sel = q => OTAB === "all" ? q !== "lp-study" : q === OTAB;
@@ -437,18 +437,18 @@ function renderOffer(){
   $("#ofunT").textContent = isLP ? "Seção por seção" : "Caminho dentro da oferta";
   $("#ofunN").textContent = isLP ? "Na ordem da página. Percentual = parte de quem abriu a página. “Perda” = quantos pararam entre a seção anterior e esta. Quem clica em um botão pode pular seções, então às vezes uma linha fica maior que a anterior." : "Percentual = parte de quem viu a oferta. \"Perda\" = quanto caiu em relação à linha anterior; em vermelho as maiores quedas.";
   // A/B headline test
-  if (isLP && (ev.ab_a_view || ev.ab_b_view)) {
-    const HLS = {a:"A · “Why the Bible feels hard to understand (and why it’s not your fault)”", b:"B · “If you can listen for 10 minutes, you can finally understand the Bible”"};
+  if (isLP && (ev.ab_c_view || ev.ab_d_view)) {
+    const HLS = {c:"A · Estudo bíblico — “Understand the Bible like never before — without spending hours reading”", d:"B · Sabedoria para a vida — “The Bible has wisdom for your money, your time and your relationships…”"}, NM = {c:"A (estudo)", d:"B (sabedoria para a vida)"};
     const M = [["eng","Passaram do topo","rolaram ou tocaram em algo"],["top","Chegaram à 2ª seção","“Sound familiar?”"],["price","Viram os preços",""],["buy","Clicaram em comprar",""],["co","Foram ao checkout",""]];
     const r = (v, k) => (ev["ab_" + v + "_view"] ? (ev["ab_" + v + "_" + k] || 0) / ev["ab_" + v + "_view"] : 0);
-    const z = k => { const na = ev.ab_a_view || 0, nb = ev.ab_b_view || 0; if (!na || !nb) return 0; const pa = r("a", k), pb = r("b", k), pp = ((ev["ab_a_" + k] || 0) + (ev["ab_b_" + k] || 0)) / (na + nb); const se = Math.sqrt(pp * (1 - pp) * (1 / na + 1 / nb)); return se ? (pb - pa) / se : 0; };
-    const zz = z("eng"), lead = r("b", "eng") > r("a", "eng") ? "b" : r("a", "eng") > r("b", "eng") ? "a" : null, few = Math.min(ev.ab_a_view || 0, ev.ab_b_view || 0) < 100;
-    const verdict = !lead ? "Empate até agora." : Math.abs(zz) >= 1.96 ? `<b>Headline ${lead.toUpperCase()} está vencendo</b> em passagem do topo, com diferença confiável (95%).` : `Headline ${lead.toUpperCase()} está na frente em passagem do topo, mas a diferença ainda pode ser sorte${few ? " — espere pelo menos 100 visitas em cada" : ""}.`;
+    const z = k => { const na = ev.ab_c_view || 0, nb = ev.ab_d_view || 0; if (!na || !nb) return 0; const pa = r("c", k), pb = r("d", k), pp = ((ev["ab_c_" + k] || 0) + (ev["ab_d_" + k] || 0)) / (na + nb); const se = Math.sqrt(pp * (1 - pp) * (1 / na + 1 / nb)); return se ? (pb - pa) / se : 0; };
+    const zz = z("eng"), lead = r("d", "eng") > r("c", "eng") ? "d" : r("c", "eng") > r("d", "eng") ? "c" : null, few = Math.min(ev.ab_c_view || 0, ev.ab_d_view || 0) < 100;
+    const verdict = !lead ? "Empate até agora." : Math.abs(zz) >= 1.96 ? `<b>Headline ${NM[lead]} está vencendo</b> em passagem do topo, com diferença confiável (95%).` : `Headline ${NM[lead]} está na frente em passagem do topo, mas a diferença ainda pode ser sorte${few ? " — espere pelo menos 100 visitas em cada" : ""}.`;
     $("#oab").innerHTML = `<div class="card" style="padding:16px 18px"><h2 style="margin:0 0 4px">Teste A/B da headline</h2><p class="note" style="margin:0 0 10px">Cada visitante vê uma das duas, sorteada (50/50), e sempre a mesma se voltar. ${verdict}</p>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px"><tr><th style="text-align:left;padding:6px 8px"></th>${["a","b"].map(v => `<th style="text-align:left;padding:6px 8px;font-weight:600;width:40%;white-space:normal;vertical-align:bottom">${HLS[v]}</th>`).join("")}</tr>
-      <tr><td style="padding:6px 8px;color:var(--muted)">Visitas</td>${["a","b"].map(v => `<td style="padding:6px 8px"><b>${fmt(ev["ab_" + v + "_view"] || 0)}</b></td>`).join("")}</tr>
-      ${M.map(([k, t, sub]) => { const ra = r("a", k), rb = r("b", k), best = ra === rb ? null : ra > rb ? "a" : "b";
-        return `<tr style="border-top:1px solid var(--line)"><td style="padding:6px 8px">${t}${sub ? `<small style="display:block;color:var(--muted);font-size:12px">${sub}</small>` : ""}</td>${["a","b"].map(v => `<td style="padding:6px 8px;${best === v ? "color:#19b56b;font-weight:700" : ""}">${(r(v, k) * 100).toFixed(1)}% <small style="color:var(--muted);font-weight:400">(${fmt(ev["ab_" + v + "_" + k] || 0)})</small></td>`).join("")}</tr>`; }).join("")}
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px"><tr><th style="text-align:left;padding:6px 8px"></th>${["c","d"].map(v => `<th style="text-align:left;padding:6px 8px;font-weight:600;width:40%;white-space:normal;vertical-align:bottom">${HLS[v]}</th>`).join("")}</tr>
+      <tr><td style="padding:6px 8px;color:var(--muted)">Visitas</td>${["c","d"].map(v => `<td style="padding:6px 8px"><b>${fmt(ev["ab_" + v + "_view"] || 0)}</b></td>`).join("")}</tr>
+      ${M.map(([k, t, sub]) => { const ra = r("c", k), rb = r("d", k), best = ra === rb ? null : ra > rb ? "c" : "b";
+        return `<tr style="border-top:1px solid var(--line)"><td style="padding:6px 8px">${t}${sub ? `<small style="display:block;color:var(--muted);font-size:12px">${sub}</small>` : ""}</td>${["c","d"].map(v => `<td style="padding:6px 8px;${best === v ? "color:#19b56b;font-weight:700" : ""}">${(r(v, k) * 100).toFixed(1)}% <small style="color:var(--muted);font-weight:400">(${fmt(ev["ab_" + v + "_" + k] || 0)})</small></td>`).join("")}</tr>`; }).join("")}
       </table></div></div>`;
     $("#oab").style.display = "";
   } else $("#oab").style.display = "none";

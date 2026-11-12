@@ -723,17 +723,12 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 <!-- 1. HERO — problem aware, with a one-tap micro-commitment -->
 <section class="hero" id="hero" data-sec="hero"><div class="clouds" data-clouds></div><div class="wrap hero-grid">
   <div>
-    <span class="eyebrow">🎧 Audio Bible study for busy Christians</span>
-    <h1 id="hl">Why the Bible feels hard to understand <em>(and why it’s not your fault)</em></h1>
-    <script>/* A/B test: headline. A = current, B = "If you can listen for 10 minutes…" */
-    (function(){var v=null,q=(new URLSearchParams(location.search).get("hl")||"").toLowerCase();
-      if(q==="a"||q==="b") v=q; else { try{ v=localStorage.getItem("vd_hl"); }catch(e){} if(v!=="a"&&v!=="b"){ v=Math.random()<.5?"a":"b"; } }
-      try{ localStorage.setItem("vd_hl",v); }catch(e){} window.HL=v;
-      if(v==="b") document.getElementById("hl").innerHTML="If you can listen for 10 minutes, <em>you can finally understand the Bible</em>";
-      try{ window.clarity&&clarity("set","headline",v); }catch(e){} })();</script>
-    <p class="lead">VEREDA is <b>in-depth Bible study you can listen to in just 10 minutes a day</b> — explained so clearly you’ll understand Scripture like never before, and see your life change, one step at a time. <b>You don’t just learn — every day you get a lesson to practice.</b></p>
+    <span class="eyebrow" id="heyebrow">🎧 Audio Bible study for busy Christians</span>
+    <h1 id="hl">Understand the Bible like never before — <em>without spending hours reading</em></h1>
+
+    <p class="lead" id="hlead">VEREDA is <b>in-depth Bible study you can listen to in just 10 minutes a day</b> — explained so clearly you’ll understand Scripture like never before, and see your life change, one step at a time. <b>You don’t just learn — every day you get a lesson to practice.</b></p>
     <div class="picker reveal">
-      <h3>What makes the Bible hardest for you?</h3>
+      <h3 id="pq">What makes the Bible hardest for you?</h3>
       <div class="hint">Tap one — we’ll show you why it happens.</div>
       <div class="opts" id="pain">
         <button class="opt" data-k="lang"><span class="e">📜</span>Old words and confusing language<span class="ck"></span></button>
@@ -741,6 +736,18 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
         <button class="opt" data-k="consistent"><span class="e">⏳</span>I can’t stay consistent<span class="ck"></span></button>
         <button class="opt" data-k="apply"><span class="e">🤔</span>I read it, but don’t know how it applies to my life<span class="ck"></span></button>
       </div>
+      <script>/* A/B test (round 2): A = Bible study angle, B = biblical wisdom for life angle */
+      (function(){var v=null,q=(new URLSearchParams(location.search).get("hl")||"").toLowerCase();
+        if(q==="a"||q==="c") v="c"; else if(q==="b"||q==="d") v="d"; else { try{ v=localStorage.getItem("vd_hl2"); }catch(e){} if(v!=="c"&&v!=="d"){ v=Math.random()<.5?"c":"d"; } }
+        try{ localStorage.setItem("vd_hl2",v); }catch(e){} window.HL=v;
+        if(v==="d"){
+          document.getElementById("heyebrow").textContent="📖 Biblical wisdom for real life";
+          document.getElementById("hl").innerHTML="The Bible has wisdom for your money, your time and your relationships. <em>No one ever taught you how to use it.</em>";
+          document.getElementById("hlead").innerHTML="It’s not a lack of faith or effort — most people were never shown how to <b>understand the Bible and live it</b>. VEREDA does: <b>in-depth audio study in 10 minutes a day</b>, plus one simple lesson to practice before the day ends.";
+          document.getElementById("pq").textContent="What weighs on you most right now?";
+          document.getElementById("pain").innerHTML=[["money","💼","Money and work — always running, never enough"],["time","⏳","No time for God (or for myself)"],["love","💞","My relationships"],["anxiety","🌧️","Anxiety and a heavy mind"],["stuck","🐢","I procrastinate and feel stuck while others move ahead"],["talk","🤐","I don’t understand the Bible well enough to talk about it"]].map(function(o){return '<button class="opt" data-k="'+o[0]+'"><span class="e">'+o[1]+'</span>'+o[2]+'<span class="ck"></span></button>';}).join("");
+        }
+        try{ window.clarity&&clarity("set","headline",v); }catch(e){} })();</script>
       <div class="answer" id="painAns"><div><div class="box" id="painBox"></div></div></div>
     </div>
     <div class="trust">
@@ -1126,6 +1133,12 @@ const PAIN={
   lang:{label:"Confusing language", html:`<b>You’re not alone.</b> The Bible was written over about 1,500 years, in three ancient languages, in cultures very different from ours. Of course it can feel foreign. VEREDA explains every reading in <b>plain, modern words</b> — so it finally makes sense.`},
   start:{label:"Knowing where to start", html:`<b>You’re in good company.</b> Researchers found that many churchgoers who don’t read the Bible on their own say they simply <b>don’t know where to start</b>. With VEREDA you never have to guess: <b>today’s reading is ready</b> the moment you open the app.`},
   consistent:{label:"Staying consistent", html:`<b>It’s not a willpower problem.</b> Most plans ask for 20+ minutes and make you feel “behind” after one missed day. VEREDA takes <b>about 10 minutes</b>, fits any time of day, and missing a day <b>never resets your progress</b>.`},
+  money:{label:"Money and work", html:`<b>The Bible talks about work, money and rest more than most people realize</b> — and it was never meant to stay on the shelf. VEREDA walks you through that wisdom in plain words, in 10 minutes, and gives you <b>one practical step</b> to apply it this week.`},
+  time:{label:"Making time for God", html:`<b>When life is this full, an hour of reading isn’t realistic.</b> That’s why VEREDA fits in about <b>10 minutes</b> — on your commute, at lunch, before bed — so time with God becomes part of your day instead of one more thing you feel behind on.`},
+  love:{label:"Relationships", html:`<b>Scripture has a lot to say about how we love, forgive and speak to each other.</b> VEREDA turns those passages into <b>small daily practices</b> — one kind word, one honest conversation — that you can live at home today.`},
+  anxiety:{label:"Anxiety and peace of mind", html:`<b>You’re not weak for feeling this way.</b> The Bible is full of people who carried heavy hearts. VEREDA helps you understand what God says about worry and peace, and ends each day with <b>a short prayer and one calm, practical step</b>. (If anxiety is overwhelming, please talk to a professional too.)`},
+  stuck:{label:"Feeling stuck", html:`<b>Feeling stuck isn’t a sign you’re failing</b> — usually it means you haven’t had a clear next step. VEREDA gives you exactly that: <b>one lesson, one action, every day</b>, and you can see your progress grow.`},
+  talk:{label:"Understanding the Bible with confidence", html:`<b>Many people who have been in church for years feel the same way</b> — they just don’t say it. VEREDA explains each passage’s context and meaning so clearly that you’ll <b>understand it — and be able to share it</b> with confidence.`},
   apply:{label:"Applying it to life", html:`<b>Reading without application feels like homework.</b> That’s why every VEREDA day ends with <b>one small, practical action</b> — so what you read today shows up in how you live today.`}
 };
 let painKey=null;
