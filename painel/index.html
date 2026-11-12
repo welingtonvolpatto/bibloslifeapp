@@ -159,7 +159,7 @@ tr:last-child td{border-bottom:0}
     <button class="ghost" id="logout">Sair</button>
   </div></header>
   <main>
-    <div class="vtabs" id="vtabs"><button type="button" data-v="quiz" class="on">Quizzes</button><button type="button" data-v="offer">Funil da oferta</button></div>
+    <div class="vtabs" id="vtabs"><button type="button" data-v="quiz" class="on">Quizzes</button><button type="button" data-v="offer">Funil da oferta</button><button type="button" data-v="lp">Página de vendas</button></div>
     <div id="vQuiz">
     <div class="lead" id="lead">Carregando…</div>
     <div class="sub" id="updated"></div>
@@ -204,8 +204,9 @@ tr:last-child td{border-bottom:0}
       <div class="sub">O que as pessoas fazem depois de chegar à página de oferta. Coleta iniciada em 11/11/2026 às 20h — períodos anteriores aparecem vazios.</div>
       <div class="tabs" id="otabs" style="margin-top:16px"></div>
       <section style="margin-top:14px">
-        <h2>Caminho dentro da oferta</h2>
-        <p class="note">Percentual = parte de quem viu a oferta. "Perda" = quanto caiu em relação à linha anterior; em vermelho as maiores quedas.</p>
+        <h2 id="ofunT">Caminho dentro da oferta</h2>
+        <p class="note" id="ofunN">Percentual = parte de quem viu a oferta. "Perda" = quanto caiu em relação à linha anterior; em vermelho as maiores quedas.</p>
+        <div id="oworst" style="display:none;margin:4px 0 10px;padding:10px 14px;border-radius:12px;background:#fdecea;color:#7a1f16;font-size:14px"></div>
         <div class="ofun" id="ofun"></div>
       </section>
       <div class="grid2">
@@ -358,7 +359,7 @@ async function downloadLeads(){
 
 
 /* ---------- offer funnel ---------- */
-let VIEWM = "quiz", OTAB = "all", ODATA = null;
+let VIEWM = "quiz", OTAB = "all", ODATA = null, VIEWLP = false;
 const OSTEPS = [
   ["view","Viram a oferta","chegaram à página de planos"],
   ["t15","Ficaram 15 s ou mais","não saíram de cara"],
@@ -382,28 +383,38 @@ async function fetchOffer(pw){
   return r.json();
 }
 function setView(v){
+  if (v === "lp") { OTAB = "lp-study"; v = "offer"; VIEWLP = true; } else if (v === "offer" && VIEWLP) { OTAB = "all"; VIEWLP = false; }
   VIEWM = v;
-  document.querySelectorAll("#vtabs button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  document.querySelectorAll("#vtabs button").forEach(b => b.classList.toggle("on", b.dataset.v === (VIEWLP && v === "offer" ? "lp" : v)));
   $("#vQuiz").classList.toggle("hidden", v !== "quiz");
   $("#vOffer").classList.toggle("hidden", v !== "offer");
-  try { localStorage.setItem("vd_view", v); } catch {}
+  try { localStorage.setItem("vd_view", VIEWLP ? "lp" : v); } catch {}
   if (v === "offer") renderOffer();
 }
 const LPSTEPS = [
-  ["view","Abriram a página",""],
-  ["pick","Escolheram a dificuldade","pergunta do topo"],
-  ["s_familiar","Viram “Sound familiar?”",""],
-  ["s_research","Viram a pesquisa (46%)",""],
-  ["s_method","Viram o método",""],
-  ["s_app","Viram o app por dentro",""],
-  ["s_video","Chegaram ao vídeo",""],
-  ["video_play","Deram play no vídeo",""],
-  ["s_plan","Viram a jornada (lições desbloqueáveis)",""],
-  ["s_pricing","Viram os preços",""],
+  ["view","Topo da página","abriram · pergunta da dificuldade"],
+  ["s_familiar","“Sound familiar?”","checklist de identificação"],
+  ["s_research","Pesquisa (46%)","dado da American Bible Society"],
+  ["s_why","Por que os planos falham","comparação usual × VEREDA"],
+  ["s_uvp","Diferencial: aprende e pratica","mecanismo único"],
+  ["s_method","Como funciona","as 5 etapas"],
+  ["s_app","O app por dentro","telas reais por aba"],
+  ["s_more","Recursos adicionais","versículo, oração, assistente, conteúdo"],
+  ["s_day","Um dia com o VEREDA","linha do tempo"],
+  ["s_video","Vídeo de depoimentos",""],
+  ["s_team","Especialistas","Caleb, Nathaniel, Abigail, Eleanor"],
+  ["s_globe","Globo",""],
+  ["s_plan","Jornada","módulos e lições"],
+  ["s_change","Antes e depois",""],
+  ["s_time","Controle de tempo","minutos por dia"],
+  ["s_get","O que você recebe","benefícios"],
+  ["s_pricing","Preços","planos e garantia"],
   ["buy","Clicaram em “Start my plan”","abriram o resumo"],
-  ["buy_confirm","Foram para o checkout","confirmaram → Hotmart"]
+  ["buy_confirm","Foram para o checkout","confirmaram → Hotmart"],
+  ["s_faq","FAQ (depois dos preços)","quem continuou rolando"],
+  ["s_final","CTA final","fim da página"]
 ];
-const LPINT = [["feat_any","Tocaram em alguma aba do app"],["demo_any","Testaram alguma demo do app"],["check_any","Marcaram itens em “Sound familiar?”"],["compare_new","Viram “The VEREDA way”"],["video_50","Assistiram metade do vídeo"],["video_end","Assistiram o vídeo inteiro"],["time_slider","Mexeram no controle de tempo"],["plan_change","Trocaram de plano"],["faq_open","Abriram alguma pergunta"],["buy_back","Voltaram do resumo"],["t60","Ficaram 1 min ou mais"]];
+const LPINT = [["video_play","Deram play no vídeo"],["feat_any","Tocaram em alguma aba do app"],["demo_any","Testaram alguma demo do app"],["check_any","Marcaram itens em “Sound familiar?”"],["compare_new","Viram “The VEREDA way”"],["video_50","Assistiram metade do vídeo"],["video_end","Assistiram o vídeo inteiro"],["time_slider","Mexeram no controle de tempo"],["plan_change","Trocaram de plano"],["faq_open","Abriram alguma pergunta"],["buy_back","Voltaram do resumo"],["t60","Ficaram 1 min ou mais"]];
 const LPPICK = [["pick_lang","📜 Linguagem confusa"],["pick_start","🧭 Não sabe por onde começar"],["pick_consistent","⏳ Não consegue ter constância"],["pick_apply","🤔 Não sabe aplicar na vida"]];
 function renderOffer(){
   if (!ODATA) { $("#olead").textContent = "Carregando…"; return; }
@@ -418,7 +429,7 @@ function renderOffer(){
   $("#olead").textContent = `${fmt(V)} ${isLP ? (V === 1 ? "pessoa abriu" : "pessoas abriram") + " a página de vendas" : (V === 1 ? "pessoa viu" : "pessoas viram") + " a oferta"} (${label}) · ${fmt(ev.buy || 0)} ${(ev.buy || 0) === 1 ? "clicou" : "clicaram"} em comprar`;
   const qs = ["all", ...ORDER];
   $("#otabs").innerHTML = qs.map(q => `<button class="tab ${OTAB === q ? "on" : ""}" data-oq="${q}">${q === "all" ? "Todos os quizzes" : QUIZ[q].name}</button>`).join("");
-  document.querySelectorAll("#otabs .tab").forEach(b => b.onclick = () => { OTAB = b.dataset.oq; renderOffer(); });
+  document.querySelectorAll("#otabs .tab").forEach(b => b.onclick = () => { OTAB = b.dataset.oq; VIEWLP = OTAB === "lp-study"; document.querySelectorAll("#vtabs button").forEach(x => x.classList.toggle("on", x.dataset.v === (VIEWLP ? "lp" : "offer"))); renderOffer(); });
   if (!V) {
     ["#ofun","#otime","#oint","#ofaq","#oplan","#odev"].forEach(id => $(id).innerHTML = '<div class="empty">Sem visitas à oferta neste período.</div>');
     $("#omed").textContent = ""; return;
@@ -426,12 +437,19 @@ function renderOffer(){
   // funnel
   const drops = STEPS_.map(([k], i) => { if (!i) return 0; const a = ev[STEPS_[i - 1][0]] || 0, b = ev[k] || 0; return a ? Math.max(0, a - b) / a : 0; });
   const worst = [...drops].sort((a, b) => b - a)[1] ?? 0;
+  $("#ofunT").textContent = isLP ? "Seção por seção" : "Caminho dentro da oferta";
+  $("#ofunN").textContent = isLP ? "Na ordem da página. Percentual = parte de quem abriu a página. “Perda” = quantos pararam entre a seção anterior e esta. Quem clica em um botão pode pular seções, então às vezes uma linha fica maior que a anterior." : "Percentual = parte de quem viu a oferta. \"Perda\" = quanto caiu em relação à linha anterior; em vermelho as maiores quedas.";
+  let bi = -1;
+  if (isLP) { let bd = 0; STEPS_.forEach(([k], i) => { if (!i || k === "s_faq" || k === "s_final") return; const a = ev[STEPS_[i - 1][0]] || 0, d = a - (ev[k] || 0); if (d > bd) { bd = d; bi = i; } });
+    $("#oworst").innerHTML = bi > 0 ? `<b>Maior perda:</b> ${fmt(bd)} ${bd === 1 ? "pessoa parou" : "pessoas pararam"} entre <b>${STEPS_[bi - 1][1]}</b> e <b>${STEPS_[bi][1]}</b> (${((bd / (ev[STEPS_[bi - 1][0]] || 1)) * 100).toFixed(0)}% de quem chegou até ali).` : "";
+    $("#oworst").style.display = bi > 0 ? "" : "none"; } else $("#oworst").style.display = "none";
   let prev = V;
   $("#ofun").innerHTML = STEPS_.map(([k, t, sub], i) => {
+    if (isLP && k === "s_faq") prev = ev.s_pricing || 0;
     const n = ev[k] || 0, pct = n / V * 100, d = i ? Math.max(0, prev - n) : 0, dp = i && prev ? d / prev : 0;
     const out = `<div class="row"><div class="lb">${t}${sub ? `<small>${sub}</small>` : ""}</div>
       <div class="otrack"><i style="width:${pct.toFixed(1)}%;${k === "buy_confirm" ? "background:#19b56b" : ""}"></i></div>
-      <div class="v"><b>${fmt(n)}</b> · ${pct.toFixed(0)}%${i ? `<small class="${dp >= worst && dp >= .25 ? "bad" : ""}">perda ${fmt(d)} (${(dp * 100).toFixed(0)}%)</small>` : "<small>&nbsp;</small>"}</div></div>`;
+      <div class="v"><b>${fmt(n)}</b> · ${pct.toFixed(0)}%${i ? `<small class="${(isLP ? i === bi : dp >= worst && dp >= .25) ? "bad" : ""}">perda ${fmt(d)} (${(dp * 100).toFixed(0)}%)</small>` : "<small>&nbsp;</small>"}</div></div>`;
     prev = n; return out;
   }).join("");
   // time
@@ -572,7 +590,7 @@ $("#lform").onsubmit = async e => {
 };
 initPicker();
 document.querySelectorAll("#vtabs button").forEach(b => b.onclick = () => setView(b.dataset.v));
-try { if (localStorage.getItem("vd_view") === "offer") setView("offer"); } catch {}
+try { const sv = localStorage.getItem("vd_view"); if (sv === "offer" || sv === "lp") setView(sv); } catch {}
 $("#leadsBtn").onclick = downloadLeads;
 $("#refresh").onclick = load;
 $("#logout").onclick = logout;
