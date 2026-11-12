@@ -367,9 +367,10 @@ const OSTEPS = [
   ["scroll_50","Rolaram até a metade",""],
   ["s_faq","Viram as perguntas frequentes",""],
   ["s_prices2","Viram os preços do final","último bloco"],
-  ["buy","Clicaram em comprar","foram para o checkout"]
+  ["buy","Clicaram em “Get my plan”","abriram o resumo do pedido"],
+  ["buy_confirm","Foram para o checkout","confirmaram no resumo → Hotmart"]
 ];
-const OINT = [["top_cta","Botão do topo (“Get my plan”)"],["plan_change","Trocaram de plano"],["weeks_tab","Mexeram nas semanas do plano"],["day_tab","Mexeram no “dia com a VEREDA”"],["faq_open","Abriram alguma pergunta"],["t60","Ficaram 1 min ou mais"],["t120","Ficaram 2 min ou mais"]];
+const OINT = [["top_cta","Botão do topo (“Get my plan”)"],["plan_change","Trocaram de plano"],["weeks_tab","Mexeram nas semanas do plano"],["day_tab","Mexeram no “dia com a VEREDA”"],["faq_open","Abriram alguma pergunta"],["buy_back","Voltaram do resumo sem comprar"],["t60","Ficaram 1 min ou mais"],["t120","Ficaram 2 min ou mais"]];
 const OFAQ = ["E se eu não entender o que estou lendo?","E se eu não conseguir ter constância?","Preciso já conhecer a Bíblia?"];
 const PLANNAMES = {en:["Teste grátis 7 dias","Mensal","Trimestral"], es:["Plano mensal"]};
 async function fetchOffer(pw){
@@ -407,7 +408,7 @@ function renderOffer(){
   $("#ofun").innerHTML = OSTEPS.map(([k, t, sub], i) => {
     const n = ev[k] || 0, pct = n / V * 100, d = i ? Math.max(0, prev - n) : 0, dp = i && prev ? d / prev : 0;
     const out = `<div class="row"><div class="lb">${t}${sub ? `<small>${sub}</small>` : ""}</div>
-      <div class="otrack"><i style="width:${pct.toFixed(1)}%;${k === "buy" ? "background:#19b56b" : ""}"></i></div>
+      <div class="otrack"><i style="width:${pct.toFixed(1)}%;${k === "buy_confirm" ? "background:#19b56b" : ""}"></i></div>
       <div class="v"><b>${fmt(n)}</b> · ${pct.toFixed(0)}%${i ? `<small class="${dp >= worst && dp >= .25 ? "bad" : ""}">perda ${fmt(d)} (${(dp * 100).toFixed(0)}%)</small>` : "<small>&nbsp;</small>"}</div></div>`;
     prev = n; return out;
   }).join("");

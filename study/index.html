@@ -396,6 +396,24 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .vsl-continue.on{opacity:1;animation:vslIn .45s ease-out}
 @keyframes vslIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
 .vsl-wait{font-size:12.5px;color:#777;margin-top:8px;min-height:16px}
+.co-wrap{position:fixed;inset:0;z-index:80;pointer-events:none}
+.co-back{position:absolute;inset:0;background:rgba(15,25,35,.45);opacity:0;transition:opacity .25s}
+.co-sheet{position:absolute;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;background:#fff;border-radius:20px 20px 0 0;padding:10px 20px calc(18px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .28s ease-out;box-shadow:0 -10px 30px rgba(0,0,0,.15)}
+.co-wrap.on{pointer-events:auto}.co-wrap.on .co-back{opacity:1}.co-wrap.on .co-sheet{transform:none}
+.co-grab{width:42px;height:5px;border-radius:3px;background:#ddd;margin:0 auto 12px}
+.co-sheet h3{font-size:19px;margin-bottom:10px;text-align:center}
+.co-row{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #eee;font-size:15px}
+.co-row span{color:#666}.co-today b{font-size:18px;color:var(--blue,#0E5F95)}
+.co-cancel{font-size:12.5px;color:#777;margin:8px 0 12px}
+.co-guar{display:flex;gap:10px;align-items:flex-start;background:#eef7f1;border:1px solid #cfe9d8;border-radius:12px;padding:11px 12px;margin-bottom:14px}
+.co-guar svg{width:22px;height:22px;flex:none;color:#19a463}
+.co-guar b{display:block;font-size:14.5px;color:#14794a}.co-guar span{font-size:12.5px;color:#456;line-height:1.35}
+.co-sheet .co-go{width:100%;display:block}
+.co-safe{text-align:center;font-size:12px;color:#777;margin-top:9px}
+.co-x{display:block;margin:8px auto 0;background:none;border:0;color:#888;font-size:13.5px;text-decoration:underline;cursor:pointer}
+.o-guar{display:flex;gap:9px;align-items:center;justify-content:center;margin:12px auto 2px;font-size:13.5px;color:#14794a;font-weight:700}
+.o-guar svg{width:18px;height:18px;color:#19a463}
+.o-guar small{display:block;font-weight:500;color:#5a6b62;font-size:12px}
 </style>
 <script src="/offer-track.js" defer></script>
 </head>
@@ -443,7 +461,7 @@ const CONFIG = {
   brandName: "VEREDA",
   links: { terms: "#", privacy: "#", subscription: "#", cookies: "#", contact: "#" },
   // Offer variant: "coupon" (personalized promo code + timer, total prices) or "perday" (price per day)
-  offerVariant: "coupon",
+  offerVariant: "perday",
   coupon: { percent: 0, minutes: 7, suffix: "" },   // percent > 0 only if your checkout really applies that discount (shows "X% off" block)
   // Offer page — plans (edit prices here)
   plans: [
@@ -592,7 +610,8 @@ const BARRIER={"Stress":"Stress","Overthinking and guilt":"Overthinking","Feelin
 const GOALS={"Growing closer to God":"Closer to God","Finding a clearer purpose":"Clearer purpose","Strengthening my faith":"Stronger faith","Nurturing inner peace":"Inner peace","Building healthier habits":"Healthier habits"};
 function quizScore(){let t=0;STEPS.forEach(s=>{if(s.score){const i=s.options.indexOf(state.answers[s.key]);if(i>=0)t+=s.score[i];}});return t;}
 function level(){const sc=quizScore();return sc<=7?{i:0,pct:22,name:"Foundations",text:"You\u2019re laying a real foundation. There\u2019s a genuine hunger to understand Scripture, and that\u2019s where strong faith begins."}:sc<=15?{i:1,pct:55,name:"Growing",text:"You\u2019re in a growing season. You understand more than you used to, and you\u2019re ready to go deeper into Scripture."}:{i:2,pct:85,name:"Rooted",text:"You\u2019re well rooted in Scripture. You understand it deeply, and you\u2019re ready to go further and share what you know."};}
-function barrier(){const v=(state.answers.Struggle||[])[0];return BARRIER[v]||"Inconsistency";}
+const HARD={"Old words and confusing language":"Confusing language","I don\u2019t know where to start":"Knowing where to start","I can\u2019t stay consistent":"Staying consistent","I read it, but don\u2019t know how it applies to my life":"Applying it to life"};
+function barrier(){if(state.answers.HardestPart&&HARD[state.answers.HardestPart])return HARD[state.answers.HardestPart];const v=(state.answers.Struggle||[])[0];return BARRIER[v]||"Inconsistency";}
 function goalTxt(){const v=(state.answers.NeedsNow||[])[0];return GOALS[v]||"Growing confidence";}
 function motivation(){return ["10-20 minutes","30+ minutes"].includes(state.answers.howMuchTime)?"Strong":"Growing";}
 const QUESTION_STEPS = STEPS.filter(s=>["age","q","multi","yn"].includes(s.type)).length;
@@ -943,6 +962,7 @@ const R = {
         <div class="o-pb"><span class="radio"></span><div class="o-pn"><b>${p.name}</b>${sub(p)}${isC?'':badge(p)}</div>${right(p)}</div></div>`).join('')}</div>${VP?VP.note():''}
       <div class="o-note">${C.planNote}</div>
       <button class="btn sub">Get my plan</button>
+      <div class="o-guar">${ICON.shield}<span>7-day money-back guarantee<small>Not for you? Full refund within 7 days.</small></span></div>
       <p class="o-terms">By clicking “Get my plan”, you agree to automatic subscription renewal. <span class="tdyn"></span> Cancel via the app or email: <a href="mailto:${C.supportEmail}">${C.supportEmail}</a>. See <a href="${C.links.subscription}">Subscription Terms</a> for details.</p>
       <div class="safe">${ICON.shield}Pay safe and secure</div>
       <div class="pay">${PAYLOGOS}</div>`;
@@ -992,7 +1012,7 @@ const R = {
       st.addEventListener('touchend',e=>{ if(x0==null) return; const dxp=e.changedTouches[0].clientX-x0; if(Math.abs(dxp)>40){stop(); show(cur+(dxp<0?1:-1));} x0=null;});
     })();
 
-    view.querySelectorAll('.sub').forEach(b=>b.onclick=checkout);
+    view.querySelectorAll('.sub').forEach(b=>b.onclick=checkoutSummary);
     $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
     sync();
     window.OFFER_TRACK&&OFFER_TRACK({url:TRACK.url.replace("/quiz_events","/offer_events"),key:TRACK.key,sid:TRACK.sid,quiz:TRACK.quiz,bot:IS_BOT,view:view,getPlan:()=>state.plan,getPlan0:state.plan});
@@ -1024,6 +1044,33 @@ function sendLead(){
   if(!CONFIG.leadWebhook) return;
   fetch(CONFIG.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:state.email,name:state.name,archetype:state.archetype,gender:state.gender,answers:state.answers})}).catch(()=>{});
 }
+/* Order summary before sending to Hotmart */
+function checkoutSummary(){
+  const i=state.plan, p=CONFIG.plans[i]||{};
+  const VPx=window.VPRICE; const amt=f=>VPx?VPx.money(VPx.plan(p,i,f)):("$"+Number(p[f]).toFixed(2));
+  const every=p.every==="month"?"every month":"every "+p.every;
+  const today=p.trialDays?(VPx?VPx.money(0):"$0.00"):amt("price");
+  const old=document.getElementById("coSheet"); if(old) old.remove();
+  const el=document.createElement("div"); el.id="coSheet"; el.className="co-wrap";
+  el.innerHTML=`<div class="co-back" data-x></div><div class="co-sheet" role="dialog" aria-label="Your order summary">
+    <div class="co-grab"></div>
+    <h3>Your order summary</h3>
+    <div class="co-row"><span>Plan</span><b>${esc(p.name||"")}</b></div>
+    ${p.trialDays?`<div class="co-row"><span>Free trial</span><b>${p.trialDays} days</b></div>`:""}
+    <div class="co-row co-today"><span>Due today</span><b>${today}</b></div>
+    <div class="co-row"><span>${p.trialDays?`After ${p.trialDays} days`:"Then"}</span><b>${amt("price")} ${every}</b></div>
+    <p class="co-cancel">Cancel anytime${p.trialDays?" before the trial ends and you won’t be charged":""}.</p>
+    <div class="co-guar">${ICON.shield}<div><b>7-day money-back guarantee</b><span>Not for you? Ask for a full refund within 7 days of your payment.</span></div></div>
+    <button class="btn co-go" type="button">Continue to secure checkout</button>
+    <div class="co-safe">🔒 Secure payment processed by Hotmart</div>
+    <button class="co-x" type="button" data-x>Back to my plan</button>
+  </div>`;
+  view.appendChild(el);
+  requestAnimationFrame(()=>el.classList.add("on"));
+  el.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{el.classList.remove("on");setTimeout(()=>el.remove(),250);});
+  el.querySelector(".co-go").onclick=()=>checkout();
+}
+
 function checkout(){
   const p=CONFIG.plans[state.plan]||{};
   const target=(window.VPRICE?VPRICE.checkout(p,state.plan):p.checkoutUrl)||CONFIG.checkoutUrl;

@@ -19,7 +19,7 @@
     var device = matchMedia("(pointer:coarse)").matches ? "mobile" : "desktop";
     function send(ev, plan) {
       if (sent[ev]) return; sent[ev] = 1;
-      if (window.clarity && /^(view|s_prices|plan_change|faq_open|top_cta|buy)$/.test(ev)) { try { clarity("event", "offer_" + ev); if (ev === "view") clarity("set", "offer", "seen"); if (ev === "buy") clarity("set", "checkout", "clicked"); } catch (e) {} }
+      if (window.clarity && /^(view|s_prices|plan_change|faq_open|top_cta|buy|buy_confirm)$/.test(ev)) { try { clarity("event", "offer_" + ev); if (ev === "view") clarity("set", "offer", "seen"); if (ev === "buy") clarity("set", "checkout", "clicked"); } catch (e) {} }
       try {
         fetch(o.url, {
           method: "POST", keepalive: true,
@@ -70,6 +70,8 @@
       if (t.closest(".o-journey .tabs button")) send("weeks_tab");
       if (t.closest(".dx-tab")) send("day_tab");
       if (t.closest("button.sub")) { var p = o.getPlan ? o.getPlan() : null; send("buy", p); }
+      if (t.closest(".co-go")) send("buy_confirm", o.getPlan ? o.getPlan() : null);
+      if (t.closest(".co-x")) send("buy_back");
     }, true);
   };
 })();
