@@ -12,8 +12,8 @@
 <script>clarity("set","page","lp-study");</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>VEREDA — Understand the Bible in 10 minutes a day</title>
-<meta name="description" content="A simple 10-minute daily Bible plan that explains Scripture in plain words — so you finally understand what you read and live it.">
+<title>VEREDA — In-depth Bible study you can listen to in 10 minutes a day</title>
+<meta name="description" content="In-depth Bible study you can listen to in just 10 minutes a day — explained so clearly you’ll understand Scripture like never before.">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 <!-- Utmify: pixel + UTM tracking -->
 <script>
@@ -27,9 +27,9 @@
 <script src="/geo-price.js"></script>
 <style>
 :root{
-  --ink:#16202c;--text:#2d3440;--muted:#69707c;--line:#e8e3da;
+  --ink:#16202c;--text:#2d3440;--muted:#69707c;--line:#dde8f1;
   --blue:#0E5F95;--blue-d:#0a4a75;--blue-soft:#e7f0f7;
-  --cream:#fbf6ee;--paper:#fffdf9;--gold:#c9973f;--gold-soft:#f6ecd8;
+  --cream:#eef5fb;--paper:#f8fbfe;--gold:#c9973f;--gold-soft:#f6ecd8;
   --green:#18a463;--green-soft:#e6f6ee;--red:#d4574b;
   --r:20px;--shadow:0 18px 50px rgba(22,32,44,.10);
   --serif:"Fraunces",Georgia,serif;--sans:"Plus Jakarta Sans",system-ui,sans-serif;
@@ -65,32 +65,32 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 /* top bar */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .25s,box-shadow .25s}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
-.topbar.solid{background:rgba(251,246,238,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+.topbar.solid{background:rgba(238,245,251,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
 .logo{height:26px}
 .topbar .btn{height:42px;padding:0 18px;font-size:14.5px;border-radius:12px;box-shadow:none}
 .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--blue));z-index:60;width:0}
 
 /* hero */
-.hero{padding:104px 0 56px;background:radial-gradient(1200px 500px at 80% -10%,#f3e6cd 0%,transparent 60%),radial-gradient(800px 400px at -10% 30%,#e3eef7 0%,transparent 60%)}
+.hero{padding:104px 0 56px;background:radial-gradient(1200px 500px at 80% -10%,#d6e8f5 0%,transparent 60%),radial-gradient(800px 400px at -10% 30%,#e6f0f8 0%,transparent 60%)}
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
 .hero h1{font-family:var(--serif);font-size:clamp(33px,6vw,62px);letter-spacing:-.02em;margin:16px 0 18px}
 .hero h1 em{display:block;font-size:.62em;font-weight:600;color:var(--blue);margin-top:6px}
 .hero .lead{margin-bottom:28px}
-.picker{background:#fff;border-radius:24px;padding:22px;box-shadow:var(--shadow);border:1px solid #f0ebe2}
+.picker{background:#fff;border-radius:24px;padding:22px;box-shadow:var(--shadow);border:1px solid #e2ecf4}
 .picker h3{font-size:17px;margin-bottom:4px}
 .picker .hint{font-size:13px;color:var(--muted);margin-bottom:14px}
 .opts{display:grid;gap:10px}
 .opt{display:flex;align-items:center;gap:12px;text-align:left;padding:14px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--paper);font-weight:600;font-size:15.5px;transition:border-color .15s,background .15s,transform .15s}
 .opt:hover{border-color:#c9d9e6;transform:translateY(-1px)}
 .opt .e{font-size:22px;width:28px;flex:none;text-align:center}
-.opt .ck{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid #d6d0c4;flex:none;display:grid;place-items:center;transition:.15s}
+.opt .ck{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid #c9d5e0;flex:none;display:grid;place-items:center;transition:.15s}
 .opt.on{border-color:var(--blue);background:var(--blue-soft)}
 .opt.on .ck{background:var(--blue);border-color:var(--blue)}
 .opt.on .ck:after{content:"";width:8px;height:5px;border:2.5px solid #fff;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
 .answer{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s ease}
 .answer>div{overflow:hidden}
 .answer.on{grid-template-rows:1fr}
-.answer .box{margin-top:14px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#fff8ea,#f5ecdc);border:1px solid #efdfbf;font-size:15px}
+.answer .box{margin-top:14px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#f4f9fd,#e6f0f8);border:1px solid #cfe0ee;font-size:15px}
 .answer .box b{color:var(--ink)}
 .answer .box .btn{height:48px;font-size:15px;margin-top:12px;width:100%}
 .hero-visual{position:relative}
@@ -111,18 +111,18 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .sec-white{background:var(--paper)}
 .checks{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:30px 0 20px}
 .chk{display:flex;gap:12px;align-items:flex-start;text-align:left;padding:16px;border-radius:16px;background:#fff;border:1.5px solid var(--line);font-size:15.5px;font-weight:600;color:var(--ink);transition:.18s}
-.chk .bx{width:24px;height:24px;border-radius:7px;border:2px solid #d3ccbf;flex:none;margin-top:1px;display:grid;place-items:center;transition:.18s}
-.chk.on{border-color:var(--gold);background:#fffaf0}
+.chk .bx{width:24px;height:24px;border-radius:7px;border:2px solid #c9d4df;flex:none;margin-top:1px;display:grid;place-items:center;transition:.18s}
+.chk.on{border-color:var(--gold);background:#f2f8fd}
 .chk.on .bx{background:var(--gold);border-color:var(--gold)}
 .chk.on .bx:after{content:"";width:9px;height:5px;border:2.5px solid #fff;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
 .chk-res{min-height:64px;text-align:center;font-size:17px;color:var(--ink);transition:opacity .3s}
 .chk-res b{color:var(--blue)}
-.chk-meter{height:8px;border-radius:8px;background:#efe9de;overflow:hidden;max-width:360px;margin:0 auto 12px}
+.chk-meter{height:8px;border-radius:8px;background:#e2ebf3;overflow:hidden;max-width:360px;margin:0 auto 12px}
 .chk-meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .4s}
 
 /* research */
 .research{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
-.paper{background:#fff;border-radius:22px;padding:28px;box-shadow:var(--shadow);border:1px solid #efe9df;position:relative}
+.paper{background:#fff;border-radius:22px;padding:28px;box-shadow:var(--shadow);border:1px solid #e1ebf3;position:relative}
 .paper .kick{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .paper .kick i{width:8px;height:8px;border-radius:50%;background:var(--red)}
 .big-stat{font-family:var(--serif);font-size:clamp(64px,10vw,96px);line-height:1;color:var(--blue);font-weight:700}
@@ -149,13 +149,13 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .verdict b{color:var(--blue)}
 
 /* compare toggle */
-.compare{margin:40px auto 0;max-width:760px;background:#fff;border-radius:22px;box-shadow:var(--shadow);overflow:hidden;border:1px solid #efe9df}
-.cmp-tabs{display:grid;grid-template-columns:1fr 1fr;background:#f3eee5;padding:6px;gap:6px}
+.compare{margin:40px auto 0;max-width:760px;background:#fff;border-radius:22px;box-shadow:var(--shadow);overflow:hidden;border:1px solid #e1ebf3}
+.cmp-tabs{display:grid;grid-template-columns:1fr 1fr;background:#e6eff6;padding:6px;gap:6px}
 .cmp-tabs button{height:46px;border-radius:12px;font-weight:700;color:var(--muted)}
 .cmp-tabs button.on{background:#fff;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.06)}
 .cmp-tabs button.on.v{color:var(--blue)}
 .cmp-body{padding:10px 22px 22px}
-.cmp-row{display:flex;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #f1ece4;font-size:15.5px}
+.cmp-row{display:flex;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #e8eef4;font-size:15.5px}
 .cmp-row:last-child{border:0}
 .cmp-row .i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;flex:none;font-weight:800;font-size:14px}
 .cmp-body.old .i{background:#fbe9e7;color:var(--red)}
@@ -176,6 +176,52 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .ten .clock:after{content:"";position:absolute;left:50%;top:50%;width:3px;height:10px;background:var(--gold);border-radius:2px;transform-origin:50% 0;animation:spin 6s linear infinite}
 @keyframes spin{from{transform:translate(-50%,0) rotate(0)}to{transform:translate(-50%,0) rotate(360deg)}}
 
+/* method flow */
+.flow-track i:after{content:"";position:absolute;right:-6px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:#ffd38a;box-shadow:0 0 0 5px rgba(255,211,138,.35),0 0 18px rgba(255,211,138,.9)}
+.flow{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px;padding-top:30px}
+.flow-track{position:absolute;top:0;left:16%;right:16%;height:6px;border-radius:6px;background:#dbe7f1;overflow:hidden}
+.flow-track{overflow:visible!important}
+.flow-track i{position:relative;display:block;height:100%;width:0;background:var(--blue);border-radius:6px;transition:width 1.1s cubic-bezier(.6,0,.2,1)}
+.fstep{position:relative;text-align:left;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;background:#fff;border-radius:24px;padding:22px 20px 20px;border:1.5px solid var(--line);box-shadow:0 8px 24px rgba(22,32,44,.05);transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s,border-color .45s,opacity .45s;opacity:.72;overflow:hidden}
+.fstep:before{content:"";position:absolute;top:-30px;left:50%;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:#dbe7f1;border:4px solid var(--cream);transition:.4s}
+.fstep.on,.fstep.past{opacity:1}
+.fstep.on{transform:translateY(-10px);border-color:transparent;box-shadow:0 26px 60px rgba(14,95,149,.20);background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,#3C86BC,#c9973f) border-box;border:2px solid transparent}
+.fstep.on:before,.fstep.past:before{background:var(--blue);box-shadow:0 0 0 6px rgba(14,95,149,.15)}
+.fs-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.fs-num{font-family:var(--serif);font-size:34px;font-weight:700;color:#dbe7f1;line-height:1;transition:color .4s}
+.fstep.on .fs-num{color:var(--blue)}
+.fs-ico{width:52px;height:52px;border-radius:16px;background:var(--blue-soft);display:grid;place-items:center;font-size:24px;color:var(--blue);transition:.4s}
+.fstep.on .fs-ico{background:var(--blue);color:#fff;box-shadow:0 10px 24px rgba(14,95,149,.35)}
+.ic-wave{display:flex;gap:3px;align-items:center;justify-content:center}
+.ic-wave i{width:4px;height:8px;border-radius:2px;background:currentColor}
+.fstep.on .ic-wave i{animation:wv .9s ease-in-out infinite}.ic-wave i:nth-child(2){animation-delay:-.2s}.ic-wave i:nth-child(3){animation-delay:-.45s}.ic-wave i:nth-child(4){animation-delay:-.65s}.ic-wave i:nth-child(5){animation-delay:-.3s}
+.fstep.on .ic-bulb{animation:glow 1.4s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 10px rgba(255,211,138,.35),0 10px 24px rgba(14,95,149,.35)}}
+.ic-check svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:24;stroke-dashoffset:0}
+.fstep.on .ic-check svg{animation:draw .8s ease-out}
+@keyframes draw{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}
+.fstep h3{font-size:19px;margin-bottom:6px}
+.fstep p{font-size:14.5px;color:var(--muted)}
+.fs-shot{margin:16px auto 0;width:78%;height:0;border-radius:22px 22px 0 0;overflow:hidden;border:6px solid #0b1118;border-bottom:0;box-shadow:0 14px 30px rgba(0,0,0,.18);opacity:0;transform:translateY(30px);transition:height .55s cubic-bezier(.2,.8,.2,1),opacity .45s,transform .55s}
+.fs-shot img{width:100%;display:block}
+.fstep.on .fs-shot{height:210px;opacity:1;transform:none}
+.fs-tag{position:absolute;top:22px;right:66px;font-size:12px;font-weight:800;color:var(--gold);background:var(--gold-soft);padding:4px 10px;border-radius:999px}
+.flow-clock{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:34px}
+.flow-clock .ring{width:72px;height:72px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}
+.ring .rbg{stroke:#dbe7f1}.ring .rfg{stroke:var(--blue);stroke-linecap:round;stroke-dasharray:169.6;stroke-dashoffset:169.6;transition:stroke-dashoffset 1.1s cubic-bezier(.6,0,.2,1)}
+.flow-clock b{display:block;font-family:var(--serif);font-size:30px;color:var(--ink);line-height:1.1}
+.flow-clock>div>span{font-size:14.5px;color:var(--muted);font-weight:600}
+.flow-clock #fmin{font:inherit;color:inherit}
+@media (max-width:900px){
+  .flow{grid-template-columns:1fr;gap:16px;padding:0 0 0 30px}
+  .flow-track{top:10px;bottom:10px;left:8px;right:auto;width:6px;height:auto}
+  .flow-track i{width:100%!important;height:0;transition:height 1.1s cubic-bezier(.6,0,.2,1)}
+  .fstep:before{top:24px;left:-31px;margin:0}
+  .fstep.on{transform:translateX(4px)}
+  .fstep.on .fs-shot{height:190px}
+  .flow-clock{justify-content:flex-start}
+}
 /* app showcase */
 .showcase{background:var(--ink);color:#d8e0ea;overflow:hidden}
 .showcase h2{color:#fff}.showcase h2 em{color:#8fc3ea}
@@ -205,16 +251,16 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .d-card{background:#fff;border-radius:18px;padding:14px;box-shadow:0 6px 20px rgba(0,0,0,.06)}
 .d-card small{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
 .d-card h4{font-size:17px;color:var(--ink);margin:2px 0 10px}
-.d-item{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid #f1ede6;font-size:14px;font-weight:600;color:var(--ink);width:100%;text-align:left}
-.d-item .c{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid #d8d2c8;display:grid;place-items:center;transition:.2s}
+.d-item{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid #e9eff5;font-size:14px;font-weight:600;color:var(--ink);width:100%;text-align:left}
+.d-item .c{margin-left:auto;width:22px;height:22px;border-radius:50%;border:2px solid #ccd7e1;display:grid;place-items:center;transition:.2s}
 .d-item.done .c{background:var(--green);border-color:var(--green)}
 .d-item.done .c:after{content:"";width:8px;height:5px;border:2.5px solid #fff;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
 .d-item.done span{color:var(--muted);text-decoration:line-through}
 .d-done{margin-top:14px;text-align:center;padding:16px;border-radius:16px;background:linear-gradient(135deg,#0E5F95,#2c86c4);color:#fff;transform:scale(.9);opacity:0;transition:.35s}
 .d-done.on{transform:none;opacity:1}
 .d-done b{display:block;font-size:20px}
-.d-bar{height:6px;border-radius:6px;background:#eee7dc;margin:6px 0 2px;overflow:hidden}.d-bar i{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
-.seg{display:flex;background:#efe9df;border-radius:999px;padding:3px;align-self:center;margin-bottom:12px}
+.d-bar{height:6px;border-radius:6px;background:#e3ebf2;margin:6px 0 2px;overflow:hidden}.d-bar i{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
+.seg{display:flex;background:#e1ebf3;border-radius:999px;padding:3px;align-self:center;margin-bottom:12px}
 .seg button{height:30px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:700;color:var(--muted)}
 .seg button.on{background:var(--blue);color:#fff}
 .d-read{font-family:var(--serif);font-size:15px;line-height:1.6;color:var(--ink);overflow:hidden}
@@ -234,7 +280,7 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .explain ul{margin:8px 0 0 16px}
 @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .mini-btn{margin-top:10px;height:40px;border-radius:12px;background:var(--blue);color:#fff;font-weight:700;font-size:13.5px;width:100%}
-.q-opt{display:block;width:100%;text-align:left;padding:11px 12px;border-radius:12px;border:1.5px solid #e6e0d6;background:#fff;font-size:13.5px;font-weight:600;color:var(--ink);margin-top:8px;transition:.15s}
+.q-opt{display:block;width:100%;text-align:left;padding:11px 12px;border-radius:12px;border:1.5px solid #dbe4ed;background:#fff;font-size:13.5px;font-weight:600;color:var(--ink);margin-top:8px;transition:.15s}
 .q-opt.ok{border-color:var(--green);background:var(--green-soft)}
 .q-opt.no{border-color:var(--red);background:#fdecea}
 .q-fb{font-size:12.5px;margin-top:10px;padding:10px;border-radius:12px;background:#fff;display:none}
@@ -259,6 +305,15 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .amen.on{background:var(--gold);color:#fff;transform:scale(1.04)}
 .demo-flag{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:10.5px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.9);padding:4px 10px;border-radius:999px;z-index:6;white-space:nowrap}
 
+.screen .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .45s}
+.screen .shot.on{opacity:1}
+.screen{cursor:pointer}
+.sdots{position:absolute;left:0;right:0;bottom:-26px;display:flex;justify-content:center;gap:6px}
+.sdots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);transition:.2s}
+.sdots i.on{background:#fff;width:20px;border-radius:4px}
+.screen .demo-flag{display:none}
+.scap{position:absolute;left:-30px;right:-30px;bottom:-60px;text-align:center;color:#c9d3df;font-size:13.5px;font-weight:700}
+.phone{margin-bottom:70px!important}
 /* day timeline */
 .day{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:30px}
 .dtabs{display:grid;gap:12px}
@@ -272,7 +327,7 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .dtab .tl{position:absolute;left:0;bottom:0;height:3px;background:var(--blue);width:0}
 .dtab.on .tl{animation:tl 5s linear forwards}
 @keyframes tl{to{width:100%}}
-.dcard{background:linear-gradient(160deg,#fff,#fbf3e3);border-radius:26px;padding:30px;box-shadow:var(--shadow);min-height:280px;display:flex;flex-direction:column;justify-content:center;border:1px solid #f0e6d2}
+.dcard{background:linear-gradient(160deg,#fff,#eaf3fb);border-radius:26px;padding:30px;box-shadow:var(--shadow);min-height:280px;display:flex;flex-direction:column;justify-content:center;border:1px solid #d9e7f2}
 .dcard .tag{font-size:12px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.06em}
 .dcard h4{font-family:var(--serif);font-size:26px;color:var(--ink);margin:8px 0}
 .dcard .body{font-family:var(--serif);font-size:19px;color:var(--text)}
@@ -281,12 +336,12 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .dcard.swap{animation:pop .4s}
 
 /* plan */
-.plan-card{max-width:760px;margin:30px auto 0;background:#fff;border-radius:26px;box-shadow:var(--shadow);padding:22px;border:1px solid #efe9df}
+.plan-card{max-width:760px;margin:30px auto 0;background:#fff;border-radius:26px;box-shadow:var(--shadow);padding:22px;border:1px solid #e1ebf3}
 .focus{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}
 .focus div{flex:1;min-width:200px;display:flex;gap:10px;align-items:center;background:var(--blue-soft);border-radius:14px;padding:10px 14px}
 .focus small{display:block;font-size:11.5px;color:var(--muted);font-weight:700}
 .focus b{color:var(--ink);font-size:15px}
-.wtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#f3eee5;border-radius:14px;padding:5px;margin-bottom:14px}
+.wtabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#e6eff6;border-radius:14px;padding:5px;margin-bottom:14px}
 .wtabs button{height:40px;border-radius:10px;font-weight:700;font-size:14px;color:var(--blue)}
 .wtabs button.on{background:var(--blue);color:#fff}
 .days{display:grid;gap:8px}
@@ -296,6 +351,24 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .c0{background:#e6f5ef;border-color:#2fa678!important}.c1{background:#fdeee6;border-color:#e98a5b!important}.c2{background:#f1ebfa;border-color:#a37bd8!important}.c3{background:#e8f1fa;border-color:#4a8fd0!important}
 .more{text-align:center;font-size:13.5px;color:var(--muted);margin-top:12px}
 
+.trail{position:relative;padding:6px 0 4px}
+.mod{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#0E5F95,#2c86c4);color:#fff;border-radius:16px;padding:14px 16px;margin-bottom:18px}
+.mod.locked{background:#eef0f3;color:var(--muted)}
+.mod small{display:block;font-size:11.5px;font-weight:700;opacity:.8;letter-spacing:.04em;text-transform:uppercase}
+.mod b{font-size:17px}.mod .ico{font-size:24px}
+.chap{font-size:12.5px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 10px;text-align:center}
+.nodes{display:flex;flex-direction:column;align-items:center;gap:14px}
+.node{display:flex;align-items:center;gap:12px;width:min(320px,100%);animation:pop .4s both}
+.node:nth-child(4n+2){transform:translateX(34px)}.node:nth-child(4n){transform:translateX(-34px)}
+.node .dot{width:54px;height:54px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:22px;background:#dfe7ef;color:#a49d90;box-shadow:inset 0 -4px 0 rgba(0,0,0,.08)}
+.node.done .dot{background:var(--green);color:#fff}
+.node.now .dot{background:var(--blue);color:#fff;box-shadow:0 0 0 6px rgba(14,95,149,.15),inset 0 -4px 0 rgba(0,0,0,.15);animation:nowp 1.8s infinite}
+@keyframes nowp{50%{box-shadow:0 0 0 12px rgba(14,95,149,.05),inset 0 -4px 0 rgba(0,0,0,.15)}}
+.node span{font-weight:700;color:var(--ink);font-size:15px}.node.lock span{color:#9aa0a8}
+.node small{display:block;font-weight:600;font-size:12px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:6px 0 16px}
+.chips span{font-size:13px;font-weight:700;background:#e6eff6;color:#5f7487;border-radius:999px;padding:7px 12px}
+.trail-end{text-align:center;color:var(--muted);font-size:14px;margin-top:6px}
 /* video */
 .vid-grid{display:grid;grid-template-columns:1fr 360px;gap:56px;align-items:center}
 .vbox{position:relative;width:100%;max-width:340px;margin:0 auto;aspect-ratio:9/16;border-radius:26px;overflow:hidden;background:#111;box-shadow:var(--shadow)}
@@ -316,14 +389,14 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .ba .after{background:linear-gradient(160deg,#eaf3fa,#f7fbfe);border-color:#cfe1ee}
 .ba h3{font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
 .ba .before h3{color:var(--red)}.ba .after h3{color:var(--blue)}
-.ba li{list-style:none;display:flex;gap:10px;padding:9px 0;font-size:16px;color:var(--ink);border-bottom:1px dashed #e7e1d6}
+.ba li{list-style:none;display:flex;gap:10px;padding:9px 0;font-size:16px;color:var(--ink);border-bottom:1px dashed #dbe5ee}
 .ba li:last-child{border:0}
 .ba .before li:before{content:"✕";color:var(--red);font-weight:800}
 .ba .after li:before{content:"✓";color:var(--green);font-weight:800}
 .ba-img{margin-top:22px;border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
 
 /* time slider */
-.time{max-width:760px;margin:30px auto 0;background:#fff;border-radius:24px;padding:28px;box-shadow:var(--shadow);border:1px solid #efe9df;text-align:center}
+.time{max-width:760px;margin:30px auto 0;background:#fff;border-radius:24px;padding:28px;box-shadow:var(--shadow);border:1px solid #e1ebf3;text-align:center}
 .time input[type=range]{width:100%;margin:18px 0 8px;accent-color:var(--blue);height:30px}
 .time .vals{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
 .time .vals div{background:var(--cream);border-radius:16px;padding:14px 8px}
@@ -339,21 +412,21 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .ben p{font-size:14.5px;color:var(--muted)}
 
 /* pricing */
-.pricing{background:linear-gradient(180deg,var(--cream),#f3eadb)}
+.pricing{background:linear-gradient(180deg,var(--cream),#e3eef8)}
 .price-wrap{max-width:560px;margin:30px auto 0}
-.pc{background:#fff;border-radius:26px;padding:22px;box-shadow:var(--shadow);border:1px solid #efe9df}
+.pc{background:#fff;border-radius:26px;padding:22px;box-shadow:var(--shadow);border:1px solid #e1ebf3}
 .pfocus{display:flex;align-items:center;gap:10px;background:var(--blue-soft);border-radius:14px;padding:10px 14px;margin-bottom:14px;font-size:14px}
 .pfocus b{color:var(--ink)}
 .plan{position:relative;display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:16px;border-radius:18px;border:2px solid var(--line);background:#fff;margin-bottom:12px;transition:.18s}
 .plan:hover{border-color:#c9d9e6}
 .plan.on{border-color:var(--blue);background:#f7fbfe;box-shadow:0 8px 22px rgba(14,95,149,.12)}
-.plan .rb{width:24px;height:24px;border-radius:50%;border:2px solid #cfc8bc;flex:none;display:grid;place-items:center}
+.plan .rb{width:24px;height:24px;border-radius:50%;border:2px solid #c5d1dc;flex:none;display:grid;place-items:center}
 .plan.on .rb{border-color:var(--blue);background:var(--blue)}
 .plan.on .rb:after{content:"";width:9px;height:5px;border:2.5px solid #fff;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-1px)}
 .plan .nm b{display:block;color:var(--ink);font-size:17px}
 .plan .nm small{font-size:13px;color:var(--muted)}
 .plan .save{display:inline-block;margin-top:5px;background:var(--green);color:#fff;font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:6px}
-.plan .pd{margin-left:auto;text-align:right;background:#f4f1eb;border-radius:12px;padding:6px 10px;display:flex;align-items:flex-start;gap:1px;color:var(--ink)}
+.plan .pd{margin-left:auto;text-align:right;background:#edf3f8;border-radius:12px;padding:6px 10px;display:flex;align-items:flex-start;gap:1px;color:var(--ink)}
 .plan.on .pd{background:var(--blue-soft)}
 .pd .cur{font-size:13px;font-weight:800;margin-top:3px}.pd .int{font-size:32px;font-weight:800;line-height:1}.pd .dec{display:flex;flex-direction:column;font-size:13px;font-weight:800;line-height:1.1;margin-top:3px}.pd .dec small{font-weight:600;font-size:10.5px;color:var(--muted)}
 .plan .free{margin-left:auto;text-align:center;background:var(--green-soft);color:var(--green);border-radius:12px;padding:8px 12px;font-weight:800;font-size:20px;line-height:1}
@@ -366,7 +439,7 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .guar b{display:block;color:#13744a}.guar span{font-size:13.5px;color:#456356}
 .terms{font-size:12px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
 .paylogos{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:12px}
-.paylogos span{width:46px;height:30px;border-radius:6px;background:#fff;border:1px solid #e7e2d9;display:grid;place-items:center}
+.paylogos span{width:46px;height:30px;border-radius:6px;background:#fff;border:1px solid #dce6ee;display:grid;place-items:center}
 .paylogos svg{width:40px;height:26px}
 .safe{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;color:var(--green);margin-top:12px}
 
@@ -386,12 +459,18 @@ footer{background:var(--ink);color:#9aa6b4;font-size:13px;padding:30px 0 110px;t
 footer a{color:#c9d3df;margin:0 8px}
 
 /* sticky cta */
-.sticky{position:fixed;left:0;right:0;bottom:0;z-index:45;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(255,253,249,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:45;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(248,251,254,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s}
 .sticky.on{transform:none}
 .sticky .in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px}
 .sticky .t{font-size:12.5px;color:var(--muted);line-height:1.3}.sticky .t b{display:block;color:var(--ink);font-size:14px}
 .sticky .btn{height:50px;margin-left:auto;font-size:15.5px;padding:0 20px}
 
+.music{position:fixed;left:14px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:46;display:flex;align-items:center;gap:8px;height:42px;padding:0 14px 0 12px;border-radius:999px;background:rgba(22,32,44,.82);color:#fff;font-size:13px;font-weight:700;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 8px 20px rgba(0,0,0,.18);transition:.2s}
+.music .bars{display:flex;gap:2px;align-items:flex-end;height:14px}
+.music .bars i{width:3px;height:4px;background:#ffd38a;border-radius:2px}
+.music.on .bars i{animation:mb 1.1s ease-in-out infinite}.music.on .bars i:nth-child(2){animation-delay:-.4s}.music.on .bars i:nth-child(3){animation-delay:-.7s}
+@keyframes mb{50%{height:14px}}
+@media (min-width:900px){.music{bottom:24px}}
 /* order summary sheet */
 .co-wrap{position:fixed;inset:0;z-index:80;pointer-events:none}
 .co-back{position:absolute;inset:0;background:rgba(15,25,35,.45);opacity:0;transition:opacity .25s}
@@ -449,9 +528,9 @@ footer a{color:#c9d3df;margin:0 8px}
 <!-- 1. HERO — problem aware, with a one-tap micro-commitment -->
 <section class="hero" id="hero" data-sec="hero"><div class="wrap hero-grid">
   <div>
-    <span class="eyebrow">For busy Christians who want to understand the Bible</span>
+    <span class="eyebrow">🎧 Audio Bible study for busy Christians</span>
     <h1>Why the Bible feels hard to understand <em>(and why it’s not your fault)</em></h1>
-    <p class="lead">A simple 10-minute daily plan that explains Scripture in plain words — so you finally understand what you read, remember it, and live it.</p>
+    <p class="lead">VEREDA is <b>in-depth Bible study you can listen to in just 10 minutes a day</b> — explained so clearly you’ll understand Scripture like never before, and see your life change, one step at a time.</p>
     <div class="picker reveal">
       <h3>What makes the Bible hardest for you?</h3>
       <div class="hint">Tap one — we’ll show you why it happens.</div>
@@ -465,14 +544,14 @@ footer a{color:#c9d3df;margin:0 8px}
     </div>
     <div class="trust">
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>10 minutes a day</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>Read or listen</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>Listen anywhere</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>7 days free</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>Cancel anytime</span>
     </div>
   </div>
   <div class="hero-visual reveal d1">
-    <div class="float-chip a"><i style="background:#e6f6ee">🔥</i>Day 7 complete</div>
-    <div class="float-chip b"><i style="background:#f6ecd8">📖</i>Explained in plain words</div>
+    <div class="float-chip a"><i style="background:#e7f0f7">🎧</i>Listening · 10 min</div>
+    <div class="float-chip b"><i style="background:#e6f6ee">🔥</i>Lesson 7 unlocked</div>
     <div class="hero-photo"><img src="/images/break3_f.webp" alt="Woman reading the Bible outdoors at sunrise">
       <div class="hero-quote">“Your word is a lamp to my feet, and a light for my path.”<small>Psalm 119:105</small></div></div>
   </div>
@@ -546,15 +625,34 @@ footer a{color:#c9d3df;margin:0 8px}
 <section class="method" data-sec="method"><div class="wrap">
   <div class="center narrow">
     <span class="eyebrow reveal">The VEREDA method</span>
-    <h2 class="reveal">A short trail through Scripture, <em>one day at a time</em></h2>
-    <p class="lead reveal">“Vereda” means a narrow path. Every day you take one small, guided step — and small steps, taken daily, change everything.</p>
+    <h2 class="reveal">Not an audio Bible. <em>An audio Bible study.</em></h2>
+    <p class="lead reveal">Listening to chapters read aloud is easy to forget. VEREDA guides you through Scripture like a great teacher would — the context, the meaning and what it changes in your life — in about 10 minutes you can fit anywhere. “Vereda” means a narrow path: one small step a day that changes everything.</p>
   </div>
-  <div class="steps">
-    <div class="step reveal"><div class="num">1</div><h3>Read or listen</h3><p>A short passage and a devotional for today — read it with your coffee or listen on the go.</p><span class="tag">≈ 5 min</span></div>
-    <div class="step reveal d1"><div class="num">2</div><h3>Understand it</h3><p>Plain-language explanations and key takeaways, so you know what it means and why it matters today.</p><span class="tag">≈ 3 min</span></div>
-    <div class="step reveal d2"><div class="num">3</div><h3>Live it</h3><p>A quick quiz to remember it, a prayer, and one small action to carry God’s Word into your day.</p><span class="tag">≈ 2 min</span></div>
+  <div class="flow reveal" id="flow">
+    <div class="flow-track"><i id="flowFill"></i></div>
+    <button class="fstep on" data-s="0" type="button">
+      <div class="fs-head"><span class="fs-ico ic-wave"><i></i><i></i><i></i><i></i><i></i></span><span class="fs-num">01</span></div>
+      <h3>Press play</h3><p>An in-depth, guided study of today’s passage — listen while you drive, walk or cook. Prefer reading? It’s all there too.</p>
+      <div class="fs-shot"><img src="img/app/listen.webp" alt="Listening to today’s study in the VEREDA app" loading="lazy"></div>
+      <span class="fs-tag">≈ 5 min</span>
+    </button>
+    <button class="fstep" data-s="1" type="button">
+      <div class="fs-head"><span class="fs-ico ic-bulb">💡</span><span class="fs-num">02</span></div>
+      <h3>Understand it like never before</h3><p>Historical context, plain-language explanations and key takeaways — the “aha” moments you never got from reading alone.</p>
+      <div class="fs-shot"><img src="img/app/study.webp" alt="In-depth study screen in the VEREDA app" loading="lazy"></div>
+      <span class="fs-tag">≈ 3 min</span>
+    </button>
+    <button class="fstep" data-s="2" type="button">
+      <div class="fs-head"><span class="fs-ico ic-check"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span class="fs-num">03</span></div>
+      <h3>Live it</h3><p>A quick quiz to remember it, a prayer, and one small action to carry God’s Word into your day.</p>
+      <div class="fs-shot"><img src="img/app/quiz-ok.webp" alt="Quiz with friendly explanation in the VEREDA app" loading="lazy"></div>
+      <span class="fs-tag">≈ 2 min</span>
+    </button>
   </div>
-  <div class="ten reveal"><span class="clock"></span>That’s it. About 10 minutes a day.</div>
+  <div class="flow-clock reveal">
+    <svg viewBox="0 0 64 64" class="ring"><circle cx="32" cy="32" r="27" class="rbg"/><circle cx="32" cy="32" r="27" class="rfg" id="ringFg"/></svg>
+    <div><b><span id="fmin">0</span> min</b><span>That’s it. About 10 minutes a day — and your next lesson unlocks.</span></div>
+  </div>
 </div></section>
 
 <!-- 6. INSIDE THE APP — interactive demos + real screenshots -->
@@ -566,78 +664,7 @@ footer a{color:#c9d3df;margin:0 8px}
   </div>
   <div class="feat-tabs" id="ftabs"></div>
   <div class="show-grid">
-    <div class="phone reveal"><div class="screen" id="fscreen">
-
-      <!-- daily path -->
-      <div class="demo on" data-f="path"><div class="d-pad">
-        <div class="d-top"><span>Module 1 · Rooted in Faith</span><span>🔥 <b id="streak">0</b></span></div>
-        <div class="d-card"><small>Devotional 1</small><h4>A Lamp for Your Path</h4>
-          <div class="d-bar"><i id="pbar"></i></div>
-          <button class="d-item" data-i><span>🙏 Daily prayer</span><b class="c"></b></button>
-          <button class="d-item" data-i><span>📖 Scripture &amp; today’s word</span><b class="c"></b></button>
-          <button class="d-item" data-i><span>❓ Quiz</span><b class="c"></b></button>
-          <button class="d-item" data-i><span>✨ One action</span><b class="c"></b></button>
-        </div>
-        <div class="d-done" id="ddone"><b>Day complete! 🔥</b>Your lamp is lit. Tomorrow’s step is unlocked.</div>
-      </div><span class="demo-flag">Tap each step</span></div>
-
-      <!-- read or listen -->
-      <div class="demo" data-f="listen"><div class="d-pad">
-        <div class="seg" id="seg"><button class="on" data-m="read">📖 Read</button><button data-m="listen">🎧 Listen</button></div>
-        <div class="d-read" id="dread">
-          <b style="font-family:var(--sans);font-size:17px">Enough Light for the Next Step</b>
-          <p style="margin-top:8px">Picture a hiker on a mountain trail an hour before sunrise. The only light she has is a small lamp. It doesn’t show the summit. It shows about three steps — <b>and three steps are enough to keep walking.</b></p>
-          <div class="v">“Your word is a lamp to my feet, and a light for my path.”<small>Psalm 119:105</small></div>
-          <p>God gives light for the next step, not for the entire journey.</p>
-        </div>
-        <div class="player" id="dplay"><div class="art">🪔</div><div class="pl-t">Enough Light for the Next Step<small>Devotional 1 · listening</small></div><div class="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-      </div><span class="demo-flag">Switch between Read and Listen</span></div>
-
-      <!-- understand -->
-      <div class="demo" data-f="understand"><div class="d-pad">
-        <div class="d-top"><span>Today’s word</span><span>Psalm 119</span></div>
-        <div class="d-read">
-          <div class="v" style="margin-top:0">“Your word is a lamp to my feet, and a light for my path.”<small>Psalm 119:105</small></div>
-        </div>
-        <button class="mini-btn" id="explainBtn">💡 What does this mean?</button>
-        <div class="explain" id="explain"><b>In plain words:</b> In the ancient world, a lamp was a small clay bowl of olive oil. Travelers held it low, near their feet, so they wouldn’t trip in the dark.
-          <ul><li>God’s Word isn’t a floodlight that removes every mystery.</li><li>It’s a faithful lamp — enough light for <b>your next step</b>.</li><li>You don’t need the whole map today. Just the next step.</li></ul></div>
-      </div><span class="demo-flag">Tap the button</span></div>
-
-      <!-- quiz -->
-      <div class="demo" data-f="quiz"><div class="d-pad">
-        <div class="d-top"><span>Quiz · 1 of 3</span><span>❓</span></div>
-        <div class="d-card"><h4 style="font-size:15.5px;margin:0">In Psalm 119:105, what does God’s Word do for us?</h4>
-          <div id="qopts"></div>
-          <div class="q-fb" id="qfb"></div>
-        </div>
-      </div><span class="demo-flag">Pick an answer</span></div>
-
-      <!-- action + journal -->
-      <div class="demo" data-f="live"><div class="d-pad">
-        <div class="d-top"><span>Live it today</span><span>✨</span></div>
-        <div class="d-card"><small>Today’s action</small><p style="font-size:14px;color:var(--ink);margin-top:6px;font-weight:600">Write Psalm 119:105 on a sticky note and put it where you start your day. Each morning this week, read it before you check your phone.</p></div>
-        <div class="journal"><small style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase">Journal</small>
-          <p style="font-size:13px;color:var(--muted);margin:4px 0 6px">Where do you wish you could see the whole map? What would it look like to trust God for just the next step?</p>
-          <textarea placeholder="Type your reflection…" aria-label="Journal reflection (demo, not saved)"></textarea></div>
-      </div><span class="demo-flag">Try writing — nothing is saved</span></div>
-
-      <!-- verse stories -->
-      <div class="demo" data-f="stories"><div class="stories" id="stories"><div class="st-bars" id="stbars"></div><div class="st-tap" id="sttap"></div></div><span class="demo-flag" style="z-index:7">Tap to see the next verse</span></div>
-
-      <!-- community -->
-      <div class="demo" data-f="community"><div class="d-pad">
-        <div class="d-top"><span style="font-size:15px;color:var(--ink)">Prayer community</span><span>🙏</span></div>
-        <div class="pr"><div class="who"><i>A</i>Member · English</div><p>Please pray for my mom’s surgery on Friday. I’m trying to trust God with this.</p><button class="amen" data-n="12">🙏 Amen · <span>12</span></button></div>
-        <div class="pr"><div class="who"><i>M</i>Miembro · Español</div><p>Oren por mi familia, que volvamos a leer la Biblia juntos.</p><button class="amen" data-n="8">🙏 Amen · <span>8</span></button></div>
-        <div class="pr"><div class="who"><i>J</i>Member · English</div><p>Starting over with God this week. Pray I stay consistent.</p><button class="amen" data-n="21">🙏 Amen · <span>21</span></button></div>
-      </div><span class="demo-flag">Example requests · tap Amen</span></div>
-
-      <!-- real screenshots -->
-      <div class="demo" data-f="bible"><img class="shot" src="img/app-bible.webp" alt="VEREDA Bible reader" loading="lazy"><span class="demo-flag">Real screen from the app</span></div>
-      <div class="demo" data-f="journey"><img class="shot" src="img/app-journey.webp" alt="VEREDA journey screen" loading="lazy"><span class="demo-flag">Real screen from the app</span></div>
-
-    </div></div>
+    <div class="phone reveal"><div class="screen" id="fscreen"></div><div class="sdots" id="sdots"></div><div class="scap" id="scap"></div></div>
     <div class="feat-copy" id="fcopy"></div>
   </div>
 </div></section>
@@ -673,32 +700,30 @@ footer a{color:#c9d3df;margin:0 8px}
   </div>
 </div></section>
 
-<!-- 9. 4-WEEK PLAN — personalized -->
+<!-- 9. THE JOURNEY — unlock step by step -->
 <section class="sec-white" data-sec="plan" id="plan"><div class="wrap">
   <div class="center narrow">
-    <span class="eyebrow reveal">Your first 28 days</span>
-    <h2 class="reveal">Here’s the path <em>you’ll walk</em></h2>
-    <p class="lead reveal">Four weeks of short, guided steps — from “where do I start?” to opening your Bible with confidence.</p>
+    <span class="eyebrow reveal">Your journey</span>
+    <h2 class="reveal">A path you unlock <em>step by step</em></h2>
+    <p class="lead reveal">VEREDA isn’t a plan that ends in a few weeks. It’s a journey through Scripture organized in lessons, chapters and modules. Finish today’s lesson and the next one lights up — and the path keeps going as you grow.</p>
   </div>
   <div class="plan-card reveal">
     <div class="focus" id="focus"></div>
-    <div class="wtabs" id="wtabs"></div>
-    <div class="days" id="days"></div>
-    <div class="more">+ more days every week · each one about 10 minutes</div>
+    <div class="trail" id="trail"></div>
   </div>
-</section>
+</div></section>
 
 <!-- 10. BEFORE / AFTER -->
 <section data-sec="change"><div class="wrap">
   <div class="center narrow">
-    <span class="eyebrow reveal">Four weeks from now</span>
+    <span class="eyebrow reveal">A few weeks from now</span>
     <h2 class="reveal">From guilt and confusion <em>to closeness</em></h2>
   </div>
   <div class="ba">
     <div class="col before reveal"><h3>Before</h3><ul>
       <li>Reading out of guilt, then giving up</li><li>Forgetting what you read by lunch</li><li>Skipping the confusing parts</li><li>Feeling far from God and not knowing why</li></ul></div>
     <div class="col after reveal d1"><h3>With VEREDA</h3><ul>
-      <li>10 minutes a day you actually look forward to</li><li>Remembering what you read — and why it matters</li><li>Understanding Scripture in plain words</li><li>Feeling close to God again</li></ul></div>
+      <li>10 minutes of Bible study you actually look forward to</li><li>Remembering what you read — and why it matters</li><li>Understanding Scripture in plain words</li><li>Feeling close to God again</li></ul></div>
   </div>
   <div class="ba-img reveal"><img src="/images/s2_before_after.webp" alt="Before: rushed and stressed. After: calm morning with the Bible" loading="lazy"></div>
 </div></section>
@@ -714,8 +739,8 @@ footer a{color:#c9d3df;margin:0 8px}
     <input type="range" min="5" max="30" step="5" value="10" id="trange" aria-label="Minutes per day">
     <div class="vals">
       <div><b id="tpct">0.7%</b><small>of your day</small></div>
-      <div><b id="thrs">4.7 h</b><small>with God’s Word in 4 weeks</small></div>
-      <div><b id="tdays">28</b><small>guided days to complete</small></div>
+      <div><b id="thrs">61 h</b><small>of Bible study in a year</small></div>
+      <div><b id="tdays">365</b><small>steps closer to God in a year</small></div>
     </div>
   </div>
 </div></section>
@@ -727,9 +752,9 @@ footer a{color:#c9d3df;margin:0 8px}
     <h2 class="reveal">What you get with <em>VEREDA</em></h2>
   </div>
   <div class="ben">
-    <div class="reveal"><span class="e">🗺️</span><b>A guided daily plan</b><p>You always know exactly what to read today — no more guessing where to start.</p></div>
+    <div class="reveal"><span class="e">🎧</span><b>In-depth audio Bible study</b><p>Not just verses read aloud — a guided study you can listen to anywhere in about 10 minutes.</p></div>
     <div class="reveal d1"><span class="e">💡</span><b>Plain-language explanations</b><p>Every reading explained in simple words, with key takeaways so nothing gets missed.</p></div>
-    <div class="reveal d2"><span class="e">🎧</span><b>Read or listen</b><p>Busy morning? Listen while you drive, walk or cook.</p></div>
+    <div class="reveal d2"><span class="e">🗺️</span><b>A journey you unlock</b><p>Lessons, chapters and modules that light up as you grow — you always know what’s next.</p></div>
     <div class="reveal"><span class="e">✅</span><b>One small action a day</b><p>Turn what you read into something you live — the same day.</p></div>
     <div class="reveal d1"><span class="e">🙏</span><b>Daily prayer &amp; journal</b><p>Guided prayers and reflection prompts to grow closer to God.</p></div>
     <div class="reveal d2"><span class="e">🤝</span><b>A praying community</b><p>Share requests and pray for others — in English and Spanish.</p></div>
@@ -769,8 +794,8 @@ footer a{color:#c9d3df;margin:0 8px}
 
 <!-- 15. FINAL CTA -->
 <section class="final" data-sec="final"><div class="wrap narrow">
-  <h2 class="reveal">Your path back to God’s Word starts with <em style="color:#ffd38a">10 minutes</em></h2>
-  <p class="lead reveal">You don’t need more discipline. You need a path made for your real life — and enough light for the next step.</p>
+  <h2 class="reveal">Change your life <em style="color:#ffd38a">10 minutes at a time</em></h2>
+  <p class="lead reveal">You don’t need more free time or more discipline. Press play, understand God’s Word like never before, and take the next step — today.</p>
   <a href="#pricing" class="btn reveal" data-cta="final">Start my free week <span class="arr">→</span></a>
   <div class="sub-cta reveal" style="color:#dfe5ec"><span>✓ 7 days free</span><span>✓ Cancel anytime</span><span>✓ 7-day money-back guarantee</span></div>
 </div></section>
@@ -782,6 +807,7 @@ footer a{color:#c9d3df;margin:0 8px}
   <div style="margin-top:12px;font-size:12px">© VEREDA. Subscriptions are processed securely by Hotmart.</div>
 </div></footer>
 
+<button class="music" id="music" type="button" aria-label="Background music"><span class="bars"><i></i><i></i><i></i></span><span id="mlabel">Music off</span></button>
 <div class="sticky" id="sticky"><div class="in">
   <div class="t"><b>7 days free</b>Then from <span id="stickyPrice">$0.66</span>/day · cancel anytime</div>
   <a href="#pricing" class="btn" data-cta="sticky">Start free <span class="arr">→</span></a>
@@ -891,60 +917,64 @@ $$(".cmp-tabs button").forEach(b=>b.onclick=()=>{ $$(".cmp-tabs button").forEach
 drawCmp("old");
 setTimeout(()=>{},0);
 
-/* ---------- 6. app showcase ---------- */
+
+/* ---------- 5. method flow (auto-play) ---------- */
+const fsteps=$$("#flow .fstep"), MINS=[5,8,10]; let fI=0, fT=null, fRun=false, fMin=0;
+function setFlow(i){ fI=i; fsteps.forEach((b,j)=>{ b.classList.toggle("on",j===i); b.classList.toggle("past",j<i); });
+  const pct=(i+1)/3*100, mob=matchMedia("(max-width:900px)").matches, fill=$("#flowFill");
+  if(mob){ fill.style.width="100%"; fill.style.height=pct+"%"; } else { fill.style.height="100%"; fill.style.width=pct+"%"; }
+  $("#ringFg").style.strokeDashoffset=169.6*(1-MINS[i]/10);
+  const to=MINS[i], from=fMin; const t0=performance.now(); (function tick(t){ const k=Math.min(1,(t-t0)/900); fMin=Math.round(from+(to-from)*k); $("#fmin").textContent=fMin; if(k<1) requestAnimationFrame(tick); })(t0); }
+function flowLoop(){ clearTimeout(fT); fT=setTimeout(()=>{ if(fI<2) setFlow(fI+1); else { fMin=0; setFlow(0); } flowLoop(); }, fI===2?4200:3200); }
+fsteps.forEach(b=>b.onclick=()=>{ setFlow(+b.dataset.s); flowLoop(); ev("method_step"); engage(); });
+new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting&&!fRun){ fRun=true; setFlow(0); flowLoop(); } else if(!e.isIntersecting&&fRun){ fRun=false; clearTimeout(fT); } }),{threshold:.35}).observe($("#flow"));
+/* ---------- 6. app showcase — real screens from the VEREDA app ---------- */
 const FEATS=[
-  {k:"path",ico:"🗺️",tab:"Daily path",h:"Your path for today",p:"Open the app and today’s step is waiting. Four short parts, about 10 minutes — then you’re done.",li:["A prayer to start","Today’s Scripture and devotional","A quick quiz and one action"]},
-  {k:"listen",ico:"🎧",tab:"Read or listen",h:"Read it — or listen to it",p:"Every devotional can be read or listened to. Perfect for the commute, a walk or the kitchen.",li:["Switch anytime with one tap","Listen to every devotional","Same plan, your format"]},
-  {k:"understand",ico:"💡",tab:"Understand",h:"Finally understand what you read",p:"Each passage comes with a plain-language explanation and key takeaways — no theology degree needed.",li:["Historical context made simple","Key takeaways for every reading","Why it matters for your life today"]},
-  {k:"quiz",ico:"❓",tab:"Quiz",h:"Remember what you read",p:"Three quick questions after each reading help it stick — and show you how much you’re growing.",li:["Instant, friendly explanations","Takes under a minute","No pressure, no scores to fear"]},
-  {k:"live",ico:"✨",tab:"Live it",h:"Turn reading into living",p:"One small action for today and a short journal prompt, so God’s Word becomes part of your day.",li:["A simple, practical step","Private journal for reflection","Look back on your growth"]},
-  {k:"stories",ico:"🌅",tab:"Verse of the day",h:"A verse to carry with you",p:"Beautiful daily verses, like stories, to start your day with God’s Word — even on your busiest days.",li:["New verses every day","Takes 30 seconds","Easy to come back to"]},
-  {k:"community",ico:"🤝",tab:"Pray together",h:"You don’t walk alone",p:"Share a prayer request and pray for others. One community, praying for each other in English and Spanish.",li:["Post anonymously if you prefer","Tap “Amen” to pray for someone","Report anything inappropriate"]},
-  {k:"bible",ico:"📖",tab:"Full Bible",h:"The whole Bible, beautifully simple",p:"Read any book and chapter in a clean, modern English translation — with read or listen modes.",li:["All 66 books","Comfortable reading view","Listen to any chapter"]},
-  {k:"journey",ico:"⛰️",tab:"Your journey",h:"See how far you’ve come",p:"Your plan is a trail of lessons organized in chapters. Each completed day lights the next step.",li:["Clear chapters and modules","Progress you can see","Always know what’s next"]}
+  {k:"listen",ico:"🎧",tab:"Listen",h:"Bible study you can listen to",p:"Not just Scripture read aloud — an in-depth, guided study you can play while you drive, walk or cook. Prefer reading? Switch with one tap.",li:["About 10 minutes a day","Context, meaning and application","Read or listen — your choice"],
+   s:[["listen","Press play on today’s study"],["prayer","Start with a guided prayer"]]},
+  {k:"path",ico:"🗺️",tab:"Today’s step",h:"Today’s lesson is always ready",p:"Open the app and today’s step is waiting: a prayer, the study, a quick quiz and one action. About 10 minutes — then the next lesson unlocks.",li:["You never wonder what to read","Four short parts","Progress you can see"],
+   s:[["journey","Your lesson for today"]]},
+  {k:"study",ico:"💡",tab:"Understand",h:"Understand the Bible like never before",p:"Each lesson walks you through the passage like a great teacher would — the story, the context and what it means for your life today.",li:["Clear, warm explanations","Real stories that make it click","No theology degree needed"],
+   s:[["study","An in-depth study, in plain words"],["prayer","Prayers that put it into words"]]},
+  {k:"quiz",ico:"❓",tab:"Quiz",h:"Remember what you learned",p:"A few quick questions lock in what you studied — with a friendly explanation for every answer.",li:["Takes under a minute","Instant explanations","See how much is taking root"],
+   s:[["quiz-intro","Let’s make it stick"],["quiz-q","Quick questions"],["quiz-ok","Friendly explanations"],["quiz-sum","See what’s taking root"]]},
+  {k:"live",ico:"✨",tab:"Live it",h:"Turn what you learn into life",p:"Every lesson ends with one small, practical action and a moment to reflect — so God’s Word shows up in your day.",li:["One simple action a day","A reflection prompt","Celebrate every step"],
+   s:[["action","One small action for today"],["action-done","Tap when it’s done"],["done","You did great today!"],["reflect","Write your reflection"]]},
+  {k:"stories",ico:"🌅",tab:"Verse of the day",h:"A verse to carry with you",p:"Beautiful daily verses, like stories — plus audio podcasts to go deeper when you have a few extra minutes.",li:["New verses every day","Share them with one tap","Audio podcasts to explore"],
+   s:[["story","Verses of the day"],["explore","Explore more"]]},
+  {k:"community",ico:"🤝",tab:"Pray together",h:"You don’t walk alone",p:"Share a prayer request — anonymously if you prefer — and pray for others in one tap. One community, in English and Spanish.",li:["Post anonymously if you want","Tap to pray for someone","Report anything inappropriate"],
+   s:[["community","Example requests"]]},
+  {k:"bible",ico:"📖",tab:"Full Bible",h:"The whole Bible, beautifully simple",p:"Read any book and chapter in a clean, modern English translation — or listen to it.",li:["All 66 books","Comfortable reading view","Listen to any chapter"],
+   s:[["bible","The full Bible"]]}
 ];
-let featIdx=0;
+const scr=$("#fscreen");
+scr.innerHTML=FEATS.map((f,i)=>`<div class="demo ${i?"":"on"}" data-f="${f.k}">${f.s.map((x,j)=>`<img class="shot ${j?"":"on"}" src="img/app/${x[0]}.webp" alt="VEREDA app: ${esc(x[1])}" ${i?'loading="lazy"':""}>`).join("")}<span class="demo-flag">${esc(f.s[0][1])}</span></div>`).join("");
+let featIdx=0, slide=0, slideT=null;
 $("#ftabs").innerHTML=FEATS.map((f,i)=>`<button data-f="${i}" class="${i?"":"on"}"><span>${f.ico}</span>${f.tab}</button>`).join("");
+function drawSlide(){
+  const f=FEATS[featIdx], d=scr.querySelector(`[data-f="${f.k}"]`);
+  d.querySelectorAll(".shot").forEach((im,j)=>im.classList.toggle("on",j===slide));
+  $("#scap").textContent=f.s[slide][1]+(f.k==="community"?" · names shown are examples":"");
+  $("#sdots").innerHTML=f.s.length>1?f.s.map((_,j)=>`<i class="${j===slide?"on":""}"></i>`).join(""):"";
+}
+function autoSlide(){ clearInterval(slideT); const f=FEATS[featIdx]; if(f.s.length>1) slideT=setInterval(()=>{ slide=(slide+1)%f.s.length; drawSlide(); },3200); }
 function showFeat(i,user){
-  featIdx=i; const f=FEATS[i];
+  featIdx=i; slide=0; const f=FEATS[i];
   $$("#ftabs button").forEach((b,j)=>b.classList.toggle("on",j===i));
-  $$("#fscreen .demo").forEach(d=>d.classList.toggle("on",d.dataset.f===f.k));
-  $("#fcopy").innerHTML=`<h3>${f.h}</h3><p>${f.p}</p><ul>${f.li.map(x=>`<li>${x}</li>`).join("")}</ul><div class="try"><i></i>Try it on the phone</div>`;
+  scr.querySelectorAll(".demo").forEach(d=>d.classList.toggle("on",d.dataset.f===f.k));
+  $("#fcopy").innerHTML=`<h3>${f.h}</h3><p>${f.p}</p><ul>${f.li.map(x=>`<li>${x}</li>`).join("")}</ul>${f.s.length>1?'<div class="try"><i></i>Tap the phone to see the next screen</div>':""}`;
+  drawSlide(); autoSlide();
   if(user){ ev("feat_"+f.k); engage(); const b=$$("#ftabs button")[i]; b&&b.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}); }
-  if(f.k==="stories") startStories(); else stopStories();
 }
 $$("#ftabs button").forEach(b=>b.onclick=()=>showFeat(+b.dataset.f,true));
-// daily path demo
-const items=$$("[data-f=path] .d-item");
-items.forEach(it=>it.onclick=()=>{ it.classList.toggle("done"); const n=$$("[data-f=path] .d-item.done").length; $("#pbar").style.width=(n/items.length*100)+"%";
-  const all=n===items.length; $("#ddone").classList.toggle("on",all); $("#streak").textContent=all?1:0; if(all) ev("demo_day"); });
-// read/listen
-$$("#seg button").forEach(b=>b.onclick=()=>{ $$("#seg button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); const l=b.dataset.m==="listen"; $("#dread").classList.toggle("off",l); $("#dplay").classList.toggle("on",l); if(l) ev("demo_listen"); });
-// explain
-$("#explainBtn").onclick=()=>{ $("#explain").classList.add("on"); $("#explainBtn").style.display="none"; ev("demo_explain"); };
-// quiz
-const Q={o:["It reveals every detail of our future","It lights the path one step at a time","It removes every difficulty from our lives","It replaces the need for prayer"],a:1,e:"The lamp image shows God guiding us step by step — enough light to keep walking, not a full map of the future."};
-$("#qopts").innerHTML=Q.o.map((o,i)=>`<button class="q-opt" data-i="${i}">${o}</button>`).join("");
-$$("#qopts .q-opt").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; $$("#qopts .q-opt").forEach(x=>x.classList.remove("ok","no")); b.classList.add(i===Q.a?"ok":"no"); $$("#qopts .q-opt")[Q.a].classList.add("ok");
-  $("#qfb").innerHTML=(i===Q.a?"✅ <b>That’s right!</b> ":"💡 <b>Almost.</b> ")+Q.e; $("#qfb").classList.add("on"); ev("demo_quiz"); });
-// stories
-const ST=[["peak-dawn","Your word is a lamp to my feet, and a light for my path.","Psalm 119:105"],["pier-sunrise","In nothing be anxious, but in everything, by prayer and petition with thanksgiving, let your requests be made known to God.","Philippians 4:6"],["meadow-path","“Come to me, all you who labor and are heavily burdened, and I will give you rest.”","Matthew 11:28"],["lake-autumn","“Be still, and know that I am God.”","Psalm 46:10"]];
-const stEl=$("#stories"); ST.forEach((s,i)=>{ const d=document.createElement("div"); d.className="story"+(i?"":" on"); d.style.backgroundImage=`url(/app/images/stories/${s[0]}.webp)`; d.innerHTML=`<div class="tx">${s[1]}<small>${s[2]}</small></div>`; stEl.insertBefore(d,$("#stbars")); });
-$("#stbars").innerHTML=ST.map(()=>"<i><b></b></i>").join("");
-let stI=0, stT=null, stStart=0;
-function stDraw(){ $$("#stories .story").forEach((s,j)=>s.classList.toggle("on",j===stI)); $$("#stbars b").forEach((b,j)=>{ b.style.transition="none"; b.style.width=j<stI?"100%":"0%"; }); const cur=$$("#stbars b")[stI]; requestAnimationFrame(()=>{ cur.style.transition="width 5s linear"; cur.style.width="100%"; }); }
-function startStories(){ stopStories(); stDraw(); stT=setInterval(()=>{ stI=(stI+1)%ST.length; stDraw(); },5000); }
-function stopStories(){ if(stT) clearInterval(stT); stT=null; }
-$("#sttap").onclick=()=>{ stI=(stI+1)%ST.length; startStories(); ev("demo_story"); };
+scr.onclick=()=>{ const f=FEATS[featIdx]; if(f.s.length<2) return; slide=(slide+1)%f.s.length; drawSlide(); autoSlide(); ev("demo_"+f.k); };
 showFeat(0);
-// community
-$$(".amen").forEach(b=>b.onclick=()=>{ const on=b.classList.toggle("on"); const n=+b.dataset.n+(on?1:0); b.querySelector("span").textContent=n; ev("demo_amen"); });
 
 /* ---------- 7. day timeline ---------- */
 const DAY=[
-  {time:"Morning",clock:"7:30 AM",icon:"☕",title:"10 minutes with your coffee",text:"Read or listen to today’s short passage — explained in plain words.",mock:{tag:"Day 4 · 10 min",head:"Today’s word",body:"“Ask and it will be given to you; seek and you will find.”",ref:"Luke 11:9",btn:"Read · Listen"}},
+  {time:"Morning",clock:"7:30 AM",icon:"🎧",title:"10 minutes on the way to work",text:"Press play on today’s study — explained so clearly it finally makes sense.",mock:{tag:"Lesson 4 · 10 min",head:"Today’s study",body:"“Ask and it will be given to you; seek and you will find.”",ref:"Luke 11:9",btn:"▶ Listen"}},
   {time:"Afternoon",clock:"1:00 PM",icon:"⚡",title:"One verse for the hard moment",text:"Carry one passage into your day — and one small action to live it out.",mock:{tag:"Today’s action",head:"Before you reply…",body:"Pause, breathe, and answer with kindness this time.",ref:"James 1:19",btn:"Mark as done"}},
-  {time:"Evening",clock:"9:00 PM",icon:"🌙",title:"Slow down and stay",text:"A short quiz and a prayer to end your day close to God.",mock:{tag:"Day complete",head:"Your lamp is lit 🪔",body:"Quiz done · Prayer said · Tomorrow’s step unlocked.",ref:"Day 4 of 28",btn:"See tomorrow"}}
+  {time:"Evening",clock:"9:00 PM",icon:"🌙",title:"Slow down and stay",text:"A short quiz and a prayer to end your day close to God.",mock:{tag:"Lesson complete",head:"Your lamp is lit 🪔",body:"Quiz done · Prayer said · Next lesson unlocked.",ref:"🔥 4-day streak",btn:"See what’s next"}}
 ];
 let dayI=0, dayT=null;
 $("#dtabs").innerHTML=DAY.map((d,i)=>`<button class="dtab reveal ${i?"":"on"}" data-d="${i}"><span class="ico">${d.icon}</span><span><small>${d.time} · ${d.clock}</small><b>${d.title}</b><p>${d.text}</p></span><span class="tl"></span></button>`).join("");
@@ -959,28 +989,67 @@ showDay(0); autoDay();
 /* ---------- 8. video ---------- */
 const vid=$("#vid"), vplay=$("#vplay"); let marks={};
 vplay.onclick=()=>{ vid.muted=false; vid.play().catch(()=>{}); ev("video_play"); engage(); };
-vid.onplay=()=>vplay.classList.add("hide");
-vid.onpause=()=>{ if(!vid.ended) { vplay.classList.remove("hide"); vplay.lastChild.textContent="Continue watching"; } };
-vid.onended=()=>{ vplay.classList.remove("hide"); vplay.lastChild.textContent="Watch again"; ev("video_end"); };
+vid.onplay=()=>{ vplay.classList.add("hide"); if(Music.on){ Music.stop(); Music.paused=true; } };
+vid.onpause=()=>{ if(Music.paused&&Music.wanted&&!vid.ended){ Music.paused=false; Music.start(); } if(!vid.ended) { vplay.classList.remove("hide"); vplay.lastChild.textContent="Continue watching"; } };
+vid.onended=()=>{ if(Music.paused&&Music.wanted){ Music.paused=false; Music.start(); } vplay.classList.remove("hide"); vplay.lastChild.textContent="Watch again"; ev("video_end"); };
 vid.ontimeupdate=()=>{ if(!vid.duration) return; const p=vid.currentTime/vid.duration; $("#vbar").style.width=(p*100)+"%"; [25,50,75].forEach(m=>{ if(p*100>=m && !marks[m]){ marks[m]=1; ev("video_"+m); } }); };
 vid.onclick=()=>{ vid.paused?vid.play():vid.pause(); };
 
-/* ---------- 9. plan ---------- */
-const WEEKS=[["Step into Light","Do I know Jesus?","Grace vs Works","Talking With God"],["Walking by Faith","When God Feels Silent","Forgiveness That Frees","The Power of Rest"],["Fear Not","Love in Action","Hearing God's Voice","Strength in Weakness"],["Your Calling","Living Generously","Hope That Holds","Walking It Out Daily"]];
-$("#wtabs").innerHTML=WEEKS.map((w,i)=>`<button class="${i?"":"on"}" data-w="${i}">Week ${i+1}</button>`).join("");
-function showWeek(i){ $$("#wtabs button").forEach((b,j)=>b.classList.toggle("on",j===i)); $("#days").innerHTML=WEEKS[i].map((d,k)=>`<div class="dayrow" style="animation-delay:${k*60}ms"><small>Day ${i*7+k+1}</small><div class="c${k}">${esc(d)}</div></div>`).join(""); }
-$$("#wtabs button").forEach(b=>b.onclick=()=>{ showWeek(+b.dataset.w); ev("weeks_tab"); });
-showWeek(0);
+
+/* ---------- background music: original ambient worship pad, generated in the browser ---------- */
+const Music={ctx:null,on:false,master:null,timer:null,k:0,wanted:true,
+  init(){ if(this.ctx) return true; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return false; }
+    const c=this.ctx; this.master=c.createGain(); this.master.gain.value=0;
+    // simple generated reverb
+    const len=c.sampleRate*3.5, ir=c.createBuffer(2,len,c.sampleRate);
+    for(let ch=0;ch<2;ch++){ const d=ir.getChannelData(ch); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6); }
+    this.rev=c.createConvolver(); this.rev.buffer=ir; const wet=c.createGain(); wet.gain.value=.55; const dry=c.createGain(); dry.gain.value=.5;
+    this.bus=c.createGain(); this.bus.connect(dry); this.bus.connect(this.rev); this.rev.connect(wet); dry.connect(this.master); wet.connect(this.master); this.master.connect(c.destination);
+    return true; },
+  // D major worship progression: D – Bm – G – A  (I – vi – IV – V)
+  CH:[[146.83,220,293.66,369.99],[123.47,246.94,293.66,369.99],[98,196,246.94,293.66],[110,220,277.18,329.63]],
+  MEL:[587.33,659.25,739.99,880,739.99,659.25,587.33,493.88],
+  pad(f,t,dur){ const c=this.ctx; [0,-6,6].forEach(det=>{ const o=c.createOscillator(), g=c.createGain(), lp=c.createBiquadFilter();
+      o.type=det?"sawtooth":"triangle"; o.frequency.value=f; o.detune.value=det; lp.type="lowpass"; lp.frequency.value=det?700:1400;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(det?.018:.05,t+2.2); g.gain.linearRampToValueAtTime(det?.014:.04,t+dur-1.5); g.gain.linearRampToValueAtTime(0,t+dur+1.5);
+      o.connect(lp); lp.connect(g); g.connect(this.bus); o.start(t); o.stop(t+dur+1.6); }); },
+  bell(f,t){ const c=this.ctx, o=c.createOscillator(), g=c.createGain(); o.type="sine"; o.frequency.value=f;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.035,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+3.2); o.connect(g); g.connect(this.bus); o.start(t); o.stop(t+3.3); },
+  loop(){ if(!this.on) return; const t=this.ctx.currentTime+.05, dur=8, ch=this.CH[this.k%4];
+    ch.forEach(f=>this.pad(f,t,dur)); this.pad(ch[0]/2,t,dur);
+    for(let i=0;i<3;i++){ if(Math.random()<.75) this.bell(this.MEL[(this.k*3+i*2+Math.floor(Math.random()*3))%this.MEL.length],t+1+i*2.4+Math.random()*.6); }
+    this.k++; this.timer=setTimeout(()=>this.loop(),dur*1000); },
+  start(){ if(!this.init()) return; this.ctx.resume(); if(this.on) return; this.on=true; this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+    this.master.gain.setValueAtTime(this.master.gain.value,this.ctx.currentTime); this.master.gain.linearRampToValueAtTime(.9,this.ctx.currentTime+3); this.loop(); ui(); },
+  stop(){ if(!this.ctx||!this.on) return; this.on=false; clearTimeout(this.timer); this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+    this.master.gain.setValueAtTime(this.master.gain.value,this.ctx.currentTime); this.master.gain.linearRampToValueAtTime(0,this.ctx.currentTime+1.2); ui(); }
+};
+function ui(){ $("#music").classList.toggle("on",Music.on); $("#mlabel").textContent=Music.on?"Music on":"Music off"; }
+try{ if(localStorage.getItem("lp_music")==="off") Music.wanted=false; }catch(e){}
+const firstTouch=()=>{ removeEventListener("pointerdown",firstTouch,true); removeEventListener("keydown",firstTouch,true); if(Music.wanted && (!vid||vid.paused)) Music.start(); };
+addEventListener("pointerdown",firstTouch,true); addEventListener("keydown",firstTouch,true);
+$("#music").addEventListener("click",e=>{ e.stopPropagation(); if(Music.on){ Music.wanted=false; Music.stop(); try{localStorage.setItem("lp_music","off")}catch(_){} ev("music_off"); } else { Music.wanted=true; Music.start(); try{localStorage.removeItem("lp_music")}catch(_){} ev("music_on"); } });
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) Music.stop(); else if(Music.wanted && Music.ctx && vid.paused) Music.start(); });
+/* ---------- 9. journey ---------- */
+const CH1=["A Lamp for Your Path","Called by Name","Loved Before You Earned It","Pray Without Pretending"];
+const CHAPS=["Walking With Jesus","The Power of Prayer","Freedom From Worry","Hearing God Every Day","Habits of the Heart","People Who Trusted God"];
+$("#trail").innerHTML=`<div class="mod"><span class="ico">🌳</span><span><small>Module 1</small><b>Rooted &amp; Unshakable</b></span></div>
+  <div class="chap">Chapter 1 · Rooted in Faith</div>
+  <div class="nodes">${CH1.map((t,i)=>`<div class="node ${i===0?"done":i===1?"now":"lock"}" style="animation-delay:${i*80}ms"><div class="dot">${i===0?"✓":i===1?"▶":"🔒"}</div><span>${t}<small>${i===0?"Completed":i===1?"Today · 10 min":"Unlocks next"}</small></span></div>`).join("")}</div>
+  <div class="chap">Next chapters</div>
+  <div class="chips">${CHAPS.map(c=>`<span>🔒 ${c}</span>`).join("")}</div>
+  <div class="mod locked"><span class="ico">💞</span><span><small>Module 2</small><b>Love That Builds</b></span></div>
+  <div class="trail-end">…and the path keeps going.</div>`;
 function personalize(){
   const f=painKey?PAIN[painKey].label:null;
-  $("#focus").innerHTML=`<div><span style="font-size:22px">🎯</span><span><small>Main challenge</small><b>${f||"Building a lasting habit"}</b></span></div><div><span style="font-size:22px">⏱️</span><span><small>Daily time</small><b>About 10 minutes</b></span></div>`;
+  $("#focus").innerHTML=`<div><span style="font-size:22px">🎯</span><span><small>Main challenge</small><b>${f||"Building a lasting habit"}</b></span></div><div><span style="font-size:22px">🎧</span><span><small>Daily time</small><b>About 10 minutes · listen or read</b></span></div>`;
   if(f){ $("#pfocus").style.display="flex"; $("#pfocus").innerHTML=`🎯 <span>Your plan focuses on: <b>${f}</b></span>`; }
 }
 try{ const k=sessionStorage.getItem("lp_pain"); if(k&&PAIN[k]) painKey=k; }catch(e){}
 personalize();
 
 /* ---------- 11. time slider ---------- */
-function drawTime(){ const m=+$("#trange").value; $("#tm").textContent=m; $("#tpct").textContent=(m/1440*100).toFixed(1)+"%"; $("#thrs").textContent=(m*28/60).toFixed(1).replace(".0","")+" h"; $("#tdays").textContent="28"; }
+function drawTime(){ const m=+$("#trange").value; $("#tm").textContent=m; $("#tpct").textContent=(m/1440*100).toFixed(1)+"%"; $("#thrs").textContent=Math.round(m*365/60)+" h"; $("#tdays").textContent="365"; }
 $("#trange").oninput=()=>{ drawTime(); ev("time_slider"); }; drawTime();
 
 /* ---------- 13. pricing ---------- */
@@ -1036,6 +1105,8 @@ function checkout(){
 
 /* ---------- 14. FAQ ---------- */
 const FAQ=[
+  ["Is VEREDA just an audio Bible?","No. An audio Bible reads chapters aloud. VEREDA is an in-depth Bible study: each lesson explains the context, the meaning and how it applies to your life — in about 10 minutes you can listen to or read."],
+  ["Does the plan end after a few weeks?","No. VEREDA is an ongoing journey organized in lessons, chapters and modules. Each lesson you complete unlocks the next, and the path keeps growing."],
   ["What if I don't understand what I'm reading?","Every reading comes with a plain-language explanation and key takeaways, so you always know what the passage means and why it matters for your life today."],
   ["What if I can't stay consistent?","Sessions take about 10 minutes and fit any time of day. A clear next step helps you keep going, and missing a day never resets your progress."],
   ["Do I need to know the Bible already?","Not at all. The plan starts where you are, whether you're opening the Bible for the first time or coming back after a long time."],
