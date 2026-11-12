@@ -25,7 +25,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="/geo-price.js"></script>
-<script src="lenis.min.js" defer></script>
+<script src="/bible-study/lenis.min.js" defer></script>
 <style>
 :root{
   --ink:#16202c;--text:#2d3440;--muted:#69707c;--line:#dde8f1;
@@ -249,28 +249,70 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 }
 /* bento: more inside */
 .more{background:linear-gradient(180deg,var(--cream),#e4eff9)}
-.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:36px}
-.bx{position:relative;height:520px;border-radius:28px;overflow:hidden;padding:24px 22px;color:#fff;box-shadow:0 20px 50px rgba(14,60,100,.12);transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s;isolation:isolate}
-.bx:hover{transform:translateY(-8px);box-shadow:0 30px 70px rgba(14,60,100,.2)}
-.bx h3{font-family:var(--sans);font-size:24px;font-weight:600;color:#fff;margin-bottom:8px;position:relative;z-index:2}
-.bx p{font-size:14px;line-height:1.45;color:rgba(255,255,255,.85);position:relative;z-index:2}
-.b1{background:linear-gradient(180deg,#5b89c4,#9db7e0)}.b2{background:linear-gradient(180deg,#a99bdc,#cbbcec)}.b3{background:linear-gradient(180deg,#2f7f95,#5aa6b3)}.b4{background:linear-gradient(180deg,#d48aa8,#ecb7c8)}
-.bx-art{position:absolute;inset:0;z-index:0}.bx-art img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
-.bx-art:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(40,80,130,.85),rgba(40,80,130,.25) 45%,rgba(20,40,70,.35))}
-.b1:hover .bx-art img{transform:scale(1.06)}
-.bx-phone{position:absolute;left:50%;bottom:-70px;width:200px;margin-left:-100px;border-radius:30px;overflow:hidden;border:7px solid #0b1118;box-shadow:0 20px 40px rgba(0,0,0,.3);transform:translateY(40px);transition:transform 1s cubic-bezier(.2,.8,.2,1) .2s;z-index:1}
-.bx.in .bx-phone{transform:none}
-.bx:hover .bx-phone{transform:translateY(-10px)}
-.bx-phone img{width:100%;display:block}
-.gchip{position:absolute;z-index:3;display:flex;gap:10px;align-items:center;text-align:left;padding:10px 12px;border-radius:16px;background:rgba(18,36,62,.55);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 10px 26px rgba(0,0,0,.15);font-size:13.5px;font-weight:700;color:#fff;animation:bob 6s ease-in-out infinite}
-.gchip small{display:block;font-size:11px;font-weight:600;opacity:.85}
-.gchip .gi{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.3);display:grid;place-items:center;font-size:16px;flex:none}
-.gq{left:16px;right:16px;bottom:22px;background:rgba(255,255,255,.18)!important;font-family:var(--serif);font-size:16px;font-weight:600}
-.gt{left:14px;top:200px;animation-delay:-2s}
-.gb{right:12px;top:215px;animation-delay:-1s}
-.gtag{position:absolute;z-index:3;font-size:12px;font-weight:700;color:#fff;background:rgba(18,36,62,.55);border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:6px 11px;border-radius:999px;animation:bob 5s ease-in-out infinite}
-.t1{left:12px;top:300px;animation-delay:-1.5s}.t2{right:12px;top:330px;animation-delay:-3s}.t3{left:16px;top:410px;animation-delay:-.5s}
-@media (max-width:1000px){.bento{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:30px -16px 0;padding:0 16px 14px;scrollbar-width:none}.bento::-webkit-scrollbar{display:none}.bx{flex:0 0 78%;scroll-snap-align:center;height:500px}}
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px;text-align:left}
+.rx{position:relative;height:540px;border-radius:30px;overflow:hidden;padding:26px 22px 0;color:#fff;isolation:isolate;box-shadow:0 18px 44px rgba(14,60,100,.10);transition:transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .6s}
+.rx:hover{transform:translateY(-6px);box-shadow:0 30px 70px rgba(14,60,100,.18)}
+.rx h3{font-family:var(--sans);font-size:23px;font-weight:600;letter-spacing:-.01em;color:#fff;margin:0 0 10px;position:relative;z-index:4;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rx h3 .soon{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.25);border:1px solid rgba(255,255,255,.4)}
+.rx>p{font-size:14px;line-height:1.45;color:rgba(255,255,255,.88);position:relative;z-index:4;margin:0}
+.r1{background:linear-gradient(180deg,#5d8fc8 0%,#86aee0 55%,#a9c6ea 100%)}
+.r2{background:linear-gradient(180deg,#a59bd8 0%,#bdb0e6 50%,#e3d6f1 100%)}
+.r3{background:linear-gradient(180deg,#2c6f8e 0%,#4e93b4 50%,#7ab7d3 100%)}
+.r4{background:linear-gradient(180deg,#d98bb0 0%,#e7a9c4 50%,#f1d3e0 100%)}
+/* background photo layers */
+.rx-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.rx-bg img{position:absolute;width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}
+.rx.in .rx-bg img{transform:scale(1)}
+.rx:hover .rx-bg img{transform:scale(1.05)}
+.r1 .rx-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#5d8fc8 0%,rgba(93,143,200,.85) 30%,rgba(93,143,200,0) 62%)}
+.r3 .rx-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#2c6f8e 0%,rgba(44,111,142,.8) 34%,rgba(44,111,142,0) 62%,rgba(10,30,45,.35) 100%)}
+.r1 .rx-bg img{object-position:50% 70%}
+.r3 .rx-bg img{object-position:72% 50%}
+/* glass bubbles */
+.gls{position:absolute;z-index:5;color:#fff;background:linear-gradient(135deg,rgba(255,255,255,.34),rgba(255,255,255,.14));border:1px solid rgba(255,255,255,.42);backdrop-filter:blur(18px) saturate(1.35);-webkit-backdrop-filter:blur(18px) saturate(1.35);box-shadow:0 14px 34px rgba(20,30,60,.18),inset 0 1px 0 rgba(255,255,255,.55);opacity:0;transform:translateY(26px) scale(.94);filter:blur(4px);transition:opacity .9s ease,transform 1.1s cubic-bezier(.2,.9,.2,1.15),filter .9s ease}
+.rx.in .gls{opacity:1;transform:none;filter:none}
+.gls.f{animation:flt 7s ease-in-out infinite}
+.gls.f2{animation:flt 8s ease-in-out -2.5s infinite}
+.gls.f3{animation:flt 6.5s ease-in-out -4s infinite}
+@keyframes flt{0%,100%{translate:0 0}50%{translate:0 -9px}}
+.gls.dark{background:linear-gradient(135deg,rgba(70,70,80,.62),rgba(40,40,50,.5));border-color:rgba(255,255,255,.22)}
+/* card 1 verse */
+.g-verse{left:16px;right:16px;bottom:18px;border-radius:24px;padding:18px 18px;display:flex;align-items:center;gap:14px;transition-delay:.25s}
+.g-verse b{display:block;font-size:17.5px;font-weight:600;line-height:1.22;letter-spacing:-.01em}
+.g-verse small{display:block;font-size:12px;opacity:.75;margin-top:6px}
+.ico3d{width:58px;height:58px;flex:none;filter:drop-shadow(0 8px 14px rgba(20,60,120,.35))}
+/* card 2 prayer phone */
+.rphone{position:absolute;left:50%;bottom:-6px;width:242px;margin-left:-121px;height:350px;border-radius:38px 38px 0 0;background:#0d0f14;padding:8px 8px 0;z-index:2;box-shadow:0 20px 50px rgba(40,20,90,.3);transform:translateY(50px);transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .1s}
+.rx.in .rphone{transform:none}
+.rphone .scr{height:100%;border-radius:31px 31px 0 0;background:linear-gradient(180deg,#f3f1fa,#ffffff 40%);overflow:hidden;position:relative;color:#1b1d24}
+.rphone .sb{display:flex;justify-content:space-between;align-items:center;padding:10px 18px 0;font-size:12px;font-weight:700}
+.rphone .isl{width:74px;height:21px;border-radius:12px;background:#0d0f14}
+.rphone .sig{display:flex;gap:3px;align-items:flex-end}.rphone .sig i{width:3px;background:#1b1d24;border-radius:1px}
+.rphone .hd{display:flex;align-items:center;padding:14px 14px 6px;font-size:11.5px;font-weight:600}
+.rphone .hd span{flex:1;text-align:center;margin-right:12px}
+.rphone .pr{font-family:Georgia,"Times New Roman",serif;font-size:14px;line-height:1.16;padding:58px 16px 0;color:#1b1d24}
+.rphone .mus{margin:12px 12px 0;background:#fff;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.08);display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:10px;font-weight:600}
+.rphone .mus .th{width:24px;height:24px;border-radius:7px;background:radial-gradient(circle at 40% 40%,#f7c4d4,#d68aa6)}
+.rphone .mus .ln{flex:1}.rphone .mus .ln i{display:block;height:2px;background:#e2e2e8;margin-top:4px;border-radius:2px}
+.rphone .mus svg{width:12px;height:12px}
+.rphone .amn{margin:10px 12px 0;background:#2368f0;color:#fff;border-radius:10px;text-align:center;font-size:11px;font-weight:600;padding:9px}
+.g-prayed{left:12px;right:12px;top:226px;border-radius:24px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;white-space:nowrap;padding:11px 12px!important;background:linear-gradient(135deg,rgba(150,140,190,.62),rgba(120,110,170,.5))!important;transition-delay:.35s}
+.avs{display:flex}.avs span{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.85);margin-left:-9px;display:grid;place-items:center;font-size:12px;font-weight:600;color:#fff;overflow:hidden}
+.avs span:first-child{margin-left:0}
+.avs img{width:100%;height:100%;object-fit:cover}
+.avs .c1{background:#7aa7e6}.avs .c2{background:#8fbbe9}
+/* card 3 assistant */
+.g-ai{left:16px;right:16px;bottom:18px;border-radius:26px;padding:18px 16px 16px;transition-delay:.3s}
+.g-ai .row{display:flex;gap:14px;align-items:center}
+.g-ai .row b{font-size:15.5px;font-weight:600;line-height:1.2}
+.g-ai .btn-ai{margin-top:14px;display:block;width:100%;text-align:center;padding:13px;border-radius:14px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);font-size:15.5px;font-weight:600;color:#fff}
+/* card 4 content */
+.rphone2{position:absolute;left:50%;top:268px;width:196px;margin-left:-86px;border-radius:32px 32px 0 0;background:#0d0f14;padding:7px 7px 0;z-index:2;box-shadow:0 20px 50px rgba(90,20,60,.28);transform:translateY(60px) rotate(2deg);transition:transform 1.1s cubic-bezier(.2,.8,.2,1) .1s}
+.rx.in .rphone2{transform:rotate(2deg)}
+.rphone2 img{width:100%;display:block;border-radius:26px 26px 0 0}
+.pill{position:absolute;z-index:5;padding:9px 15px;border-radius:999px;font-size:14px;font-weight:500;white-space:nowrap}
+.p1{right:12px;top:262px;transition-delay:.3s}.p2{left:10px;top:316px;transition-delay:.45s}.p3{right:10px;top:372px;transition-delay:.6s}.p4{right:18px;top:446px;transition-delay:.75s}.p5{left:10px;top:494px;transition-delay:.9s}
+@media (max-width:1100px){.bento{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;margin:30px -16px 0;padding:0 16px 14px;scrollbar-width:none}.bento::-webkit-scrollbar{display:none}.rx{flex:0 0 300px;scroll-snap-align:center}}
 /* app showcase */
 .showcase{background:var(--ink);color:#d8e0ea;overflow:hidden}
 .showcase h2{color:#fff}.showcase h2 em{color:#8fc3ea}
@@ -848,29 +890,43 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
     <h2 class="reveal">Everything you need to <em>grow every day</em></h2>
   </div>
   <div class="bento">
-    <article class="bx b1 reveal">
-      <h3>Verse of the day</h3><p>A new verse every morning to anchor your day — before the noise begins.</p>
-      <div class="bx-art"><img src="/app/images/stories/peak-dawn.webp" alt="" loading="lazy"></div>
-      <div class="gchip gq"><span class="gi">✦</span><span>“If anyone is in Christ, he is a new creation.”<small>2 Corinthians 5:17</small></span></div>
+    <article class="rx r1 reveal">
+      <h3>Verse of the day</h3><p>A fresh verse every morning to steady your heart before the day gets loud.</p>
+      <div class="rx-bg"><img src="/app/images/stories/peak-dawn.webp" alt="" loading="lazy"></div>
+      <div class="gls g-verse f"><svg class="ico3d" viewBox="0 0 64 64"><defs><linearGradient id="cx1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#dbe9fb"/><stop offset="1" stop-color="#9fc2ee"/></linearGradient><linearGradient id="cx2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb6ea"/><stop offset="1" stop-color="#4f86cf"/></linearGradient><linearGradient id="cx3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8d3f5"/><stop offset="1" stop-color="#6f9ddb"/></linearGradient></defs>
+<path d="M32 3l25 14.5v29L32 61 7 46.5v-29z" fill="url(#cx3)" opacity=".55"/>
+<path d="M27 12h10v12h12v10H37v18H27V34H15V24h12z" transform="translate(3 3)" fill="url(#cx2)"/>
+<path d="M27 12h10v12h12v10H37v18H27V34H15V24h12z" fill="url(#cx1)"/>
+<path d="M27.5 12.5h9v3h-9zM15.5 24.5h11v2h-11z" fill="#fff" opacity=".9"/></svg><div><b>“In Christ, you are a new creation”</b><small>2 Corinthians 5:17</small></div></div>
     </article>
-    <article class="bx b2 reveal">
-      <h3>Prayer requests</h3><p>Share what’s on your heart and be lifted up by a community that prays with you.</p>
-      <div class="bx-phone"><img src="img/app/community.webp" alt="VEREDA prayer community screen" loading="lazy"></div>
-      <div class="gchip gt"><span class="gi">🙏</span><span>Pray for all<small>one tap, every request</small></span></div>
+    <article class="rx r2 reveal">
+      <h3>Prayer requests</h3><p>Share what’s on your heart and let a community of believers pray alongside you.</p>
+      <div class="rphone"><div class="scr">
+        <div class="sb"><span>9:41</span><span class="isl"></span><span class="sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span></div>
+        <div class="hd"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1b1d24" stroke-width="2.4" stroke-linecap="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span>Prayer Requests</span></div>
+        <div class="pr">Friends, please pray for me tomorrow morning — I have a medical test I’m anxious about. Asking for God’s peace and a good result. Thank you.</div>
+        <div class="mus"><span class="th"></span><span class="ln">Gentle Music for Prayer<i></i></span><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="#1b1d24"/></svg></div>
+        <div class="amn">Amen</div>
+      </div></div>
+      <div class="gls g-prayed f2"><span class="avs"><span><img src="/images/m_age_35_44.webp" alt=""></span><span class="c1">O</span><span class="c2">JR</span></span><span>558 people prayed.</span></div>
     </article>
-    <article class="bx b3 reveal">
-      <h3>Audio podcasts</h3><p>Go deeper on the go with short series on faith, Scripture and real-life questions.</p>
-      <div class="bx-phone"><img src="img/app/explore.webp" alt="VEREDA explore screen with audio podcasts" loading="lazy"></div>
-      <div class="gchip gb"><span class="gi">🎧</span><span>Honest Faith<small>4 episodes</small></span></div>
-      <div class="gtag t1">Faith</div><div class="gtag t2">Scripture</div><div class="gtag t3">Real life</div>
+    <article class="rx r3 reveal">
+      <h3>Spiritual Assistant <span class="soon">Coming soon</span></h3><p>A Bible-grounded guide for your questions and reflections — a help for your study, never a replacement for prayer, your church or your pastor.</p>
+      <div class="rx-bg"><img src="/images/break3_m.webp" alt="" loading="lazy"></div>
+      <div class="gls dark g-ai f3"><div class="row"><svg class="ico3d" viewBox="0 0 64 64"><defs><linearGradient id="sx1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9f1ff"/><stop offset="1" stop-color="#4fa3e6"/></linearGradient><radialGradient id="sx2" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#e9f7ff"/><stop offset="1" stop-color="#bfe3fb"/></radialGradient></defs>
+<path d="M32 3l25 14.5v29L32 61 7 46.5v-29z" fill="url(#sx1)"/><path d="M32 3l25 14.5L32 32 7 17.5z" fill="#fff" opacity=".35"/>
+<path d="M32 13l3.6 12.4L48 29l-12.4 3.6L32 45l-3.6-12.4L16 29l12.4-3.6z" fill="url(#sx2)"/><path d="M32 18l2 9 9 2-9 2-2 9-2-9-9-2 9-2z" fill="#fff"/></svg><b>Get guidance, daily inspiration and dive deeper into God’s world.</b></div><span class="btn-ai">Start chat</span></div>
     </article>
-    <article class="bx b4 reveal">
-      <h3>Journal &amp; streaks</h3><p>Write what God is showing you and watch your consistency grow, day after day.</p>
-      <div class="bx-phone"><img src="img/app/reflect.webp" alt="VEREDA reflection screen" loading="lazy"></div>
-      <div class="gchip gt"><span class="gi">🔥</span><span>Lamp lit<small>+50 light today</small></span></div>
+    <article class="rx r4 reveal">
+      <h3>Faith-based content</h3><p>Studies and audio series on relationships, purpose and peace, so you can keep going deeper whenever you’re ready.</p>
+      <div class="rphone2"><img src="/bible-study/img/app/explore.webp" alt="VEREDA explore screen" loading="lazy"></div>
+      <span class="gls dark pill p1 f">Character</span>
+      <span class="gls dark pill p2 f2">Self-discovery</span>
+      <span class="gls dark pill p3 f3">Deepen your faith</span>
+      <span class="gls dark pill p4 f">Parenting</span>
+      <span class="gls dark pill p5 f2">Relationships</span>
     </article>
-  </div>
-</div></section>
+  </div></section>
 
 <!-- 7. A DAY WITH VEREDA -->
 <section class="sec-white" data-sec="day"><div class="wrap">
@@ -911,10 +967,10 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
     <p class="lead reveal">VEREDA isn’t generated content. Every study is written and reviewed by a team of teachers who have spent their lives in Scripture.</p>
   </div>
   <div class="team">
-    <div class="tm reveal"><div class="tm-ph"><img src="img/team/caleb.webp" alt="Caleb Whitmor" loading="lazy"></div><h3>Caleb Whitmor</h3><p>Pedagogical coordinator · leads how every lesson is taught</p></div>
-    <div class="tm reveal d1"><div class="tm-ph"><img src="img/team/nathaniel.webp" alt="Nathaniel Hayes" loading="lazy"></div><h3>Nathaniel Hayes</h3><p>Lawyer · Bible teacher</p></div>
-    <div class="tm reveal d2"><div class="tm-ph"><img src="img/team/abigail.webp" alt="Abigail Brooks" loading="lazy"></div><h3>Abigail Brooks</h3><p>Chemical engineer and theologian · 30+ years of teaching</p></div>
-    <div class="tm reveal d3"><div class="tm-ph"><img src="img/team/eleanor.webp" alt="Eleanor Bennett" loading="lazy"></div><h3>Eleanor Bennett</h3><p>Researcher in African Christianity · missiology</p></div>
+    <div class="tm reveal"><div class="tm-ph"><img src="/bible-study/img/team/caleb.webp" alt="Caleb Whitmor" loading="lazy"></div><h3>Caleb Whitmor</h3><p>Pedagogical coordinator · leads how every lesson is taught</p></div>
+    <div class="tm reveal d1"><div class="tm-ph"><img src="/bible-study/img/team/nathaniel.webp" alt="Nathaniel Hayes" loading="lazy"></div><h3>Nathaniel Hayes</h3><p>Lawyer · Bible teacher</p></div>
+    <div class="tm reveal d2"><div class="tm-ph"><img src="/bible-study/img/team/abigail.webp" alt="Abigail Brooks" loading="lazy"></div><h3>Abigail Brooks</h3><p>Chemical engineer and theologian · 30+ years of teaching</p></div>
+    <div class="tm reveal d3"><div class="tm-ph"><img src="/bible-study/img/team/eleanor.webp" alt="Eleanor Bennett" loading="lazy"></div><h3>Eleanor Bennett</h3><p>Researcher in African Christianity · missiology</p></div>
   </div>
 </div></section>
 
@@ -1174,7 +1230,7 @@ const FEATS=[
    s:[["bible","The full Bible"]]}
 ];
 const scr=$("#fscreen");
-scr.innerHTML=FEATS.map((f,i)=>`<div class="demo ${i?"":"on"}" data-f="${f.k}">${f.s.map((x,j)=>`<img class="shot ${j?"":"on"}" src="img/app/${x[0]}.webp" alt="VEREDA app: ${esc(x[1])}" ${i?'loading="lazy"':""}>`).join("")}<span class="demo-flag">${esc(f.s[0][1])}</span></div>`).join("");
+scr.innerHTML=FEATS.map((f,i)=>`<div class="demo ${i?"":"on"}" data-f="${f.k}">${f.s.map((x,j)=>`<img class="shot ${j?"":"on"}" src="/bible-study/img/app/${x[0]}.webp" alt="VEREDA app: ${esc(x[1])}" ${i?'loading="lazy"':""}>`).join("")}<span class="demo-flag">${esc(f.s[0][1])}</span></div>`).join("");
 let featIdx=0, slide=0, slideT=null;
 $("#ftabs").innerHTML=FEATS.map((f,i)=>`<button data-f="${i}" class="${i?"":"on"}"><span>${f.ico}</span>${f.tab}</button>`).join("");
 function drawSlide(){
