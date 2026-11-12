@@ -930,18 +930,6 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
     </article>
   </div></section>
 
-<!-- 7. A DAY WITH VEREDA -->
-<section class="sec-white" data-sec="day"><div class="wrap">
-  <div class="center narrow">
-    <span class="eyebrow reveal">Fits real life</span>
-    <h2 class="reveal">What a day with VEREDA <em>feels like</em></h2>
-  </div>
-  <div class="day">
-    <div class="dtabs" id="dtabs"></div>
-    <div class="dcard reveal d1" id="dcard"></div>
-  </div>
-</div></section>
-
 <!-- 8. VIDEO TESTIMONIALS -->
 <section data-sec="video" id="video"><div class="wrap vid-grid">
   <div>
@@ -1229,22 +1217,6 @@ function showFeat(i,user){
 $$("#ftabs button").forEach(b=>b.onclick=()=>showFeat(+b.dataset.f,true));
 scr.onclick=()=>{ autoTabs=false; const f=FEATS[featIdx]; if(f.s.length<2) return; slide=(slide+1)%f.s.length; drawSlide(); autoSlide(); ev("demo_"+f.k); };
 showFeat(0); appIO.observe($("#app"));
-
-/* ---------- 7. day timeline ---------- */
-const DAY=[
-  {time:"Morning",clock:"7:30 AM",icon:"🎧",title:"10 minutes on the way to work",text:"Press play on today’s study — explained so clearly it finally makes sense.",mock:{tag:"Lesson 4 · 10 min",head:"Today’s study",body:"“Ask and it will be given to you; seek and you will find.”",ref:"Luke 11:9",btn:"▶ Listen"}},
-  {time:"Afternoon",clock:"1:00 PM",icon:"⚡",title:"One verse for the hard moment",text:"Carry one passage into your day — and one small action to live it out.",mock:{tag:"Today’s action",head:"Before you reply…",body:"Pause, breathe, and answer with kindness this time.",ref:"James 1:19",btn:"Mark as done"}},
-  {time:"Evening",clock:"9:00 PM",icon:"🌙",title:"Slow down and stay",text:"A short quiz and a prayer to end your day close to God.",mock:{tag:"Lesson complete",head:"Your lamp is lit 🪔",body:"Quiz done · Prayer said · Next lesson unlocked.",ref:"🔥 4-day streak",btn:"See what’s next"}}
-];
-let dayI=0, dayT=null;
-$("#dtabs").innerHTML=DAY.map((d,i)=>`<button class="dtab reveal ${i?"":"on"}" data-d="${i}"><span class="ico">${d.icon}</span><span><small>${d.time} · ${d.clock}</small><b>${d.title}</b><p>${d.text}</p></span><span class="tl"></span></button>`).join("");
-$$("#dtabs .reveal").forEach(el=>io.observe(el));
-function showDay(i){ dayI=i; $$("#dtabs .dtab").forEach((b,j)=>{ b.classList.remove("on"); if(j===i){ void b.offsetWidth; b.classList.add("on"); } });
-  const m=DAY[i].mock, c=$("#dcard"); c.classList.remove("swap"); void c.offsetWidth; c.classList.add("swap");
-  c.innerHTML=`<span class="tag">${m.tag}</span><h4>${m.head}</h4><div class="body">${m.body}</div><div class="ref">${m.ref}</div><span class="fake-btn">${m.btn}</span>`; }
-function autoDay(){ clearInterval(dayT); dayT=setInterval(()=>showDay((dayI+1)%DAY.length),5000); }
-$$("#dtabs .dtab").forEach(b=>b.onclick=()=>{ showDay(+b.dataset.d); autoDay(); ev("day_tab"); });
-showDay(0); autoDay();
 
 /* ---------- 8. video ---------- */
 const vid=$("#vid"), vplay=$("#vplay"); let marks={};
