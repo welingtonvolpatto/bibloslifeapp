@@ -407,7 +407,7 @@ const CONFIG = {
     age: { female: ["arch_f_age_18_34.webp","arch_f_age_35_44.webp","arch_f_age_45_54.webp","arch_f_age_55_plus.webp"],
            male:   ["arch_m_age_18_34.webp","arch_m_age_35_44.webp","arch_m_age_45_54.webp","arch_m_age_55_plus.webp"] },
     break1: {male:"break1_m.webp", female:"break1_f.webp"}, break2: {male:"break2_m.webp", female:"break2_f.webp"}, break3: {male:"break3_m.webp", female:"break3_f.webp"}, break4: {male:"break4_m.webp", female:"break4_f.webp"},
-    coach: "coach.webp"
+    coach: "coach.webp", coach_female: "coach_female.webp"
   },
   brandName: "VEREDA",
   links: { terms: "#", privacy: "#", subscription: "#", cookies: "#", contact: "#" },
@@ -840,7 +840,7 @@ const R = {
       <div class="o-journey">
         <div class="tabs">${C.weeks.map((w,i)=>`<button class="${i===0?'on':''}" data-w="${i}">Semana ${i+1}</button>`).join('')}</div>
         <div class="tl" id="tl"></div>
-        <img class="coach" src="${C.img}${C.images.coach}" alt="" onerror="this.style.display='none'">
+        <img class="coach" src="${C.img}${state.gender==='female'?C.images.coach_female:C.images.coach}" alt="" onerror="this.style.display='none'">
         <div class="jf"><b>Sigue acercándote a Dios</b><span>Desbloquea tu camino devocional completo</span></div>
       </div>
       <div class="o-card o-get"><h3>Lo que recibes con <span class="hl">${esc(C.brandName)}</span></h3>
