@@ -701,6 +701,10 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 .uvp-day .upr{margin-top:10px;padding-top:10px;border-top:1px dashed #d6e3ee;font-size:14.5px;color:var(--muted)}
 .uvp-day .upr b{color:#e0784f}
 @media(max-width:760px){.uvp-split,.uvp-day{grid-template-columns:1fr}.uvp .btn{white-space:normal;text-align:center}}
+.feat-tabs button{position:relative;overflow:hidden}
+.feat-tabs button .pg{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--blue);border-radius:3px}
+.feat-tabs button.on.run .pg{animation:pgfill var(--dur,4s) linear forwards}
+@keyframes pgfill{to{width:100%}}
 </style>
 </head>
 <body>
@@ -1196,25 +1200,35 @@ const FEATS=[
 const scr=$("#fscreen");
 scr.innerHTML=FEATS.map((f,i)=>`<div class="demo ${i?"":"on"}" data-f="${f.k}">${f.s.map((x,j)=>`<img class="shot ${j?"":"on"}" src="/bible-study/img/app/${x[0]}.webp" alt="VEREDA app: ${esc(x[1])}" ${i?'loading="lazy"':""}>`).join("")}<span class="demo-flag">${esc(f.s[0][1])}</span></div>`).join("");
 let featIdx=0, slide=0, slideT=null;
-$("#ftabs").innerHTML=FEATS.map((f,i)=>`<button data-f="${i}" class="${i?"":"on"}"><span>${f.ico}</span>${f.tab}</button>`).join("");
+$("#ftabs").innerHTML=FEATS.map((f,i)=>`<button data-f="${i}" class="${i?"":"on"}"><span>${f.ico}</span>${f.tab}<i class="pg"></i></button>`).join("");
+let autoTabs=true, appInView=false; const STEP=3200;
 function drawSlide(){
   const f=FEATS[featIdx], d=scr.querySelector(`[data-f="${f.k}"]`);
   d.querySelectorAll(".shot").forEach((im,j)=>im.classList.toggle("on",j===slide));
   $("#scap").textContent=f.s[slide][1]+(f.k==="community"?" · names shown are examples":"");
   $("#sdots").innerHTML=f.s.length>1?f.s.map((_,j)=>`<i class="${j===slide?"on":""}"></i>`).join(""):"";
 }
-function autoSlide(){ clearInterval(slideT); const f=FEATS[featIdx]; if(f.s.length>1) slideT=setInterval(()=>{ slide=(slide+1)%f.s.length; drawSlide(); },3200); }
+/* auto-play: walk through every screen of a tab, then move to the next tab, until the user takes over */
+function autoSlide(){ clearInterval(slideT); const f=FEATS[featIdx];
+  const b=$$("#ftabs button")[featIdx]; $$("#ftabs button").forEach(x=>x.classList.remove("run"));
+  if(autoTabs&&appInView&&b){ b.style.setProperty("--dur",(STEP*Math.max(1,f.s.length-slide)/1000)+"s"); void b.offsetWidth; b.classList.add("run"); }
+  slideT=setInterval(()=>{ if(!appInView) return;
+    if(slide<f.s.length-1){ slide++; drawSlide(); }
+    else if(autoTabs){ const n=(featIdx+1)%FEATS.length; showFeat(n); const tb=$("#ftabs"), nb=$$("#ftabs button")[n]; if(tb&&nb) tb.scrollTo({left:nb.offsetLeft-tb.clientWidth/2+nb.clientWidth/2,behavior:"smooth"}); }
+    else if(f.s.length>1){ slide=0; drawSlide(); }
+  },STEP); }
+const appIO=new IntersectionObserver(es=>es.forEach(e=>{ appInView=e.isIntersecting; autoSlide(); }),{threshold:.35});
 function showFeat(i,user){
   featIdx=i; slide=0; const f=FEATS[i];
   $$("#ftabs button").forEach((b,j)=>b.classList.toggle("on",j===i));
   scr.querySelectorAll(".demo").forEach(d=>d.classList.toggle("on",d.dataset.f===f.k));
   $("#fcopy").innerHTML=`<h3>${f.h}</h3><p>${f.p}</p><ul>${f.li.map(x=>`<li>${x}</li>`).join("")}</ul>${f.s.length>1?'<div class="try"><i></i>Tap the phone to see the next screen</div>':""}`;
   drawSlide(); autoSlide();
-  if(user){ ev("feat_"+f.k); engage(); const b=$$("#ftabs button")[i]; b&&b.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}); }
+  if(user){ autoTabs=false; $$("#ftabs button").forEach(x=>x.classList.remove("run")); ev("feat_"+f.k); engage(); const b=$$("#ftabs button")[i]; b&&b.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"}); }
 }
 $$("#ftabs button").forEach(b=>b.onclick=()=>showFeat(+b.dataset.f,true));
-scr.onclick=()=>{ const f=FEATS[featIdx]; if(f.s.length<2) return; slide=(slide+1)%f.s.length; drawSlide(); autoSlide(); ev("demo_"+f.k); };
-showFeat(0);
+scr.onclick=()=>{ autoTabs=false; const f=FEATS[featIdx]; if(f.s.length<2) return; slide=(slide+1)%f.s.length; drawSlide(); autoSlide(); ev("demo_"+f.k); };
+showFeat(0); appIO.observe($("#app"));
 
 /* ---------- 7. day timeline ---------- */
 const DAY=[
