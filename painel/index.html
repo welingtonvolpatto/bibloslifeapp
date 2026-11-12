@@ -213,7 +213,7 @@ tr:last-child td{border-bottom:0}
         <section class="card"><h2 style="margin-top:0">Interações</h2><p class="note">Quantas pessoas fizeram cada ação (de quem viu a oferta).</p><div id="oint"></div></section>
       </div>
       <div class="grid2">
-        <section class="card"><h2 style="margin-top:0">Perguntas frequentes mais abertas</h2><p class="note">Mostram as dúvidas que pesam na decisão.</p><div id="ofaq"></div></section>
+        <section class="card"><h2 style="margin-top:0" id="ofaqT">Perguntas frequentes mais abertas</h2><p class="note" id="ofaqN">Mostram as dúvidas que pesam na decisão.</p><div id="ofaq"></div></section>
         <section class="card"><h2 style="margin-top:0">Plano escolhido ao clicar em comprar</h2><p class="note">E de qual aparelho vieram as visitas à oferta.</p><div id="oplan"></div><div id="odev" style="margin-top:14px"></div></section>
       </div>
       <section class="card" style="margin-top:22px"><h2 style="margin-top:0">Como ler</h2>
@@ -236,9 +236,10 @@ const QUIZ = {
   study:     {name:"Estudo A (/study)", url:"https://veredaapplication.vercel.app/study/", path:"/study", color:"#C9973F"},
   study2:    {name:"Estudo B (/study2)", url:"https://veredaapplication.vercel.app/study2/", path:"/study2", color:"#5b8c5a"},
   "es-arqu":   {name:"ES Arquetipo (/es-arqu)", url:"https://veredaapplication.vercel.app/es-arqu", path:"/es-arqu", color:"#8a5bb5"},
-  "es-estud2": {name:"ES Estudio (/es-estud2)", url:"https://veredaapplication.vercel.app/es-estud2", path:"/es-estud2", color:"#c2605a"}
+  "es-estud2": {name:"ES Estudio (/es-estud2)", url:"https://veredaapplication.vercel.app/es-estud2", path:"/es-estud2", color:"#c2605a"},
+  "lp-study":  {name:"Página de vendas (/bible-study)", url:"https://veredaapplication.vercel.app/bible-study/", path:"/bible-study", color:"#2b9c8f"}
 };
-const ORDER = ["archetype","study","study2","es-arqu","es-estud2"];
+const ORDER = ["archetype","study","study2","es-arqu","es-estud2","lp-study"];
 const OFFERS = {"76tfafb3":"Teste grátis 7 dias","t5216fgc":"Mensal $19,90","ah15t54l":"Trimestral $39,90"};
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -388,12 +389,33 @@ function setView(v){
   try { localStorage.setItem("vd_view", v); } catch {}
   if (v === "offer") renderOffer();
 }
+const LPSTEPS = [
+  ["view","Abriram a página",""],
+  ["pick","Escolheram a dificuldade","pergunta do topo"],
+  ["s_familiar","Viram “Sound familiar?”",""],
+  ["s_research","Viram a pesquisa (46%)",""],
+  ["s_method","Viram o método",""],
+  ["s_app","Viram o app por dentro",""],
+  ["s_video","Chegaram ao vídeo",""],
+  ["video_play","Deram play no vídeo",""],
+  ["s_plan","Viram o plano de 4 semanas",""],
+  ["s_pricing","Viram os preços",""],
+  ["buy","Clicaram em “Start my plan”","abriram o resumo"],
+  ["buy_confirm","Foram para o checkout","confirmaram → Hotmart"]
+];
+const LPINT = [["feat_any","Tocaram em alguma aba do app"],["demo_any","Testaram alguma demo do app"],["check_any","Marcaram itens em “Sound familiar?”"],["compare_new","Viram “The VEREDA way”"],["video_50","Assistiram metade do vídeo"],["video_end","Assistiram o vídeo inteiro"],["time_slider","Mexeram no controle de tempo"],["plan_change","Trocaram de plano"],["faq_open","Abriram alguma pergunta"],["buy_back","Voltaram do resumo"],["t60","Ficaram 1 min ou mais"]];
+const LPPICK = [["pick_lang","📜 Linguagem confusa"],["pick_start","🧭 Não sabe por onde começar"],["pick_consistent","⏳ Não consegue ter constância"],["pick_apply","🤔 Não sabe aplicar na vida"]];
 function renderOffer(){
   if (!ODATA) { $("#olead").textContent = "Carregando…"; return; }
-  const sel = q => OTAB === "all" || q === OTAB;
+  const sel = q => OTAB === "all" ? q !== "lp-study" : q === OTAB;
+  const isLP = OTAB === "lp-study";
   const ev = {}; (ODATA.events || []).forEach(x => { if (sel(x.quiz)) ev[x.ev] = (ev[x.ev] || 0) + x.n; });
+  const sumPre = pre => Object.keys(ev).filter(k => k.startsWith(pre)).reduce((a, k) => a + ev[k], 0);
+  const maxPre = pre => Math.max(0, ...Object.keys(ev).filter(k => k.startsWith(pre)).map(k => ev[k]));
+  if (isLP) { ev.pick = sumPre("pick_"); ev.feat_any = maxPre("feat_"); ev.demo_any = maxPre("demo_"); ev.check_any = ev.check_1 || 0; }
+  const STEPS_ = isLP ? LPSTEPS : OSTEPS, INT_ = isLP ? LPINT : OINT;
   const V = ev.view || 0, label = PERIOD.phrase || PERIOD.label.toLowerCase();
-  $("#olead").textContent = `${fmt(V)} ${V === 1 ? "pessoa viu" : "pessoas viram"} a oferta (${label}) · ${fmt(ev.buy || 0)} ${(ev.buy || 0) === 1 ? "clicou" : "clicaram"} em comprar`;
+  $("#olead").textContent = `${fmt(V)} ${isLP ? (V === 1 ? "pessoa abriu" : "pessoas abriram") + " a página de vendas" : (V === 1 ? "pessoa viu" : "pessoas viram") + " a oferta"} (${label}) · ${fmt(ev.buy || 0)} ${(ev.buy || 0) === 1 ? "clicou" : "clicaram"} em comprar`;
   const qs = ["all", ...ORDER];
   $("#otabs").innerHTML = qs.map(q => `<button class="tab ${OTAB === q ? "on" : ""}" data-oq="${q}">${q === "all" ? "Todos os quizzes" : QUIZ[q].name}</button>`).join("");
   document.querySelectorAll("#otabs .tab").forEach(b => b.onclick = () => { OTAB = b.dataset.oq; renderOffer(); });
@@ -402,10 +424,10 @@ function renderOffer(){
     $("#omed").textContent = ""; return;
   }
   // funnel
-  const drops = OSTEPS.map(([k], i) => { if (!i) return 0; const a = ev[OSTEPS[i - 1][0]] || 0, b = ev[k] || 0; return a ? Math.max(0, a - b) / a : 0; });
+  const drops = STEPS_.map(([k], i) => { if (!i) return 0; const a = ev[STEPS_[i - 1][0]] || 0, b = ev[k] || 0; return a ? Math.max(0, a - b) / a : 0; });
   const worst = [...drops].sort((a, b) => b - a)[1] ?? 0;
   let prev = V;
-  $("#ofun").innerHTML = OSTEPS.map(([k, t, sub], i) => {
+  $("#ofun").innerHTML = STEPS_.map(([k, t, sub], i) => {
     const n = ev[k] || 0, pct = n / V * 100, d = i ? Math.max(0, prev - n) : 0, dp = i && prev ? d / prev : 0;
     const out = `<div class="row"><div class="lb">${t}${sub ? `<small>${sub}</small>` : ""}</div>
       <div class="otrack"><i style="width:${pct.toFixed(1)}%;${k === "buy_confirm" ? "background:#19b56b" : ""}"></i></div>
@@ -420,10 +442,13 @@ function renderOffer(){
   $("#otime").innerHTML = [["lt15","menos de 15 s"],["s15_60","15 s a 1 min"],["s60_180","1 a 3 min"],["gt180","mais de 3 min"]].map(([k, t]) =>
     `<div class="orow"><span>${t}</span><div class="otrack"><i style="width:${(T[k] / tt * 100).toFixed(1)}%"></i></div><span class="v"><b>${fmt(T[k])}</b> · ${(T[k] / tt * 100).toFixed(0)}%</span></div>`).join("");
   // interactions
-  $("#oint").innerHTML = OINT.map(([k, t]) => { const n = ev[k] || 0;
+  $("#oint").innerHTML = INT_.map(([k, t]) => { const n = ev[k] || 0;
     return `<div class="orow"><span>${t}</span><div class="otrack"><i style="width:${(n / V * 100).toFixed(1)}%"></i></div><span class="v"><b>${fmt(n)}</b> · ${(n / V * 100).toFixed(0)}%</span></div>`; }).join("");
   // faq
-  $("#ofaq").innerHTML = OFAQ.map((t, i) => { const n = ev["faq_" + i] || 0;
+  $("#ofaqT").textContent = isLP ? "Dificuldade escolhida no topo" : "Perguntas frequentes mais abertas";
+  $("#ofaqN").textContent = isLP ? "A dor que mais aparece — use nos criativos e na headline." : "Mostram as dúvidas que pesam na decisão.";
+  if (isLP) { const tp = ev.pick || 1; $("#ofaq").innerHTML = LPPICK.map(([k, t]) => { const n = ev[k] || 0; return `<div class="orow"><span>${t}</span><div class="otrack"><i style="width:${(n / tp * 100).toFixed(1)}%;background:#2b9c8f"></i></div><span class="v"><b>${fmt(n)}</b> · ${(n / tp * 100).toFixed(0)}%</span></div>`; }).join(""); }
+  else $("#ofaq").innerHTML = OFAQ.map((t, i) => { const n = ev["faq_" + i] || 0;
     return `<div class="orow"><span>${t}</span><div class="otrack"><i style="width:${(n / V * 100).toFixed(1)}%"></i></div><span class="v"><b>${fmt(n)}</b> · ${(n / V * 100).toFixed(0)}%</span></div>`; }).join("");
   // plans at buy
   const bp = {}; (ODATA.buy_plans || []).forEach(x => { if (!sel(x.quiz)) return; const nm = (x.quiz.startsWith("es-") ? PLANNAMES.es : PLANNAMES.en)[x.plan] || ("Plano " + (x.plan + 1)); bp[nm] = (bp[nm] || 0) + x.n; });
@@ -465,10 +490,10 @@ function render(){
       <div class="url"><a href="${m.url}" target="_blank" rel="noopener">${m.path}</a></div>
       <div class="kpis">
         <div class="k"><b>${fmt(s.started)}</b><span>iniciaram</span></div>
-        <div class="k hi"><b>${fp(s.passed_first, s.started)}</b><span>passaram da 1ª tela</span></div>
-        <div class="k"><b>${fmt(s.reached_offer)}<em>${fp(s.reached_offer, s.started)}</em></b><span>chegaram à oferta</span></div>
+        <div class="k hi"><b>${fp(s.passed_first, s.started)}</b><span>${q === "lp-study" ? "engajaram (tocaram ou rolaram)" : "passaram da 1ª tela"}</span></div>
+        <div class="k"><b>${fmt(s.reached_offer)}<em>${fp(s.reached_offer, s.started)}</em></b><span>${q === "lp-study" ? "viram os preços" : "chegaram à oferta"}</span></div>
         <div class="k"><b>${fmt(s.checkout_clicks)}<em>${fp(s.checkout_clicks, s.started)}</em></b><span>clicaram em comprar</span></div>
-        <div class="k"><b>${fmt(s.reached_email)}</b><span>chegaram ao e-mail</span></div>
+        ${q === "lp-study" ? `<div class="k"><b>—</b><span>sem e-mail (página direta)</span></div>` : `<div class="k"><b>${fmt(s.reached_email)}</b><span>chegaram ao e-mail</span></div>`}
         <div class="k"><b>${fmt(s.purchases)}</b><span>compras ligadas ao quiz</span></div>
       </div></div>`;
   }).join("");
