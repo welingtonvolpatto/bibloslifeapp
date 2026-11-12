@@ -366,6 +366,19 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .dx-dots{display:flex;justify-content:center;gap:6px;margin-top:12px}
 .dx-dots i{width:6px;height:6px;border-radius:50%;background:#d6d9de;transition:all .3s}
 .dx-dots i.on{width:18px;border-radius:3px;background:var(--blue)}
+.vsl-box{position:relative;width:min(330px,100%,calc(56vh*9/16));margin:0 auto;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#111;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.vsl-box video{width:100%;height:100%;object-fit:cover;display:block}
+.vsl-sound{position:absolute;left:50%;top:14px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.62);color:#fff;font-weight:700;font-size:14px;padding:10px 14px;border-radius:999px;border:0;white-space:nowrap;animation:vslPulse 1.6s ease-in-out infinite}
+@keyframes vslPulse{50%{transform:translateX(-50%) scale(1.05)}}
+.vsl-play{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;background:rgba(0,0,0,.55);border:0;display:grid;place-items:center}
+.vsl-play.hidden{display:none}
+.vsl-bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.25)}
+.vsl-bar i{display:block;height:100%;width:0;background:#fff;transition:width .25s linear}
+.vsl-cta{max-width:330px;width:100%;margin:14px auto 0;text-align:center}
+.vsl-cta .vsl-continue{display:block;width:100%;max-width:none;letter-spacing:.06em;opacity:.45;transition:opacity .3s,transform .3s}
+.vsl-continue.on{opacity:1;animation:vslIn .45s ease-out}
+@keyframes vslIn{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.vsl-wait{font-size:12.5px;color:#777;margin-top:8px;min-height:16px}
 </style>
 <script src="/offer-track.js" defer></script>
 </head>
@@ -558,6 +571,7 @@ const STEPS = [
   {type:"email"},
   {type:"name"},
   {type:"cards"},
+  {type:"vsl"},
   {type:"offer"}
 ];
 const QUESTION_STEPS = STEPS.filter(s=>["age","q","multi","yn"].includes(s.type)).length;
@@ -644,8 +658,8 @@ function render(){
   window.scrollTo(0,0);
   $('hdrWrap').style.display = s.type==="offer" ? "none" : "";
   $('hdr').classList.toggle('transparent', s.type==="cards");
-  $('backBtn').classList.toggle('hidden', state.i===0 || ["loader","cards","offer"].includes(s.type));
-  const showProg = !["gender","reveal","loader","summary","email","name","cards","offer"].includes(s.type);
+  $('backBtn').classList.toggle('hidden', state.i===0 || ["loader","cards","vsl","offer"].includes(s.type));
+  const showProg = !["gender","reveal","loader","summary","email","name","cards","vsl","offer"].includes(s.type);
   $('progress').style.display = showProg?'':'none'; if(showProg) progress();
   setCTA(null);
   (R[s.type])(s);
@@ -788,6 +802,40 @@ const R = {
     const cs=view.querySelectorAll('.card'); let i=0;
     const step=()=>{ cs.forEach((c,j)=>{c.classList.toggle('show',j===i);c.classList.toggle('back',j<i);}); i++; if(i<cs.length) setTimeout(step,2900); };
     step(); setTimeout(()=>go(),2900*cs.length+300);
+  },
+  vsl(){
+    const KEY="vq_vsl_seen", need=15;
+    view.innerHTML = `<section class="screen vsl">
+      <h2 class="q-title" style="text-align:center;margin-bottom:4px">Your plan is ready 🎉</h2>
+      <p class="s" style="text-align:center;margin-bottom:12px">Before you see it, hear from people already using VEREDA.</p>
+      <div class="vsl-box">
+        <video id="vslv" src="/videos/vsl-en.mp4" poster="/videos/vsl-en.jpg" playsinline webkit-playsinline preload="auto" muted autoplay></video>
+        <button class="vsl-sound" id="vslSound" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m22 9-6 6M16 9l6 6"/></svg>Tap to turn on sound</button>
+        <button class="vsl-play hidden" id="vslPlay" type="button" aria-label="Play"><svg width="34" height="34" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="#fff"/></svg></button>
+        <div class="vsl-bar"><i id="vslBar"></i></div>
+      </div>
+      <div class="vsl-cta"><button class="btn vsl-continue" id="vslGo" disabled>CONTINUE</button><div class="vsl-wait" id="vslWait">Continue unlocks in ${need}s</div></div>
+    </section>`;
+    const v=$("vslv"), go2=$("vslGo"), snd=$("vslSound"), play=$("vslPlay");
+    let watched=0, last=null, done=false;
+    try{ if(sessionStorage.getItem(KEY)) { watched=need; } }catch(e){}
+    const unlock=()=>{ if(done) return; done=true; go2.disabled=false; go2.classList.add("on"); $("vslWait").textContent=""; try{sessionStorage.setItem(KEY,"1")}catch(e){} try{window.clarity&&clarity("event","vsl_unlock")}catch(e){} };
+    if(watched>=need) unlock();
+    v.addEventListener("timeupdate",()=>{
+      if(!v.isConnected){ v.pause(); return; }
+      const t=v.currentTime; if(last!=null && !v.paused && t>last && t-last<1.5) watched+=t-last; last=t;
+      $("vslBar").style.width=(v.duration? (t/v.duration*100):0)+"%";
+      if(!done){ const left=Math.max(0,Math.ceil(need-watched)); $("vslWait").textContent=left?`Continue unlocks in ${left}s`:""; if(watched>=need) unlock(); }
+    });
+    v.addEventListener("seeked",()=>{ last=v.currentTime; });
+    v.addEventListener("ended",()=>{ unlock(); play.classList.remove("hidden"); });
+    v.addEventListener("pause",()=>{ if(!v.ended) play.classList.remove("hidden"); });
+    v.addEventListener("play",()=>play.classList.add("hidden"));
+    snd.onclick=()=>{ v.muted=false; v.currentTime=0; last=0; v.play().catch(()=>{}); snd.remove(); try{window.clarity&&clarity("event","vsl_sound")}catch(e){} };
+    play.onclick=()=>{ if(v.ended){v.currentTime=0;last=0;} v.play().catch(()=>{}); };
+    v.onclick=()=>{ if(snd.isConnected) return snd.onclick(); v.paused?v.play().catch(()=>{}):v.pause(); };
+    const p=v.play(); if(p&&p.catch) p.catch(()=>play.classList.remove("hidden"));
+    go2.onclick=()=>{ if(go2.disabled) return; v.pause(); go(); };
   },
   offer(){
     const C=CONFIG, P=C.plans;
