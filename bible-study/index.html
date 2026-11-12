@@ -793,6 +793,15 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
     <button class="chk reveal"><span class="bx"></span>You mostly pray when something goes wrong</button>
     <button class="chk reveal d1"><span class="bx"></span>God feels distant — and you don’t know why</button>
   </div>
+  <script>/* A/B: variant B (wisdom for life) gets its own checklist */
+  if(window.HL==="d"){ document.getElementById("checks").innerHTML=[
+    "You work nonstop — and the money still never seems to be enough",
+    "There’s little time left for God, and you feel guilty about it",
+    "You’ve been going to church for years, but your life feels the same",
+    "You read a chapter a day and forget it by tomorrow",
+    "You stay quiet when people talk about the Bible",
+    "You see everyone moving forward — except you"
+  ].map(function(t,i){return '<button class="chk reveal'+(i%2?' d1':'')+'"><span class="bx"></span>'+t+'</button>';}).join(""); }</script>
   <div class="chk-meter"><i id="meter"></i></div>
   <div class="chk-res" id="chkRes">Tap the ones that feel true.</div>
 </div></section>
@@ -1153,7 +1162,7 @@ $$("#pain .opt").forEach(b=>b.onclick=()=>{
 const checks=$$("#checks .chk");
 checks.forEach(c=>c.onclick=()=>{ c.classList.toggle("on"); engage(); const n=$$("#checks .chk.on").length; ev("check_"+n);
   $("#meter").style.width=(n/checks.length*100)+"%";
-  $("#chkRes").innerHTML = n===0?"Tap the ones that feel true.":n<=2?`You checked <b>${n}</b>. You’re not broken — you’ve just never had a method made for real life.`:`You checked <b>${n} of ${checks.length}</b>. You’re exactly who VEREDA was made for. <b>Keep reading</b> — there’s a better way.`; });
+  $("#chkRes").innerHTML = n===0?"Tap the ones that feel true.":n<=2?(window.HL==="d"?`You checked <b>${n}</b>. You’re not failing — no one ever showed you how to bring the Bible’s wisdom into everyday life.`:`You checked <b>${n}</b>. You’re not broken — you’ve just never had a method made for real life.`):`You checked <b>${n} of ${checks.length}</b>. You’re exactly who VEREDA was made for. <b>Keep reading</b> — there’s a better way.`; });
 
 /* ---------- 3. stat counter ---------- */
 const cio=new IntersectionObserver(es=>es.forEach(e=>{ if(!e.isIntersecting) return; const el=e.target, to=+el.dataset.count; let n=0;
