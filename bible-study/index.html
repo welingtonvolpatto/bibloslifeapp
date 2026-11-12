@@ -1020,42 +1020,6 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   <div class="ba-img reveal"><img src="/images/s2_before_after.webp" alt="Before: rushed and stressed. After: calm morning with the Bible" loading="lazy"></div>
 </div></section>
 
-<!-- 11. TIME SLIDER -->
-<section class="sec-white" data-sec="time"><div class="clouds" data-clouds></div><div class="wrap">
-  <div class="center narrow">
-    <span class="eyebrow reveal">“I don’t have time”</span>
-    <h2 class="reveal">You have more time than <em>you think</em></h2>
-  </div>
-  <div class="time reveal">
-    <div class="mins">If I give God <span id="tm">10</span> minutes a day…</div>
-    <input type="range" min="5" max="30" step="5" value="10" id="trange" aria-label="Minutes per day">
-    <div class="vals">
-      <div><b id="tpct">0.7%</b><small>of your day</small></div>
-      <div><b id="thrs">61 h</b><small>of Bible study in a year</small></div>
-      <div><b id="tdays">365</b><small>steps closer to God in a year</small></div>
-    </div>
-  </div>
-</div></section>
-
-<!-- 12. WHAT YOU GET -->
-<section data-sec="get"><div class="wrap">
-  <div class="center narrow">
-    <span class="eyebrow reveal">Everything in one place</span>
-    <h2 class="reveal">What you get with <em>VEREDA</em></h2>
-  </div>
-  <div class="ben">
-    <div class="reveal"><span class="e">🎧</span><b>In-depth audio Bible study</b><p>Not just verses read aloud — a guided study you can listen to anywhere in about 10 minutes.</p></div>
-    <div class="reveal d1"><span class="e">💡</span><b>Plain-language explanations</b><p>Every reading explained in simple words, with key takeaways so nothing gets missed.</p></div>
-    <div class="reveal d2"><span class="e">🗺️</span><b>A journey you unlock</b><p>Lessons, chapters and modules that light up as you grow — you always know what’s next.</p></div>
-    <div class="reveal"><span class="e">✅</span><b>One small action a day</b><p>Turn what you read into something you live — the same day.</p></div>
-    <div class="reveal d1"><span class="e">🙏</span><b>Daily prayer &amp; journal</b><p>Guided prayers and reflection prompts to grow closer to God.</p></div>
-    <div class="reveal d2"><span class="e">🤝</span><b>A praying community</b><p>Share requests and pray for others — in English and Spanish.</p></div>
-    <div class="reveal"><span class="e">📖</span><b>The full Bible</b><p>Read any book and chapter in a clean, modern English translation.</p></div>
-    <div class="reveal d1"><span class="e">✨</span><b>Verse of the day</b><p>A beautiful daily verse to carry with you.</p></div>
-    <div class="reveal d2"><span class="e">🔥</span><b>Gentle streaks</b><p>See your progress grow — missing a day never resets your plan.</p></div>
-  </div>
-</div></section>
-
 <!-- 13. PRICING -->
 <section class="pricing" id="pricing" data-sec="pricing"><div class="clouds" data-clouds></div><div class="wrap">
   <div class="center narrow">
@@ -1433,9 +1397,6 @@ try{ const k=sessionStorage.getItem("lp_pain"); if(k&&PAIN[k]) painKey=k; }catch
 personalize();
 
 /* ---------- 11. time slider ---------- */
-function drawTime(){ const m=+$("#trange").value; $("#tm").textContent=m; $("#tpct").textContent=(m/1440*100).toFixed(1)+"%"; $("#thrs").textContent=Math.round(m*365/60)+" h"; $("#tdays").textContent="365"; }
-$("#trange").oninput=()=>{ drawTime(); ev("time_slider"); }; drawTime();
-
 /* ---------- 13. pricing ---------- */
 const P=CONFIG.plans;
 const L=(p,i,f)=>VP?VP.plan(p,i,f||"price"):Number(p[f||"price"]);
