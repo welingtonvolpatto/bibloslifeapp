@@ -982,19 +982,6 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   </div>
 </div></section>
 
-<!-- 9. THE JOURNEY — unlock step by step -->
-<section class="sec-white" data-sec="plan" id="plan"><div class="clouds" data-clouds></div><div class="wrap">
-  <div class="center narrow">
-    <span class="eyebrow reveal">Your journey</span>
-    <h2 class="reveal">A path you unlock <em>step by step</em></h2>
-    <p class="lead reveal scrub">VEREDA isn’t a plan that ends in a few weeks. It’s a journey through Scripture organized in lessons, chapters and modules. Finish today’s lesson and the next one lights up — and the path keeps going as you grow.</p>
-  </div>
-  <div class="plan-card reveal">
-    <div class="focus" id="focus"></div>
-    <div class="trail" id="trail"></div>
-  </div>
-</div></section>
-
 <!-- 10. BEFORE / AFTER -->
 <section data-sec="change"><div class="wrap">
   <div class="center narrow">
@@ -1365,18 +1352,9 @@ const PRAY=["🙏 Share a prayer request — the community prays with you","🌎
   let gs=200; setInterval(()=>{ gs=gs>=600?120:gs+1; const m=String(Math.floor(gs/60)).padStart(2,"0"), sec=String(gs%60).padStart(2,"0"); const t=$("#glT"); if(t){ t.textContent=m+":"+sec; $("#glBar").style.width=(gs/600*100)+"%"; } },1000);
 })();
 /* ---------- 9. journey ---------- */
-const CH1=["A Lamp for Your Path","Called by Name","Loved Before You Earned It","Pray Without Pretending"];
-const CHAPS=["Walking With Jesus","The Power of Prayer","Freedom From Worry","Hearing God Every Day","Habits of the Heart","People Who Trusted God"];
-$("#trail").innerHTML=`<div class="mod"><span class="ico">🌳</span><span><small>Module 1</small><b>Rooted &amp; Unshakable</b></span></div>
-  <div class="chap">Chapter 1 · Rooted in Faith</div>
-  <div class="nodes">${CH1.map((t,i)=>`<div class="node ${i===0?"done":i===1?"now":"lock"}" style="animation-delay:${i*80}ms"><div class="dot">${i===0?"✓":i===1?"▶":"🔒"}</div><span>${t}<small>${i===0?"Completed":i===1?"Today · 10 min":"Unlocks next"}</small></span></div>`).join("")}</div>
-  <div class="chap">Next chapters</div>
-  <div class="chips">${CHAPS.map(c=>`<span>🔒 ${c}</span>`).join("")}</div>
-  <div class="mod locked"><span class="ico">💞</span><span><small>Module 2</small><b>Love That Builds</b></span></div>
-  <div class="trail-end">…and the path keeps going.</div>`;
 function personalize(){
   const f=painKey?PAIN[painKey].label:null;
-  $("#focus").innerHTML=`<div><span style="font-size:22px">🎯</span><span><small>Main challenge</small><b>${f||"Building a lasting habit"}</b></span></div><div><span style="font-size:22px">🎧</span><span><small>Daily time</small><b>About 10 minutes · listen or read</b></span></div>`;
+  if($("#focus")) $("#focus").innerHTML=`<div><span style="font-size:22px">🎯</span><span><small>Main challenge</small><b>${f||"Building a lasting habit"}</b></span></div><div><span style="font-size:22px">🎧</span><span><small>Daily time</small><b>About 10 minutes · listen or read</b></span></div>`;
   if(f){ $("#pfocus").style.display="flex"; $("#pfocus").innerHTML=`🎯 <span>Your plan focuses on: <b>${f}</b></span>`; }
 }
 try{ const k=sessionStorage.getItem("lp_pain"); if(k&&PAIN[k]) painKey=k; }catch(e){}
