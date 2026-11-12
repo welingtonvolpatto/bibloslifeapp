@@ -206,6 +206,7 @@ tr:last-child td{border-bottom:0}
       <section style="margin-top:14px">
         <h2 id="ofunT">Caminho dentro da oferta</h2>
         <p class="note" id="ofunN">Percentual = parte de quem viu a oferta. "Perda" = quanto caiu em relação à linha anterior; em vermelho as maiores quedas.</p>
+        <div id="oab" style="display:none;margin:6px 0 14px"></div>
         <div id="oworst" style="display:none;margin:4px 0 10px;padding:10px 14px;border-radius:12px;background:#fdecea;color:#7a1f16;font-size:14px"></div>
         <div class="ofun" id="ofun"></div>
       </section>
@@ -437,6 +438,22 @@ function renderOffer(){
   const worst = [...drops].sort((a, b) => b - a)[1] ?? 0;
   $("#ofunT").textContent = isLP ? "Seção por seção" : "Caminho dentro da oferta";
   $("#ofunN").textContent = isLP ? "Na ordem da página. Percentual = parte de quem abriu a página. “Perda” = quantos pararam entre a seção anterior e esta. Quem clica em um botão pode pular seções, então às vezes uma linha fica maior que a anterior." : "Percentual = parte de quem viu a oferta. \"Perda\" = quanto caiu em relação à linha anterior; em vermelho as maiores quedas.";
+  // A/B headline test
+  if (isLP && (ev.ab_a_view || ev.ab_b_view)) {
+    const HLS = {a:"A · “Why the Bible feels hard to understand (and why it’s not your fault)”", b:"B · “If you can listen for 10 minutes, you can finally understand the Bible”"};
+    const M = [["eng","Passaram do topo","rolaram ou tocaram em algo"],["top","Chegaram à 2ª seção","“Sound familiar?”"],["price","Viram os preços",""],["buy","Clicaram em comprar",""],["co","Foram ao checkout",""]];
+    const r = (v, k) => (ev["ab_" + v + "_view"] ? (ev["ab_" + v + "_" + k] || 0) / ev["ab_" + v + "_view"] : 0);
+    const z = k => { const na = ev.ab_a_view || 0, nb = ev.ab_b_view || 0; if (!na || !nb) return 0; const pa = r("a", k), pb = r("b", k), pp = ((ev["ab_a_" + k] || 0) + (ev["ab_b_" + k] || 0)) / (na + nb); const se = Math.sqrt(pp * (1 - pp) * (1 / na + 1 / nb)); return se ? (pb - pa) / se : 0; };
+    const zz = z("eng"), lead = r("b", "eng") > r("a", "eng") ? "b" : r("a", "eng") > r("b", "eng") ? "a" : null, few = Math.min(ev.ab_a_view || 0, ev.ab_b_view || 0) < 100;
+    const verdict = !lead ? "Empate até agora." : Math.abs(zz) >= 1.96 ? `<b>Headline ${lead.toUpperCase()} está vencendo</b> em passagem do topo, com diferença confiável (95%).` : `Headline ${lead.toUpperCase()} está na frente em passagem do topo, mas a diferença ainda pode ser sorte${few ? " — espere pelo menos 100 visitas em cada" : ""}.`;
+    $("#oab").innerHTML = `<div class="card" style="padding:16px 18px"><h2 style="margin:0 0 4px">Teste A/B da headline</h2><p class="note" style="margin:0 0 10px">Cada visitante vê uma das duas, sorteada (50/50), e sempre a mesma se voltar. ${verdict}</p>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px"><tr><th style="text-align:left;padding:6px 8px"></th>${["a","b"].map(v => `<th style="text-align:left;padding:6px 8px;font-weight:600;width:40%;white-space:normal;vertical-align:bottom">${HLS[v]}</th>`).join("")}</tr>
+      <tr><td style="padding:6px 8px;color:var(--muted)">Visitas</td>${["a","b"].map(v => `<td style="padding:6px 8px"><b>${fmt(ev["ab_" + v + "_view"] || 0)}</b></td>`).join("")}</tr>
+      ${M.map(([k, t, sub]) => { const ra = r("a", k), rb = r("b", k), best = ra === rb ? null : ra > rb ? "a" : "b";
+        return `<tr style="border-top:1px solid var(--line)"><td style="padding:6px 8px">${t}${sub ? `<small style="display:block;color:var(--muted);font-size:12px">${sub}</small>` : ""}</td>${["a","b"].map(v => `<td style="padding:6px 8px;${best === v ? "color:#19b56b;font-weight:700" : ""}">${(r(v, k) * 100).toFixed(1)}% <small style="color:var(--muted);font-weight:400">(${fmt(ev["ab_" + v + "_" + k] || 0)})</small></td>`).join("")}</tr>`; }).join("")}
+      </table></div></div>`;
+    $("#oab").style.display = "";
+  } else $("#oab").style.display = "none";
   let bi = -1;
   if (isLP) { let bd = 0; STEPS_.forEach(([k], i) => { if (!i || k === "s_faq" || k === "s_final") return; const a = ev[STEPS_[i - 1][0]] || 0, d = a - (ev[k] || 0); if (d > bd) { bd = d; bi = i; } });
     $("#oworst").innerHTML = bi > 0 ? `<b>Maior perda:</b> ${fmt(bd)} ${bd === 1 ? "pessoa parou" : "pessoas pararam"} entre <b>${STEPS_[bi - 1][1]}</b> e <b>${STEPS_[bi][1]}</b> (${((bd / (ev[STEPS_[bi - 1][0]] || 1)) * 100).toFixed(0)}% de quem chegou até ali).` : "";

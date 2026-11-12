@@ -264,10 +264,8 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .rx-bg img{position:absolute;width:100%;height:100%;object-fit:cover;transform:scale(1.08);transition:transform 1.6s cubic-bezier(.2,.8,.2,1)}
 .rx.in .rx-bg img{transform:scale(1)}
 .rx:hover .rx-bg img{transform:scale(1.05)}
-.r1 .rx-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#5d8fc8 0%,rgba(93,143,200,.85) 30%,rgba(93,143,200,0) 62%)}
-.r3 .rx-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#2c6f8e 0%,rgba(44,111,142,.8) 34%,rgba(44,111,142,0) 62%,rgba(10,30,45,.35) 100%)}
-.r1 .rx-bg img{object-position:50% 70%}
-.r3 .rx-bg img{object-position:72% 50%}
+.rx-bg img{object-position:50% 50%}
+.rx-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,40,80,.28) 0%,rgba(20,40,80,.12) 24%,rgba(20,40,80,0) 40%)}
 /* glass bubbles */
 .gls{position:absolute;z-index:5;color:#fff;background:linear-gradient(135deg,rgba(255,255,255,.34),rgba(255,255,255,.14));border:1px solid rgba(255,255,255,.42);backdrop-filter:blur(18px) saturate(1.35);-webkit-backdrop-filter:blur(18px) saturate(1.35);box-shadow:0 14px 34px rgba(20,30,60,.18),inset 0 1px 0 rgba(255,255,255,.55);opacity:0;transform:translateY(26px) scale(.94);filter:blur(4px);transition:opacity .9s ease,transform 1.1s cubic-bezier(.2,.9,.2,1.15),filter .9s ease}
 .rx.in .gls{opacity:1;transform:none;filter:none}
@@ -296,7 +294,7 @@ h2 em,h1 em{font-style:italic;color:var(--blue)}
 .rphone .mus .ln{flex:1}.rphone .mus .ln i{display:block;height:2px;background:#e2e2e8;margin-top:4px;border-radius:2px}
 .rphone .mus svg{width:12px;height:12px}
 .rphone .amn{margin:10px 12px 0;background:#2368f0;color:#fff;border-radius:10px;text-align:center;font-size:11px;font-weight:600;padding:9px}
-.g-prayed{left:12px;right:12px;top:226px;border-radius:24px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;white-space:nowrap;padding:11px 12px!important;background:linear-gradient(135deg,rgba(150,140,190,.62),rgba(120,110,170,.5))!important;transition-delay:.35s}
+.g-prayed{left:12px;right:12px;top:248px;border-radius:24px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;white-space:nowrap;padding:11px 12px!important;background:linear-gradient(135deg,rgba(140,130,200,.92),rgba(118,108,178,.88))!important;transition-delay:.35s}
 .avs{display:flex}.avs span{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.85);margin-left:-9px;display:grid;place-items:center;font-size:12px;font-weight:600;color:#fff;overflow:hidden}
 .avs span:first-child{margin-left:0}
 .avs img{width:100%;height:100%;object-fit:cover}
@@ -717,7 +715,13 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 <section class="hero" id="hero" data-sec="hero"><div class="clouds" data-clouds></div><div class="wrap hero-grid">
   <div>
     <span class="eyebrow">🎧 Audio Bible study for busy Christians</span>
-    <h1>Why the Bible feels hard to understand <em>(and why it’s not your fault)</em></h1>
+    <h1 id="hl">Why the Bible feels hard to understand <em>(and why it’s not your fault)</em></h1>
+    <script>/* A/B test: headline. A = current, B = "If you can listen for 10 minutes…" */
+    (function(){var v=null,q=(new URLSearchParams(location.search).get("hl")||"").toLowerCase();
+      if(q==="a"||q==="b") v=q; else { try{ v=localStorage.getItem("vd_hl"); }catch(e){} if(v!=="a"&&v!=="b"){ v=Math.random()<.5?"a":"b"; } }
+      try{ localStorage.setItem("vd_hl",v); }catch(e){} window.HL=v;
+      if(v==="b") document.getElementById("hl").innerHTML="If you can listen for 10 minutes, <em>you can finally understand the Bible</em>";
+      try{ window.clarity&&clarity("set","headline",v); }catch(e){} })();</script>
     <p class="lead">VEREDA is <b>in-depth Bible study you can listen to in just 10 minutes a day</b> — explained so clearly you’ll understand Scripture like never before, and see your life change, one step at a time. <b>You don’t just learn — every day you get a lesson to practice.</b></p>
     <div class="picker reveal">
       <h3>What makes the Bible hardest for you?</h3>
@@ -892,7 +896,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   <div class="bento">
     <article class="rx r1 reveal">
       <h3>Verse of the day</h3><p>A fresh verse every morning to steady your heart before the day gets loud.</p>
-      <div class="rx-bg"><img src="/app/images/stories/peak-dawn.webp" alt="" loading="lazy"></div>
+      <div class="rx-bg"><img src="/bible-study/img/feat/verse.webp" alt="" loading="lazy"></div>
       <div class="gls g-verse f"><svg class="ico3d" viewBox="0 0 64 64"><defs><linearGradient id="cx1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#dbe9fb"/><stop offset="1" stop-color="#9fc2ee"/></linearGradient><linearGradient id="cx2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb6ea"/><stop offset="1" stop-color="#4f86cf"/></linearGradient><linearGradient id="cx3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8d3f5"/><stop offset="1" stop-color="#6f9ddb"/></linearGradient></defs>
 <path d="M32 3l25 14.5v29L32 61 7 46.5v-29z" fill="url(#cx3)" opacity=".55"/>
 <path d="M27 12h10v12h12v10H37v18H27V34H15V24h12z" transform="translate(3 3)" fill="url(#cx2)"/>
@@ -901,25 +905,19 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
     </article>
     <article class="rx r2 reveal">
       <h3>Prayer requests</h3><p>Share what’s on your heart and let a community of believers pray alongside you.</p>
-      <div class="rphone"><div class="scr">
-        <div class="sb"><span>9:41</span><span class="isl"></span><span class="sig"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span></div>
-        <div class="hd"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1b1d24" stroke-width="2.4" stroke-linecap="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><span>Prayer Requests</span></div>
-        <div class="pr">Friends, please pray for me tomorrow morning — I have a medical test I’m anxious about. Asking for God’s peace and a good result. Thank you.</div>
-        <div class="mus"><span class="th"></span><span class="ln">Gentle Music for Prayer<i></i></span><svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z" fill="#1b1d24"/></svg></div>
-        <div class="amn">Amen</div>
-      </div></div>
+      <div class="rx-bg"><img src="/bible-study/img/feat/prayer.webp" alt="VEREDA prayer requests screen" loading="lazy"></div>
       <div class="gls g-prayed f2"><span class="avs"><span><img src="/images/m_age_35_44.webp" alt=""></span><span class="c1">O</span><span class="c2">JR</span></span><span>558 people prayed.</span></div>
     </article>
     <article class="rx r3 reveal">
-      <h3>Spiritual Assistant <span class="soon">Coming soon</span></h3><p>A Bible-grounded guide for your questions and reflections — a help for your study, never a replacement for prayer, your church or your pastor.</p>
-      <div class="rx-bg"><img src="/images/break3_m.webp" alt="" loading="lazy"></div>
+      <h3>Spiritual Assistant <span class="soon">Coming soon</span></h3><p>Your Bible questions, answered with Scripture.</p>
+      <div class="rx-bg"><img src="/bible-study/img/feat/assistant.webp" alt="" loading="lazy"></div>
       <div class="gls dark g-ai f3"><div class="row"><svg class="ico3d" viewBox="0 0 64 64"><defs><linearGradient id="sx1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9f1ff"/><stop offset="1" stop-color="#4fa3e6"/></linearGradient><radialGradient id="sx2" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#e9f7ff"/><stop offset="1" stop-color="#bfe3fb"/></radialGradient></defs>
 <path d="M32 3l25 14.5v29L32 61 7 46.5v-29z" fill="url(#sx1)"/><path d="M32 3l25 14.5L32 32 7 17.5z" fill="#fff" opacity=".35"/>
 <path d="M32 13l3.6 12.4L48 29l-12.4 3.6L32 45l-3.6-12.4L16 29l12.4-3.6z" fill="url(#sx2)"/><path d="M32 18l2 9 9 2-9 2-2 9-2-9-9-2 9-2z" fill="#fff"/></svg><b>Get guidance, daily inspiration and dive deeper into God’s world.</b></div><span class="btn-ai">Start chat</span></div>
     </article>
     <article class="rx r4 reveal">
-      <h3>Faith-based content</h3><p>Studies and audio series on relationships, purpose and peace, so you can keep going deeper whenever you’re ready.</p>
-      <div class="rphone2"><img src="/bible-study/img/app/explore.webp" alt="VEREDA explore screen" loading="lazy"></div>
+      <h3>Faith-based content</h3><p>Audio series on relationships, purpose and peace.</p>
+      <div class="rx-bg"><img src="/bible-study/img/feat/content.webp" alt="VEREDA explore screen" loading="lazy"></div>
       <span class="gls dark pill p1 f">Character</span>
       <span class="gls dark pill p2 f2">Self-discovery</span>
       <span class="gls dark pill p3 f3">Deepen your faith</span>
@@ -1105,14 +1103,16 @@ function track(step,key,event,planName){
     body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,step:step,step_key:key,event:event,device:device,plan:planName||null,
       utm_source:(qs.get("utm_source")||"").slice(0,120)||null,utm_campaign:(qs.get("utm_campaign")||"").slice(0,200)||null})}).catch(()=>{});}catch(e){}
 }
+const AB={view:"view",s_familiar:"top",s_pricing:"price",buy:"buy",buy_confirm:"co"};
 function ev(name,p){
   if(IS_BOT||sentO[name]) return; sentO[name]=1;
+  if(AB[name]&&window.HL) setTimeout(()=>ev("ab_"+window.HL+"_"+AB[name]),0);
   try{ if(window.clarity && /^(pick_|video_play|s_pricing|buy|buy_confirm)/.test(name)) clarity("event","lp_"+name); }catch(e){}
   try{fetch(TRACK.url.replace("/quiz_events","/offer_events"),{method:"POST",keepalive:true,headers:{apikey:TRACK.key,"Content-Type":"application/json",Prefer:"return=minimal"},
     body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,ev:name,device:device,plan:p==null?null:p})}).catch(()=>{});}catch(e){}
 }
 track(0,"hero","view"); ev("view");
-let engaged=false; const engage=()=>{ if(engaged) return; engaged=true; track(1,"engaged","view"); };
+let engaged=false; const engage=()=>{ if(engaged) return; engaged=true; track(1,"engaged","view"); if(window.HL) ev("ab_"+window.HL+"_eng"); };
 addEventListener("scroll",()=>{ if(scrollY>innerHeight*.6) engage(); },{passive:true});
 
 /* ---------- reveal on scroll + section tracking ---------- */
