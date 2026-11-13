@@ -529,6 +529,14 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .cs-i.done .ok{transform:scale(1)}.cs-i.done .cs-r span{opacity:0}
 .cs-t b{display:block;font-size:15px;color:var(--title)}.cs-t small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
 .cs-i.on .cs-t small{color:var(--blue);font-weight:700}.cs-i.done .cs-t small{color:#11804b;font-weight:700}
+.tm-sub{text-align:center;font-size:14.5px;line-height:1.5;color:var(--muted);margin:-8px 14px 16px}
+.tmc{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 6px 10px;scrollbar-width:none}
+.tmc::-webkit-scrollbar{display:none}
+.tmc-i{flex:0 0 78%;scroll-snap-align:center;position:relative;border-radius:20px;overflow:hidden;box-shadow:0 12px 28px rgba(14,60,100,.16);background:#fff}
+.tmc-i img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+.tmc-t{position:absolute;left:0;right:0;bottom:0;padding:40px 16px 16px;background:linear-gradient(180deg,rgba(10,25,45,0),rgba(10,25,45,.85));color:#fff}
+.tmc-t b{display:block;font-size:19px}.tmc-t span{display:block;font-size:13.5px;opacity:.9;margin-top:3px}
+.tmc-dots{display:flex;justify-content:center;gap:6px;margin-top:6px}.tmc-dots i{width:7px;height:7px;border-radius:50%;background:#c9d9e8;transition:.3s}.tmc-dots i.on{width:20px;border-radius:4px;background:var(--blue)}
 </style>
 <script src="/offer-track.js" defer></script>
 </head>
@@ -1138,6 +1146,10 @@ const R = {
       <h3 class="o-h2">People often ask</h3>
       <div class="faq">${C.faq.map(f=>`<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}</div>
       ${priceBlock("pB")}
+      <h3 class="o-h2">The people behind <span class="hl">every lesson</span></h3>
+      <p class="tm-sub">VEREDA isn’t generated content. Every study is written and reviewed by a team that has spent their lives in Scripture.</p>
+      <div class="tmc" id="tmc">${[["caleb","Caleb Whitmor","Biblical coordinator at VEREDA"],["nathaniel","Nathaniel Hayes","Pastor · Founder of VEREDA"],["abigail","Abigail Brooks","Theologian and therapist · 20+ years"],["eleanor","Eleanor Bennett","Researcher in African Christianity · missiology"]].map(t=>`<div class="tmc-i"><img src="/bible-study/img/team/${t[0]}.webp" alt="${t[1]}" loading="lazy"><div class="tmc-t"><b>${t[1]}</b><span>${t[2]}</span></div></div>`).join("")}</div>
+      <div class="tmc-dots" id="tmd">${[0,1,2,3].map(i=>`<i class="${i?'':'on'}"></i>`).join("")}</div>
     </div>
     <footer class="addr">Questions? <a href="mailto:${C.supportEmail}">${C.supportEmail}</a></footer>`;
     const tl=$('tl');
@@ -1145,6 +1157,11 @@ const R = {
     view.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showWeek(+b.dataset.w)); showWeek(0);
     view.querySelectorAll('.sub').forEach(b=>b.onclick=checkoutSummary);
     $('getPlan').onclick=()=>$('pA').scrollIntoView({behavior:'smooth'});
+    (function(){ const c=$('tmc'), dots=[...view.querySelectorAll('#tmd i')]; if(!c) return; let i=0, user=false;
+      const sync=()=>{ const w=c.firstElementChild.offsetWidth+12; i=Math.round(c.scrollLeft/w); dots.forEach((d,j)=>d.classList.toggle('on',j===i)); };
+      c.addEventListener('scroll',()=>requestAnimationFrame(sync),{passive:true});
+      c.addEventListener('pointerdown',()=>{user=true;},{passive:true});
+      const t=setInterval(()=>{ if(!c.isConnected) return clearInterval(t); if(user) return; const w=c.firstElementChild.offsetWidth+12; i=(i+1)%4; c.scrollTo({left:i*w,behavior:'smooth'}); },3500); })();
     window.OFFER_TRACK&&OFFER_TRACK({url:TRACK.url.replace("/quiz_events","/offer_events"),key:TRACK.key,sid:TRACK.sid,quiz:TRACK.quiz,bot:IS_BOT,view:view,getPlan:()=>0,getPlan0:0});
   }
 };
