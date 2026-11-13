@@ -486,7 +486,7 @@ const CONFIG = {
   checkoutUrl: "https://pay.hotmart.com/G108477652R",   // Hotmart product 8963014 — one-time payment
   price: "$9.90",              // price shown on the offer (one-time payment)
   priceNote: "One-time payment · No subscription",
-  accessText: "",              // e.g. "Lifetime access" — only shown when filled            // fallback checkout link; each plan below can have its own checkoutUrl (Hotmart link). UTMs, email and name are passed along
+  accessText: "Lifetime access",            // fallback checkout link; each plan below can have its own checkoutUrl (Hotmart link). UTMs, email and name are passed along
   leadWebhook: "",             // optional: URL that receives {email, name, archetype, answers} via POST
   // Social proof shown on the first screen. Leave rating empty to hide it.
   // Only use numbers you can prove (your own real reviews).
@@ -527,7 +527,7 @@ const CONFIG = {
     {icon:"home",  lead:"You stay consistent without burnout", text:"at your own pace, even on busy days"}
   ],
   faq: [
-    {q:"Is this a subscription?", a:"No. It’s a single payment — no monthly charges and nothing to cancel."},
+    {q:"Is this a subscription?", a:"No. You pay once and get lifetime access — no monthly charges and nothing to cancel."},
     {q:"What exactly do I get?", a:"Your VEREDA Bible Plan (10-minute in-depth audio studies with one lesson to practice every day) plus the app bonuses: the prayer community, verse of the day, audio series and Bible stories, journal and progress, and the complete Bible."},
     {q:"How do I access it?", a:"Right after payment you receive your access by email. VEREDA works in your phone’s browser — no app store download needed."},
     {q:"What if I don't understand what I'm reading?", a:"Every lesson explains the passage’s context and meaning in plain words, so you always know what it means and why it matters for your life today."},

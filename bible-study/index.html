@@ -1028,7 +1028,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   <div class="center narrow">
     <span class="eyebrow reveal">Start today</span>
     <h2 class="reveal">Everything you need, <em>one simple payment</em></h2>
-    <p class="lead reveal">Every day: one lesson to learn, one lesson to practice. Pay once — no subscription, no monthly charges, nothing to cancel.</p>
+    <p class="lead reveal">Every day: one lesson to learn, one lesson to practice. Pay once and keep it for life — no subscription, no monthly charges, nothing to cancel.</p>
   </div>
   <div class="price-wrap">
     <div class="pc reveal">
@@ -1054,7 +1054,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   <h2 class="reveal">Change your life <em style="color:#ffd38a">10 minutes at a time</em></h2>
   <p class="lead reveal">You don’t need more free time or more discipline. Press play, understand God’s Word like never before, and take the next step — today.</p>
   <a href="#pricing" class="btn reveal" data-cta="final">Get instant access <span class="arr">→</span></a>
-  <div class="sub-cta reveal" style="color:#dfe5ec"><span>✓ One-time $9.90</span><span>✓ No subscription</span><span>✓ 7-day money-back guarantee</span></div>
+  <div class="sub-cta reveal" style="color:#dfe5ec"><span>✓ One-time $9.90</span><span>✓ Lifetime access</span><span>✓ 7-day money-back guarantee</span></div>
 </div></section>
 
 <footer><div class="wrap">
@@ -1066,7 +1066,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 
 <button class="music" id="music" type="button" aria-label="Background music"><span class="bars"><i></i><i></i><i></i></span><span id="mlabel">Music off</span></button>
 <div class="sticky" id="sticky"><div class="in">
-  <div class="t"><b>Only $9.90</b>One-time payment · no subscription</div>
+  <div class="t"><b>Only $9.90</b>One-time payment · lifetime access</div>
   <a href="#pricing" class="btn" data-cta="sticky">Get access <span class="arr">→</span></a>
 </div></div>
 
@@ -1394,8 +1394,8 @@ const INCL=[["Your VEREDA Bible Plan","10-minute in-depth audio studies + one le
 function drawPlans(){
   $("#plans").innerHTML=`<div class="one"><span class="one-k">Everything included</span>
     <ul class="one-l">${INCL.map(([t,d],i)=>`<li><b>${i?"Bonus: ":""}${esc(t)}</b>${d?` — ${esc(d)}`:""}</li>`).join("")}</ul>
-    <div class="one-p"><b>${esc(CONFIG.price)}</b><span>One-time payment · No subscription</span></div></div>`;
-  $("#terms").innerHTML=`One-time payment of ${esc(CONFIG.price)}. No subscription and no recurring charges. Questions? <a href="mailto:institutoacademy20@gmail.com">institutoacademy20@gmail.com</a>.`;
+    <div class="one-p"><b>${esc(CONFIG.price)}</b><span>One-time payment · Lifetime access · No subscription</span></div></div>`;
+  $("#terms").innerHTML=`One-time payment of ${esc(CONFIG.price)} with lifetime access. No subscription and no recurring charges. Questions? <a href="mailto:institutoacademy20@gmail.com">institutoacademy20@gmail.com</a>.`;
   $("#buy").innerHTML='Get instant access <span class="arr">→</span>';
 }
 drawPlans();
@@ -1414,7 +1414,7 @@ $("#buy").onclick=()=>{
   el.innerHTML=`<div class="co-back" data-x></div><div class="co-sheet" role="dialog" aria-label="Your order summary"><div class="co-grab"></div><h3>Your order summary</h3>
     <div class="co-row"><span>VEREDA Bible Plan</span><b>Included</b></div><div class="co-row"><span>5 app bonuses</span><b>Included</b></div>
     <div class="co-row co-today"><span>Total today</span><b>${esc(CONFIG.price)}</b></div>
-    <p class="co-cancel">One-time payment. No subscription and no recurring charges.</p>
+    <p class="co-cancel">One-time payment with lifetime access. No subscription and no recurring charges.</p>
     <div class="guar">${SHIELD}<div><b>7-day money-back guarantee</b><span>Not for you? Ask for a full refund within 7 days of your payment.</span></div></div>
     <button class="btn co-go" type="button">Continue to secure checkout <span class="arr">→</span></button><div class="co-safe">🔒 Secure payment processed by Hotmart</div><button class="co-x" type="button" data-x>Back</button></div>`;
   document.body.appendChild(el); requestAnimationFrame(()=>el.classList.add("on"));
@@ -1437,7 +1437,7 @@ const FAQ=[
   ["What if I don't understand what I'm reading?","Every reading comes with a plain-language explanation and key takeaways, so you always know what the passage means and why it matters for your life today."],
   ["What if I can't stay consistent?","Sessions take about 10 minutes and fit any time of day. A clear next step helps you keep going, and missing a day never resets your progress."],
   ["Do I need to know the Bible already?","Not at all. The plan starts where you are, whether you're opening the Bible for the first time or coming back after a long time."],
-  ["Is this a subscription?","No. It's a single payment of $9.90 — no monthly charges and nothing to cancel."],
+  ["Is this a subscription?","No. You pay $9.90 once and get lifetime access — no monthly charges and nothing to cancel."],
   ["What exactly do I get?","Your VEREDA Bible Plan (10-minute in-depth audio studies with one lesson to practice every day) plus the app bonuses: the prayer community, verse of the day, audio series and Bible stories, journal and progress, and the complete Bible."],
   ["Do I need to download anything?","No. VEREDA works right in your phone's browser — after purchase you get your access link, and you can add it to your home screen so it opens like any other app."],
   ["Is there a guarantee?","Yes. If VEREDA isn't for you, ask for a full refund within 7 days of your payment."]
