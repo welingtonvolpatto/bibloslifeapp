@@ -877,8 +877,8 @@ function render(){
 const R = {
   hook(s){
     view.innerHTML = `<section class="screen">
-      <h1 class="big-title st-title">Why the Bible Feels Hard to Understand <span style="white-space:nowrap">(It’s Not Your Fault)</span></h1>
-      <p class="big-sub st-sub">Answer a few quick questions and get a simple, step-by-step plan that fits your level and your schedule.</p>
+      <h1 class="big-title st-title">Give God 10 minutes a day. <span class="hl">In 28 days, see your life change.</span></h1>
+      <p class="big-sub st-sub">Answer a few quick questions and get your personalized 28-day Bible plan — made for your level and your schedule.</p>
       <div class="chiprow" style="margin:4px 0 2px"><span class="gchip" style="position:relative;animation-delay:.2s,1s"><span class="e">🎧</span>10-min audio study</span><span class="gchip" style="position:relative;margin-left:8px;animation-delay:.4s,1.6s"><span class="e">🌱</span>1 lesson to practice</span></div>
       <div class="hook-chip">⏱ 1-minute quiz · Your personalized plan</div>
       <h2 class="hook-q">What makes the Bible hardest for you?</h2>
@@ -936,13 +936,13 @@ const R = {
     setCTA("Continue",()=>go());
   },
   stat(){
-    view.innerHTML=`<section class="screen">${art({img:"/images/s2_article.webp",chips:[["⛪","Church every week"],["📕","Bible stays closed"]]})}<div class="st-k">Research · American Bible Society</div>
+    view.innerHTML=`<section class="screen">${art({img:"/images/s2_article.webp",chips:[["📱","Scrolling instead"],["📕","Bible stays closed"]]})}<div class="st-k">Research · American Bible Society</div>
       <div class="st-big" id="stN">0%</div>
-      <p class="st-l">of people who go to church every week <b>don’t read the Bible on their own.</b></p>
-      <div class="st-why"><small>The two main reasons they gave:</small><div><span>⏳</span>Not enough time</div><div><span>🧭</span>Not knowing where to start</div></div>
+      <p class="st-l">of Americans <b>don’t open the Bible more than once a week.</b></p>
+      <div class="st-why"><small>The two main reasons people give:</small><div><span>⏳</span>Not enough time</div><div><span>🧭</span>Not knowing where to start</div></div>
       <div class="ins-card" style="margin-top:16px"><b>That’s exactly what VEREDA solves.</b><p>In-depth Bible study you can <b>listen to in about 10 minutes</b>, explained in plain words — and every day ends with <b>one simple lesson to practice</b>.</p></div>
       <p class="st-src">Source: American Bible Society, State of the Bible USA 2026.</p></section>`;
-    const t0=performance.now(); (function tk(t){ const k=Math.min(1,(t-t0)/1300); const el=$('stN'); if(!el) return; el.textContent=Math.round(46*(1-Math.pow(1-k,3)))+'%'; if(k<1) requestAnimationFrame(tk); })(t0);
+    const t0=performance.now(); (function tk(t){ const k=Math.min(1,(t-t0)/1300); const el=$('stN'); if(!el) return; el.textContent=Math.round(82*(1-Math.pow(1-k,3)))+'%'; if(k<1) requestAnimationFrame(tk); })(t0);
     setCTA("Continue",()=>go());
   },
   info(s){
