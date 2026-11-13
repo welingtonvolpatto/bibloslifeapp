@@ -24,7 +24,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="/geo-price.js"></script>
 <script src="/bible-study/lenis.min.js" defer></script>
 <style>
 :root{
@@ -711,6 +710,13 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 .feat-tabs button .pg{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--blue);border-radius:3px}
 .feat-tabs button.on.run .pg{animation:pgfill var(--dur,4s) linear forwards}
 @keyframes pgfill{to{width:100%}}
+.one{background:#f4f9fe;border:1.5px solid #cfe3f3;border-radius:18px;padding:18px 16px;text-align:left}
+.one-k{display:block;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);text-align:center}
+.one-l{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.one-l li{position:relative;padding-left:26px;font-size:14.5px;line-height:1.45;color:var(--ink)}
+.one-l li:before{content:"✓";position:absolute;left:0;top:1px;width:19px;height:19px;border-radius:50%;background:#e7f6ee;color:#11804b;font-weight:800;font-size:11px;display:grid;place-items:center}
+.one-p{text-align:center;margin-top:16px}.one-p b{display:block;font-size:46px;line-height:1;color:var(--ink);font-family:var(--serif)}
+.one-p span{display:block;font-size:13.5px;color:var(--muted);margin-top:6px;font-weight:600}
 </style>
 </head>
 <body>
@@ -718,7 +724,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 
 <header class="topbar" id="topbar"><div class="wrap">
   <img src="/images/logo.svg" alt="VEREDA" class="logo">
-  <a href="#pricing" class="btn" data-cta="top">Start free</a>
+  <a href="#pricing" class="btn" data-cta="top">Get VEREDA</a>
 </div></header>
 
 <!-- 1. HERO — problem aware, with a one-tap micro-commitment -->
@@ -754,8 +760,8 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
     <div class="trust">
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>10 minutes a day</span>
       <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>Listen anywhere</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>7 days free</span>
-      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>Cancel anytime</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>One-time $9.90</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12l4 4 10-10"/></svg>No subscription</span>
     </div>
   </div>
   <div class="hero-visual reveal d1">
@@ -1021,15 +1027,13 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 <section class="pricing" id="pricing" data-sec="pricing"><div class="clouds" data-clouds></div><div class="wrap">
   <div class="center narrow">
     <span class="eyebrow reveal">Start today</span>
-    <h2 class="reveal">Choose your plan and <em>take the first step</em></h2>
-    <p class="lead reveal">Every day: one lesson to learn, one lesson to practice. Try VEREDA free for 7 days. If it’s not for you, cancel before the trial ends and you won’t be charged.</p>
+    <h2 class="reveal">Everything you need, <em>one simple payment</em></h2>
+    <p class="lead reveal">Every day: one lesson to learn, one lesson to practice. Pay once — no subscription, no monthly charges, nothing to cancel.</p>
   </div>
   <div class="price-wrap">
     <div class="pc reveal">
       <div class="pfocus" id="pfocus" style="display:none"></div>
       <div id="plans"></div>
-      <div class="geo-note" id="geonote"></div>
-      <p class="pnote">A 3-month plan gives you time to turn reading the Bible into a lasting habit — and costs 33% less than paying monthly.</p>
       <button class="btn block" id="buy" type="button">Start my plan <span class="arr">→</span></button>
       <div class="guar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5" stroke-linecap="round"/></svg><div><b>7-day money-back guarantee</b><span>Not for you? Ask for a full refund within 7 days of your payment.</span></div></div>
       <p class="terms" id="terms"></p>
@@ -1049,21 +1053,21 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 <section class="final" data-sec="final"><div class="wrap narrow">
   <h2 class="reveal">Change your life <em style="color:#ffd38a">10 minutes at a time</em></h2>
   <p class="lead reveal">You don’t need more free time or more discipline. Press play, understand God’s Word like never before, and take the next step — today.</p>
-  <a href="#pricing" class="btn reveal" data-cta="final">Start my free week <span class="arr">→</span></a>
-  <div class="sub-cta reveal" style="color:#dfe5ec"><span>✓ 7 days free</span><span>✓ Cancel anytime</span><span>✓ 7-day money-back guarantee</span></div>
+  <a href="#pricing" class="btn reveal" data-cta="final">Get instant access <span class="arr">→</span></a>
+  <div class="sub-cta reveal" style="color:#dfe5ec"><span>✓ One-time $9.90</span><span>✓ No subscription</span><span>✓ 7-day money-back guarantee</span></div>
 </div></section>
 
 <footer><div class="wrap">
   <img src="/images/logo.svg" alt="VEREDA" style="height:22px;margin:0 auto 14px;filter:brightness(0) invert(1);opacity:.85">
   <div>Questions? <a href="mailto:institutoacademy20@gmail.com">institutoacademy20@gmail.com</a></div>
-  <div style="margin-top:10px"><a href="#" data-l="terms">Terms</a>·<a href="#" data-l="privacy">Privacy</a>·<a href="#" data-l="subscription">Subscription terms</a></div>
-  <div style="margin-top:12px;font-size:12px">© VEREDA. Subscriptions are processed securely by Hotmart.</div>
+  <div style="margin-top:10px"><a href="#" data-l="terms">Terms</a>·<a href="#" data-l="privacy">Privacy</a></div>
+  <div style="margin-top:12px;font-size:12px">© VEREDA. Payments are processed securely by Hotmart.</div>
 </div></footer>
 
 <button class="music" id="music" type="button" aria-label="Background music"><span class="bars"><i></i><i></i><i></i></span><span id="mlabel">Music off</span></button>
 <div class="sticky" id="sticky"><div class="in">
-  <div class="t"><b>7 days free</b>Then from <span id="stickyPrice">$0.66</span>/day · cancel anytime</div>
-  <a href="#pricing" class="btn" data-cta="sticky">Start free <span class="arr">→</span></a>
+  <div class="t"><b>Only $9.90</b>One-time payment · no subscription</div>
+  <a href="#pricing" class="btn" data-cta="sticky">Get access <span class="arr">→</span></a>
 </div></div>
 
 <script>
@@ -1073,18 +1077,12 @@ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&
 
 /* ---------- config (same plans and offers as the English quizzes) ---------- */
 const CONFIG={
-  plans:[
-    {name:"7-Day Free Trial", checkoutUrl:"https://pay.hotmart.com/F108347453I?off=76tfafb3", price:19.90, every:"month", days:30, trialDays:7,
-     terms:"Free for 7 days, then $19.90 every month until you cancel. Cancel anytime before the trial ends and you won’t be charged."},
-    {name:"Monthly Plan", checkoutUrl:"https://pay.hotmart.com/F108347453I?off=t5216fgc", price:19.90, every:"month", days:30,
-     terms:"$19.90 today, then $19.90 every month until you cancel."},
-    {name:"3-Month Plan", checkoutUrl:"https://pay.hotmart.com/F108347453I?off=ah15t54l", price:39.90, every:"3 months", days:90, compareAt:59.70,
-     terms:"$39.90 today, then $39.90 every 3 months until you cancel."}
-  ],
-  localPrices:{}, defaultPlan:0, popular:0,
-  links:{terms:"#",privacy:"#",subscription:"#"}
+  price:"$9.90",                                       // one-time payment (Hotmart product 8963014, priced in USD)
+  checkoutUrl:"https://pay.hotmart.com/G108477652R",
+  plans:[{name:"VEREDA Bible Plan + all bonuses"}],
+  defaultPlan:0,
+  links:{terms:"#",privacy:"#"}
 };
-const VP=window.VPRICE||null; if(VP) VP.cfg=CONFIG;   // applies the half-price tier outside high-income countries
 let plan=CONFIG.defaultPlan;
 
 /* ---------- tracking ---------- */
@@ -1390,25 +1388,17 @@ try{ const k=sessionStorage.getItem("lp_pain"); if(k&&PAIN[k]) painKey=k; }catch
 personalize();
 
 /* ---------- 11. time slider ---------- */
-/* ---------- 13. pricing ---------- */
+/* ---------- 13. pricing (one-time payment) ---------- */
 const P=CONFIG.plans;
-const L=(p,i,f)=>VP?VP.plan(p,i,f||"price"):Number(p[f||"price"]);
-const money=v=>VP?VP.money(v):"$"+Number(v).toFixed(2);
-const parts=v=>VP?VP.parts(v):{sym:"$",int:String(Math.floor(v)),dec:v.toFixed(2).split(".")[1]};
+const INCL=[["Your VEREDA Bible Plan","10-minute in-depth audio studies + one lesson to practice every day"],["Prayer community","believers around the world praying with you"],["Verse of the day",""],["Audio series & Bible stories",""],["Journal & progress",""],["The complete Bible","in a clear, modern translation"]];
 function drawPlans(){
-  $("#plans").innerHTML=P.map((p,i)=>{ const pd=parts(L(p,i)/p.days);
-    const right=p.trialDays?`<div class="free">FREE<small>${p.trialDays} days</small></div>`:`<div class="pd"><span class="cur">${pd.sym}</span><span class="int">${pd.int}</span><span class="dec"><b>${pd.dec}</b><small>per day</small></span></div>`;
-    const sub=p.trialDays?`${p.trialDays} days free, then ${money(L(p,i))}/${p.every}`:`${money(L(p,i))} billed every ${p.every}`;
-    const save=p.compareAt?`<span class="save">SAVE ${Math.round((1-p.price/p.compareAt)*100)}%</span>`:"";
-    return `<button class="plan ${i===plan?"on":""}" data-i="${i}" type="button">${i===CONFIG.popular?'<span class="rib">★ MOST POPULAR</span>':""}<span class="rb"></span><span class="nm"><b>${p.name}</b><small>${sub}</small>${save?"<br>"+save:""}</span>${right}</button>`; }).join("");
-  $$("#plans .plan").forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(i!==plan) ev("plan_change"); plan=i; ev("plan_"+i,i); drawPlans(); });
-  const p=P[plan]; $("#terms").innerHTML=`By tapping “Start my plan”, you agree to automatic subscription renewal. ${esc(VP?VP.terms(p,plan):p.terms)} Cancel anytime via the app or email <a href="mailto:institutoacademy20@gmail.com">institutoacademy20@gmail.com</a>.`;
-  $("#geonote").innerHTML=VP&&VP.isEstimate()?`Prices converted from USD — the final amount is shown at checkout.`:"";
-  const m=P[1]; $("#stickyPrice").textContent=money(L(m,1)/m.days);
-  $("#buy").innerHTML=(p.trialDays?"Start my free week":"Start my plan")+' <span class="arr">→</span>';
+  $("#plans").innerHTML=`<div class="one"><span class="one-k">Everything included</span>
+    <ul class="one-l">${INCL.map(([t,d],i)=>`<li><b>${i?"Bonus: ":""}${esc(t)}</b>${d?` — ${esc(d)}`:""}</li>`).join("")}</ul>
+    <div class="one-p"><b>${esc(CONFIG.price)}</b><span>One-time payment · No subscription</span></div></div>`;
+  $("#terms").innerHTML=`One-time payment of ${esc(CONFIG.price)}. No subscription and no recurring charges. Questions? <a href="mailto:institutoacademy20@gmail.com">institutoacademy20@gmail.com</a>.`;
+  $("#buy").innerHTML='Get instant access <span class="arr">→</span>';
 }
 drawPlans();
-if(VP&&VP.ready) VP.ready.then(()=>{ VP.cfg=CONFIG; drawPlans(); });
 const PAYLOGOS=['<svg viewBox="0 0 48 30"><text x="24" y="19.5" text-anchor="middle" font-family="Verdana,Arial,sans-serif" font-size="10" font-weight="700" font-style="italic"><tspan fill="#253B80">Pay</tspan><tspan fill="#179BD7">Pal</tspan></text></svg>',
  '<svg viewBox="0 0 48 30"><text x="24" y="19.5" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-size="11" font-weight="900" font-style="italic" fill="#1A1F71">VISA</text></svg>',
  '<svg viewBox="0 0 48 30"><circle cx="20" cy="15" r="7" fill="#EB001B"/><circle cx="28" cy="15" r="7" fill="#F79E1B"/><path d="M24 9.3a7 7 0 0 1 0 11.4 7 7 0 0 1 0-11.4z" fill="#FF5F00"/></svg>',
@@ -1418,22 +1408,21 @@ $("#paylogos").innerHTML=PAYLOGOS.map(x=>`<span>${x}</span>`).join("");
 /* order summary → Hotmart */
 const SHIELD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5" stroke-linecap="round"/></svg>';
 $("#buy").onclick=()=>{
-  const i=plan, p=P[i]; ev("buy",i); engage();
-  const every=p.every==="month"?"every month":"every "+p.every, today=p.trialDays?money(0):money(L(p,i));
+  ev("buy",0); engage();
   const old=$("#coSheet"); if(old) old.remove();
   const el=document.createElement("div"); el.id="coSheet"; el.className="co-wrap";
   el.innerHTML=`<div class="co-back" data-x></div><div class="co-sheet" role="dialog" aria-label="Your order summary"><div class="co-grab"></div><h3>Your order summary</h3>
-    <div class="co-row"><span>Plan</span><b>${esc(p.name)}</b></div>${p.trialDays?`<div class="co-row"><span>Free trial</span><b>${p.trialDays} days</b></div>`:""}
-    <div class="co-row co-today"><span>Due today</span><b>${today}</b></div><div class="co-row"><span>${p.trialDays?`After ${p.trialDays} days`:"Then"}</span><b>${money(L(p,i))} ${every}</b></div>
-    <p class="co-cancel">Cancel anytime${p.trialDays?" before the trial ends and you won’t be charged":""}.</p>
+    <div class="co-row"><span>VEREDA Bible Plan</span><b>Included</b></div><div class="co-row"><span>5 app bonuses</span><b>Included</b></div>
+    <div class="co-row co-today"><span>Total today</span><b>${esc(CONFIG.price)}</b></div>
+    <p class="co-cancel">One-time payment. No subscription and no recurring charges.</p>
     <div class="guar">${SHIELD}<div><b>7-day money-back guarantee</b><span>Not for you? Ask for a full refund within 7 days of your payment.</span></div></div>
     <button class="btn co-go" type="button">Continue to secure checkout <span class="arr">→</span></button><div class="co-safe">🔒 Secure payment processed by Hotmart</div><button class="co-x" type="button" data-x>Back</button></div>`;
   document.body.appendChild(el); requestAnimationFrame(()=>el.classList.add("on"));
   el.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{ ev("buy_back"); el.classList.remove("on"); setTimeout(()=>el.remove(),250); });
-  el.querySelector(".co-go").onclick=()=>{ ev("buy_confirm",i); checkout(); };
+  el.querySelector(".co-go").onclick=()=>{ ev("buy_confirm",0); checkout(); };
 };
 function checkout(){
-  const p=P[plan]; const target=(VP?VP.checkout(p,plan):p.checkoutUrl); if(!target) return;
+  const p=P[0]; const target=CONFIG.checkoutUrl; if(!target) return;
   const u=new URL(target,location.href);
   track(16,"checkout","checkout",p.name);
   if(!u.searchParams.has("sck")&&!qs.has("sck")) u.searchParams.set("sck","vq_"+TRACK.quiz+"_"+TRACK.sid);
@@ -1448,9 +1437,9 @@ const FAQ=[
   ["What if I don't understand what I'm reading?","Every reading comes with a plain-language explanation and key takeaways, so you always know what the passage means and why it matters for your life today."],
   ["What if I can't stay consistent?","Sessions take about 10 minutes and fit any time of day. A clear next step helps you keep going, and missing a day never resets your progress."],
   ["Do I need to know the Bible already?","Not at all. The plan starts where you are, whether you're opening the Bible for the first time or coming back after a long time."],
-  ["How does the 7-day free trial work?","You start today and get full access for 7 days. You'll enter your payment details at checkout, but you won't be charged if you cancel before the trial ends. After 7 days, your subscription continues automatically."],
+  ["Is this a subscription?","No. It's a single payment of $9.90 — no monthly charges and nothing to cancel."],
+  ["What exactly do I get?","Your VEREDA Bible Plan (10-minute in-depth audio studies with one lesson to practice every day) plus the app bonuses: the prayer community, verse of the day, audio series and Bible stories, journal and progress, and the complete Bible."],
   ["Do I need to download anything?","No. VEREDA works right in your phone's browser — after purchase you get your access link, and you can add it to your home screen so it opens like any other app."],
-  ["How do I cancel?","Anytime, in a few taps through your purchase account or by emailing institutoacademy20@gmail.com. No questions, no hassle."],
   ["Is there a guarantee?","Yes. If VEREDA isn't for you, ask for a full refund within 7 days of your payment."]
 ];
 $("#faq").innerHTML=FAQ.map(([q,a],i)=>`<details class="reveal" data-i="${i}"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");

@@ -447,6 +447,12 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .u-now{display:block;font-size:46px;font-weight:800;color:var(--title);line-height:1}
 .u-note{display:block;font-size:13.5px;color:var(--muted);margin-top:6px;font-weight:600}
 .u-btn{font-size:18px}
+.music{position:fixed;left:12px;bottom:calc(92px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 10px;border-radius:999px;background:rgba(22,32,44,.78);color:#fff;font-size:12px;font-weight:700;border:0;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 6px 16px rgba(0,0,0,.16);cursor:pointer}
+.music .bars{display:flex;gap:2px;align-items:flex-end;height:12px}
+.music .bars i{width:3px;height:4px;background:#ffd38a;border-radius:2px}
+.music.on .bars i{animation:mb 1.1s ease-in-out infinite}.music.on .bars i:nth-child(2){animation-delay:-.4s}.music.on .bars i:nth-child(3){animation-delay:-.7s}
+@keyframes mb{50%{height:12px}}
+body.no-cta .music{bottom:calc(16px + env(safe-area-inset-bottom))}
 </style>
 <script src="/offer-track.js" defer></script>
 </head>
@@ -477,7 +483,7 @@ const CONFIG = {
   brand: "VEREDA",
   supportEmail: "institutoacademy20@gmail.com",
   companyAddress: "Your Company Ltd, Address, City, Country",
-  checkoutUrl: "",            // >>> PASTE the Hotmart link of the one-time offer here <<<
+  checkoutUrl: "https://pay.hotmart.com/G108477652R",   // Hotmart product 8963014 — one-time payment
   price: "$9.90",              // price shown on the offer (one-time payment)
   priceNote: "One-time payment · No subscription",
   accessText: "",              // e.g. "Lifetime access" — only shown when filled            // fallback checkout link; each plan below can have its own checkoutUrl (Hotmart link). UTMs, email and name are passed along
@@ -670,6 +676,7 @@ $('backBtn').onclick=()=>{ if(state.history.length){ state.i=state.history.pop()
 function go(next){ state.history.push(state.i); state.i = next ?? state.i+1; render(); }
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function setCTA(label, onClick, disabled=false){
+  document.body.classList.toggle('no-cta',!label);
   if(!label){ $('cta').style.display='none'; return; }
   $('cta').style.display=''; const b=$('ctaBtn'); b.textContent=label; b.disabled=disabled; b.onclick=onClick;
 }
@@ -717,6 +724,7 @@ function render(){
   const showProg = !["hook","gender","profile","crafting","email","newsletter","name","graph","vsl","offer"].includes(s.type);
   $('progress').style.display = showProg?'':'none'; if(showProg) progress();
   setCTA(null);
+  if(typeof Music!=="undefined"){ if(s.type!=="vsl" && Music.wanted && Music.ctx && !Music.on) Music.start(); }
   (R[s.type])(s);
   track(state.i, s.key||s.type);
 }
@@ -967,7 +975,7 @@ const R = {
     v.addEventListener("ended",()=>{ unlock(); play.classList.remove("hidden"); });
     v.addEventListener("pause",()=>{ if(!v.ended) play.classList.remove("hidden"); });
     v.addEventListener("play",()=>play.classList.add("hidden"));
-    snd.onclick=()=>{ v.muted=false; v.currentTime=0; last=0; v.play().catch(()=>{}); snd.remove(); try{window.clarity&&clarity("event","vsl_sound")}catch(e){} };
+    snd.onclick=()=>{ Music.stop(); v.muted=false; v.currentTime=0; last=0; v.play().catch(()=>{}); snd.remove(); try{window.clarity&&clarity("event","vsl_sound")}catch(e){} };
     play.onclick=()=>{ if(v.ended){v.currentTime=0;last=0;} v.play().catch(()=>{}); };
     v.onclick=()=>{ if(snd.isConnected) return snd.onclick(); v.paused?v.play().catch(()=>{}):v.pause(); };
     const p=v.play(); if(p&&p.catch) p.catch(()=>play.classList.remove("hidden"));
@@ -1084,6 +1092,57 @@ function checkout(){
   if(state.name)  u.searchParams.set('name',state.name);
   location.href=u.toString();
 }
+/* ===== Background music (original ambient pad generated in the browser) + selection sounds ===== */
+const Music={ctx:null,on:false,master:null,timer:null,k:0,wanted:true,
+  init(){ if(this.ctx) return true; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return false; }
+    const c=this.ctx; this.master=c.createGain(); this.master.gain.value=0;
+    // simple generated reverb
+    const len=c.sampleRate*3.5, ir=c.createBuffer(2,len,c.sampleRate);
+    for(let ch=0;ch<2;ch++){ const d=ir.getChannelData(ch); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6); }
+    this.rev=c.createConvolver(); this.rev.buffer=ir; const wet=c.createGain(); wet.gain.value=.55; const dry=c.createGain(); dry.gain.value=.5;
+    this.bus=c.createGain(); this.bus.connect(dry); this.bus.connect(this.rev); this.rev.connect(wet); dry.connect(this.master); wet.connect(this.master); this.master.connect(c.destination);
+    return true; },
+  // D major worship progression: D – Bm – G – A  (I – vi – IV – V)
+  CH:[[146.83,220,293.66,369.99],[123.47,246.94,293.66,369.99],[98,196,246.94,293.66],[110,220,277.18,329.63]],
+  MEL:[587.33,659.25,739.99,880,739.99,659.25,587.33,493.88],
+  pad(f,t,dur){ const c=this.ctx; [0,-6,6].forEach(det=>{ const o=c.createOscillator(), g=c.createGain(), lp=c.createBiquadFilter();
+      o.type=det?"sawtooth":"triangle"; o.frequency.value=f; o.detune.value=det; lp.type="lowpass"; lp.frequency.value=det?700:1400;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(det?.018:.05,t+2.2); g.gain.linearRampToValueAtTime(det?.014:.04,t+dur-1.5); g.gain.linearRampToValueAtTime(0,t+dur+1.5);
+      o.connect(lp); lp.connect(g); g.connect(this.bus); o.start(t); o.stop(t+dur+1.6); }); },
+  bell(f,t){ const c=this.ctx, o=c.createOscillator(), g=c.createGain(); o.type="sine"; o.frequency.value=f;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.035,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+3.2); o.connect(g); g.connect(this.bus); o.start(t); o.stop(t+3.3); },
+  loop(){ if(!this.on) return; const t=this.ctx.currentTime+.05, dur=8, ch=this.CH[this.k%4];
+    ch.forEach(f=>this.pad(f,t,dur)); this.pad(ch[0]/2,t,dur);
+    for(let i=0;i<3;i++){ if(Math.random()<.75) this.bell(this.MEL[(this.k*3+i*2+Math.floor(Math.random()*3))%this.MEL.length],t+1+i*2.4+Math.random()*.6); }
+    this.k++; this.timer=setTimeout(()=>this.loop(),dur*1000); },
+  start(){ if(!this.init()) return; this.ctx.resume(); if(this.on) return; this.on=true; this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+    this.master.gain.setValueAtTime(this.master.gain.value,this.ctx.currentTime); this.master.gain.linearRampToValueAtTime(.9,this.ctx.currentTime+3); this.loop(); ui(); },
+  stop(){ if(!this.ctx||!this.on) return; this.on=false; clearTimeout(this.timer); this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+    this.master.gain.setValueAtTime(this.master.gain.value,this.ctx.currentTime); this.master.gain.linearRampToValueAtTime(0,this.ctx.currentTime+1.2); ui(); }
+};
+function ui(){ const b=document.getElementById("music"); if(!b) return; b.classList.toggle("on",Music.on); document.getElementById("mlabel").textContent=Music.on?"Music on":"Music off"; }
+const Sfx={ ctx(){ return Music.init()?Music.ctx:null; },
+  tone(f,t,dur,vol,type){ const c=this.ctx(); if(!c) return; const o=c.createOscillator(), g=c.createGain(); o.type=type||"sine"; o.frequency.value=f;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.012); g.gain.exponentialRampToValueAtTime(.0001,t+dur); o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+dur+.05); },
+  select(){ if(!Sfx.on) return; const c=this.ctx(); if(!c) return; c.resume(); const t=c.currentTime; this.tone(880,t,.35,.09); this.tone(1318.5,t+.07,.5,.07); },
+  tick(){ if(!Sfx.on) return; const c=this.ctx(); if(!c) return; c.resume(); this.tone(1046.5,c.currentTime,.18,.06,"triangle"); },
+  next(){ if(!Sfx.on) return; const c=this.ctx(); if(!c) return; c.resume(); const t=c.currentTime; this.tone(659.25,t,.25,.05); this.tone(987.77,t+.05,.35,.045); },
+  on:true };
+try{ if(localStorage.getItem("vq_music")==="off"){ Music.wanted=false; Sfx.on=false; } }catch(e){}
+(function(){ const b=document.createElement("button"); b.className="music"; b.id="music"; b.type="button"; b.setAttribute("aria-label","Background music");
+  b.innerHTML='<span class="bars"><i></i><i></i><i></i></span><span id="mlabel">Music off</span>'; document.body.appendChild(b);
+  b.addEventListener("click",e=>{ e.stopPropagation(); if(Music.on){ Music.wanted=false; Sfx.on=false; Music.stop(); try{localStorage.setItem("vq_music","off")}catch(_){} try{window.clarity&&clarity("event","music_off")}catch(_){} }
+    else { Music.wanted=true; Sfx.on=true; Music.start(); try{localStorage.removeItem("vq_music")}catch(_){} try{window.clarity&&clarity("event","music_on")}catch(_){} } });
+})();
+// sounds: option picked / multi toggled / continue
+document.addEventListener("click",e=>{ const t=e.target;
+  if(t.closest(".opt.multi")) Sfx.tick();
+  else if(t.closest(".opt,.tile,.modal .yn button")) Sfx.select();
+  else if(t.closest("#ctaBtn,#vslGo")) Sfx.next(); },true);
+// music starts on the first tap (browsers block audio before that)
+const firstTouch=()=>{ removeEventListener("pointerdown",firstTouch,true); if(Music.wanted && STEPS[state.i].type!=="vsl") Music.start(); };
+addEventListener("pointerdown",firstTouch,true);
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) Music.stop(); else if(Music.wanted && Music.ctx && STEPS[state.i].type!=="vsl") Music.start(); });
 render();
 </script>
 </body>
