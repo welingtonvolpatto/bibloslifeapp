@@ -472,9 +472,9 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
 .opt .oe{font-size:20px;margin-right:2px}
 /* art block: image + floating glass chips, matched to each step */
-.art{position:relative;margin:4px 2px 18px;height:150px;border-radius:20px;overflow:visible}
-.art .ai{position:absolute;inset:0;border-radius:20px;overflow:hidden;box-shadow:0 14px 30px rgba(20,70,120,.16);animation:artin .7s cubic-bezier(.2,.8,.2,1) both}
-.art .ai img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);animation:kb 9s ease-out forwards}
+.art{position:relative;margin:4px 2px 18px;border-radius:20px;overflow:visible}
+.art .ai{position:relative;border-radius:20px;overflow:hidden;box-shadow:0 14px 30px rgba(20,70,120,.16);animation:artin .7s cubic-bezier(.2,.8,.2,1) both}
+.art .ai img{width:100%;height:auto;display:block;transform:scale(1.04);animation:kb 6s ease-out forwards}
 @keyframes kb{to{transform:scale(1)}}
 @keyframes artin{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
 .gchip{position:absolute;z-index:3;display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:14px;font-size:12.5px;font-weight:700;color:#14324a;white-space:nowrap;
@@ -516,6 +516,19 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .lp-card.done .lp-end{opacity:1;transform:none}
 .lp-end b{display:block;font-size:16px}.lp-end span{font-size:11.5px;font-weight:600}
 .lp-verse{text-align:center;font-size:14px;font-style:italic;color:var(--muted);margin:14px 10px 0}.lp-verse span{display:block;font-style:normal;font-size:12px;font-weight:700;margin-top:4px;color:var(--blue)}
+.cs{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.cs-i{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9);opacity:.55;transition:all .4s ease}
+.cs-i.on{opacity:1;background:#fff;box-shadow:0 12px 28px rgba(14,95,149,.16);transform:scale(1.02)}
+.cs-i.done{opacity:1;background:rgba(255,255,255,.8)}
+.cs-r{position:relative;width:48px;height:48px;flex:none}
+.cs-r svg{width:48px;height:48px;transform:rotate(-90deg)}
+.cs-r .bg{fill:none;stroke:#e3edf6;stroke-width:5}
+.cs-r .fg{fill:none;stroke:var(--blue);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .1s linear}
+.cs-r span{position:absolute;inset:0;display:grid;place-items:center;font-size:11.5px;font-weight:800;color:var(--blue)}
+.cs-r .ok{position:absolute;inset:4px;border-radius:50%;background:#19b56b;color:#fff;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:18px;transform:scale(0);transition:transform .35s cubic-bezier(.2,.9,.25,1.4)}
+.cs-i.done .ok{transform:scale(1)}.cs-i.done .cs-r span{opacity:0}
+.cs-t b{display:block;font-size:15px;color:var(--title)}.cs-t small{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
+.cs-i.on .cs-t small{color:var(--blue);font-weight:700}.cs-i.done .cs-t small{color:#11804b;font-weight:700}
 </style>
 <script src="/offer-track.js" defer></script>
 </head>
@@ -984,32 +997,30 @@ const R = {
     setCTA("Continue",()=>go());
   },
   crafting(){
-    const items=[["Aligning with your goals","Goals","Are you ready to study the Bible daily?"],["Identifying growth areas","Growth areas","Are you willing to stay consistent this time?"],["Picking Bible verses for you","Content","Are you committed to growing in your faith?"]];
-    const revs=CONFIG.reviews;
-    view.innerHTML=`<section class="screen"><h2 class="info-title" style="margin-top:6px">We are crafting your<br><span class="hl">Personalized Bible Study Plan</span></h2>
-      <div class="cr">${items.map((it,i)=>`<div class="cr-i"><div class="cr-t"><span class="cr-l">${it[0]}</span><span class="cr-p" id="cp${i}">0%</span></div><div class="cr-b"><i id="cb${i}"></i></div></div>`).join('')}</div>
+    const items=[["Analyzing your answers","Your level, barrier and goals"],["Mapping your 28-day path","Lessons in the right order for you"],["Picking Bible verses for you","Passages for your focus area"]];
+    const R0=20, CIRC=2*Math.PI*R0;
+    view.innerHTML=`<section class="screen"><h2 class="info-title" style="margin-top:6px">We are crafting your<br><span class="hl">Personalized Bible Plan</span></h2>
+      <div class="cs">${items.map((it,i)=>`<div class="cs-i" id="cs${i}">
+        <div class="cs-r"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="${R0}" class="bg"/><circle cx="24" cy="24" r="${R0}" class="fg" id="cr${i}" stroke-dasharray="${CIRC}" stroke-dashoffset="${CIRC}"/></svg>
+          <span id="cp${i}">0%</span><i class="ok">✓</i></div>
+        <div class="cs-t"><b>${it[0]}</b><small id="cst${i}">${it[1]}</small></div></div>`).join('')}</div>
       <div class="nt-h">What VEREDA users are saying</div><div class="nt" id="nt"></div></section>`;
     let vi=0; const nt=$('nt');
-    const push=()=>{ if(!nt||!nt.isConnected) return; const v=VOICES[vi++%VOICES.length]; const d=document.createElement('div'); d.className='nt-i';
+    const push=()=>{ if(!nt||!nt.isConnected||nt.children.length>=4) return; const v=VOICES[vi++%VOICES.length]; const d=document.createElement('div'); d.className='nt-i';
       d.innerHTML=`<img src="rev/${v.a}.webp" alt=""><div><div class="nt-top"><b>VEREDA</b><span>now</span></div><p>“${esc(v.t)}”</p><small>${esc(v.w)}</small></div>`;
-      nt.prepend(d); requestAnimationFrame(()=>d.classList.add('on')); try{Sfx.tick()}catch(e){}
-      [...nt.children].slice(3).forEach(x=>{x.classList.add('out');setTimeout(()=>x.remove(),400);}); };
-    push(); const ntT=setInterval(()=>{ if(!nt.isConnected) return clearInterval(ntT); push(); },2600);
-    window.__ntPush=push;
-    const card=r=>`<div class="mq-c"><div class="mq-top"><em>${r.photo?`<img src="${CONFIG.img}${esc(r.photo)}" alt="">`:esc((r.name||'').replace(/[^A-Za-z]/g,'').charAt(0)||'?')}</em><div><b>${esc(r.name)}</b></div></div><span class="mq-st">${'<i>\u2605</i>'.repeat(r.stars||5)}</span>${r.title?`<b style="font-size:14px;margin-top:8px">${esc(r.title)}</b>`:''}<p>${esc(r.text)}</p></div>`;
-    if(revs.length){const row=revs.map(card).join('');$('crev').innerHTML=`<div class="mq-h">Users love ${esc(CONFIG.brandName)}</div><div class="mq"><div class="mq-t" style="--d:${Math.max(24,revs.length*8)}s">${row}${row}</div></div>`;}
-    const showRev=()=>{};
+      nt.prepend(d); requestAnimationFrame(()=>d.classList.add('on')); try{Sfx.tick()}catch(e){} };
+    setTimeout(push,900); const ntT=setInterval(()=>{ if(!nt.isConnected||nt.children.length>=4) return clearInterval(ntT); push(); },3800);
     let k=0;
     const run=()=>{
-      if(k>=items.length) return setTimeout(()=>go(),500);
-      showRev(k); let p=0; const asked={};
-      const tick=()=>{
-        if(p===60 && !asked[k]){asked[k]=1;return ask(items[k][2],()=>{ try{window.__ntPush&&window.__ntPush()}catch(e){} setTimeout(tick,40); });}
-        $('cp'+k).textContent=p+'%'; $('cb'+k).style.width=p+'%';
-        if(p>=100){$('cp'+k).textContent='100%';k++;return setTimeout(run,300);}
-        p++; setTimeout(tick,35);
+      if(k>=items.length) return setTimeout(()=>go(),1600);
+      const row=$('cs'+k); row.classList.add('on'); $('cst'+k).textContent='Working on it…';
+      let p=0;
+      const tick=()=>{ if(!row.isConnected) return;
+        $('cp'+k).textContent=p+'%'; $('cr'+k).style.strokeDashoffset=CIRC*(1-p/100);
+        if(p>=100){ row.classList.remove('on'); row.classList.add('done'); $('cst'+k).textContent='Done'; try{Sfx.select()}catch(e){} k++; return setTimeout(run,450); }
+        p++; setTimeout(tick, p>70&&p<85?70:42);
       }; tick();
-    }; setTimeout(run,300);
+    }; setTimeout(run,400);
   },
   newsletter(){
     view.innerHTML=`<section class="screen center" style="justify-content:flex-start"><h2 class="info-title" style="margin-top:40px">Do you want to receive emails with <span class="hl">Bible study tips</span> and our <span class="hl">spiritual growth updates</span>?</h2>
