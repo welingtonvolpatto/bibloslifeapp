@@ -445,6 +445,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .u-list li{position:relative;padding-left:28px;font-size:14.5px;line-height:1.45;color:var(--text)}
 .u-list li:before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:#e7f6ee;color:#11804b;font-weight:800;font-size:12px;display:grid;place-items:center}
 .u-amt{text-align:center;margin:16px 0 14px}
+.u-was{display:block;font-size:13.5px;color:var(--muted);margin-bottom:6px;font-weight:600}.u-was s{color:#b4513a}
 .u-now{display:block;font-size:46px;font-weight:800;color:var(--title);line-height:1}
 .u-note{display:block;font-size:13.5px;color:var(--muted);margin-top:6px;font-weight:600}
 .u-btn{font-size:18px}
@@ -549,6 +550,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 @keyframes rvs{to{left:130%}}
 .rv-back{background:#fff;border:2px solid var(--blue);box-shadow:0 18px 40px rgba(14,95,149,.18);transform:rotateY(180deg);padding:20px;gap:6px}
 .rv-card.open .rv-front{transform:rotateY(-180deg);animation:none}.rv-card.open .rv-back{transform:rotateY(0)}
+.rv-pct{font-size:84px;font-weight:800;line-height:1;color:var(--blue);display:flex;align-items:flex-start;gap:4px}.rv-pct em{font-style:normal;font-size:20px;font-weight:800;color:#c0392b;margin-top:12px}
 .rv-row{display:flex;justify-content:space-between;width:100%;font-size:14px;color:var(--muted)}.rv-row s{color:#b4513a;font-weight:700}
 .rv-line{width:100%;height:1px;background:var(--line);margin:8px 0}
 .rv-k{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
@@ -558,6 +560,37 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .cf{position:fixed;left:0;right:0;top:30%;height:0;pointer-events:none;z-index:50}
 .cf i{position:absolute;top:0;width:8px;height:12px;border-radius:2px;opacity:0;animation:cff 1.6s cubic-bezier(.2,.7,.4,1) forwards}
 @keyframes cff{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--dx),420px) rotate(var(--r))}}
+.ds{position:fixed;inset:0;z-index:200;background:rgba(10,25,45,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .3s}
+.ds.on{opacity:1}
+.ds-box{width:100%;max-width:430px;max-height:94vh;overflow:auto;background:linear-gradient(180deg,#eef6fd,#fff 30%);border-radius:24px 24px 0 0;padding:22px 18px 22px;transform:translateY(40px);transition:transform .45s cubic-bezier(.2,.9,.25,1.15)}
+.ds.on .ds-box{transform:none}
+.ds-k{text-align:center;font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#c0392b}
+.ds-h{text-align:center;font-size:24px;line-height:1.2;color:var(--title);margin:8px 4px 10px}.ds-h span{color:var(--blue)}
+.ds-p{font-size:15px;line-height:1.55;color:var(--text);text-align:center;margin:8px 4px}
+.ds-list{display:grid;gap:8px;margin:12px 0}
+.ds-list div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:14px;line-height:1.45}
+.ds-list b{display:block;color:var(--blue);font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+.ds-price{margin:14px 0;text-align:center;background:#fff;border:2px dashed var(--blue);border-radius:18px;padding:14px}
+.ds-off{display:inline-block;background:#c0392b;color:#fff;font-weight:800;font-size:13px;padding:4px 10px;border-radius:999px}
+.ds-price s{display:block;color:var(--muted);font-size:16px;margin-top:8px}
+.ds-price b{display:block;font-size:52px;line-height:1;color:var(--title);margin-top:2px}
+.ds-price small{display:block;font-size:12.5px;color:var(--muted);margin-top:6px;font-weight:600}
+.ds-yes{font-size:16px}
+.ds-no{display:block;margin:12px auto 0;background:none;border:0;color:var(--muted);font-size:13.5px;text-decoration:underline;cursor:pointer}
+.fl-row{position:relative;display:flex;align-items:center;justify-content:center;gap:12px;margin:14px 0;flex-wrap:wrap}
+.fl-row.r1{margin:18px 0 16px}
+.fl-col{display:flex;flex-direction:column;gap:10px}
+.fl-card,.fl-chip{background:linear-gradient(135deg,rgba(120,170,215,.55),rgba(70,130,190,.45));border:1px solid rgba(255,255,255,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 14px 30px rgba(20,60,110,.22),inset 0 1px 0 rgba(255,255,255,.5);color:#fff;animation:flt 6s ease-in-out infinite}
+.fl-player{width:150px;border-radius:22px;padding:10px 12px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;transform:rotate(-3deg)}
+.fl-tag{align-self:flex-start;font-size:11px;font-weight:700;background:rgba(255,255,255,.22);padding:4px 8px;border-radius:8px}
+.fl-ic{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,#5aa0dd,#2a6fb0);display:grid;place-items:center;box-shadow:0 8px 16px rgba(20,60,110,.3)}.fl-ic svg{width:24px;height:24px}
+.fl-bar{display:flex;align-items:center;gap:6px;width:100%;font-size:10px;font-weight:700}.fl-bar i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.35);position:relative;overflow:hidden}
+.fl-bar b{position:absolute;left:0;top:0;bottom:0;width:59%;background:#fff;animation:flp 10s linear infinite}@keyframes flp{from{width:40%}to{width:80%}}
+.fl-ctl{display:flex;align-items:center;justify-content:space-between;width:100%}.fl-ctl em{font-style:normal;width:22px;height:22px;border:1.5px solid #fff;border-radius:50%;display:grid;place-items:center;font-size:9px;font-weight:800}
+.fl-pause{display:flex;gap:4px}.fl-pause i{width:5px;height:16px;border-radius:2px;background:#fff}
+.fl-chip{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:14px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.fl-chip span{font-size:15px}
+.fl-chip.a{transform:rotate(-3deg);animation-delay:-1.5s}.fl-chip.b{transform:rotate(2deg);animation-delay:-3s}.fl-chip.c{transform:rotate(-1deg);animation-delay:-4.5s}
 </style>
 <script src="/offer-track.js" defer></script>
 </head>
@@ -592,6 +625,8 @@ const CONFIG = {
   checkoutUrl: "https://pay.hotmart.com/G108477652R",   // Hotmart product 8963014 — one-time payment
   price: "$9.90",              // price shown on the offer (one-time payment)
   priceNote: "One-time payment · No subscription",
+  // Back-redirect / exit offer: 50% off, shown once when the visitor tries to leave the offer
+  downsell: { url: "https://pay.hotmart.com/G108477652R?off=o7rzx1lz", price: "$5", was: "$9.90" },
   accessText: "Lifetime access",            // fallback checkout link; each plan below can have its own checkoutUrl (Hotmart link). UTMs, email and name are passed along
   leadWebhook: "",             // optional: URL that receives {email, name, archetype, answers} via POST
   // Social proof shown on the first screen. Leave rating empty to hide it.
@@ -940,33 +975,29 @@ const R = {
     view.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{b.classList.add('sel');state.answers[s.key]=b.dataset.v;setTimeout(()=>go(),300);});
   },
   reveal(){
-    const low=!!(window.VPRICE&&VPRICE.tier==="low"); const mo=low?9.90:19.90, yr=(mo*12), save=yr-9.90;
-    const f=v=>"$"+v.toFixed(2);
+    const low=!!(window.VPRICE&&VPRICE.tier==="low"); const mo=low?9.90:19.90, yr=mo*12, pct=Math.floor((1-9.90/yr)*100);
     view.innerHTML=`<section class="screen rv">
       <div class="gr-b" style="align-self:center">One last step</div>
-      <h2 class="info-title" style="margin-top:12px">Your price is <span class="hl">ready to unlock</span></h2>
-      <p class="rv-sub">Tap the card to reveal what you’ll pay today.</p>
-      <button class="rv-card" id="rvc" type="button" aria-label="Reveal my price">
-        <span class="rv-front"><span class="rv-shine"></span><span class="rv-gift">🎁</span><b>Tap to reveal</b><small>Your price on this page</small></span>
+      <h2 class="info-title" style="margin-top:12px">You’ve unlocked a <span class="hl">special price</span></h2>
+      <p class="rv-sub">Tap the card to see your discount.</p>
+      <button class="rv-card" id="rvc" type="button" aria-label="Reveal my discount">
+        <span class="rv-front"><span class="rv-shine"></span><span class="rv-gift">🎁</span><b>Tap to reveal</b><small>Your discount</small></span>
         <span class="rv-back">
-          <span class="rv-row"><span>VEREDA monthly plan</span><s>${f(mo)}/month</s></span>
-          <span class="rv-row"><span>One year on the monthly plan</span><s>${f(yr)}</s></span>
-          <span class="rv-line"></span>
-          <span class="rv-k">Your price today</span>
-          <span class="rv-now">$9.90</span>
-          <span class="rv-note">Pay once · Lifetime access · No subscription</span>
-          <span class="rv-save">You save ${f(save)} in the first year alone</span>
+          <span class="rv-k">Your discount</span>
+          <span class="rv-pct"><span id="rvn">0</span>%<em>OFF</em></span>
+          <span class="rv-note">compared to a full year of the VEREDA monthly plan</span>
+          <span class="rv-save">+ lifetime access · no subscription</span>
         </span>
       </button>
       <div class="cf" id="cf"></div></section>`;
     let opened=false; const c=$('rvc');
     const open=()=>{ if(opened) return; opened=true; c.classList.add('open'); try{Sfx.select();setTimeout(()=>Sfx.next(),180)}catch(e){}
-      const cf=$('cf'); let h=''; const col=['#0E5F95','#f6c66b','#19b56b','#e5735a','#8fb6ea'];
-      for(let i=0;i<46;i++){ h+=`<i style="left:${Math.random()*100}%;background:${col[i%5]};--dx:${(Math.random()*2-1)*80}px;--r:${Math.random()*720}deg;animation-delay:${Math.random()*.25}s"></i>`; } cf.innerHTML=h;
+      const t0=performance.now()+350; (function tk(t){ const el=$('rvn'); if(!el) return; const k=Math.max(0,Math.min(1,(t-t0)/1200)); el.textContent=Math.round(pct*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(tk); else { const cf=$('cf'); let h=''; const col=['#0E5F95','#f6c66b','#19b56b','#e5735a','#8fb6ea'];
+        for(let i=0;i<46;i++){ h+=`<i style="left:${Math.random()*100}%;background:${col[i%5]};--dx:${(Math.random()*2-1)*80}px;--r:${Math.random()*720}deg;animation-delay:${Math.random()*.25}s"></i>`; } cf.innerHTML=h; try{Sfx.select()}catch(e){} } })(performance.now());
       try{window.clarity&&clarity("event","price_reveal")}catch(e){}
-      setTimeout(()=>setCTA("See my plan →",()=>go()),900); };
+      setTimeout(()=>setCTA("See how much I pay →",()=>go()),1700); };
     c.onclick=open;
-    const auto=setTimeout(()=>{ if(c.isConnected) open(); },6000);
+    setTimeout(()=>{ if(c.isConnected) open(); },6000);
   },
   loader(){
     state.archetype = computeArchetype();
@@ -1160,13 +1191,17 @@ const R = {
       {img:IMG+"app/reflect.webp", t:"Journal & progress", d:"Write what God is showing you and watch your streak and progress grow."},
       {img:IMG+"app/bible.webp", t:"The complete Bible", d:"Read any book and chapter in a clear, modern English translation."}
     ];
+    const HP='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg>';
+    const player=`<div class="fl-card fl-player"><span class="fl-tag">Listening · 10 min</span><span class="fl-ic">${HP}</span><span class="fl-bar"><small>05:56</small><i><b></b></i><small>10:00</small></span><span class="fl-ctl"><em>5</em><span class="fl-pause"><i></i><i></i></span><em>10</em></span></div>`;
+    const chip=(e,t,c)=>`<div class="fl-chip ${c||''}"><span>${e}</span>${t}</div>`;
+    const floatRow=(html,cls)=>`<div class="fl-row ${cls||''}" aria-hidden="true">${html}</div>`;
     const priceBlock=id=>`<div id="${id}" class="u-price">
       <div class="u-pk">Your 28-day plan + lifetime access</div>
       <ul class="u-list">
         <li><b>Your VEREDA Bible Plan</b> — 10-minute in-depth audio studies + one lesson to practice every day, starting with <b>${esc(challenge.toLowerCase())}</b></li>
         ${BON.map(x=>`<li><b>Bonus:</b> ${esc(x.t)}</li>`).join("")}
       </ul>
-      <div class="u-amt"><span class="u-now">${esc(C.price)}</span><span class="u-note">${esc(C.priceNote)}${C.accessText?` · ${esc(C.accessText)}`:""}</span></div>
+      <div class="u-amt"><span class="u-was">A year on the monthly plan: <s>${(window.VPRICE&&VPRICE.tier==="low")?"$118.80":"$238.80"}</s></span><span class="u-now">${esc(C.price)}</span><span class="u-note">${esc(C.priceNote)}${C.accessText?` · ${esc(C.accessText)}`:""}</span></div>
       <button class="btn sub u-btn">Start my 28 days →</button>
       <div class="o-guar">${ICON.shield}<span>30-day money-back guarantee<small>Not for you? Ask for a full refund within 30 days.</small></span></div>
       <div class="safe">${ICON.shield}Secure payment processed by Hotmart</div>
@@ -1176,6 +1211,7 @@ const R = {
       <div class="o-kick">Your personalized plan is ready</div>
       <h1 class="o-h1">Give God 10 minutes a day.<br><b>In 28 days, see your life change.</b></h1>
       <p class="o-promise">Understand the Bible like never before and <b>live it every day</b> — at home, at work and in your relationships. Your first 28 days are already mapped out for you, and you keep access for life.</p>
+      ${floatRow(player+`<div class="fl-col">${chip("✨","Lesson 7 unlocked","a")}${chip("🎧","Listen anywhere","b")}</div>`,"r1")}
       <div class="o-chips"><div>${ICON.alert}<span><small>Main challenge</small>${challenge}</span></div><div>${ICON.bulb}<span><small>Focus</small>${goal}</span></div></div>
       <div class="u-diag"><b>Why you’ve felt stuck</b><p>You didn’t lack faith or effort. You were trying to read the Bible without anyone explaining it — and without a simple way to <b>live</b> what you read. VEREDA changes both: you <b>understand</b> it in about 10 minutes, and you <b>practice</b> it the same day.</p></div>
       <h3 class="o-h2" style="margin-top:26px">Your <span class="hl">28-day plan</span></h3>
@@ -1186,10 +1222,12 @@ const R = {
       </div>
       <h3 class="o-h2">What you’re getting for <span class="hl">${esc(C.price)}</span></h3>
       <div class="u-main"><img src="${IMG}app/listen.webp" alt="" loading="lazy"><div><span class="u-tag">Your main plan</span><b>The VEREDA Bible Plan</b><p>Every day: a short guided prayer, an in-depth Bible study you can <b>listen to in about 10 minutes</b>, a quick quiz to remember it, and <b>one simple lesson to practice</b> the same day. It starts with <b>${esc(challenge.toLowerCase())}</b> and keeps going as you grow.</p></div></div>
+      ${floatRow(chip("📖","Verse of the day","a")+chip("🙏","Prayer community","b")+chip("🔥","Day 7 streak","c"),"r2")}
       <div class="u-soc"><b>560K+</b> people in <b>169+</b> countries already study with VEREDA</div>
       <h3 class="o-h2" style="margin-top:26px">Plus, these bonuses are <span class="hl">included</span></h3>
       <div class="o-get u-bon">${BON.map(x=>`<div class="u-b"><img src="${x.img}" alt="" loading="lazy"><div><b>${esc(x.t)}</b><p>${esc(x.d)}</p></div></div>`).join("")}</div>
       ${priceBlock("pA")}
+      ${floatRow(chip("🌱","1 lesson to practice","a")+chip("✅","Action done","b"),"r3")}
       <h3 class="o-h2">People often ask</h3>
       <div class="faq">${C.faq.map(f=>`<details><summary>${f.q}</summary><p>${f.a}</p></details>`).join('')}</div>
       ${priceBlock("pB")}
@@ -1209,6 +1247,7 @@ const R = {
       c.addEventListener('scroll',()=>requestAnimationFrame(sync),{passive:true});
       c.addEventListener('pointerdown',()=>{user=true;},{passive:true});
       const t=setInterval(()=>{ if(!c.isConnected) return clearInterval(t); if(user) return; const w=c.firstElementChild.offsetWidth+12; i=(i+1)%4; c.scrollTo({left:i*w,behavior:'smooth'}); },3500); })();
+    armDownsell();
     window.OFFER_TRACK&&OFFER_TRACK({url:TRACK.url.replace("/quiz_events","/offer_events"),key:TRACK.key,sid:TRACK.sid,quiz:TRACK.quiz,bot:IS_BOT,view:view,getPlan:()=>0,getPlan0:0});
   }
 };
@@ -1238,6 +1277,38 @@ function sendLead(){
   fetch(CONFIG.leadWebhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:state.email,name:state.name,archetype:state.archetype,gender:state.gender,answers:state.answers})}).catch(()=>{});
 }
 /* Order summary before sending to Hotmart */
+/* ===== Exit offer (back redirect): shown once, when the visitor presses Back or (desktop) moves to leave the page ===== */
+let dsShown=false, dsArmed=false;
+function oev(name){ if(IS_BOT) return; try{ fetch(TRACK.url.replace("/quiz_events","/offer_events"),{method:"POST",keepalive:true,headers:{"apikey":TRACK.key,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,ev:name,device:matchMedia("(pointer:coarse)").matches?"mobile":"desktop",plan:null})}).catch(()=>{}); }catch(e){} }
+function armDownsell(){
+  if(dsArmed||!CONFIG.downsell) return; dsArmed=true;
+  try{ history.pushState({vd:"offer"},"",location.href); }catch(e){}
+  addEventListener("popstate",()=>{ if(STEPS[state.i].type!=="offer") return; if(!dsShown){ try{history.pushState({vd:"offer"},"",location.href);}catch(e){} showDownsell("back"); } else { history.back(); } });
+  setTimeout(()=>{ document.addEventListener("mouseout",e=>{ if(!e.relatedTarget && e.clientY<=0 && !dsShown && STEPS[state.i].type==="offer") showDownsell("exit"); }); },8000);
+}
+function showDownsell(src){
+  if(dsShown) return; dsShown=true; const D=CONFIG.downsell; oev("ds_view"); oev("ds_"+src);
+  try{window.clarity&&clarity("event","downsell_view")}catch(e){}
+  const old=document.getElementById("coSheet"); if(old) old.remove();
+  const el=document.createElement("div"); el.className="ds"; el.id="ds";
+  el.innerHTML=`<div class="ds-box" role="dialog" aria-label="A special offer before you go">
+    <div class="ds-k">Wait — before you go</div>
+    <h2 class="ds-h">Don’t let another year pass with your Bible <span>closed.</span></h2>
+    <p class="ds-p">You came this far because something inside you wants more. More peace. More of God. A different life.</p>
+    <div class="ds-list">
+      <div><b>At home</b><span>calmer words, more patience, a family that prays together</span></div>
+      <div><b>At work</b><span>wisdom for decisions, purpose in what you do, peace under pressure</span></div>
+      <div><b>In your heart</b><span>less anxiety, less guilt, and the feeling of finally walking with God</span></div>
+    </div>
+    <p class="ds-p">It all starts with 10 minutes a day. We don’t want price to be the reason you walk away — so here is our best offer, just once:</p>
+    <div class="ds-price"><span class="ds-off">50% OFF</span><s>${esc(D.was)}</s><b>${esc(D.price)}</b><small>one-time · lifetime access · 30-day money-back guarantee</small></div>
+    <button class="btn ds-yes" type="button">Yes — I want my life to change for ${esc(D.price)}</button>
+    <button class="ds-no" type="button">No thanks, I’ll keep going on my own</button>
+  </div>`;
+  document.body.appendChild(el); requestAnimationFrame(()=>el.classList.add("on")); try{Sfx.select()}catch(e){}
+  el.querySelector(".ds-yes").onclick=()=>{ oev("ds_buy"); try{window.clarity&&clarity("event","downsell_buy")}catch(e){} checkout(D.url); };
+  el.querySelector(".ds-no").onclick=()=>{ oev("ds_no"); el.classList.remove("on"); setTimeout(()=>el.remove(),300); };
+}
 function checkoutSummary(){
   const C=CONFIG;
   const old=document.getElementById("coSheet"); if(old) old.remove();
@@ -1260,9 +1331,9 @@ function checkoutSummary(){
   el.querySelector(".co-go").onclick=()=>checkout();
 }
 
-function checkout(){
+function checkout(over){
   const p=CONFIG.plans[state.plan]||{};
-  const target=CONFIG.checkoutUrl;
+  const target=over||CONFIG.checkoutUrl;
   if(!target||target==="#") return;
   const u=new URL(target,location.href);
   track(state.i,'checkout','checkout',p.name||String(state.plan));
