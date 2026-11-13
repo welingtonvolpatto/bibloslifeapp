@@ -731,7 +731,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
 <section class="hero" id="hero" data-sec="hero"><div class="clouds" data-clouds></div><div class="wrap hero-grid">
   <div>
     <span class="eyebrow" id="heyebrow">🎧 Audio Bible study for busy Christians</span>
-    <h1 id="hl">Understand the Bible like never before — <em>without spending hours reading</em></h1>
+    <h1 id="hl">Give God 10 minutes a day. <em>In 28 days, see your life change.</em></h1>
 
     <p class="lead" id="hlead">VEREDA is <b>in-depth Bible study you can listen to in just 10 minutes a day</b> — explained so clearly you’ll understand Scripture like never before, and see your life change, one step at a time. <b>You don’t just learn — every day you get a lesson to practice.</b></p>
     <div class="picker reveal">
@@ -743,18 +743,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
         <button class="opt" data-k="consistent"><span class="e">⏳</span>I can’t stay consistent<span class="ck"></span></button>
         <button class="opt" data-k="apply"><span class="e">🤔</span>I read it, but don’t know how it applies to my life<span class="ck"></span></button>
       </div>
-      <script>/* A/B test (round 2): A = Bible study angle, B = biblical wisdom for life angle */
-      (function(){var v=null,q=(new URLSearchParams(location.search).get("hl")||"").toLowerCase();
-        if(q==="a"||q==="c") v="c"; else if(q==="b"||q==="d") v="d"; else { try{ v=localStorage.getItem("vd_hl2"); }catch(e){} if(v!=="c"&&v!=="d"){ v=Math.random()<.5?"c":"d"; } }
-        try{ localStorage.setItem("vd_hl2",v); }catch(e){} window.HL=v;
-        if(v==="d"){
-          document.getElementById("heyebrow").textContent="📖 Biblical wisdom for real life";
-          document.getElementById("hl").innerHTML="The Bible has wisdom for your money, your time and your relationships. <em>No one ever taught you how to use it.</em>";
-          document.getElementById("hlead").innerHTML="It’s not a lack of faith or effort — most people were never shown how to <b>understand the Bible and live it</b>. VEREDA does: <b>in-depth audio study in 10 minutes a day</b>, plus one simple lesson to practice before the day ends.";
-          document.getElementById("pq").textContent="What weighs on you most right now?";
-          document.getElementById("pain").innerHTML=[["money","💼","Money and work — always running, never enough"],["time","⏳","No time for God (or for myself)"],["love","💞","My relationships"],["anxiety","🌧️","Anxiety and a heavy mind"],["stuck","🐢","I procrastinate and feel stuck while others move ahead"],["talk","🤐","I don’t understand the Bible well enough to talk about it"]].map(function(o){return '<button class="opt" data-k="'+o[0]+'"><span class="e">'+o[1]+'</span>'+o[2]+'<span class="ck"></span></button>';}).join("");
-        }
-        try{ window.clarity&&clarity("set","headline",v); }catch(e){} })();</script>
+
       <div class="answer" id="painAns"><div><div class="box" id="painBox"></div></div></div>
     </div>
     <div class="trust">
