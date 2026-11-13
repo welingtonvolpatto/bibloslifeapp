@@ -25,13 +25,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#0E5F95;--blue-d:#0A4A75;--blue-soft:#E8F0F7;--cream:#FDF7EF;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
+:root{--text:#2b2d30;--title:#212121;--muted:rgba(41,44,50,.79);--line:#edeef0;--blue:#0E5F95;--blue-d:#0A4A75;--blue-soft:#E8F0F7;--cream:#EEF6FD;--ink:#1E2430;--gold:#C9973F;--green:#19b56b;--green-bg:#e6f7ee;--soft:#f6f7f8}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:var(--cream);-webkit-font-smoothing:antialiased}
+body{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;color:var(--text);background:linear-gradient(180deg,#e3f0fb 0%,#f1f8fe 45%,#fbfdff 100%) fixed;-webkit-font-smoothing:antialiased}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 input{font:inherit}
 .app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;display:flex;flex-direction:column}
-header{height:56px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;position:sticky;top:0;background:var(--cream);z-index:10}
+header{height:56px;display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:0 8px;position:sticky;top:0;background:rgba(232,243,252,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:10}
 header.transparent{background:transparent}
 .hbtn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px}
 .hbtn.hidden{visibility:hidden}
@@ -42,7 +42,7 @@ main{flex:1;display:flex;flex-direction:column}
 .screen{flex:1;display:flex;flex-direction:column;padding:12px 16px 110px;animation:fade .35s ease}
 .screen.center{justify-content:center}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.footer-cta{position:fixed;left:0;right:0;bottom:0;padding:12px 16px 20px;background:#fff;border-top:1px solid var(--line);z-index:20}
+.footer-cta{position:fixed;left:0;right:0;bottom:0;padding:14px 16px 20px;background:linear-gradient(180deg,rgba(241,248,254,0),rgba(241,248,254,.92) 30%);z-index:20}
 .footer-cta .inner{max-width:398px;margin:0 auto}
 .btn{display:flex;align-items:center;justify-content:center;width:100%;height:56px;border-radius:12px;background:var(--blue);color:#fff;font-size:18px;font-weight:700;transition:background .15s,opacity .15s}
 .btn:hover{background:var(--blue-d)}
@@ -202,7 +202,7 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .o-logo{height:24px}
 .o-cta{width:auto;height:44px;padding:0 26px;font-size:15px}
 .offer{padding:8px 16px 24px}
-.o-h1{font-size:22px;font-weight:400;text-align:center;line-height:1.3;margin:22px 0 14px;color:var(--title)}
+.o-h1{font-size:23px;font-weight:400;text-align:center;line-height:1.3;margin:6px 0 4px;color:var(--title)}
 .o-h1 b{font-weight:700}
 .o-chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .o-chips>div{display:flex;align-items:center;gap:10px;background:var(--blue-soft);border-radius:10px;padding:10px 12px;font-size:14px;font-weight:600;color:var(--title)}
@@ -447,16 +447,57 @@ footer.addr{text-align:center;font-size:12.5px;color:#6b6f76;padding:36px 16px 3
 .u-now{display:block;font-size:46px;font-weight:800;color:var(--title);line-height:1}
 .u-note{display:block;font-size:13.5px;color:var(--muted);margin-top:6px;font-weight:600}
 .u-btn{font-size:18px}
-.music{position:fixed;left:12px;bottom:calc(92px + env(safe-area-inset-bottom));z-index:60;display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 10px;border-radius:999px;background:rgba(22,32,44,.78);color:#fff;font-size:12px;font-weight:700;border:0;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 6px 16px rgba(0,0,0,.16);cursor:pointer}
+.music{position:fixed;right:max(58px,calc(50vw - 157px));top:12px;z-index:60;display:flex;align-items:center;gap:7px;height:36px;padding:0 12px 0 10px;border-radius:999px;background:rgba(22,32,44,.78);color:#fff;font-size:12px;font-weight:700;border:0;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 6px 16px rgba(0,0,0,.16);cursor:pointer}
 .music .bars{display:flex;gap:2px;align-items:flex-end;height:12px}
 .music .bars i{width:3px;height:4px;background:#ffd38a;border-radius:2px}
 .music.on .bars i{animation:mb 1.1s ease-in-out infinite}.music.on .bars i:nth-child(2){animation-delay:-.4s}.music.on .bars i:nth-child(3){animation-delay:-.7s}
 @keyframes mb{50%{height:12px}}
-body.no-cta .music{bottom:calc(16px + env(safe-area-inset-bottom))}
+.music #mlabel{display:none}.music{height:32px;padding:0 10px}body.offer-on .music{top:auto;bottom:calc(16px + env(safe-area-inset-bottom));left:12px;right:auto}
+
+/* ---------- sky, clouds, motion ---------- */
+.sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;container-type:inline-size}
+.app{z-index:1}
+.cloud{position:absolute;left:0;width:var(--w,220px);height:calc(var(--w,220px)*.42);animation:drift var(--t,60s) linear infinite;animation-delay:var(--dl,0s);opacity:var(--o,.85)}
+.cloud:before,.cloud:after,.cloud i{content:"";position:absolute;background:#fff;border-radius:50%;box-shadow:inset 0 -10px 22px rgba(160,190,215,.18)}
+.cloud:before{width:46%;height:92%;left:16%;bottom:6%}.cloud:after{width:38%;height:72%;left:48%;bottom:6%}
+.cloud i{width:100%;height:46%;left:0;bottom:0;border-radius:999px}
+@keyframes drift{from{transform:translateX(-120%)}to{transform:translateX(calc(100cqw + 20%))}}
+.opt,.tile{background:#fff;box-shadow:0 4px 14px rgba(20,70,120,.06);border-color:#e3edf6}
+.screen .opt{animation:optin .45s cubic-bezier(.2,.8,.2,1) both}
+.screen .opt:nth-child(1){animation-delay:.05s}.screen .opt:nth-child(2){animation-delay:.11s}.screen .opt:nth-child(3){animation-delay:.17s}.screen .opt:nth-child(4){animation-delay:.23s}.screen .opt:nth-child(5){animation-delay:.29s}.screen .opt:nth-child(6){animation-delay:.35s}
+@keyframes optin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.opt{transition:transform .15s,border-color .15s,background .15s,box-shadow .15s}
+.opt:active{transform:scale(.98)}
+.opt.sel{animation:pop .35s ease both!important;box-shadow:0 8px 22px rgba(14,95,149,.16)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+.opt .oe{font-size:20px;margin-right:2px}
+/* art block: image + floating glass chips, matched to each step */
+.art{position:relative;margin:4px 2px 18px;height:150px;border-radius:20px;overflow:visible}
+.art .ai{position:absolute;inset:0;border-radius:20px;overflow:hidden;box-shadow:0 14px 30px rgba(20,70,120,.16);animation:artin .7s cubic-bezier(.2,.8,.2,1) both}
+.art .ai img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);animation:kb 9s ease-out forwards}
+@keyframes kb{to{transform:scale(1)}}
+@keyframes artin{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:none}}
+.gchip{position:absolute;z-index:3;display:flex;align-items:center;gap:7px;padding:8px 12px;border-radius:14px;font-size:12.5px;font-weight:700;color:#14324a;white-space:nowrap;
+  background:linear-gradient(135deg,rgba(255,255,255,.88),rgba(255,255,255,.62));border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 24px rgba(20,60,110,.18);
+  opacity:0;animation:chipin .6s cubic-bezier(.2,.9,.25,1.25) forwards, flt 6s ease-in-out infinite}
+.gchip .e{font-size:16px}
+.gchip.c1{left:-4px;top:12px;animation-delay:.35s,1s}.gchip.c2{right:-4px;top:54px;animation-delay:.55s,1.6s}.gchip.c3{left:14px;bottom:-12px;animation-delay:.75s,.4s}
+@keyframes chipin{from{opacity:0;transform:translateY(10px) scale(.85)}to{opacity:1;transform:none}}
+@keyframes flt{0%,100%{translate:0 0}50%{translate:0 -6px}}
+.art.noimg{height:auto;min-height:0;margin:0}
+.art.noimg .gchip{position:relative;left:auto;right:auto;top:auto;bottom:auto;display:inline-flex;margin:0 6px 8px 0}
+.chiprow{display:flex;flex-wrap:wrap;justify-content:center;margin:2px 0 14px}
+.st-big{animation:none}
+.pf-bar i{transition:left 1.4s cubic-bezier(.2,.8,.2,1)}
+.hook-float{position:relative;height:0}
+.hook-float .gchip{top:auto}
+.o-kick{text-align:center;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);margin-top:14px}
+.o-promise{text-align:center;font-size:15px;line-height:1.55;color:var(--text);margin:10px 8px 16px}
 </style>
 <script src="/offer-track.js" defer></script>
 </head>
 <body>
+<div class="sky" id="sky"></div>
 <div class="app">
   <div id="hdrWrap">
     <header id="hdr">
@@ -615,11 +656,11 @@ function computeArchetype(){
 const STEPS = [
   {type:"hook", key:"HardestPart", options:[["📜","Old words and confusing language"],["🧭","I don\u2019t know where to start"],["⏳","I can\u2019t stay consistent"],["🤔","I read it, but don\u2019t know how it applies to my life"]]},
   {type:"insight", key:"insight"},
-  {type:"q", key:"ReadOrListen", title:"How often do you open your Bible today?", options:["Every day","A few times a week","Rarely","Almost never"], score:[3,2,1,0]},
-  {type:"q", key:"ScriptureUnders", title:"When you read it, how much do you really understand?", options:["Most of it","Some parts","Not much","Honestly, very little"], score:[6,4,2,0]},
-  {type:"multi", key:"LifeArea", title:"Where do you most need God\u2019s wisdom right now?", options:["Money and work","Relationships and family","Anxiety and peace of mind","Purpose and direction","Habits and discipline","Feeling close to God"]},
+  {type:"q", key:"ReadOrListen", title:"How often do you open your Bible today?", options:["Every day","A few times a week","Rarely","Almost never"], score:[3,2,1,0], emo:["📖","📅","🌙","💤"], art:{img:"/images/break3_f.webp", chips:[["🔥","3-day streak"],["📖","Psalm 23"],["⏱","10 min a day"]]}},
+  {type:"q", key:"ScriptureUnders", title:"When you read it, how much do you really understand?", options:["Most of it","Some parts","Not much","Honestly, very little"], score:[6,4,2,0], emo:["😊","🙂","😕","😓"], art:{img:"/images/s2_why_fail.webp", chips:[["❓","What does this mean?"],["💡","Aha moment"],["📜","Context explained"]]}},
+  {type:"multi", key:"LifeArea", title:"Where do you most need God\u2019s wisdom right now?", options:["Money and work","Relationships and family","Anxiety and peace of mind","Purpose and direction","Habits and discipline","Feeling close to God"], emo:["💼","💞","🕊️","🧭","🌱","🙏"], art:{chips:[["📖","Proverbs 3:5"],["🕊️","Peace"],["💞","Family"]]}},
   {type:"stat", key:"research"},
-  {type:"q", key:"howMuchTime", title:"How much time could you give God each day?", options:["5 minutes","10 minutes","15\u201320 minutes","30+ minutes"]},
+  {type:"q", key:"howMuchTime", title:"How much time could you give God each day?", options:["5 minutes","10 minutes","15\u201320 minutes","30+ minutes"], emo:["⚡","🎧","☕","📚"], art:{img:"/images/s2_before_after.webp", chips:[["⏱","10:00"],["🎧","Listen on the go"],["☕","With your coffee"]]}},
   {type:"profile"},
   {type:"crafting"},
   {type:"email"},
@@ -691,6 +732,8 @@ function placeholder(label, ratio){
   const svg=`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${w} ${h}'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#f4ecdf'/><stop offset='1' stop-color='#d9d4f5'/></linearGradient></defs><rect width='${w}' height='${h}' fill='url(#g)'/><circle cx='${w/2}' cy='${h*0.42}' r='${Math.min(w,h)*0.16}' fill='#fff' opacity='.7'/><text x='50%' y='${h*0.78}' font-family='sans-serif' font-size='${Math.round(Math.min(w,h)*0.07)}' fill='#7a7480' text-anchor='middle'>${label}</text></svg>`;
   return "data:image/svg+xml;utf8,"+encodeURIComponent(svg);
 }
+function art(a){ if(!a) return ""; const ch=(a.chips||[]).map((c,i)=>`<span class="gchip c${i+1}"><span class="e">${c[0]}</span>${esc(c[1])}</span>`).join("");
+  return a.img?`<div class="art"><div class="ai"><img src="${a.img}" alt=""></div>${ch}</div>`:`<div class="art noimg"><div class="chiprow">${ch}</div></div>`; }
 function progress(){
   const qIndex = STEPS.slice(0,state.i+1).filter(s=>["age","q","multi","yn"].includes(s.type)).length;
   $('progress').firstElementChild.style.width = Math.min(100,qIndex/QUESTION_STEPS*100)+'%';
@@ -719,6 +762,7 @@ function render(){
   const s = STEPS[state.i];
   window.scrollTo(0,0);
   $('hdrWrap').style.display = s.type==="offer" ? "none" : "";
+  document.body.classList.toggle('offer-on', s.type==="offer");
   $('hdr').classList.toggle('transparent', s.type==="cards");
   $('backBtn').classList.toggle('hidden', state.i===0 || ["crafting","offer"].includes(s.type));
   const showProg = !["hook","gender","profile","crafting","email","newsletter","name","graph","vsl","offer"].includes(s.type);
@@ -734,6 +778,7 @@ const R = {
     view.innerHTML = `<section class="screen">
       <h1 class="big-title st-title">Why the Bible Feels Hard to Understand <span style="white-space:nowrap">(It’s Not Your Fault)</span></h1>
       <p class="big-sub st-sub">Answer a few quick questions and get a simple, step-by-step plan that fits your level and your schedule.</p>
+      <div class="chiprow" style="margin:4px 0 2px"><span class="gchip" style="position:relative;animation-delay:.2s,1s"><span class="e">🎧</span>10-min audio study</span><span class="gchip" style="position:relative;margin-left:8px;animation-delay:.4s,1.6s"><span class="e">🌱</span>1 lesson to practice</span></div>
       <div class="hook-chip">⏱ 1-minute quiz · Your personalized plan</div>
       <h2 class="hook-q">What makes the Bible hardest for you?</h2>
       <div class="opts hook-opts">${s.options.map(([e,o])=>`<button class="opt"><span class="he">${e}</span><span class="ht">${esc(o)}</span><span class="c"></span></button>`).join("")}</div>
@@ -777,19 +822,26 @@ const R = {
       "I can’t stay consistent":["Most Bible plans ask for 20–30 minutes of dense reading a day.","Real life doesn’t allow that — so people quit and feel guilty. Consistency comes from making it small: about 10 minutes that fit into your day."],
       "I read it, but don’t know how it applies to my life":["Reading without practicing is like studying a map and never taking a step.","Real change happens when every lesson ends with one simple thing to live out — at home, at work, in your relationships."]
     }[k]||["You’re not alone.","Millions of believers feel the same way. It’s not a faith problem — it’s a method problem."];
-    view.innerHTML=`<section class="screen"><div class="ins-badge">✓ You’re not alone</div>
-      <h2 class="info-title" style="margin-top:14px">It’s not your fault.</h2>
+    const A={
+      "Old words and confusing language":{img:"/images/s2_why_fail.webp",chips:[["📜","Written over 1,500 years"],["🌍","3 ancient languages"],["💬","Plain words"]]},
+      "I don’t know where to start":{img:"/images/break1_f.webp",chips:[["🧭","Step 1 of your path"],["📍","Start here"],["✨","Lesson unlocked"]]},
+      "I can’t stay consistent":{img:"/images/s2_article.webp",chips:[["🔔","12 notifications"],["⏳","No time again…"],["⏱","Just 10 min"]]},
+      "I read it, but don’t know how it applies to my life":{img:"/images/break3_f.webp",chips:[["📖","Read it"],["🌱","Live it today"],["✅","Action done"]]}
+    }[k]||{img:"/images/break3_f.webp",chips:[["🙏","You’re not alone"]]};
+    view.innerHTML=`<section class="screen">${art(A)}<div class="ins-badge">✓ You’re not alone</div>
+      <h2 class="info-title" style="margin-top:8px">It’s not your fault.</h2>
       <div class="ins-card"><b>${T[0]}</b><p>${T[1]}</p></div>
       <p class="ins-next">Answer <b>4 quick questions</b> so we can see what’s really holding you back — and build a plan around it.</p></section>`;
     setCTA("Continue",()=>go());
   },
   stat(){
-    view.innerHTML=`<section class="screen"><div class="st-k">Research · American Bible Society</div>
-      <div class="st-big">46%</div>
+    view.innerHTML=`<section class="screen">${art({img:"/images/s2_article.webp",chips:[["⛪","Church every week"],["📕","Bible stays closed"]]})}<div class="st-k">Research · American Bible Society</div>
+      <div class="st-big" id="stN">0%</div>
       <p class="st-l">of people who go to church every week <b>don’t read the Bible on their own.</b></p>
       <div class="st-why"><small>The two main reasons they gave:</small><div><span>⏳</span>Not enough time</div><div><span>🧭</span>Not knowing where to start</div></div>
       <div class="ins-card" style="margin-top:16px"><b>That’s exactly what VEREDA solves.</b><p>In-depth Bible study you can <b>listen to in about 10 minutes</b>, explained in plain words — and every day ends with <b>one simple lesson to practice</b>.</p></div>
       <p class="st-src">Source: American Bible Society, State of the Bible USA 2026.</p></section>`;
+    const t0=performance.now(); (function tk(t){ const k=Math.min(1,(t-t0)/1300); const el=$('stN'); if(!el) return; el.textContent=Math.round(46*(1-Math.pow(1-k,3)))+'%'; if(k<1) requestAnimationFrame(tk); })(t0);
     setCTA("Continue",()=>go());
   },
   info(s){
@@ -799,8 +851,8 @@ const R = {
     setCTA("Continue",()=>go());
   },
   q(s){
-    view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><div class="opts">${
-      s.options.map(o=>`<button class="opt"><span>${esc(o)}</span><span class="c"></span></button>`).join("")}</div></section>`;
+    view.innerHTML = `<section class="screen">${art(s.art)}<h2 class="q-title">${s.title}</h2><div class="opts">${
+      s.options.map((o,i)=>`<button class="opt"><span>${s.emo?`<span class="oe">${s.emo[i]}</span> `:""}${esc(o)}</span><span class="c"></span></button>`).join("")}</div></section>`;
     view.querySelectorAll('.opt').forEach((b,i)=>{
       const v=s.options[i], stored=s.save?s.save(v):v;
       if(state.answers[s.key]===stored) b.classList.add('sel');
@@ -809,8 +861,8 @@ const R = {
   },
   multi(s){
     const cur = new Set(state.answers[s.key]||[]);
-    view.innerHTML = `<section class="screen"><h2 class="q-title">${s.title}</h2><p class="q-hint">Select all that apply</p><div class="opts">${
-      s.options.map(o=>`<button class="opt multi ${cur.has(o)?'sel':''}"><span>${esc(o)}</span><span class="c"></span></button>`).join("")}</div></section>`;
+    view.innerHTML = `<section class="screen">${art(s.art)}<h2 class="q-title">${s.title}</h2><p class="q-hint">Select all that apply</p><div class="opts">${
+      s.options.map((o,i)=>`<button class="opt multi ${cur.has(o)?'sel':''}"><span>${s.emo?`<span class="oe">${s.emo[i]}</span> `:""}${esc(o)}</span><span class="c"></span></button>`).join("")}</div></section>`;
     const upd=()=>setCTA("Continue",()=>{state.answers[s.key]=[...cur];go();},cur.size===0);
     view.querySelectorAll('.opt').forEach((b,i)=>b.onclick=()=>{const v=s.options[i];cur.has(v)?cur.delete(v):cur.add(v);b.classList.toggle('sel');upd();});
     upd();
@@ -855,7 +907,7 @@ const R = {
   },
   email(){
     const DOMAINS=["gmail.com","icloud.com","yahoo.com","hotmail.com","outlook.com","aol.com","live.com","msn.com","me.com","protonmail.com"];
-    view.innerHTML = `<section class="screen"><h2 class="info-title" style="margin-top:12px">Enter your email to get your <span class="hl">Personalized Bible Study Plan</span></h2>
+    view.innerHTML = `<section class="screen">${art({chips:[["✅","Plan ready"],["🔒","Private & secure"],["📩","Sent to your inbox"]]})}<h2 class="info-title" style="margin-top:2px">Enter your email to get your <span class="hl">Personalized Bible Study Plan</span></h2>
       <div class="em-wrap"><div class="em-field"><input id="em" type="email" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Enter your email" value="${esc(state.email)}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M4 7l8 6 8-6"/></svg></div>
         <ul class="em-sug" id="sug" hidden></ul></div>
@@ -893,9 +945,9 @@ const R = {
   },
   profile(){
     const L=level();
-    view.innerHTML=`<section class="screen"><h2 class="info-title" style="margin-top:6px">Here’s your<br><span class="hl">Bible Growth profile</span></h2>
+    view.innerHTML=`<section class="screen">${art({chips:[["📊","Analysis complete"],["🎯",barrier()],["🌱",goalTxt()]]})}<h2 class="info-title" style="margin-top:2px">Here’s your<br><span class="hl">Bible Growth profile</span></h2>
       <div class="pf"><b class="pf-h">Scripture Confidence</b>
-        <div class="pf-bar"><i style="left:${L.pct}%"></i></div>
+        <div class="pf-bar"><i id="pfm" style="left:2%"></i></div>
         <div class="pf-lv">${["Foundations","Growing","Rooted"].map((n,i)=>`<span class="${i===L.i?'on':''}">${n}</span>`).join('')}</div>
         <div class="pf-st">${ICON.book}<p><b>Spiritual status</b>${L.text}</p></div>
         <div class="pf-low"><div class="pf-rows">
@@ -905,6 +957,7 @@ const R = {
         </div></div>
         <div class="pf-focus">Based on your answers, your plan starts with <b>${barrier().toLowerCase()}</b> and focuses on <b>${goalTxt().toLowerCase()}</b>, in about <b>10 minutes a day</b>.</div>
       </div></section>`;
+    setTimeout(()=>{ const m=$('pfm'); if(m) m.style.left=L.pct+'%'; },250);
     setCTA("Continue",()=>go());
   },
   crafting(){
@@ -935,7 +988,7 @@ const R = {
   },
   graph(){
     const d=new Date(Date.now()+28*864e5).toLocaleDateString("en",{month:"long",day:"numeric"});
-    view.innerHTML=`<section class="screen"><div class="gr-b">Ready to get your plan?</div>
+    view.innerHTML=`<section class="screen">${art({chips:[["📖","Understand"],["🌱","Practice"],["🙏","Closer to God"]]})}<div class="gr-b" style="align-self:center">Ready to get your plan?</div>
       <h2 class="info-title" style="margin-top:14px">See your spiritual life<br>transform by <span class="hl">${d}</span></h2>
       <div class="gr"><svg viewBox="0 0 320 200" class="gr-s"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E5F95" stop-opacity=".28"/><stop offset="1" stop-color="#0E5F95" stop-opacity="0"/></linearGradient></defs>
         <g stroke="#ECEEF1">${[40,80,120,160].map(y=>`<line x1="10" x2="310" y1="${y}" y2="${y}"/>`).join('')}</g>
@@ -992,21 +1045,24 @@ const R = {
       {img:IMG+"app/bible.webp", t:"The complete Bible", d:"Read any book and chapter in a clear, modern English translation."}
     ];
     const priceBlock=id=>`<div id="${id}" class="u-price">
-      <div class="u-pk">Everything you get today</div>
+      <div class="u-pk">Your 28-day plan + lifetime access</div>
       <ul class="u-list">
         <li><b>Your VEREDA Bible Plan</b> — 10-minute in-depth audio studies + one lesson to practice every day, starting with <b>${esc(challenge.toLowerCase())}</b></li>
         ${BON.map(x=>`<li><b>Bonus:</b> ${esc(x.t)}</li>`).join("")}
       </ul>
       <div class="u-amt"><span class="u-now">${esc(C.price)}</span><span class="u-note">${esc(C.priceNote)}${C.accessText?` · ${esc(C.accessText)}`:""}</span></div>
-      <button class="btn sub u-btn">Get instant access →</button>
+      <button class="btn sub u-btn">Start my 28 days →</button>
       <div class="o-guar">${ICON.shield}<span>7-day money-back guarantee<small>Not for you? Ask for a full refund within 7 days.</small></span></div>
       <div class="safe">${ICON.shield}Secure payment processed by Hotmart</div>
       <div class="pay">${PAYLOGOS}</div></div>`;
     view.innerHTML = `<div class="o-top"><img src="${C.img}logo.svg" alt="${esc(C.brandName)}" class="o-logo"><button class="btn o-cta" id="getPlan">Get my plan</button></div>
     <div class="offer">
-      <h1 class="o-h1">Your personalized<br><b>Bible Plan is ready!</b></h1>
+      <div class="o-kick">Your personalized plan is ready</div>
+      <h1 class="o-h1">Give God 10 minutes a day.<br><b>In 28 days, see your life change.</b></h1>
+      <p class="o-promise">Understand the Bible like never before and <b>live it every day</b> — at home, at work and in your relationships. Your first 28 days are already mapped out for you, and you keep access for life.</p>
       <div class="o-chips"><div>${ICON.alert}<span><small>Main challenge</small>${challenge}</span></div><div>${ICON.bulb}<span><small>Focus</small>${goal}</span></div></div>
       <div class="u-diag"><b>Why you’ve felt stuck</b><p>You didn’t lack faith or effort. You were trying to read the Bible without anyone explaining it — and without a simple way to <b>live</b> what you read. VEREDA changes both: you <b>understand</b> it in about 10 minutes, and you <b>practice</b> it the same day.</p></div>
+      <h3 class="o-h2" style="margin-top:26px">Your <span class="hl">28-day plan</span></h3>
       <div class="o-journey">
         <div class="tabs">${C.weeks.map((w,i)=>`<button class="${i===0?'on':''}" data-w="${i}">Week ${i+1}</button>`).join('')}</div>
         <div class="tl" id="tl"></div>
@@ -1092,6 +1148,10 @@ function checkout(){
   if(state.name)  u.searchParams.set('name',state.name);
   location.href=u.toString();
 }
+/* ===== drifting clouds ===== */
+(function(){ const sky=document.getElementById("sky"); if(!sky) return; let h=""; const n=innerWidth<700?4:6;
+  for(let i=0;i<n;i++){ const w=140+Math.random()*200, top=5+Math.random()*80, t=60+Math.random()*50, dl=-Math.random()*t, o=(.5+Math.random()*.4).toFixed(2);
+    h+=`<div class="cloud" style="--w:${w|0}px;top:${top|0}%;--t:${t|0}s;--dl:${dl|0}s;--o:${o}"><i></i></div>`; } sky.innerHTML=h; })();
 /* ===== Background music (original ambient pad generated in the browser) + selection sounds ===== */
 const Music={ctx:null,on:false,master:null,timer:null,k:0,wanted:true,
   init(){ if(this.ctx) return true; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return false; }
