@@ -609,7 +609,7 @@ const CONFIG = {
     {q:"How do I access it?", a:"Right after payment you receive your access by email. VEREDA works in your phone’s browser — no app store download needed."},
     {q:"What if I don't understand what I'm reading?", a:"Every lesson explains the passage’s context and meaning in plain words, so you always know what it means and why it matters for your life today."},
     {q:"What if I can't stay consistent?", a:"Lessons take about 10 minutes and fit any time of day. Missing a day never resets your progress — you just pick up where you left off."},
-    {q:"Is there a guarantee?", a:"Yes. If VEREDA isn’t for you, ask for a full refund within 7 days of your payment."}
+    {q:"Is there a guarantee?", a:"Yes. If VEREDA isn’t for you, ask for a full refund within 30 days of your payment."}
   ],
 
   // ===== SOCIAL PROOF — replace every [ ] placeholder with YOUR real data before running ads =====
@@ -1113,7 +1113,7 @@ const R = {
       </ul>
       <div class="u-amt"><span class="u-now">${esc(C.price)}</span><span class="u-note">${esc(C.priceNote)}${C.accessText?` · ${esc(C.accessText)}`:""}</span></div>
       <button class="btn sub u-btn">Start my 28 days →</button>
-      <div class="o-guar">${ICON.shield}<span>7-day money-back guarantee<small>Not for you? Ask for a full refund within 7 days.</small></span></div>
+      <div class="o-guar">${ICON.shield}<span>30-day money-back guarantee<small>Not for you? Ask for a full refund within 30 days.</small></span></div>
       <div class="safe">${ICON.shield}Secure payment processed by Hotmart</div>
       <div class="pay">${PAYLOGOS}</div></div>`;
     view.innerHTML = `<div class="o-top"><img src="${C.img}logo.svg" alt="${esc(C.brandName)}" class="o-logo"><button class="btn o-cta" id="getPlan">Get my plan</button></div>
@@ -1185,7 +1185,7 @@ function checkoutSummary(){
     <div class="co-row"><span>5 app bonuses</span><b>Included</b></div>
     <div class="co-row co-today"><span>Total today</span><b>${esc(C.price)}</b></div>
     <p class="co-cancel">One-time payment. No subscription and no recurring charges.${C.accessText?" "+esc(C.accessText)+".":""}</p>
-    <div class="co-guar">${ICON.shield}<div><b>7-day money-back guarantee</b><span>Not for you? Ask for a full refund within 7 days of your payment.</span></div></div>
+    <div class="co-guar">${ICON.shield}<div><b>30-day money-back guarantee</b><span>Not for you? Ask for a full refund within 30 days of your payment.</span></div></div>
     <button class="btn co-go" type="button">Continue to secure checkout</button>
     <div class="co-safe">🔒 Secure payment processed by Hotmart</div>
     <button class="co-x" type="button" data-x>Back to my plan</button>

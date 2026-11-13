@@ -1035,7 +1035,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
       <div class="pfocus" id="pfocus" style="display:none"></div>
       <div id="plans"></div>
       <button class="btn block" id="buy" type="button">Start my plan <span class="arr">→</span></button>
-      <div class="guar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5" stroke-linecap="round"/></svg><div><b>7-day money-back guarantee</b><span>Not for you? Ask for a full refund within 7 days of your payment.</span></div></div>
+      <div class="guar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8.2-8 9-4.6-.8-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5" stroke-linecap="round"/></svg><div><b>30-day money-back guarantee</b><span>Not for you? Ask for a full refund within 30 days of your payment.</span></div></div>
       <p class="terms" id="terms"></p>
       <div class="safe">🔒 Secure payment processed by Hotmart</div>
       <div class="paylogos" id="paylogos"></div>
@@ -1054,7 +1054,7 @@ section>.wrap,section>.narrow{position:relative;z-index:1}
   <h2 class="reveal">Change your life <em style="color:#ffd38a">10 minutes at a time</em></h2>
   <p class="lead reveal">You don’t need more free time or more discipline. Press play, understand God’s Word like never before, and take the next step — today.</p>
   <a href="#pricing" class="btn reveal" data-cta="final">Get instant access <span class="arr">→</span></a>
-  <div class="sub-cta reveal" style="color:#dfe5ec"><span>✓ One-time $9.90</span><span>✓ Lifetime access</span><span>✓ 7-day money-back guarantee</span></div>
+  <div class="sub-cta reveal" style="color:#dfe5ec"><span>✓ One-time $9.90</span><span>✓ Lifetime access</span><span>✓ 30-day money-back guarantee</span></div>
 </div></section>
 
 <footer><div class="wrap">
@@ -1415,7 +1415,7 @@ $("#buy").onclick=()=>{
     <div class="co-row"><span>VEREDA Bible Plan</span><b>Included</b></div><div class="co-row"><span>5 app bonuses</span><b>Included</b></div>
     <div class="co-row co-today"><span>Total today</span><b>${esc(CONFIG.price)}</b></div>
     <p class="co-cancel">One-time payment with lifetime access. No subscription and no recurring charges.</p>
-    <div class="guar">${SHIELD}<div><b>7-day money-back guarantee</b><span>Not for you? Ask for a full refund within 7 days of your payment.</span></div></div>
+    <div class="guar">${SHIELD}<div><b>30-day money-back guarantee</b><span>Not for you? Ask for a full refund within 30 days of your payment.</span></div></div>
     <button class="btn co-go" type="button">Continue to secure checkout <span class="arr">→</span></button><div class="co-safe">🔒 Secure payment processed by Hotmart</div><button class="co-x" type="button" data-x>Back</button></div>`;
   document.body.appendChild(el); requestAnimationFrame(()=>el.classList.add("on"));
   el.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{ ev("buy_back"); el.classList.remove("on"); setTimeout(()=>el.remove(),250); });
@@ -1440,7 +1440,7 @@ const FAQ=[
   ["Is this a subscription?","No. You pay $9.90 once and get lifetime access — no monthly charges and nothing to cancel."],
   ["What exactly do I get?","Your VEREDA Bible Plan (10-minute in-depth audio studies with one lesson to practice every day) plus the app bonuses: the prayer community, verse of the day, audio series and Bible stories, journal and progress, and the complete Bible."],
   ["Do I need to download anything?","No. VEREDA works right in your phone's browser — after purchase you get your access link, and you can add it to your home screen so it opens like any other app."],
-  ["Is there a guarantee?","Yes. If VEREDA isn't for you, ask for a full refund within 7 days of your payment."]
+  ["Is there a guarantee?","Yes. If VEREDA isn't for you, ask for a full refund within 30 days of your payment."]
 ];
 $("#faq").innerHTML=FAQ.map(([q,a],i)=>`<details class="reveal" data-i="${i}"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
 $$("#faq .reveal").forEach(el=>io.observe(el));
