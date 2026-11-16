@@ -577,16 +577,24 @@ const Sfx={ c(){ return Snd.on&&Music.init()?Music.ctx:null; },
 const Voice={mode:"always",v:null,cur:null,busy:false,
   init(){ try{ this.mode=localStorage.getItem("vq4_voice")||"always"; }catch(e){}
     if(!("speechSynthesis" in window)) return; const choose=()=>{ const vs=speechSynthesis.getVoices().filter(v=>/^en[-_]US/i.test(v.lang));
-      for(const p of [/Samantha/i,/Ava/i,/Allison/i,/Google US English/i,/Jenny/i,/Aria/i,/Zira/i]){ const f=vs.find(v=>p.test(v.name)); if(f){ this.v=f; return; } } this.v=vs[0]||null; };
+      for(const p of [/(Aria|Jenny|Ava|Emma|Michelle).*(Natural|Neural)/i,/(Natural|Neural)/i,/(Samantha|Ava|Allison|Zoe|Nicky).*(Enhanced|Premium)/i,/(Enhanced|Premium)/i,/Samantha/i,/Ava/i,/Allison/i,/Google US English/i,/Jenny/i,/Aria/i,/Zira/i]){ const f=vs.find(v=>p.test(v.name)); if(f){ this.v=f; return; } } this.v=vs[0]||null; };
     choose(); speechSynthesis.onvoiceschanged=choose; },
   unlock(){ try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u); }catch(e){} },
   speak(text,o={}){ this.stop(); if(!Snd.on||(!o.force&&(this.mode==="off"||(this.mode==="lessons"&&!o.lesson)))) return Promise.resolve();
     return new Promise(res=>{ let done=false; const end=()=>{ if(done) return; done=true; this.busy=false; Music.duck(); res(); };
       this.busy=true; Music.duck(); setTimeout(end,2000+text.length*85);
-      if(CONFIG.voiceFiles&&o.id){ const a=new Audio(`/study4/voice/${o.id}.mp3`); this.cur=a; a.onended=end; a.onerror=()=>{ this.cur=null; this.tts(text,end); }; a.play().catch(()=>this.tts(text,end)); return; }
-      this.tts(text,end); }); },
-  tts(text,end){ if(!("speechSynthesis" in window)) return end(); try{ const u=new SpeechSynthesisUtterance(text.replace(/[—–]/g,", ").replace(/[“”]/g,""));
-      if(this.v) u.voice=this.v; u.lang="en-US"; u.rate=1; u.pitch=1.12; u.onend=end; u.onerror=end; speechSynthesis.speak(u); }catch(e){ end(); } },
+      if(CONFIG.voiceFiles&&o.id){ const a=new Audio(`/study4/voice/${o.id}.mp3`); this.cur=a; a.onended=end; a.onerror=()=>{ this.cur=null; this.tts(text,end,o); }; a.play().catch(()=>this.tts(text,end,o)); return; }
+      this.tts(text,end,o); }); },
+  /* browser voice with feeling: each mood gets its own pitch and pace; sentences are spoken one by one so pauses and "!" / "?" carry */
+  TONE:{talk:[1.12,1],idle:[1.1,1],happy:[1.2,1.05],cheer:[1.3,1.1],wow:[1.32,1.1],love:[1.15,.93],empathy:[1,.86],think:[1.05,.92],listen:[1.08,.95],verse:[.98,.8]},
+  tts(text,end,o={}){ if(!("speechSynthesis" in window)) return end();
+    try{ const tone=(o.id&&/^v_/.test(o.id))?"verse":(o.tone||"talk"), t=this.TONE[tone]||this.TONE.talk;
+      const parts=(text.replace(/[“”]/g,"").replace(/\s*[—–]\s*/g,", ").match(/[^.!?…]+[.!?…]*\s*/g)||[text]).map(x=>x.trim()).filter(Boolean);
+      parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p.replace(/…/g,"..."));
+        if(this.v) u.voice=this.v; u.lang="en-US"; const ex=/!$/.test(p), q=/\?$/.test(p);
+        u.pitch=Math.min(2,t[0]+(ex?.1:q?.05:0)); u.rate=Math.min(1.4,t[1]*(ex?1.05:1)); u.volume=1;
+        if(i===parts.length-1){ u.onend=end; u.onerror=end; } speechSynthesis.speak(u); });
+    }catch(e){ end(); } },
   stop(){ try{ speechSynthesis.cancel(); }catch(e){} if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
 };
 Voice.init();
@@ -598,7 +606,7 @@ sndUI();
 function say(text,o={}){ const b=$("bub"); if(!b) return Promise.resolve(); const tok=S.tok;
   b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop");
   b.innerHTML=`<span class="on"></span><span class="off"></span>`; const on=b.firstChild, off=b.lastChild; off.textContent=text;
-  if(!o.keep) mood("talk"); const sp=Voice.speak(o.speak||text,o); let i=0, skip=false; b.onclick=()=>{ skip=true; };
+  if(!o.keep) mood("talk"); const sp=Voice.speak(o.speak||text,{...o,tone:o.tone||o.after}); let i=0, skip=false; b.onclick=()=>{ skip=true; };
   return new Promise(res=>{ const step=()=>{ if(tok!==S.tok) return res(); i=skip?text.length:i+1; on.textContent=text.slice(0,i); off.textContent=text.slice(i);
       if(i<text.length){ const ch=text[i-1]; setTimeout(step,/[.!?]/.test(ch)?200:/[,—:]/.test(ch)?110:23); }
       else sp.then(()=>{ if(tok!==S.tok) return res(); if(!o.keep) mood(o.after||"idle"); res(); }); };
@@ -785,7 +793,7 @@ const R={
       ${curveChart({label:"Your Bible habit",ghost:(before-after)+" days sooner",end:fmt(addDays(after)),start:"Today"})}
       <p class="note" style="margin-top:18px">Tap to continue</p></section>`;
     runCurve({done:()=>mood("wow")});
-    Voice.speak(`Your answers brought your goal ${before-after} days closer!`,{id:"closer_"+(before-after)});
+    Voice.speak(`Your answers brought your goal ${before-after} days closer!`,{id:"closer_"+(before-after),tone:"wow"});
     $("cl").onclick=()=>go(); later(()=>go(),5200); },
 
   style(){ const O=[["🕯️","Gentle","calm and kind, one step at a time","Lovely choice. We'll go slowly, one verse at a time, with lots of grace."],["🔥","Challenging","I'll push you to show up every day","I love it. I'll call you higher every day, always with grace."]];
@@ -879,7 +887,7 @@ const R={
       <h2 class="h2" style="margin-top:6px">Where should I send <em>your plan?</em></h2><p class="sub" style="margin-top:6px">This is how you'll get into the app and see your plan.</p>
       <div class="field"><label for="em">Your email</label><input id="em" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" value="${esc(S.email)}"><div class="err" id="er"></div>
       <small>We'll use your email to send your plan and to talk with you about VEREDA.</small></div></section>`;
-    mood("happy"); Voice.speak("Where should I send your plan?",{id:"email"});
+    mood("happy"); Voice.speak("Where should I send your plan?",{id:"email",tone:"happy"});
     const sub=()=>{ const v=$("em").value.trim(); if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ $("er").textContent="Please enter a valid email."; return; } S.email=v; sendLead(); clar("lead"); go(); };
     $("em").onkeydown=e=>{ if(e.key==="Enter") sub(); };
     cta("Continue",sub,false,"You're not buying anything yet"); },
@@ -939,7 +947,7 @@ const R={
       <div class="sec"><h2 class="h2 c">Meet the people behind VEREDA</h2><div class="tmc" id="tmc">${[["caleb","Caleb Whitmor","Biblical coordinator at VEREDA"],["nathaniel","Nathaniel Hayes","Pastor · Founder of VEREDA"],["abigail","Abigail Brooks","Theologian and therapist · 20+ years"],["eleanor","Eleanor Bennett","Researcher in African Christianity · missiology"]].map(t=>`<div class="tmc-i"><img src="/bible-study/img/team/${t[0]}.webp" alt="${t[1]}" loading="lazy"><div class="tmc-t"><b>${t[1]}</b><span>${t[2]}</span></div></div>`).join("")}</div></div>
       <div style="margin-top:22px"><button class="btn" data-p="1">Start my 3-month plan</button></div>
       <button class="link" id="nt" style="color:var(--muted)">Not today</button></section>`;
-    mood("happy"); Voice.speak("Your gifts are applied. Just pick your plan, and we start today.",{id:"offer"});
+    mood("happy"); Voice.speak("Your gifts are applied. Just pick your plan, and we start today.",{id:"offer",tone:"happy"});
     $$("[data-p]").forEach(b=>b.onclick=()=>{ S.plan=+b.dataset.p; oev(S.plan?"plan_q":"plan_m",S.plan); summary(S.plan); });
     $("nt").onclick=()=>{ oev("ds_link"); downsell("link"); };
     const tm=$("tmc"); let ti=0; const iv=setInterval(()=>{ if(!tm.isConnected) return clearInterval(iv); ti=(ti+1)%4; const it=tm.children[ti]; tm.scrollTo({left:it.offsetLeft-(tm.clientWidth-it.clientWidth)/2,behavior:"smooth"}); },3500);
@@ -978,7 +986,7 @@ function showDs(){ const old=$("coSheet"); if(old) old.remove(); const T=CONFIG.
     <p class="sub c" style="margin-top:12px">Nothing changes: same path, same daily walk with me.</p>
     <div class="dsl"><span>📖 study</span><span>🙏 pray</span><span>🪔 practice</span></div>
     <button class="btn" id="dsy" style="margin-top:10px">Start my ${T.days} days</button><button class="link" id="dsn" style="color:var(--muted)">No thanks, I'll keep going on my own</button></div>`;
-  document.body.appendChild(el); requestAnimationFrame(()=>el.classList.add("on")); Sfx.select(); Voice.speak("What if you start smaller? Nothing changes: same path, same daily walk with me.",{id:"downsell"});
+  document.body.appendChild(el); requestAnimationFrame(()=>el.classList.add("on")); Sfx.select(); Voice.speak("What if you start smaller? Nothing changes: same path, same daily walk with me.",{id:"downsell",tone:"love"});
   $("dsy").onclick=()=>{ oev("ds_buy"); clar("downsell_buy"); el.remove(); summary("trial"); };
   $("dsn").onclick=()=>{ oev("ds_no"); el.classList.remove("on"); Voice.stop(); setTimeout(()=>el.remove(),300); }; }
 
