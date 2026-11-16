@@ -926,8 +926,8 @@ const R={
     $$(".card").forEach(c=>c.onclick=()=>{ const k=+c.dataset.k; $$(".card").forEach(x=>x.classList.toggle("sel",x===c)); Sfx.select(); S.a.Style=O[k][1]; S.style=O[k][4]; mood(O[k][5]);
       later(()=>say(O[k][3],{id:"style_"+O[k][4],after:O[k][5],tone:O[k][5]}),200); cta("Start my first study →",()=>go()); }); },
 
-  prep(){ const C=S.style==="coach"; view.innerHTML=`<section class="scr c" style="padding-top:12vh"><div class="kick">${esc(S.a.Style||"Gentle & loving")} mode</div><div class="hero" style="margin-top:10px">${lumi("lg","halo")}<div class="bub" id="bub"></div></div><div class="dots3"><i></i><i></i><i></i></div></section>`;
-    say(C?"Getting your first study ready… this one is going to be good!":"Preparing your first study. Breathe.",{id:"prep",coachFile:1,after:C?"happy":"think"}); later(()=>go(),3800); },
+  prep(){ const C=S.style==="coach", t0=Date.now(); view.innerHTML=`<section class="scr c" style="padding-top:12vh"><div class="kick">${esc(S.a.Style||"Gentle & loving")} mode</div><div class="hero" style="margin-top:10px">${lumi("lg","halo")}<div class="bub" id="bub"></div></div><div class="dots3"><i></i><i></i><i></i></div></section>`;
+    say(C?"Getting your first study ready… this one is going to be good!":"Preparing your first study. Breathe.",{id:"prep",after:C?"happy":"think"}).then(()=>later(()=>go(),Math.max(400,3800-(Date.now()-t0)))); },
 
   lesson(){ const C=S.style==="coach", bar=pick("Stop",4), val0=null;
     view.innerHTML=`<section class="scr"><div class="ls-top"><span>📖 Study 1 · Psalm 23</span><span class="pips"><i id="p0"></i><i id="p1"></i><i id="p2"></i></span></div>
