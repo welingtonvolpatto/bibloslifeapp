@@ -658,7 +658,8 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
     const g=++this.gen;
     return new Promise(res=>{ let done=false; const end=()=>{ if(done) return; done=true; if(g===this.gen){ this.busy=false; Music.duck(); } res(); };
       this.busy=true; Music.duck(); setTimeout(end,2500+text.length*90);
-      if(CONFIG.voiceFiles&&o.id){ const id=`${o.id}${S.style==="coach"&&o.coachFile?"_c":""}`;
+      if(CONFIG.voiceFiles&&o.id){ /* after the guide is chosen, every line (except Bible verses) has a gentle and a coach recording */
+        const id=o.id+(S.style==="coach"&&!/^(v_|style|hear|read|goal|q_|r_|min|topics|closer|proof|intro)/.test(o.id)?"_c":"");
         /* recorded voice: played through Web Audio (unlocked by the first tap, works in in-app browsers); falls back to the browser voice if the file is missing */
         this.file(id).then(buf=>{ if(g!==this.gen) return end(); const c=Music.ctx; if(!buf||!c){ this.tts(text,end,o,g); return; }
           c.resume(); const src=c.createBufferSource(), gn=c.createGain(); gn.gain.value=1; src.buffer=buf; src.connect(gn); gn.connect(c.destination); src.onended=end; this.cur={pause(){ try{ src.onended=null; src.stop(); }catch(e){} }}; src.start(); }); return; }
