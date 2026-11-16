@@ -166,6 +166,12 @@ tr:last-child td{border-bottom:0}
 
     <div class="grid3" id="cards"></div>
 
+    <section id="vsec">
+      <h2>Quiz Lumi (/study4): comparação das 3 URLs</h2>
+      <p class="note">Cada coluna é um link de anúncio. Percentual = parte de quem abriu aquele link. Sessões de antes de 16/11 (14h) não têm a marcação e aparecem como "Sem marcação".</p>
+      <div class="scroll"><table id="vtbl"></table></div>
+    </section>
+
     <section>
       <h2>Comparação das etapas principais</h2>
       <p class="note">Percentual = parte de quem iniciou o quiz. Mostra onde cada versão perde mais gente.</p>
@@ -492,12 +498,33 @@ function renderOffer(){
   const dt = Object.values(dv).reduce((a, b) => a + b, 0) || 1;
   $("#odev").innerHTML = Object.entries(dv).map(([d, n]) => `<div class="orow"><span>${d === "mobile" ? "Celular" : d === "desktop" ? "Computador" : "Outro"}</span><div class="otrack"><i style="width:${(n / dt * 100).toFixed(1)}%;background:#8a9bb0"></i></div><span class="v"><b>${fmt(n)}</b> · ${(n / dt * 100).toFixed(0)}%</span></div>`).join("");
 }
+async function fetchVariants(pw){
+  const q = PERIOD.from ? {from:PERIOD.from, to:PERIOD.to} : {days:PERIOD.days};
+  const r = await fetch(API, {method:"POST", headers:{"content-type":"application/json", apikey:KEY}, body:JSON.stringify({password:pw, action:"variants", ...q})});
+  if (!r.ok) throw new Error("erro");
+  return r.json();
+}
+let VDATA = null;
+function renderVariants(){
+  const t = $("#vtbl"); if (!t) return;
+  const rows = VDATA || [];
+  const COLS = [["study","Estudo da Bíblia","?p=study"],["life","Mudança de vida","?p=life"],["ask","Sem persona","sem ?p (a Lumi pergunta)"],["sem_tag","Sem marcação","sessões antigas"]]
+    .filter(c => c[0] !== "sem_tag" || rows.some(r => r.url === "sem_tag"));
+  const get = k => rows.find(r => r.url === k) || {};
+  const LINES = [["sessions","Abriram o quiz"],["proof","Passaram da 1ª tela"],["why","Chegaram na 1ª pergunta"],["lesson","Chegaram no estudo (Salmo 23)"],["vsl","Vídeo de depoimentos"],["email","Tela do e-mail"],["offer","Viram a oferta"],["checkout","Clicaram em comprar"],["co_m","  · Mensal"],["co_q","  · Trimestral"],["co_t","  · Teste grátis"]];
+  const pc = (n, d) => d ? ` <span style="color:var(--muted);font-size:12px">${Math.round(n / d * 100)}%</span>` : "";
+  let h = `<tr><th style="text-align:left">Etapa</th>${COLS.map(c => `<th style="text-align:right;white-space:normal">${c[1]}<br><span style="font-weight:400;color:var(--muted);font-size:11px">${c[2]}</span></th>`).join("")}</tr>`;
+  h += LINES.map(([k, l]) => `<tr><td style="white-space:pre">${l}</td>${COLS.map(c => { const r = get(c[0]), n = r[k] || 0; return `<td style="text-align:right"><b>${n}</b>${k === "sessions" ? "" : pc(n, r.sessions)}</td>`; }).join("")}</tr>`).join("");
+  const a = get("ask"); if ((a.pick_study || 0) + (a.pick_life || 0))
+    h += `<tr><td>Escolha na 1ª tela (sem persona)</td>${COLS.map(c => `<td style="text-align:right;font-size:12px">${c[0] === "ask" ? `📖 ${a.pick_study || 0} · 🌱 ${a.pick_life || 0}` : ""}</td>`).join("")}</tr>`;
+  t.innerHTML = h;
+}
 async function load(){
   const bar = $("#loading"); bar.style.width = "60%";
   $("#refresh").disabled = true;
   try {
-    const [d, o] = await Promise.all([fetchData(PW), fetchOffer(PW).catch(() => null)]);
-    DATA = d; ODATA = o; render(); if (VIEWM === "offer") renderOffer();
+    const [d, o, v] = await Promise.all([fetchData(PW), fetchOffer(PW).catch(() => null), fetchVariants(PW).catch(() => null)]);
+    DATA = d; ODATA = o; VDATA = v; render(); renderVariants(); if (VIEWM === "offer") renderOffer();
   } catch (e) {
     if (e.message === "senha") { logout(); $("#lerr").textContent = "A senha mudou. Entre de novo."; }
     else $("#updated").textContent = "Não foi possível atualizar agora. Tente de novo em instantes.";
@@ -598,7 +625,7 @@ $("#lform").onsubmit = async e => {
     DATA = await fetchData(pw);
     PW = pw; store.set(pw, $("#remember").checked);
     $("#login").classList.add("hidden"); $("#app").classList.remove("hidden");
-    render(); clearInterval(timer); timer = setInterval(load, 5 * 60 * 1000);
+    render(); load(); clearInterval(timer); timer = setInterval(load, 5 * 60 * 1000);
   } catch (err) {
     $("#lerr").textContent = err.message === "senha" ? "Senha incorreta." : "Não foi possível conectar. Tente de novo.";
   } finally { $("#lbtn").disabled = false; }

@@ -288,6 +288,9 @@ main{padding:0 18px 140px}
 .nudge{position:fixed;left:0;right:0;bottom:104px;z-index:31;display:flex;flex-direction:column;align-items:center;pointer-events:none;animation:fi .5s 1.2s both;opacity:0}
 .nudge span{background:var(--ink);color:#fff;font-weight:900;font-size:13.5px;padding:7px 13px;border-radius:12px;box-shadow:0 6px 16px rgba(10,30,60,.2)}
 .nudge b{font-size:26px;margin-top:2px;animation:nb 1s ease-in-out infinite}
+#sndHint{position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-80px);z-index:40;background:var(--ink);color:#fff;font-weight:900;font-size:14px;padding:9px 16px;border-radius:999px;box-shadow:0 8px 20px rgba(10,30,60,.25);transition:transform .35s;pointer-events:none;white-space:nowrap}
+#sndHint.on{transform:translateX(-50%) translateY(0);animation:sh 1.2s ease-in-out infinite}
+@keyframes sh{50%{transform:translateX(-50%) translateY(5px)}}
 .nudge.inl{position:static;margin:14px 0 4px;animation-delay:.6s}
 @keyframes nb{50%{transform:translateY(7px)}}
 .btn.pulse{animation:bp 1.6s ease-in-out infinite}
@@ -461,6 +464,7 @@ main{padding:0 18px 140px}
 </style>
 </head>
 <body>
+<div id="sndHint">🔊 Tap anywhere to hear Lumi</div>
 <div class="sky" id="sky"></div>
 <div class="app">
   <div class="top">
@@ -526,7 +530,7 @@ const MINS=[[5,"a quick walk"],[10,"what most people choose"],[15,"to go deeper"
 const GOALS=[[14,"2 weeks","An intense start. 15 minutes or more a day helps."],[28,"28 days","The pace almost everyone can keep: one short study a day."],[90,"3 months","Gentle and steady, at your own pace."]];
 
 const STEPS=[
-  {t:"intro"},{t:"proof"},{t:"hear",key:"Voice"},{t:"read",key:"ReadAloud"},{t:"goal",key:"Goal"},{t:"goalgraph"},
+  {t:"intro"},{t:"proof"},{t:"read",key:"ReadAloud"},{t:"goal",key:"Goal"},{t:"goalgraph"},
   {t:"q",key:"Why"},{t:"q",key:"Stop"},{t:"q",key:"Freq"},{t:"q",key:"When"},
   {t:"minutes",key:"Minutes"},{t:"topics",key:"Topics"},{t:"closer"},{t:"style",key:"Style"},{t:"prep"},
   {t:"lesson"},{t:"done"},{t:"pact"},{t:"streak"},{t:"build"},{t:"vsl"},{t:"email"},{t:"diag"},{t:"chests"},{t:"offer"}
@@ -613,7 +617,7 @@ function flame(v){ const l=$("lumi"); if(l) l.style.setProperty("--f",v); }
 
 /* ---------- sound: music, effects, voice ---------- */
 const Snd={on:true};
-try{ if(localStorage.getItem("vq4_sound")==="off") Snd.on=false; }catch(e){}
+try{ localStorage.removeItem("vq4_sound"); if(sessionStorage.getItem("vq4_sound")==="off") Snd.on=false; }catch(e){}
 const Music={ctx:null,on:false,master:null,timer:null,k:0,
   init(){ if(this.ctx) return true; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return false; }
     const c=this.ctx; this.master=c.createGain(); this.master.gain.value=0;
@@ -667,7 +671,7 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
     this.v=(edge&&pick(en,[/(Aria|Jenny|Ava|Emma|Michelle).*Natural/i,/Natural/i]))
       ||pick(local,[/(Samantha|Ava|Allison|Zoe|Nicky|Evan).*(Enhanced|Premium)/i,/(Enhanced|Premium)/i,/Samantha/i,/Ava/i,/Allison/i,/Aria/i,/Jenny/i,/Zira/i,/Google/i])
       ||local[0]||en[0]||null; },
-  init(){ try{ this.mode=localStorage.getItem("vq4_voice")||"always"; }catch(e){} if(!this.ok()) return; this.choose(); try{ this.ss().onvoiceschanged=()=>this.choose(); }catch(e){} },
+  init(){ this.mode="always"; try{ localStorage.removeItem("vq4_voice"); }catch(e){} if(!this.ok()) return; this.choose(); try{ this.ss().onvoiceschanged=()=>this.choose(); }catch(e){} },
   active(){ try{ return !navigator.userActivation||navigator.userActivation.hasBeenActive; }catch(e){ return true; } },
   unlock(){ if(!this.ok()||!/iP(hone|ad|od)|Macintosh.*Mobile/.test(navigator.userAgent)) return; try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; this.q.push(u); this.ss().speak(u); }catch(e){} },
   speak(text,o={}){ this.stop(); if(!Snd.on||(!o.force&&(this.mode==="off"||(this.mode==="lessons"&&!o.lesson)))) return Promise.resolve();
@@ -679,7 +683,7 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
         const id=o.id+(S.style==="coach"&&!/^(v_|style|hear|read|goal|q_|r_|min|topics|closer|proof|intro)/.test(o.id)?"_c":"");
         const el=this.el(); el.onended=end; el.onloadedmetadata=()=>{ if(isFinite(el.duration)){ clearTimeout(tm); tm=setTimeout(end,el.duration*1000+1500); } }; el.onerror=()=>end();
         el.src=`/study4/voice/${id}.mp3`; this.cur={pause(){ try{ el.onended=null; el.onerror=null; el.pause(); }catch(e){} }};
-        const pr=el.play(); if(pr&&pr.catch) pr.catch(e=>{ if(!e||e.name!=="AbortError") end(); }); return; }
+        const pr=el.play(); if(pr&&pr.catch) pr.catch(e=>{ if(e&&e.name==="NotAllowedError") this.block(); if(!e||e.name!=="AbortError") end(); }); return; }
       setTimeout(()=>{ if(g===this.gen) this.tts(text,end,o,g); else end(); },120); }); },
   /* browser voice with feeling: pitch and pace per mood; the guide style shifts it (coach brighter and faster, gentle softer and slower) */
   TONE:{talk:[1.12,1],idle:[1.1,1],happy:[1.2,1.05],cheer:[1.3,1.1],wow:[1.32,1.1],love:[1.15,.93],empathy:[1,.86],think:[1.05,.92],listen:[1.08,.95],verse:[.98,.8]},
@@ -708,6 +712,13 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
   el(){ if(!this._el){ this._el=new Audio(); this._el.preload="auto"; this._el.setAttribute("playsinline",""); } return this._el; },
   /* must run inside a tap: after this, the same element can play every line without another tap */
   unlockEl(){ try{ const el=this.el(); if(el.dataset.ok) return; el.src=this.SILENT; const p=el.play(); el.dataset.ok="1"; if(p&&p.then) p.then(()=>{ try{ if(el.src===this.SILENT) el.pause(); }catch(e){} }).catch(e=>{ if(e&&e.name==="NotAllowedError") delete el.dataset.ok; }); }catch(e){} },
+  /* the browser refused sound (no touch yet): show "Tap to hear Lumi" and replay the line on the next touch */
+  blocked:false,
+  block(){ this.blocked=true; try{ delete this.el().dataset.ok; }catch(e){} const h=$("sndHint"); if(h) h.classList.add("on"); },
+  gesture(){ const el=this.el();
+    if(this.blocked){ this.blocked=false; const h=$("sndHint"); if(h) h.classList.remove("on");
+      try{ if(Snd.on&&el.src&&!/^data:/.test(el.src)&&el.paused&&!el.ended){ el.currentTime=0; mood("talk"); el.onended=()=>mood("happy"); el.dataset.ok="1"; const p=el.play(); if(p&&p.catch) p.catch(e=>{ if(e&&e.name==="NotAllowedError") this.block(); }); return; } }catch(e){} }
+    this.unlockEl(); },
   cache:new Map(),
   file(id){ if(!this.cache.has(id)) this.cache.set(id,fetch(`/study4/voice/${id}.mp3`).then(r=>r.ok?r.arrayBuffer():null).then(ab=>ab&&Music.init()?new Promise((ok,no)=>Music.ctx.decodeAudioData(ab,ok,no)):null).catch(()=>null)); return this.cache.get(id); },
   preload(ids){ if(CONFIG.voiceFiles) ids.forEach(i=>{ try{ fetch(`/study4/voice/${i}.mp3`).catch(()=>{}); }catch(e){} }); },
@@ -716,7 +727,7 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
 };
 Voice.init();
 function sndUI(){ $("snd").classList.toggle("mute",!Snd.on); }
-$("snd").onclick=()=>{ Snd.on=!Snd.on; try{localStorage.setItem("vq4_sound",Snd.on?"on":"off")}catch(e){} sndUI(); if(Snd.on) Music.start(); else { Music.stop(); Voice.stop(); } };
+$("snd").onclick=()=>{ Snd.on=!Snd.on; try{sessionStorage.setItem("vq4_sound",Snd.on?"on":"off")}catch(e){} sndUI(); if(Snd.on) Music.start(); else { Music.stop(); Voice.stop(); } };
 sndUI();
 
 /* ---------- typing + speaking ---------- */
@@ -811,9 +822,10 @@ const IS_BOT=(()=>{try{const ua=navigator.userAgent||"", raw=location.search||""
   return !!navigator.webdriver || /bot\b|bot\/|crawl|spider|slurp|facebookexternalhit|facebot|meta-external|headless|lighthouse|pingdom|gtmetrix|preview/i.test(ua)
     || /%25(5B|5D|7B|7C)/i.test(raw) || /\{\{[a-z._]+\}\}/i.test(decodeURIComponent(raw));}catch(e){return false;}})();
 const dev=()=>matchMedia('(pointer:coarse)').matches?'mobile':'desktop';
+const VAR=PERSONA||"ask";
 function track(step,key,event,plan){ if(IS_BOT) return; try{ const q=new URLSearchParams(location.search);
   fetch(TRACK.url,{method:"POST",keepalive:true,headers:{"apikey":TRACK.key,"Content-Type":"application/json","Prefer":"return=minimal"},
-    body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,step,step_key:String(key).slice(0,40),event:event||"view",plan:plan||null,
+    body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,step,step_key:String(key).slice(0,40),event:event||"view",plan:plan||("v:"+VAR+">"+(S.persona||"-")),
       utm_source:(q.get('utm_source')||'').slice(0,120)||null,utm_campaign:(q.get('utm_campaign')||'').slice(0,200)||null,device:dev()})}).catch(()=>{}); }catch(e){} }
 const OEV={};
 function oev(name,plan){ if(IS_BOT||OEV[name]) return; OEV[name]=1; try{ fetch(TRACK.url.replace("/quiz_events","/offer_events"),{method:"POST",keepalive:true,headers:{"apikey":TRACK.key,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({sid:TRACK.sid,quiz:TRACK.quiz,ev:name,device:dev(),plan:plan==null?null:plan})}).catch(()=>{}); }catch(e){} }
@@ -824,7 +836,7 @@ const clar=(e)=>{ try{ window.clarity&&clarity("event",e); }catch(_){} };
 
 /* warm up the recordings the next screens will need */
 function preloadNext(s){ if(!CONFIG.voiceFiles) return; const c=S.style==="coach"?"_c":"", A=(p,n)=>Array.from({length:n},(_,i)=>p+i);
-  const P={proof:["hear","hear_always","read","read_r_none","read_deeper_none","read_r_spoke","read_deeper","goal","goalgraph"],
+  const P={proof:["read","read_r_none","read_deeper_none","read_r_spoke","read_deeper","goal","goalgraph"],
     goalgraph:["q_Why",...A("r_Why_",4),"q_Stop",...A("r_Stop_",4)],
     q:["q_Freq",...A("r_Freq_",4),"q_When",...A("r_When_",4),"minutes","min_r_5","min_r_10","min_r_15","min_r_20"],
     minutes:["topics",...[3,4,5,6,7,8,9].map(n=>"closer_"+n),"style","style_gentle","style_coach"],
@@ -842,7 +854,7 @@ function render(){ const s=STEPS[S.i]; S.tok++; TM.forEach(clearTimeout); TM=[];
 
 /* ---------- screens ---------- */
 const R={
-  intro(){ Voice.preload(["intro_study","intro_life","intro_ask","pick_study","pick_life","proof","hear","hear_always","read","read_r_none","read_deeper_none","goal","goalgraph","q_Why"]);
+  intro(){ Voice.preload(["intro_study","intro_life","intro_ask","pick_study","pick_life","proof","read","read_r_none","read_deeper_none","goal","goalgraph","q_Why"]);
     const P=S.persona, T={study:["Give God 10 minutes a day.","Finally understand the Bible."],life:["Your marriage, your money, your mind…","the answers are in a book you already own."]}[P]||["Give God 10 minutes a day.","I'll walk with you."];
     const W={study:"Hi, I'm Lumi! If you've tried to read the Bible and gave up… that's not your fault. Give me 3 minutes, and we'll build your 28-day plan.",
              life:"Hi, I'm Lumi! Whatever you're facing right now, the Bible has answers most people never find. Give me 3 minutes."}[P]||"Hi, I'm Lumi! I'm so happy you're here. Tell me, what brought you here today?";
@@ -861,7 +873,7 @@ const R={
     addEventListener("pointerdown",tapHello,true); $("il").onclick=()=>{ voiced=false; hello(); };
     /* idle nudge: if nothing happens for 4s, Lumi hops to call attention */
     let idle=0; const nudgeHop=()=>{ if(STEPS[S.i].t!=="intro") return; idle++; mood("happy"); later(()=>mood("idle"),900); if(idle<6) later(nudgeHop,4000); }; later(nudgeHop,4500);
-    const start=()=>{ removeEventListener("pointerdown",tapHello,true); Voice.unlockEl(); Voice.unlock(); S.a.Persona=S.persona; track(0,"p_"+S.persona); go(); };
+    const start=()=>{ removeEventListener("pointerdown",tapHello,true); Voice.unlockEl(); Voice.unlock(); S.a.Persona=S.persona; go(); };
     if(P){ cta("Start my plan →",start,false,"Takes about 3 minutes"); $("ctaBtn").classList.add("pulse"); }
     else $$(".pick .card").forEach(c=>c.onclick=()=>{ const k=+c.dataset.k; c.classList.add("sel"); Sfx.select(); S.persona=k?"life":"study";
       S.carry=[k?"Then you're in the right place. God's Word has real answers for real life.":"I love that. Let's make the Bible finally make sense to you.",k?"pick_life":"pick_study","happy"]; later(start,300); }); },
@@ -1180,7 +1192,7 @@ function showDs(){ const old=$("coSheet"); if(old) old.remove(); const T=CONFIG.
 (function(){ const sky=$("sky"); let h=""; const n=innerWidth<700?4:6;
   for(let i=0;i<n;i++){ const w=140+Math.random()*200, top=5+Math.random()*80, t=60+Math.random()*50, dl=-Math.random()*t, o=(.5+Math.random()*.4).toFixed(2);
     h+=`<div class="cloud" style="--w:${w|0}px;top:${top|0}%;--t:${t|0}s;--dl:${dl|0}s;--o:${o}"><i></i></div>`; } sky.innerHTML=h; })();
-document.addEventListener("pointerdown",()=>Voice.unlockEl(),true);
+["pointerdown","touchend","click"].forEach(ev=>document.addEventListener(ev,()=>Voice.gesture(),true));
 const firstTouch=()=>{ removeEventListener("pointerdown",firstTouch,true); if(STEPS[S.i].t!=="vsl") Music.start(); };
 addEventListener("pointerdown",firstTouch,true);
 document.addEventListener("visibilitychange",()=>{ if(document.hidden){ Music.stop(); Voice.stop(); } else if(Music.ctx&&STEPS[S.i].t!=="vsl") Music.start(); });
