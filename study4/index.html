@@ -470,7 +470,6 @@ main{padding:0 18px 140px}
   <div class="top">
     <button class="ib hide" id="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
     <div class="prog off" id="prog"><i></i></div>
-    <button class="ib snd" id="snd" aria-label="Sound"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" fill-opacity=".12"/><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="x" d="m22 9-6 6M16 9l6 6"/></svg></button>
   </div>
   <main id="view"></main>
 </div>
@@ -617,7 +616,7 @@ function flame(v){ const l=$("lumi"); if(l) l.style.setProperty("--f",v); }
 
 /* ---------- sound: music, effects, voice ---------- */
 const Snd={on:true};
-try{ localStorage.removeItem("vq4_sound"); if(sessionStorage.getItem("vq4_sound")==="off") Snd.on=false; }catch(e){}
+try{ localStorage.removeItem("vq4_sound"); sessionStorage.removeItem("vq4_sound"); }catch(e){}
 const Music={ctx:null,on:false,master:null,timer:null,k:0,
   init(){ if(this.ctx) return true; try{ this.ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return false; }
     const c=this.ctx; this.master=c.createGain(); this.master.gain.value=0;
@@ -674,7 +673,7 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
   init(){ this.mode="always"; try{ localStorage.removeItem("vq4_voice"); }catch(e){} if(!this.ok()) return; this.choose(); try{ this.ss().onvoiceschanged=()=>this.choose(); }catch(e){} },
   active(){ try{ return !navigator.userActivation||navigator.userActivation.hasBeenActive; }catch(e){ return true; } },
   unlock(){ if(!this.ok()||!/iP(hone|ad|od)|Macintosh.*Mobile/.test(navigator.userAgent)) return; try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; this.q.push(u); this.ss().speak(u); }catch(e){} },
-  speak(text,o={}){ this.stop(); if(!Snd.on||(!o.force&&(this.mode==="off"||(this.mode==="lessons"&&!o.lesson)))) return Promise.resolve();
+  speak(text,o={}){ this.stop(); if(!text) return Promise.resolve();
     const g=++this.gen;
     return new Promise(res=>{ let done=false; const end=()=>{ if(done) return; done=true; if(g===this.gen){ this.busy=false; Music.duck(); } res(); };
       this.busy=true; Music.duck(); let tm=setTimeout(end,2500+text.length*90);
@@ -717,7 +716,7 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
   block(){ this.blocked=true; try{ delete this.el().dataset.ok; }catch(e){} const h=$("sndHint"); if(h) h.classList.add("on"); },
   gesture(){ const el=this.el();
     if(this.blocked){ this.blocked=false; const h=$("sndHint"); if(h) h.classList.remove("on");
-      try{ if(Snd.on&&el.src&&!/^data:/.test(el.src)&&el.paused&&!el.ended){ el.currentTime=0; mood("talk"); el.onended=()=>mood("happy"); el.dataset.ok="1"; const p=el.play(); if(p&&p.catch) p.catch(e=>{ if(e&&e.name==="NotAllowedError") this.block(); }); return; } }catch(e){} }
+      try{ if(el.src&&!/^data:/.test(el.src)&&el.paused&&!el.ended){ el.currentTime=0; mood("talk"); el.onended=()=>mood("happy"); el.dataset.ok="1"; const p=el.play(); if(p&&p.catch) p.catch(e=>{ if(e&&e.name==="NotAllowedError") this.block(); }); return; } }catch(e){} }
     this.unlockEl(); },
   cache:new Map(),
   file(id){ if(!this.cache.has(id)) this.cache.set(id,fetch(`/study4/voice/${id}.mp3`).then(r=>r.ok?r.arrayBuffer():null).then(ab=>ab&&Music.init()?new Promise((ok,no)=>Music.ctx.decodeAudioData(ab,ok,no)):null).catch(()=>null)); return this.cache.get(id); },
@@ -726,9 +725,6 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
   stop(){ this.gen++; if(this.ok()){ try{ const ss=this.ss(); if(ss.speaking||ss.pending) ss.cancel(); if(ss.paused) ss.resume(); }catch(e){} } if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
 };
 Voice.init();
-function sndUI(){ $("snd").classList.toggle("mute",!Snd.on); }
-$("snd").onclick=()=>{ Snd.on=!Snd.on; try{sessionStorage.setItem("vq4_sound",Snd.on?"on":"off")}catch(e){} sndUI(); if(Snd.on) Music.start(); else { Music.stop(); Voice.stop(); } };
-sndUI();
 
 /* ---------- typing + speaking ---------- */
 function say(text,o={}){ const b=$("bub"); if(!b) return Promise.resolve(); const tok=S.tok;
@@ -888,13 +884,6 @@ const R={
     const t0=performance.now(); (function tk(t){ const el=$("cnt"); if(!el) return; const k=Math.min(1,(t-t0)/1600); el.textContent=Math.round(560*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(tk); })(t0);
     sayQ("…in 169+ countries already walk with VEREDA. Ready to be next?",{id:"proof",after:"happy",speak:"Welcome! More than 560 thousand people, in over 169 countries, already walk with VEREDA. Ready to be next?"});
     cta("Let's go →",()=>go()); },
-
-  hear(s){ const O=[["🔊","Talk to me anytime","Your voice it is! I'll talk with you all the way.","always"],["🔈","Only during studies","Got it. I'll stay quiet and speak only during our studies.","lessons"],["💬","Text only","No problem. We'll keep it to text.","off"]];
-    view.innerHTML=`<section class="scr">${chatTop(["🎧","🔊"])}${cards(O)}<p class="note">You can change this anytime</p></section>`;
-    say("Before we start, how would you like to hear me?",{id:"hear",force:true});
-    let lock=false; $$(".card").forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const o=O[+c.dataset.k]; c.classList.add("sel"); $$(".card").forEach(x=>x!==c&&x.classList.add("dim")); Sfx.select();
-      Voice.mode=o[3]; try{localStorage.setItem("vq4_voice",o[3])}catch(e){} S.a.Voice=o[3];
-      S.carry=[o[2],"hear_"+o[3],"happy"]; later(()=>go(),380); }); },
 
   read(){ view.innerHTML=`<section class="scr stage"><div class="bub" id="bub"></div>
       <div class="pcard"><div class="kick">Recite a verse you know</div><p>Any verse you carry in your heart.</p><small>Take your time. I'm listening.</small></div>
