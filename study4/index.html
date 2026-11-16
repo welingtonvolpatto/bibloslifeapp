@@ -474,6 +474,7 @@ const CONFIG={
   trial:{url:"https://pay.hotmart.com/F108347453I?off=76tfafb3", days:7, then:19.90},
   // Lumi's voice: false = the browser's voice; true = recorded files at /study4/voice/<id>.mp3 (falls back to the browser's voice when a file is missing)
   voiceFiles:true,
+  music:false,            // background music off (it competed with the voice)
   weeks:[
     ["Step into Light","Do I know Jesus?","Grace vs Works","Talking With God"],
     ["Walking by Faith","When God Feels Silent","Forgiveness That Frees","The Power of Rest"],
@@ -619,7 +620,7 @@ const Music={ctx:null,on:false,master:null,timer:null,k:0,
     for(let i=0;i<3;i++){ if(Math.random()<.7) this.bell(this.MEL[(this.k*3+i*2+Math.floor(Math.random()*3))%this.MEL.length],t+1+i*2.4+Math.random()*.6); }
     this.k++; this.timer=setTimeout(()=>this.loop(),dur*1000); },
   level(){ return Voice.busy?.22:.8; },
-  start(){ if(!Snd.on||!this.init()) return; this.ctx.resume(); if(this.on) return; this.on=true; const g=this.master.gain,t=this.ctx.currentTime;
+  start(){ if(!Snd.on||!this.init()) return; this.ctx.resume(); if(CONFIG.music===false) return; if(this.on) return; this.on=true; const g=this.master.gain,t=this.ctx.currentTime;
     g.cancelScheduledValues(t); g.setValueAtTime(g.value,t); g.linearRampToValueAtTime(this.level(),t+3); this.loop(); },
   stop(){ if(!this.ctx||!this.on) return; this.on=false; clearTimeout(this.timer); const g=this.master.gain,t=this.ctx.currentTime;
     g.cancelScheduledValues(t); g.setValueAtTime(g.value,t); g.linearRampToValueAtTime(0,t+1); },
@@ -657,12 +658,13 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
   speak(text,o={}){ this.stop(); if(!Snd.on||(!o.force&&(this.mode==="off"||(this.mode==="lessons"&&!o.lesson)))) return Promise.resolve();
     const g=++this.gen;
     return new Promise(res=>{ let done=false; const end=()=>{ if(done) return; done=true; if(g===this.gen){ this.busy=false; Music.duck(); } res(); };
-      this.busy=true; Music.duck(); setTimeout(end,2500+text.length*90);
-      if(CONFIG.voiceFiles&&o.id){ /* after the guide is chosen, every line (except Bible verses) has a gentle and a coach recording */
+      this.busy=true; Music.duck(); let tm=setTimeout(end,2500+text.length*90);
+      if(CONFIG.voiceFiles&&o.id){
+        /* after the guide is chosen, every line (except Bible verses) has a gentle and a coach recording */
         const id=o.id+(S.style==="coach"&&!/^(v_|style|hear|read|goal|q_|r_|min|topics|closer|proof|intro)/.test(o.id)?"_c":"");
-        /* recorded voice: played through Web Audio (unlocked by the first tap, works in in-app browsers); falls back to the browser voice if the file is missing */
-        this.file(id).then(buf=>{ if(g!==this.gen) return end(); const c=Music.ctx; if(!buf||!c){ this.tts(text,end,o,g); return; }
-          c.resume(); const src=c.createBufferSource(), gn=c.createGain(); gn.gain.value=1; src.buffer=buf; src.connect(gn); gn.connect(c.destination); src.onended=end; this.cur={pause(){ try{ src.onended=null; src.stop(); }catch(e){} }}; src.start(); }); return; }
+        const el=this.el(); el.onended=end; el.onloadedmetadata=()=>{ if(isFinite(el.duration)){ clearTimeout(tm); tm=setTimeout(end,el.duration*1000+1500); } }; el.onerror=()=>{ if(g===this.gen) this.tts(text,end,o,g); };
+        el.src=`/study4/voice/${id}.mp3`; this.cur={pause(){ try{ el.onended=null; el.onerror=null; el.pause(); }catch(e){} }};
+        const pr=el.play(); if(pr&&pr.catch) pr.catch(()=>{ if(g===this.gen) this.tts(text,end,o,g); }); return; }
       setTimeout(()=>{ if(g===this.gen) this.tts(text,end,o,g); else end(); },120); }); },
   /* browser voice with feeling: pitch and pace per mood; the guide style shifts it (coach brighter and faster, gentle softer and slower) */
   TONE:{talk:[1.12,1],idle:[1.1,1],happy:[1.2,1.05],cheer:[1.3,1.1],wow:[1.32,1.1],love:[1.15,.93],empathy:[1,.86],think:[1.05,.92],listen:[1.08,.95],verse:[.98,.8]},
@@ -687,9 +689,13 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
         try{ ss.cancel(); ss.resume(); }catch(e){}
         if(!o._retry&&this.fails<3) this.tts(text,end,{...o,_retry:1},g); else end(); },2600);
     }catch(e){ end(); } },
+  _el:null, SILENT:"data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjYwLjE2LjEwMAAAAAAAAAAAAAAA//NwwAAAAAAAAAAAAEluZm8AAAAPAAAACAAAA/oAR0dHR0dHR0dHR0dHYmJiYmJiYmJiYmJifHx8fHx8fHx8fHx8fJaWlpaWlpaWlpaWlrGxsbGxsbGxsbGxsbHLy8vLy8vLy8vLy8vl5eXl5eXl5eXl5eXl////////////////AAAAAExhdmM2MC4zMQAAAAAAAAAAAAAAACQC1AAAAAAAAAP6yysejgAAAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsRbAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjEwMFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQMSkAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NCxKMAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//NAxKQAAANIAAAAAFVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/80LEowAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy4xMDBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/80DEpAAAA0gAAAAAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/zQsSjAAADSAAAAABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ==",
+  el(){ if(!this._el){ this._el=new Audio(); this._el.preload="auto"; this._el.setAttribute("playsinline",""); } return this._el; },
+  /* must run inside a tap: after this, the same element can play every line without another tap */
+  unlockEl(){ try{ const el=this.el(); if(el.dataset.ok) return; el.src=this.SILENT; const p=el.play(); el.dataset.ok="1"; if(p&&p.then) p.then(()=>{ try{ if(el.src===this.SILENT) el.pause(); }catch(e){} }).catch(e=>{ if(e&&e.name==="NotAllowedError") delete el.dataset.ok; }); }catch(e){} },
   cache:new Map(),
   file(id){ if(!this.cache.has(id)) this.cache.set(id,fetch(`/study4/voice/${id}.mp3`).then(r=>r.ok?r.arrayBuffer():null).then(ab=>ab&&Music.init()?new Promise((ok,no)=>Music.ctx.decodeAudioData(ab,ok,no)):null).catch(()=>null)); return this.cache.get(id); },
-  preload(ids){ if(CONFIG.voiceFiles) ids.forEach(i=>this.file(i)); },
+  preload(ids){ if(CONFIG.voiceFiles) ids.forEach(i=>{ try{ fetch(`/study4/voice/${i}.mp3`).catch(()=>{}); }catch(e){} }); },
   /* cancel only when something is playing (cancelling an idle engine breaks some voices), and always resume afterwards */
   stop(){ this.gen++; if(this.ok()){ try{ const ss=this.ss(); if(ss.speaking||ss.pending) ss.cancel(); if(ss.paused) ss.resume(); }catch(e){} } if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
 };
@@ -817,7 +823,7 @@ const R={
       <div id="il" style="cursor:pointer">${lumi("lg")}</div></div>
       <h1 class="h1">Give God 10 minutes a day.<br><em>I'll walk with you.</em></h1>
       <div class="hero"><div class="bub" id="bub" style="margin-top:12px"></div></div></section>`;
-    let voiced=false; const hello=()=>{ if(voiced) return; voiced=true; Voice.unlock(); Music.start(); mood("talk"); Voice.speak(W,{id:"intro",tone:"happy"}).then(()=>mood("happy")); };
+    let voiced=false; const hello=()=>{ if(voiced) return; voiced=true; Voice.unlockEl(); Voice.unlock(); Music.start(); mood("talk"); Voice.speak(W,{id:"intro",tone:"happy"}).then(()=>mood("happy")); };
     later(()=>{ mood("happy"); say(W,{id:"intro",after:"happy"}).then(()=>{}); },400);
     /* browsers only allow sound after a first touch: the first tap anywhere (or on Lumi) plays the welcome */
     const tapHello=e=>{ if(e.target.closest("#ctaBtn")) return; removeEventListener("pointerdown",tapHello,true); if(STEPS[S.i].t==="intro") hello(); };
@@ -1135,6 +1141,7 @@ function showDs(){ const old=$("coSheet"); if(old) old.remove(); const T=CONFIG.
 (function(){ const sky=$("sky"); let h=""; const n=innerWidth<700?4:6;
   for(let i=0;i<n;i++){ const w=140+Math.random()*200, top=5+Math.random()*80, t=60+Math.random()*50, dl=-Math.random()*t, o=(.5+Math.random()*.4).toFixed(2);
     h+=`<div class="cloud" style="--w:${w|0}px;top:${top|0}%;--t:${t|0}s;--dl:${dl|0}s;--o:${o}"><i></i></div>`; } sky.innerHTML=h; })();
+document.addEventListener("pointerdown",()=>Voice.unlockEl(),true);
 const firstTouch=()=>{ removeEventListener("pointerdown",firstTouch,true); if(STEPS[S.i].t!=="vsl") Music.start(); };
 addEventListener("pointerdown",firstTouch,true);
 document.addEventListener("visibilitychange",()=>{ if(document.hidden){ Music.stop(); Voice.stop(); } else if(Music.ctx&&STEPS[S.i].t!=="vsl") Music.start(); });
