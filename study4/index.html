@@ -807,13 +807,23 @@ function sendLead(){ if(IS_BOT||!S.email) return; try{ const q=new URLSearchPara
     body:JSON.stringify({p:{sid:TRACK.sid,quiz:TRACK.quiz,email:S.email,name:null,newsletter:null,archetype:null,gender:null,lang:"en",utm_source:q.get("utm_source"),utm_campaign:q.get("utm_campaign")}})}).catch(()=>{}); }catch(e){} }
 const clar=(e)=>{ try{ window.clarity&&clarity("event",e); }catch(_){} };
 
+/* warm up the recordings the next screens will need */
+function preloadNext(s){ if(!CONFIG.voiceFiles) return; const c=S.style==="coach"?"_c":"", A=(p,n)=>Array.from({length:n},(_,i)=>p+i);
+  const P={proof:["hear","hear_always","read","read_r_none","read_deeper_none","read_r_spoke","read_deeper","goal","goalgraph"],
+    goalgraph:["q_Why",...A("r_Why_",4),"q_Stop",...A("r_Stop_",4)],
+    q:["q_Freq",...A("r_Freq_",4),"q_When",...A("r_When_",4),"minutes","min_r_5","min_r_10","min_r_15","min_r_20"],
+    minutes:["topics",...[3,4,5,6,7,8,9].map(n=>"closer_"+n),"style","style_gentle","style_coach"],
+    prep:["ls_intro","v_ps23_3","ls_cast","ls_q1","ls_r1_0","ls_r1_1","ls_r1_2","ls_shift","ls_shift_no","ls_shift_ok","v_ps23_6","ls_radaph","ls_q2","ls_r2","ls_q3","ls_r3","ls_next"].map(i=>/^v_/.test(i)?i:i+c),
+    lesson:["done","pact_5","pact_10","pact_15","pact_20","pact_r","streak","email","diag"].map(i=>i+c),
+    email:["chests","chest_0","chest_1","chest_2","reveal","offer","downsell"].map(i=>i+c)};
+  Voice.preload(P[s.t]||[]); }
 /* ---------- navigation ---------- */
 function go(n){ S.hist.push(S.i); S.i=n??S.i+1; render(); }
 $("back").onclick=()=>{ while(S.hist.length){ const p=S.hist.pop(); if(!NOBACK.has(STEPS[p].t)){ S.i=p; render(); return; } } };
 function render(){ const s=STEPS[S.i]; S.tok++; TM.forEach(clearTimeout); TM=[]; Voice.stop(); Mic.stop(); window.scrollTo(0,0); cta(null);
   $("back").classList.toggle("hide",NOBACK.has(s.t)||!S.hist.some(p=>!NOBACK.has(STEPS[p].t)));
   const showP=S.i>0&&S.i<=EMAIL_AT&&!["lesson","vsl"].includes(s.t); $("prog").classList.toggle("off",!showP); $("prog").firstElementChild.style.width=Math.round(S.i/EMAIL_AT*100)+"%";
-  document.body.dataset.step=s.t; R[s.t](s); track(S.i,s.key||s.t); }
+  document.body.dataset.step=s.t; R[s.t](s); preloadNext(s); track(S.i,s.key||s.t); }
 
 /* ---------- screens ---------- */
 const R={
