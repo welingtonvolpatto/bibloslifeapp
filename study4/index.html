@@ -482,11 +482,11 @@ const CONFIG={
   quiz:"study4",
   // Hotmart subscription product (same offers as /study2)
   plans:[
-    {id:"m", name:"Monthly Plan",  url:"https://pay.hotmart.com/F108347453I?off=t5216fgc", price:19.90, every:"month",    months:1},
-    {id:"q", name:"3-Month Plan", url:"https://pay.hotmart.com/F108347453I?off=ah15t54l", price:39.90, every:"3 months", months:3}
+    {id:"m", name:"Monthly Plan",  url:"https://pay.hotmart.com/F108347453I?off=t5216fgc&checkoutMode=10", price:19.90, every:"month",    months:1},
+    {id:"q", name:"3-Month Plan", url:"https://pay.hotmart.com/F108347453I?off=ah15t54l&checkoutMode=10", price:39.90, every:"3 months", months:3}
   ],
   // "Not today" / back button → start smaller: 7-day trial, then the monthly plan
-  trial:{url:"https://pay.hotmart.com/F108347453I?off=76tfafb3", days:7, then:19.90},
+  trial:{url:"https://pay.hotmart.com/F108347453I?off=76tfafb3&checkoutMode=10", days:7, then:19.90},
   // Lumi's voice: false = the browser's voice; true = recorded files at /study4/voice/<id>.mp3 (falls back to the browser's voice when a file is missing)
   voiceFiles:true,
   music:false,            // background music off (it competed with the voice)
