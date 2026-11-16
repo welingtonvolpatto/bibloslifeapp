@@ -641,39 +641,50 @@ const Sfx={ c(){ return Snd.on&&Music.init()?Music.ctx:null; },
     s.buffer=b; f.type="bandpass"; f.frequency.setValueAtTime(400,t); f.frequency.exponentialRampToValueAtTime(2400,t+.4); g.gain.value=.25; s.connect(f); f.connect(g); g.connect(c.destination); s.start(t);
     this.tone(1046.5,t+.35,1.2,.06); this.tone(1568,t+.45,1.4,.04); }
 };
-const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,
-  init(){ try{ this.mode=localStorage.getItem("vq4_voice")||"always"; }catch(e){}
-    if(!("speechSynthesis" in window)) return; const choose=()=>{ const vs=speechSynthesis.getVoices().filter(v=>/^en[-_]US/i.test(v.lang));
-      for(const p of [/(Aria|Jenny|Ava|Emma|Michelle).*(Natural|Neural)/i,/(Natural|Neural)/i,/(Samantha|Ava|Allison|Zoe|Nicky).*(Enhanced|Premium)/i,/(Enhanced|Premium)/i,/Samantha/i,/Ava/i,/Allison/i,/Google US English/i,/Jenny/i,/Aria/i,/Zira/i]){ const f=vs.find(v=>p.test(v.name)); if(f){ this.v=f; return; } } this.v=vs[0]||null; };
-    choose(); speechSynthesis.onvoiceschanged=choose; },
-  unlock(){ try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; this.q.push(u); speechSynthesis.speak(u); }catch(e){} },
+const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new Set(),
+  ok(){ return "speechSynthesis" in window && typeof SpeechSynthesisUtterance!=="undefined"; },
+  ss(){ return window.speechSynthesis; },
+  /* voice choice: local voices first (network voices in Chrome get stuck after a cancel); Edge's "Natural" voices are fine in Edge */
+  choose(){ if(!this.ok()) return; const all=this.ss().getVoices()||[], en=all.filter(v=>/^en[-_]US/i.test(v.lang)&&!this.bad.has(v.name)), edge=/Edg\//.test(navigator.userAgent);
+    const pick=(list,res)=>{ for(const r of res){ const f=list.find(v=>r.test(v.name)); if(f) return f; } return null; };
+    const local=en.filter(v=>v.localService!==false);
+    this.v=(edge&&pick(en,[/(Aria|Jenny|Ava|Emma|Michelle).*Natural/i,/Natural/i]))
+      ||pick(local,[/(Samantha|Ava|Allison|Zoe|Nicky|Evan).*(Enhanced|Premium)/i,/(Enhanced|Premium)/i,/Samantha/i,/Ava/i,/Allison/i,/Aria/i,/Jenny/i,/Zira/i,/Google/i])
+      ||local[0]||en[0]||null; },
+  init(){ try{ this.mode=localStorage.getItem("vq4_voice")||"always"; }catch(e){} if(!this.ok()) return; this.choose(); try{ this.ss().onvoiceschanged=()=>this.choose(); }catch(e){} },
+  active(){ try{ return !navigator.userActivation||navigator.userActivation.hasBeenActive; }catch(e){ return true; } },
+  unlock(){ if(!this.ok()||!/iP(hone|ad|od)|Macintosh.*Mobile/.test(navigator.userAgent)) return; try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; this.q.push(u); this.ss().speak(u); }catch(e){} },
   speak(text,o={}){ this.stop(); if(!Snd.on||(!o.force&&(this.mode==="off"||(this.mode==="lessons"&&!o.lesson)))) return Promise.resolve();
     const g=++this.gen;
     return new Promise(res=>{ let done=false; const end=()=>{ if(done) return; done=true; if(g===this.gen){ this.busy=false; Music.duck(); } res(); };
-      this.busy=true; Music.duck(); setTimeout(end,2500+text.length*95);
+      this.busy=true; Music.duck(); setTimeout(end,2500+text.length*90);
       if(CONFIG.voiceFiles&&o.id){ const a=new Audio(`/study4/voice/${o.id}${S.style==="coach"&&o.coachFile?"_c":""}.mp3`); this.cur=a; a.onended=end; a.onerror=()=>{ this.cur=null; if(g===this.gen) this.tts(text,end,o,g); }; a.play().catch(()=>{ if(g===this.gen) this.tts(text,end,o,g); }); return; }
-      /* speaking right after cancel() is dropped by some browsers: wait a beat */
-      setTimeout(()=>{ if(g===this.gen) this.tts(text,end,o,g); else end(); },90); }); },
-  /* browser voice with feeling: each mood gets its own pitch and pace; the guide style shifts it (coach = brighter and faster, gentle = softer and slower) */
+      setTimeout(()=>{ if(g===this.gen) this.tts(text,end,o,g); else end(); },120); }); },
+  /* browser voice with feeling: pitch and pace per mood; the guide style shifts it (coach brighter and faster, gentle softer and slower) */
   TONE:{talk:[1.12,1],idle:[1.1,1],happy:[1.2,1.05],cheer:[1.3,1.1],wow:[1.32,1.1],love:[1.15,.93],empathy:[1,.86],think:[1.05,.92],listen:[1.08,.95],verse:[.98,.8]},
-  tts(text,end,o={},g){ if(!("speechSynthesis" in window)) return end();
-    try{ const tone=(o.id&&/^v_/.test(o.id))?"verse":(o.tone||"talk"), t=this.TONE[tone]||this.TONE.talk;
+  tts(text,end,o={},g){ if(!this.ok()||this.fails>=3) return end();
+    try{ const ss=this.ss(), tone=(o.id&&/^v_/.test(o.id))?"verse":(o.tone||"talk"), t=this.TONE[tone]||this.TONE.talk;
       const st=tone==="verse"?[0,1]:S.style==="coach"?[.08,1.08]:S.style==="gentle"?[-.03,.95]:[0,1];
       const parts=(text.replace(/[“”]/g,"").replace(/\s*[—–]\s*/g,", ").replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,"").match(/[^.!?…]+[.!?…]*\s*/g)||[text]).map(x=>x.trim()).filter(Boolean);
       if(!parts.length) return end();
-      try{ if(speechSynthesis.paused) speechSynthesis.resume(); }catch(e){}
-      this.q=[]; let started=false;
+      if(!this.v) this.choose();
+      try{ if(ss.paused) ss.resume(); }catch(e){}
+      this.q=[]; let started=false, blocked=false;
       parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p.replace(/…/g,"..."));
         if(this.v) u.voice=this.v; u.lang="en-US"; const ex=/!$/.test(p), q=/\?$/.test(p);
         u.pitch=Math.max(.5,Math.min(2,t[0]+st[0]+(ex?.1:q?.05:0))); u.rate=Math.min(1.5,t[1]*st[1]*(ex?1.05:1)); u.volume=1;
-        u.onstart=()=>{ started=true; };
-        if(i===parts.length-1){ u.onend=end; u.onerror=e=>{ if(e&&e.error==="interrupted") return end(); end(); }; }
-        this.q.push(u); speechSynthesis.speak(u); });
-      /* watchdog: if nothing started, the engine got stuck; reset and try once more */
-      setTimeout(()=>{ if(!started&&g===this.gen&&!speechSynthesis.speaking){ try{ speechSynthesis.cancel(); speechSynthesis.resume(); }catch(e){} if(!o._retry) this.tts(text,end,{...o,_retry:1},g); else end(); } },1600);
+        u.onstart=()=>{ started=true; this.fails=0; };
+        u.onerror=e=>{ const er=e&&e.error; if(er==="not-allowed"){ blocked=true; return end(); } if(er==="interrupted"||er==="canceled") return; if(i===parts.length-1) end(); };
+        if(i===parts.length-1) u.onend=end;
+        this.q.push(u); ss.speak(u); });
+      /* watchdog: nothing started → the engine is stuck or the voice is broken: reset, drop that voice, try once more; never make the quiz wait */
+      setTimeout(()=>{ if(started||blocked||g!==this.gen) return; if(!this.active()) return end();
+        this.fails++; if(this.v) this.bad.add(this.v.name); this.v=null; this.choose();
+        try{ ss.cancel(); ss.resume(); }catch(e){}
+        if(!o._retry&&this.fails<3) this.tts(text,end,{...o,_retry:1},g); else end(); },2600);
     }catch(e){ end(); } },
-  /* cancel() leaves Chrome "paused" if it was paused, and then every later sentence stays silent: always resume after cancelling */
-  stop(){ this.gen++; try{ speechSynthesis.cancel(); speechSynthesis.resume(); }catch(e){} if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
+  /* cancel only when something is playing (cancelling an idle engine breaks some voices), and always resume afterwards */
+  stop(){ this.gen++; if(this.ok()){ try{ const ss=this.ss(); if(ss.speaking||ss.pending) ss.cancel(); if(ss.paused) ss.resume(); }catch(e){} } if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
 };
 Voice.init();
 function sndUI(){ $("snd").classList.toggle("mute",!Snd.on); }
