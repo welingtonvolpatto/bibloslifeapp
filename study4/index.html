@@ -381,6 +381,17 @@ main{padding:0 18px 140px}
 .plac:before,.plac:after{content:"";position:absolute;top:-8px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #cfdcec}
 .plac:before{left:14px}.plac:after{right:14px}
 @keyframes placIn{from{transform:translateY(20px) scale(.6);opacity:0}to{transform:none;opacity:1}}
+/* big discount reveal */
+.chs{transition:opacity .5s,filter .5s}
+.chs.rev .hero,.chs.rev .chests,.chs.rev .note{opacity:.18;filter:blur(1.5px)}
+.bigrev{position:fixed;left:0;right:0;top:0;bottom:0;z-index:25;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;padding-bottom:60px}
+.bigrev .lumi{width:210px;animation:revUp .7s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes revUp{from{opacity:0;transform:translateY(60px) scale(.6)}to{opacity:1;transform:none}}
+.plac.big{font-size:64px;padding:12px 30px 10px;border-radius:22px;margin-top:-18px;transform:rotate(-2deg);animation:placBig .7s .25s cubic-bezier(.2,1.6,.4,1) both;box-shadow:0 8px 0 var(--blue-d),0 22px 40px rgba(31,111,209,.35)}
+.plac.big small{font-size:20px;margin-left:6px}
+.plac.big:before,.plac.big:after{width:26px;height:26px;top:-13px}.plac.big:before{left:26px}.plac.big:after{right:26px}
+@keyframes placBig{from{opacity:0;transform:rotate(-2deg) translateY(30px) scale(.4)}to{opacity:1;transform:rotate(-2deg)}}
+.bigrev h2{margin-top:24px;font-size:25px;font-weight:900;color:var(--ink);animation:fi .5s .7s both;opacity:0}
 /* offer */
 .toast{display:flex;gap:10px;align-items:center;background:#fff;border-radius:16px;padding:10px 14px;font-size:13.5px;font-weight:800;color:var(--ink);box-shadow:0 3px 0 #d3e1f0;margin:4px 0 14px;animation:scrIn .5s}
 .of-hero{display:flex;flex-direction:column;align-items:center;margin-bottom:6px}
@@ -1017,14 +1028,19 @@ const R={
   chests(){ const G=[[`${SAVE}%`,"off your 3-month plan"],["5","app bonuses included"],["30","day money-back guarantee"]];
     const chest=`<svg viewBox="0 0 92 80"><circle class="burst" cx="46" cy="30" r="30" fill="#FFE7A0"/><rect x="10" y="34" width="72" height="38" rx="6" fill="#3E86E0" stroke="#E2A93B" stroke-width="4"/><rect x="40" y="34" width="12" height="38" fill="#E2A93B"/>
       <g class="lid"><path d="M10 36Q10 12 46 12Q82 12 82 36Z" fill="#5A9BEA" stroke="#E2A93B" stroke-width="4" stroke-linejoin="round"/><rect x="40" y="12" width="12" height="24" fill="#E2A93B"/></g><rect x="39" y="30" width="14" height="14" rx="3" fill="#F7C95C" stroke="#B9822A" stroke-width="2"/></svg>`;
-    view.innerHTML=`<section class="scr c"><div class="hero" style="margin-top:2vh"><div id="ph" style="min-height:44px"></div>${lumi("md")}<div class="bub" id="bub"></div></div>
+    view.innerHTML=`<section class="scr c chs" id="chs"><div class="hero" style="margin-top:2vh">${lumi("md")}<div class="bub" id="bub"></div></div>
       <div class="chests">${[0,1,2].map(i=>`<div class="chest" data-i="${i}">${chest}<div class="gift" id="g${i}"></div></div>`).join("")}</div><p class="note" id="cn">Open each chest</p></section>`;
     say("Before we begin, I saved 3 gifts for you. Open each chest!",{id:"chests",after:"happy"});
     let n=0; const lines=[`You unlocked ${SAVE}% off your 3-month plan!`,"5 app bonuses, all included!","And a 30-day money-back guarantee. All yours!"];
     $$(".chest").forEach(c=>c.onclick=()=>{ if(c.classList.contains("open")) return; const g=G[n]; c.classList.add("open"); Sfx.pop(); oev("chest"+(n+1));
-      $("g"+c.dataset.i).innerHTML=`<b>${g[0]}</b>${g[1]}`; if(n===0){ $("ph").innerHTML=`<div class="plac">${SAVE}%<small>OFF</small></div>`; confetti(30); }
+      $("g"+c.dataset.i).innerHTML=`<b>${g[0]}</b>${g[1]}`;
       mood(n===2?"cheer":"wow"); say(lines[n],{id:"chest_"+n,after:n===2?"cheer":"happy"}); n++;
-      if(n===3){ $("cn").textContent=""; later(()=>cta("See my plan →",()=>go()),700); } }); },
+      if(n===3){ $("cn").textContent=""; later(reveal,1500); } });
+    /* all gifts open → the screen fades and Lumi pops up holding the discount, like Cláudia */
+    const reveal=()=>{ Voice.stop(); $("chs").classList.add("rev"); const r=document.createElement("div"); r.className="bigrev"; r.id="bigrev";
+      r.innerHTML=`<div class="lumi" data-mood="cheer">${lumiSVG()}</div><div class="plac big">${SAVE}%<small>OFF</small></div><h2>You unlocked ${SAVE}% off!</h2>`;
+      view.appendChild(r); Sfx.win(); later(()=>confetti(60),300); Voice.speak(`Wow! You unlocked ${SAVE}% off!`,{id:"reveal",tone:"wow"});
+      later(()=>cta("See my plan →",()=>go()),1200); }; },
 
   offer(){ oev("view"); clar("offer_view"); const habit=fmt(addDays(finalDays()));
     const bonus=[["community","Prayer community","Pray together with people of faith"],["reflect","Verse of the day","One verse and reflection every morning"],["story","Audio series & Bible stories","Listen anywhere, any time"],["journey","Journal & progress","See how far you've walked"],["bible","The complete Bible","Read or listen to any book"]];
@@ -1053,14 +1069,11 @@ const R={
         ${bonus.map(b=>`<div class="inc"><img src="/bible-study/img/app/${b[0]}.webp" alt="" loading="lazy"><div><b>${b[1]}</b><span>${b[2]}</span></div><span class="fr">BONUS</span></div>`).join("")}</div>
       <div class="sec"><h2 class="h2">Your 28-day plan</h2>${CONFIG.weeks.map((w,i)=>`<div class="wk"><b>Week ${i+1}</b><span>${w.join(" · ")}</span></div>`).join("")}</div>
       <div class="guar"><span class="gi">🛡️</span><div><b>30-day money-back guarantee</b><p>Try VEREDA for 30 days. If it isn't for you, ask for a full refund within 30 days of your payment.</p></div></div>
-      <div class="sec"><h2 class="h2">Questions</h2>${FAQ.map(f=>`<details class="faq"><summary>${f[0]}</summary><p>${f[1]}</p></details>`).join("")}</div>
-      <div class="sec"><h2 class="h2 c">Meet the people behind VEREDA</h2><div class="tmc" id="tmc">${[["caleb","Caleb Whitmor","Biblical coordinator at VEREDA"],["nathaniel","Nathaniel Hayes","Pastor · Founder of VEREDA"],["abigail","Abigail Brooks","Theologian and therapist · 20+ years"],["eleanor","Eleanor Bennett","Researcher in African Christianity · missiology"]].map(t=>`<div class="tmc-i"><img src="/bible-study/img/team/${t[0]}.webp" alt="${t[1]}" loading="lazy"><div class="tmc-t"><b>${t[1]}</b><span>${t[2]}</span></div></div>`).join("")}</div></div>
       <div style="margin-top:22px"><button class="btn" data-p="1">Start my 3-month plan</button></div>
       <button class="link" id="nt" style="color:var(--muted)">Not today</button></section>`;
     mood("happy"); Voice.speak("Your gifts are applied. Just pick your plan, and we start today.",{id:"offer",tone:"happy"});
     $$("[data-p]").forEach(b=>b.onclick=()=>{ S.plan=+b.dataset.p; oev(S.plan?"plan_q":"plan_m",S.plan); summary(S.plan); });
     $("nt").onclick=()=>{ oev("ds_link"); downsell("link"); };
-    const tm=$("tmc"); let ti=0; const iv=setInterval(()=>{ if(!tm.isConnected) return clearInterval(iv); ti=(ti+1)%4; const it=tm.children[ti]; tm.scrollTo({left:it.offsetLeft-(tm.clientWidth-it.clientWidth)/2,behavior:"smooth"}); },3500);
     armExit(); }
 };
 
