@@ -258,6 +258,60 @@ main{padding:0 18px 140px}
 .trk .rd svg{width:100%;height:100%;overflow:visible}
 .trk .st{position:absolute;top:50%;width:18px;height:18px;margin:-9px 0 0 -4px;opacity:0;transition:opacity .4s 1.8s}
 .trk.go .st{opacity:1}
+/* thought bubble per question (Lumi "thinking" about the topic) */
+.chat.th{position:relative;padding-top:66px}
+.tb{position:absolute;left:30px;top:0;z-index:2;animation:tbIn .5s cubic-bezier(.2,1.5,.4,1) both;animation-delay:.25s}
+@keyframes tbIn{from{opacity:0;transform:translateY(10px) scale(.6)}to{opacity:1;transform:none}}
+.tb-c{position:relative;display:flex;gap:2px;align-items:center;background:#fff;border-radius:22px;padding:6px 10px;box-shadow:0 3px 0 #d3e1f0,0 8px 18px rgba(25,70,130,.1);font-size:24px;line-height:1}
+.tb-c:before,.tb-c:after{content:"";position:absolute;background:#fff;border-radius:50%;box-shadow:0 2px 0 #d3e1f0}
+.tb-c:before{width:13px;height:13px;left:6px;bottom:-12px}.tb-c:after{width:7px;height:7px;left:0;bottom:-22px}
+.tb-c span{display:inline-block;animation:tbb 2.6s ease-in-out infinite}
+.tb-c span:nth-child(2){animation-delay:-.8s}.tb-c span:nth-child(3){animation-delay:-1.6s}
+@keyframes tbb{50%{transform:translateY(-3px) rotate(-6deg)}}
+.tb-s{position:absolute;color:#FFC93C;font-size:13px;animation:tw 1.3s ease-in-out infinite}
+/* the lamp glows while it talks or listens */
+.lumi:after{content:"";position:absolute;left:-8%;right:-2%;top:-6%;bottom:-6%;border-radius:50%;background:radial-gradient(circle at 50% 55%,rgba(255,214,120,.55),rgba(150,195,250,.35) 45%,rgba(150,195,250,0) 70%);z-index:-1;opacity:0;transform:scale(.9);transition:opacity .3s}
+.lumi{isolation:isolate}
+.lumi[data-mood=talk]:after{opacity:1;animation:haloT .45s ease-in-out infinite alternate}
+.lumi[data-mood=listen]:after{opacity:1;animation:haloT .9s ease-in-out infinite alternate}
+.lumi.halo:after{opacity:.55}
+@keyframes haloT{from{transform:scale(.9)}to{transform:scale(1.12)}}
+/* voice stage: prompt card on top, big Lumi in the middle, mic under it */
+.stage{display:flex;flex-direction:column;align-items:center;text-align:center}
+.stage .bub{width:100%;text-align:center;font-size:17px}
+.stage .bub:before{display:none}
+.stage .lumi{margin:22px 0 6px}
+.pcard{width:100%;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 3px 0 #d3e1f0,0 10px 24px rgba(25,70,130,.07);margin-top:12px}
+.pcard p{font-size:20px;line-height:1.3;font-weight:900;color:var(--ink);margin-top:4px}
+.pcard small{display:block;color:var(--muted);font-weight:700;font-size:13px;margin-top:6px}
+/* intro welcome bubble */
+.wb{display:inline-block;margin-top:8px;cursor:pointer}
+/* proof map */
+.wmap{position:relative;width:calc(100% + 40px);margin:18px -20px 0}
+.wmap img{width:100%;display:block}
+.wmap svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.wmap .lb{font-size:15px;font-weight:900;fill:var(--ink)}
+.wmap .hub{fill:#4F8DF0}
+.wmap .arc2{fill:none;stroke:#5B9BF2;stroke-width:2.2;stroke-dasharray:4 4;stroke-linecap:round}
+.wmap .draw{stroke-dasharray:3 4}
+/* insight + lesson extras */
+.ins{display:flex;gap:10px;background:#FFF7E6;border:2px solid #FBE3B1;border-radius:18px;padding:12px 14px;margin:2px 0 12px;text-align:left;font-size:14.5px;line-height:1.45;color:#5b4210;font-weight:700}
+.ins b{display:block;color:#8a5a00;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
+.vw{cursor:pointer;border-radius:6px;padding:0 2px;transition:background .2s}
+.vw:hover{background:var(--soft)}
+.vw.hit{background:#FFE7A0;color:#7a4b00;box-shadow:0 0 0 3px #FFE7A0}
+.vw.miss{animation:shake .35s}
+.myv{background:linear-gradient(135deg,#1F6FD1,#5B4FD8);color:#fff;border-radius:22px;padding:18px;text-align:left;box-shadow:0 6px 0 #1a4fa0,0 16px 30px rgba(31,111,209,.3);margin-top:6px}
+.myv .k{font-size:11px;letter-spacing:.14em;font-weight:900;opacity:.85}
+.myv p{font-size:21px;font-weight:900;line-height:1.3;margin-top:8px}
+.myv small{display:block;margin-top:8px;opacity:.85;font-weight:700}
+.lock{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:0 3px 0 #d3e1f0;margin-top:12px;text-align:left}
+.lock .lk{font-size:22px}.lock b{display:block;color:var(--ink);font-size:15px}.lock span{font-size:13px;color:var(--muted);font-weight:700}
+/* email suggestions */
+.em-sug{list-style:none;margin-top:6px;background:#fff;border-radius:14px;max-height:200px;overflow-y:auto;padding:4px 0;box-shadow:0 3px 0 #d3e1f0;text-align:left}
+.em-sug li{padding:12px 16px;font-size:15px;color:var(--ink);font-weight:700;cursor:pointer}
+.em-sug li b{color:var(--blue)}
+.em-sug li:hover{background:var(--soft)}
 /* thought */
 .thought{position:absolute;left:62px;top:-10px;display:flex;gap:2px;background:#fff;border-radius:16px;padding:4px 8px;box-shadow:0 3px 0 #d3e1f0;font-size:18px;min-width:30px;min-height:30px;opacity:0;transition:opacity .3s}
 .thought.on{opacity:1}
@@ -422,22 +476,22 @@ const money=n=>"$"+n.toFixed(2);
 
 /* ---------- questions ---------- */
 const Q={
-  Why:{say:"What brings you here today?",o:[
+  Why:{art:["🕊️","📖","🏡"],say:"What brings you here today?",o:[
     ["🕊️","Peace for my anxiety","I'm so glad you came. God's Word has so much to say about peace, and we'll find it together.","happy","find peace in God's Word"],
     ["📖","To finally understand the Bible","Then you're in the right place. I'll explain everything in plain words.","happy","finally understand the Bible"],
     ["🏡","My family and marriage","Beautiful. Strong homes are built on this Word. Let's build yours.","love","bring God's Word into your home"],
     ["🙏","To feel closer to God","He wants that too, more than you know. Let's walk toward Him.","love","feel closer to God every day"]]},
-  Stop:{say:"And what gets in your way the most?",o:[
+  Stop:{art:["⏰","❓","😔"],mood:"think",say:"And what gets in your way the most?",o:[
     ["🤯","I don't understand what I read","That's not your fault. Old words are hard. I'll make them simple.","empathy","not understanding what you read"],
     ["⏰","I never have time","Then we'll keep it short. A few minutes a day is enough.","happy","not having time"],
     ["🧭","I don't know where to start","Don't worry. I'll show you exactly where to start, step by step.","happy","not knowing where to start"],
     ["😔","I feel guilty for being away","Hey… no guilt here. God never stopped waiting for you.","empathy","the guilt of being away"]]},
-  Freq:{say:"How often do you open the Bible today?",o:[
+  Freq:{art:["📖","🗓️"],say:"How often do you open the Bible today?",o:[
     ["🌑","Almost never","That's okay. Today is a new beginning.","empathy",0],
     ["🌒","About once a week","A good seed. We'll help it grow.","happy",10],
     ["🌓","A few days a week","You're on your way! Let's make it daily.","happy",25],
     ["🌕","Every day","Wonderful! Now let's go deeper together.","cheer",45]]},
-  When:{say:"When is the best moment for us to talk?",o:[
+  When:{art:["🌅","☕","🌙"],say:"When is the best moment for us to talk?",o:[
     ["🌅","In the morning","Starting the day with God. Lovely. I'll be there with your coffee.","happy"],
     ["☀️","On my lunch break","A peaceful pause in the middle of the day. Perfect.","happy"],
     ["🌙","In the evening","Ending the day close to God. I love that.","love"],
@@ -525,6 +579,8 @@ function lumiSVG(){ return `<svg viewBox="0 0 220 190" aria-hidden="true">
 <g class="l-heart" fill="#FF6F8E"><path d="M58 66c-4-6-14-2-10 6l10 9 10-9c4-8-6-12-10-6z"/><path d="M150 46c-3-5-11-2-8 5l8 7 8-7c3-7-5-10-8-5z"/></g>
 </svg>`; }
 function lumi(size,extra){ return `<div class="lumi ${size||"sm"} ${extra||""}" id="lumi" data-mood="idle">${lumiSVG()}</div>`; }
+function thought(icons){ return `<div class="tb"><div class="tb-c">${icons.map(i=>`<span>${i}</span>`).join("")}</div><span class="tb-s" style="right:-10px;top:-6px">✦</span><span class="tb-s" style="left:-12px;top:14px;animation-delay:-.5s">✦</span></div>`; }
+function chatTop(icons,id){ return `<div class="chat${icons?" th":""}"${id?` id="${id}"`:""}>${icons?thought(icons):""}${lumi()}<div class="bub" id="bub"></div></div>`; }
 function mood(m){ const l=$("lumi"); if(l) l.dataset.mood=m; }
 function flame(v){ const l=$("lumi"); if(l) l.style.setProperty("--f",v); }
 
@@ -574,28 +630,39 @@ const Sfx={ c(){ return Snd.on&&Music.init()?Music.ctx:null; },
     s.buffer=b; f.type="bandpass"; f.frequency.setValueAtTime(400,t); f.frequency.exponentialRampToValueAtTime(2400,t+.4); g.gain.value=.25; s.connect(f); f.connect(g); g.connect(c.destination); s.start(t);
     this.tone(1046.5,t+.35,1.2,.06); this.tone(1568,t+.45,1.4,.04); }
 };
-const Voice={mode:"always",v:null,cur:null,busy:false,
+const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,
   init(){ try{ this.mode=localStorage.getItem("vq4_voice")||"always"; }catch(e){}
     if(!("speechSynthesis" in window)) return; const choose=()=>{ const vs=speechSynthesis.getVoices().filter(v=>/^en[-_]US/i.test(v.lang));
       for(const p of [/(Aria|Jenny|Ava|Emma|Michelle).*(Natural|Neural)/i,/(Natural|Neural)/i,/(Samantha|Ava|Allison|Zoe|Nicky).*(Enhanced|Premium)/i,/(Enhanced|Premium)/i,/Samantha/i,/Ava/i,/Allison/i,/Google US English/i,/Jenny/i,/Aria/i,/Zira/i]){ const f=vs.find(v=>p.test(v.name)); if(f){ this.v=f; return; } } this.v=vs[0]||null; };
-    choose(); speechSynthesis.onvoiceschanged=choose; },
-  unlock(){ try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u); }catch(e){} },
+    choose(); speechSynthesis.onvoiceschanged=choose;
+    /* Chrome stops long speech after ~15s unless nudged */
+    setInterval(()=>{ try{ if(speechSynthesis.speaking&&!speechSynthesis.paused&&/Chrome/.test(navigator.userAgent)&&!/Mobile/.test(navigator.userAgent)){ speechSynthesis.pause(); speechSynthesis.resume(); } }catch(e){} },9000); },
+  unlock(){ try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; this.q.push(u); speechSynthesis.speak(u); }catch(e){} },
   speak(text,o={}){ this.stop(); if(!Snd.on||(!o.force&&(this.mode==="off"||(this.mode==="lessons"&&!o.lesson)))) return Promise.resolve();
-    return new Promise(res=>{ let done=false; const end=()=>{ if(done) return; done=true; this.busy=false; Music.duck(); res(); };
-      this.busy=true; Music.duck(); setTimeout(end,2000+text.length*85);
-      if(CONFIG.voiceFiles&&o.id){ const a=new Audio(`/study4/voice/${o.id}.mp3`); this.cur=a; a.onended=end; a.onerror=()=>{ this.cur=null; this.tts(text,end,o); }; a.play().catch(()=>this.tts(text,end,o)); return; }
-      this.tts(text,end,o); }); },
-  /* browser voice with feeling: each mood gets its own pitch and pace; sentences are spoken one by one so pauses and "!" / "?" carry */
+    const g=++this.gen;
+    return new Promise(res=>{ let done=false; const end=()=>{ if(done) return; done=true; if(g===this.gen){ this.busy=false; Music.duck(); } res(); };
+      this.busy=true; Music.duck(); setTimeout(end,2500+text.length*95);
+      if(CONFIG.voiceFiles&&o.id){ const a=new Audio(`/study4/voice/${o.id}${S.style==="coach"&&o.coachFile?"_c":""}.mp3`); this.cur=a; a.onended=end; a.onerror=()=>{ this.cur=null; if(g===this.gen) this.tts(text,end,o,g); }; a.play().catch(()=>{ if(g===this.gen) this.tts(text,end,o,g); }); return; }
+      /* speaking right after cancel() is dropped by some browsers: wait a beat */
+      setTimeout(()=>{ if(g===this.gen) this.tts(text,end,o,g); else end(); },90); }); },
+  /* browser voice with feeling: each mood gets its own pitch and pace; the guide style shifts it (coach = brighter and faster, gentle = softer and slower) */
   TONE:{talk:[1.12,1],idle:[1.1,1],happy:[1.2,1.05],cheer:[1.3,1.1],wow:[1.32,1.1],love:[1.15,.93],empathy:[1,.86],think:[1.05,.92],listen:[1.08,.95],verse:[.98,.8]},
-  tts(text,end,o={}){ if(!("speechSynthesis" in window)) return end();
+  tts(text,end,o={},g){ if(!("speechSynthesis" in window)) return end();
     try{ const tone=(o.id&&/^v_/.test(o.id))?"verse":(o.tone||"talk"), t=this.TONE[tone]||this.TONE.talk;
-      const parts=(text.replace(/[“”]/g,"").replace(/\s*[—–]\s*/g,", ").match(/[^.!?…]+[.!?…]*\s*/g)||[text]).map(x=>x.trim()).filter(Boolean);
+      const st=tone==="verse"?[0,1]:S.style==="coach"?[.08,1.08]:S.style==="gentle"?[-.03,.95]:[0,1];
+      const parts=(text.replace(/[“”]/g,"").replace(/\s*[—–]\s*/g,", ").replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,"").match(/[^.!?…]+[.!?…]*\s*/g)||[text]).map(x=>x.trim()).filter(Boolean);
+      if(!parts.length) return end();
+      this.q=[]; let started=false;
       parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p.replace(/…/g,"..."));
         if(this.v) u.voice=this.v; u.lang="en-US"; const ex=/!$/.test(p), q=/\?$/.test(p);
-        u.pitch=Math.min(2,t[0]+(ex?.1:q?.05:0)); u.rate=Math.min(1.4,t[1]*(ex?1.05:1)); u.volume=1;
-        if(i===parts.length-1){ u.onend=end; u.onerror=end; } speechSynthesis.speak(u); });
+        u.pitch=Math.max(.5,Math.min(2,t[0]+st[0]+(ex?.1:q?.05:0))); u.rate=Math.min(1.5,t[1]*st[1]*(ex?1.05:1)); u.volume=1;
+        u.onstart=()=>{ started=true; };
+        if(i===parts.length-1){ u.onend=end; u.onerror=e=>{ if(e&&e.error==="interrupted") return end(); end(); }; }
+        this.q.push(u); speechSynthesis.speak(u); });
+      /* watchdog: if nothing started, the engine got stuck; reset and try once more */
+      setTimeout(()=>{ if(!started&&g===this.gen&&!speechSynthesis.speaking){ try{ speechSynthesis.cancel(); speechSynthesis.resume(); }catch(e){} if(!o._retry) this.tts(text,end,{...o,_retry:1},g); else end(); } },1600);
     }catch(e){ end(); } },
-  stop(){ try{ speechSynthesis.cancel(); }catch(e){} if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
+  stop(){ this.gen++; try{ speechSynthesis.cancel(); }catch(e){} if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
 };
 Voice.init();
 function sndUI(){ $("snd").classList.toggle("mute",!Snd.on); }
@@ -613,6 +680,8 @@ function say(text,o={}){ const b=$("bub"); if(!b) return Promise.resolve(); cons
     step(); }); }
 
 /* ---------- UI helpers ---------- */
+/* reaction to the last answer is spoken at the start of the next screen, so a tap on an option moves on right away */
+function sayQ(text,o={}){ if(!S.carry) return say(text,o); const c=S.carry; S.carry=null; mood(c[2]); return say(c[0],{id:c[1],after:c[2]}).then(()=>say(text,o)); }
 function cta(label,fn,dis,foot){ const c=$("cta"); if(!label){ c.classList.add("hide"); return; } c.classList.remove("hide"); const b=$("ctaBtn"); b.innerHTML=label; b.disabled=!!dis; b.onclick=()=>{ Sfx.next(); fn(); }; $("ctaFoot").textContent=foot||""; }
 function cards(list,cls){ return `<div class="cards ${cls||""}">${list.map((o,k)=>`<button class="card" data-k="${k}" style="--d:${120+k*70}ms"><span class="e">${o[0]}</span><span>${esc(o[1])}${o.sub?`<small>${esc(o.sub)}</small>`:""}</span><i class="ck"></i></button>`).join("")}</div>`; }
 function confetti(n){ const col=["#1F6FD1","#F4B740","#19A863","#FF6F61","#8FB6EA"]; for(let i=0;i<(n||40);i++){ const e=document.createElement("i"); e.className="cf";
@@ -713,43 +782,53 @@ function render(){ const s=STEPS[S.i]; S.tok++; TM.forEach(clearTimeout); TM=[];
 
 /* ---------- screens ---------- */
 const R={
-  intro(){ view.innerHTML=`<section class="scr c"><div class="orbit">
+  intro(){ const W="Hi! I'm Lumi. I'm so happy you're here! Give me 3 minutes, and we'll build a 28-day plan made just for you.";
+    view.innerHTML=`<section class="scr c"><div class="orbit">
       <span class="fi" style="left:4px;top:30px">📖</span><span class="fi" style="right:6px;top:22px;animation-delay:-1s">🎧</span><span class="fi" style="left:22px;bottom:18px;animation-delay:-2s">🙏</span><span class="fi" style="right:18px;bottom:30px;animation-delay:-3s">🕊️</span><span class="fi" style="left:50%;margin-left:-23px;top:-8px;animation-delay:-1.6s">✨</span>
-      ${lumi("lg")}</div>
+      <div id="il" style="cursor:pointer">${lumi("lg")}</div></div>
       <h1 class="h1">Give God 10 minutes a day.<br><em>I'll walk with you.</em></h1>
-      <p class="sub" style="margin-top:10px">Hi, I'm <b>Lumi</b>, your Bible study guide. In 3 minutes we'll build a 28-day plan made for your life.</p></section>`;
-    later(()=>mood("happy"),600);
-    cta("Start →",()=>{ Voice.unlock(); Music.start(); go(); },false,"Takes about 3 minutes"); },
+      <div class="hero"><div class="bub" id="bub" style="margin-top:12px"></div></div></section>`;
+    let voiced=false; const hello=()=>{ if(voiced) return; voiced=true; Voice.unlock(); Music.start(); mood("talk"); Voice.speak(W,{id:"intro",tone:"happy"}).then(()=>mood("happy")); };
+    later(()=>{ mood("happy"); say(W,{id:"intro",after:"happy"}).then(()=>{}); },400);
+    /* browsers only allow sound after a first touch: the first tap anywhere (or on Lumi) plays the welcome */
+    const tapHello=e=>{ if(e.target.closest("#ctaBtn")) return; removeEventListener("pointerdown",tapHello,true); if(STEPS[S.i].t==="intro") hello(); };
+    addEventListener("pointerdown",tapHello,true); $("il").onclick=()=>{ voiced=false; hello(); };
+    cta("Start →",()=>{ removeEventListener("pointerdown",tapHello,true); Voice.unlock(); Music.start(); go(); },false,"Takes about 3 minutes"); },
 
   proof(){ view.innerHTML=`<section class="scr c"><div style="display:flex;justify-content:center">${lumi("sm")}</div>
       <div class="big" style="margin-top:6px"><span id="cnt">0</span>K+ people</div>
       <div class="hero"><div class="bub" id="bub"></div></div>
-      <div class="map"><img src="/images/worldmap.svg" alt=""><svg viewBox="0 0 340 170" id="msvg"></svg></div></section>`;
-    const P=[[78,58],[92,72],[176,48],[186,58],[200,98],[118,118],[262,66],[290,124],[226,80],[160,90]];
-    $("msvg").innerHTML=P.map(([x,y],i)=>`<circle class="pulse" cx="${x}" cy="${y}" r="5" stroke-width="1.5" style="animation-delay:${i*.2}s"/><circle class="dot" cx="${x}" cy="${y}" r="3.2"/>`).join("")+
-      [[78,58,186,58],[118,118,186,58],[186,58,262,66],[200,98,290,124]].map(([a,b,c,d],i)=>`<path class="arc arcd" style="animation-delay:${.3+i*.35}s" d="M${a} ${b}Q${(a+c)/2} ${Math.min(b,d)-34} ${c} ${d}"/>`).join("");
-    const t0=performance.now(); (function tk(t){ const el=$("cnt"); if(!el) return; const k=Math.min(1,(t-t0)/1400); el.textContent=Math.round(560*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(tk); })(t0);
-    say("…in 169+ countries already walk with VEREDA. Ready to be next?",{id:"proof",after:"happy",speak:"More than 560 thousand people, in over 169 countries, already walk with VEREDA. Ready to be next?"});
+      <div class="wmap"><img src="/images/worldmap-dots.svg" alt=""><svg viewBox="0 0 640 300" id="msvg"></svg></div></section>`;
+    const H=[140,95], P=[["US",140,95,0,1],["UK",308,60,1,1],["BR",226,212,0,1],["NG",336,166,0,1],["PH",546,160,1,1],["AU",566,236,1,1],["CA",132,58,1,0],["KE",392,190,1,0],["IN",458,142,0,0]];
+    const arc=(x,y,i)=>{ const mx=(H[0]+x)/2, my=Math.min(H[1],y)-Math.abs(x-H[0])*.22-14; return `<path class="arc2" style="opacity:0;animation:fi .4s ${.5+i*.22}s forwards" d="M${H[0]} ${H[1]}Q${mx} ${my} ${x} ${y}"/>`; };
+    $("msvg").innerHTML=P.slice(1).filter(q=>q[4]).map((q,i)=>arc(q[1],q[2],i)).join("")+P.map(([c,x,y,up,a],i)=>`<g style="opacity:0;animation:fi .4s ${i?.6+i*.22:.2}s forwards"><circle class="pulse" cx="${x}" cy="${y}" r="7" stroke-width="2" style="animation-delay:${i*.25}s"/><circle class="${i?"dot":"hub"}" cx="${x}" cy="${y}" r="${i?5:7.5}"/><text class="lb" x="${x}" y="${up?y-13:y+24}" text-anchor="middle">${c}</text></g>`).join("");
+    const t0=performance.now(); (function tk(t){ const el=$("cnt"); if(!el) return; const k=Math.min(1,(t-t0)/1600); el.textContent=Math.round(560*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(tk); })(t0);
+    say("…in 169+ countries already walk with VEREDA. Ready to be next?",{id:"proof",after:"happy",speak:"Welcome! More than 560 thousand people, in over 169 countries, already walk with VEREDA. Ready to be next?"});
     cta("Let's go →",()=>go()); },
 
   hear(s){ const O=[["🔊","Talk to me anytime","Your voice it is! I'll talk with you all the way.","always"],["🔈","Only during studies","Got it. I'll stay quiet and speak only during our studies.","lessons"],["💬","Text only","No problem. We'll keep it to text.","off"]];
-    view.innerHTML=`<section class="scr"><div class="chat">${lumi()}<div class="bub" id="bub"></div></div>${cards(O)}<p class="note">You can change this anytime</p></section>`;
+    view.innerHTML=`<section class="scr">${chatTop(["🎧","🔊"])}${cards(O)}<p class="note">You can change this anytime</p></section>`;
     say("Before we start, how would you like to hear me?",{id:"hear",force:true});
     let lock=false; $$(".card").forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const o=O[+c.dataset.k]; c.classList.add("sel"); $$(".card").forEach(x=>x!==c&&x.classList.add("dim")); Sfx.select();
       Voice.mode=o[3]; try{localStorage.setItem("vq4_voice",o[3])}catch(e){} S.a.Voice=o[3];
-      say(o[2],{id:"hear_"+o[3],after:"happy"}).then(()=>later(()=>go(),650)); }); },
+      S.carry=[o[2],"hear_"+o[3],"happy"]; later(()=>go(),380); }); },
 
-  read(){ view.innerHTML=`<section class="scr"><div class="chat">${lumi()}<div class="bub" id="bub"></div></div>
-      <div class="verse"><div class="kick">Read with me</div><p>“Your word is a lamp to my feet and a light to my path.”</p><small>Psalm 119:105</small><button class="spk" id="vspk" aria-label="Listen">${ICO.spk}</button></div><div id="mh"></div></section>`;
-    const V="Your word is a lamp to my feet and a light to my path.";
-    say("Now read this verse out loud with me. It's the verse I was named after!",{id:"read",after:"happy"});
-    $("vspk").onclick=()=>{ mood("talk"); Voice.speak(V,{force:true,id:"v_ps119"}).then(()=>mood("idle")); };
-    micUI($("mh"),(t,spoke,skipped)=>{ S.a.ReadAloud=skipped?"skipped":spoke?"spoke":"silent";
-      const line=skipped?"No problem! You can listen and tap along whenever you like.":/lamp|light|path|word/i.test(t||"")?"Beautiful! I heard every word: “a lamp to my feet.”":spoke?"Beautiful. I could hear your heart in it.":"Amen. Even a whisper counts with God.";
-      mood(skipped?"happy":"cheer"); if(!skipped) Sfx.ok();
-      say(line,{id:"read_r_"+(skipped?"skip":/lamp|light|path|word/i.test(t||"")?"words":spoke?"spoke":"silent"),after:skipped?"happy":"cheer"}).then(()=>later(()=>go(),700)); }); },
+  read(){ view.innerHTML=`<section class="scr stage"><div class="bub" id="bub"></div>
+      <div class="pcard"><div class="kick">Recite a verse you know</div><p>Any verse you carry in your heart.</p><small>Take your time. I'm listening.</small></div>
+      ${lumi("lg","halo")}<div id="mh" style="width:100%"></div></section>`;
+    sayQ("Let's start with something you already carry in your heart. Recite a Bible verse you know by heart!",{id:"read",after:"happy"});
+    const KNOWN=[[/so loved the world|only begotten|john 3/i,"John 3:16","john316"],[/shepherd|shall not want/i,"Psalm 23","ps23"],[/all things through|i can do all/i,"Philippians 4:13","phil413"],[/plans i have|know the plans/i,"Jeremiah 29:11","jer2911"],[/be still/i,"Psalm 46:10","ps4610"],[/trust in the lord|lean not/i,"Proverbs 3:5","prov35"],[/work together for good|all things work/i,"Romans 8:28","rom828"],[/lamp unto|lamp to my|light unto my path|light to my path/i,"Psalm 119:105","ps119"],[/strong and (of a good )?courage/i,"Joshua 1:9","josh19"],[/love is patient|charity suffereth/i,"1 Corinthians 13","cor13"]];
+    micUI($("mh"),(t,spoke,skipped)=>{ const k=KNOWN.find(x=>x[0].test(t||""));
+      S.a.ReadAloud=skipped?"none":k?k[1]:spoke?"spoke":"silent"; if(!skipped) Sfx.ok();
+      const first=skipped?["That's okay! Most people don't know one by heart. That's exactly why I'm here.","read_r_none","empathy"]
+        :k?[`${k[1]}! Beautiful. Did you know that's one of the verses most people already know by heart?`,"read_k_"+k[2],"wow"]
+        :spoke?["Beautiful! That's one of the verses most people already know by heart.","read_r_spoke","wow"]
+        :["Even a whisper counts. Most people only know a verse or two by heart.","read_r_silent","happy"];
+      mood(first[2]);
+      say(first[0],{id:first[1],after:first[2]}).then(()=>say(skipped?"Let's learn something new together, and go deeper than most people ever go.":"And that's wonderful… but it means it's time to learn something new, and go deeper.",{id:skipped?"read_deeper_none":"read_deeper",after:"think"})).then(()=>later(()=>go(),700));
+    },"I don't know any verse yet"); },
 
-  goal(){ view.innerHTML=`<section class="scr"><div class="chat">${lumi()}<div class="bub" id="bub"></div></div>
+  goal(){ view.innerHTML=`<section class="scr">${chatTop(["📅","🌱"])}
       <div class="rul"><div class="rul-v" id="rv"></div><div class="rul-tag" id="rt">Recommended</div><div class="rul-t">${GOALS.map((g,k)=>`<button data-k="${k}">${g[1]}</button>`).join("")}</div><p class="rul-d" id="rd"></p></div></section>`;
     const set=k=>{ S.goal=GOALS[k][0]; $("rv").textContent=GOALS[k][1]; $("rt").classList.toggle("on",k===1); $("rd").textContent=GOALS[k][2]; $$(".rul-t button").forEach((b,i)=>b.classList.toggle("on",i===k)); };
     set(1); $$(".rul-t button").forEach(b=>b.onclick=()=>{ Sfx.tick(); set(+b.dataset.k); mood("happy"); later(()=>mood("idle"),900); });
@@ -765,15 +844,15 @@ const R={
     cta("Let's go →",()=>go()); },
 
   q(s){ const D=Q[s.key];
-    view.innerHTML=`<section class="scr"><div class="chat">${lumi()}<div class="bub" id="bub"></div></div>${cards(D.o)}</section>`;
-    say(D.say,{id:"q_"+s.key});
+    view.innerHTML=`<section class="scr">${chatTop(D.art)}${cards(D.o)}</section>`;
+    sayQ(D.say,{id:"q_"+s.key,after:D.mood||"idle"});
     let lock=false; $$(".card").forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const k=+c.dataset.k, o=D.o[k];
       S.k[s.key]=k; S.a[s.key]=o[1]; c.classList.add("sel"); $$(".card").forEach(x=>x!==c&&x.classList.add("dim")); Sfx.select();
-      mood(o[3]); later(()=>say(o[2],{id:`r_${s.key}_${k}`,after:o[3]}).then(()=>later(()=>go(),650)),260); }); },
+      mood(o[3]); S.carry=[o[2],`r_${s.key}_${k}`,o[3]]; later(()=>go(),380); }); },
 
   minutes(){ const O=MINS.map(m=>{ const x=["⏱️",m[0]+" minutes"]; x.sub=m[1]; return x; });
-    view.innerHTML=`<section class="scr"><div class="chat">${lumi()}<div class="bub" id="bub"></div></div><div id="mx">${cards(O)}</div></section>`;
-    say("How many minutes fit into your day?",{id:"minutes"});
+    view.innerHTML=`<section class="scr">${chatTop(["⏳","☕"])}<div id="mx">${cards(O)}</div></section>`;
+    sayQ("How many minutes fit into your day?",{id:"minutes"});
     let lock=false; $$(".card").forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const k=+c.dataset.k; S.min=MINS[k][0]; S.a.Minutes=S.min; c.classList.add("sel"); $$(".card").forEach(x=>x!==c&&x.classList.add("dim")); Sfx.select();
       later(()=>{ const d=fmt(addDays(habitDays()));
         $("mx").innerHTML=`<div class="scr"><div class="kick">Your projection</div><div class="h2" style="margin-top:6px">At this pace, the Bible becomes a natural habit by <em>${d}</em></div>
@@ -781,9 +860,9 @@ const R={
         mood("happy"); say(`${S.min} minutes a day, at your own pace. That's all it takes.`,{id:"min_r_"+S.min,after:"happy"});
         cta("Continue",()=>go()); },450); }); },
 
-  topics(){ view.innerHTML=`<section class="scr"><div class="chat" style="position:relative">${lumi()}<div class="thought" id="th"></div><div class="bub" id="bub"></div></div>${cards(TOPICS)}<p class="note">Pick as many as you like</p></section>`;
+  topics(){ view.innerHTML=`<section class="scr"><div class="chat th">${thought(["💭"])}${lumi()}<div class="bub" id="bub"></div></div>${cards(TOPICS)}<p class="note">Pick as many as you like</p></section>`;
     say("What would you love to talk about with God?",{id:"topics"});
-    const upd=()=>{ const n=S.topics.length; $("th").classList.toggle("on",n>0); $("th").innerHTML=S.topics.map(t=>`<span>${TOPICS[t][0]}</span>`).join(""); cta(n?"Continue":"Pick at least one",()=>{ S.a.Topics=S.topics.map(t=>TOPICS[t][1]).join(", "); go(); },!n); };
+    const upd=()=>{ const n=S.topics.length; $$(".tb-c")[0].innerHTML=(n?S.topics.slice(-3).map(t=>TOPICS[t][0]):["💭"]).map(i=>`<span>${i}</span>`).join(""); cta(n?"Continue":"Pick at least one",()=>{ S.a.Topics=S.topics.map(t=>TOPICS[t][1]).join(", "); go(); },!n); };
     $$(".card").forEach(c=>c.onclick=()=>{ const k=+c.dataset.k, i=S.topics.indexOf(k); if(i<0) S.topics.push(k); else S.topics.splice(i,1); c.classList.toggle("sel"); Sfx.tick(); mood("think"); upd(); });
     $$(".card").forEach(c=>{ if(S.topics.includes(+c.dataset.k)) c.classList.add("sel"); }); upd(); },
 
@@ -796,42 +875,65 @@ const R={
     Voice.speak(`Your answers brought your goal ${before-after} days closer!`,{id:"closer_"+(before-after),tone:"wow"});
     $("cl").onclick=()=>go(); later(()=>go(),5200); },
 
-  style(){ const O=[["🕯️","Gentle","calm and kind, one step at a time","Lovely choice. We'll go slowly, one verse at a time, with lots of grace."],["🔥","Challenging","I'll push you to show up every day","I love it. I'll call you higher every day, always with grace."]];
-    view.innerHTML=`<section class="scr"><div class="hero">${lumi("md")}<div class="bub" id="bub"></div></div><div style="margin-top:16px">${cards(O.map(o=>{const x=[o[0],o[1]];x.sub=o[2];return x;}))}</div></section>`;
+  style(){ const O=[["🤍","Gentle & loving","calm, tender, one step at a time","Lovely. I'll walk with you gently, with lots of love and grace.","gentle","love"],["📣","Uplifting coach","I'll cheer you on and lift you up every day","Yes! Let's go! I'll be your biggest fan, cheering you on every single day!","coach","cheer"]];
+    view.innerHTML=`<section class="scr"><div class="hero">${lumi("md","halo")}<div class="bub" id="bub"></div></div><div style="margin-top:16px">${cards(O.map(o=>{const x=[o[0],o[1]];x.sub=o[2];return x;}))}</div></section>`;
     say("Time for your first study! How should I walk with you?",{id:"style"});
-    $$(".card").forEach(c=>c.onclick=()=>{ const k=+c.dataset.k; $$(".card").forEach(x=>x.classList.toggle("sel",x===c)); Sfx.select(); S.a.Style=O[k][1]; mood(k?"wow":"happy");
-      later(()=>say(O[k][3],{id:"style_"+k,after:k?"cheer":"happy"}),200); cta("Start my first study →",()=>go()); }); },
+    $$(".card").forEach(c=>c.onclick=()=>{ const k=+c.dataset.k; $$(".card").forEach(x=>x.classList.toggle("sel",x===c)); Sfx.select(); S.a.Style=O[k][1]; S.style=O[k][4]; mood(O[k][5]);
+      later(()=>say(O[k][3],{id:"style_"+O[k][4],after:O[k][5],tone:O[k][5]}),200); cta("Start my first study →",()=>go()); }); },
 
-  prep(){ view.innerHTML=`<section class="scr c" style="padding-top:12vh"><div class="kick">${esc(S.a.Style||"Gentle")} mode</div><div class="hero" style="margin-top:10px">${lumi("lg")}<div class="bub" id="bub"></div></div><div class="dots3"><i></i><i></i><i></i></div></section>`;
-    say("Preparing your first study. Breathe.",{id:"prep",after:"think"}); later(()=>go(),3600); },
+  prep(){ const C=S.style==="coach"; view.innerHTML=`<section class="scr c" style="padding-top:12vh"><div class="kick">${esc(S.a.Style||"Gentle & loving")} mode</div><div class="hero" style="margin-top:10px">${lumi("lg","halo")}<div class="bub" id="bub"></div></div><div class="dots3"><i></i><i></i><i></i></div></section>`;
+    say(C?"Getting your first study ready… this one is going to be good!":"Preparing your first study. Breathe.",{id:"prep",coachFile:1,after:C?"happy":"think"}); later(()=>go(),3800); },
 
-  lesson(){ view.innerHTML=`<section class="scr"><div class="ls-top"><span>📖 Study 1 · Psalm 23</span><span class="pips"><i id="p0"></i><i id="p1"></i><i id="p2"></i></span></div>
-      <div class="hero">${lumi("md")}<div class="bub" id="bub"></div></div><div id="lx" style="margin-top:14px"></div></section>`;
+  lesson(){ const C=S.style==="coach", bar=pick("Stop",4), val0=null;
+    view.innerHTML=`<section class="scr"><div class="ls-top"><span>📖 Study 1 · Psalm 23</span><span class="pips"><i id="p0"></i><i id="p1"></i><i id="p2"></i></span></div>
+      <div class="hero">${lumi("md","halo")}<div class="bub" id="bub"></div></div><div id="lx" style="margin-top:14px"></div></section>`;
     const lx=$("lx"), L={lesson:true}, pip=n=>{ $("p"+n).classList.add("on"); Sfx.ok(); };
     const verse=(t,ref,id)=>`<div class="verse sm scr"><div class="kick">Lumi reads</div><p>“${t}”</p><small>${ref} (KJV)</small><button class="spk" data-v="${esc(t)}" data-id="${id}" aria-label="Listen">${ICO.spk}</button></div>`;
+    const ins=(k,t)=>`<div class="ins scr"><span style="font-size:22px">💡</span><div><b>${k}</b>${t}</div></div>`;
     const spk=()=>$$(".spk",lx).forEach(b=>b.onclick=()=>{ mood("talk"); Voice.speak(b.dataset.v,{force:true,id:b.dataset.id}).then(()=>mood("idle")); });
-    const ex1=()=>{ const t="The LORD is my shepherd; I shall not want.";
-      lx.innerHTML=verse(t,"Psalm 23:1","v_ps23_1")+`<div class="lq">What does “I shall not want” mean?</div>${cards([["🌾","I'll lack nothing I truly need"],["🚫","I must stop wanting things"]])}`; spk();
-      say(t,{...L,id:"v_ps23_1"}).then(()=>say("What do you think it means?",{...L,id:"ls_q1"}));
-      let lock=false; $$(".card",lx).forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const right=c.dataset.k==="0";
-        c.classList.add(right?"ok":"no"); if(!right) $$(".card",lx)[0].classList.add("ok"); right?Sfx.ok():Sfx.soft(); mood(right?"cheer":"empathy");
-        say(right?"Exactly! With God as your shepherd, you lack nothing you truly need.":"Close! It means you'll lack nothing you truly need, because God provides.",{...L,id:right?"ls_r1a":"ls_r1b",after:"happy"}).then(()=>{ pip(0); later(ex2,900); }); }); };
-    const ex2=()=>{ const t="He restoreth my soul.";
-      lx.innerHTML=verse(t,"Psalm 23:3","v_ps23_3")+`<div class="lq">Now say it with me:</div><div id="mh2"></div>`; spk();
-      say("He restoreth my soul. Your turn, say it out loud!",{...L,id:"ls_q2"});
-      micUI($("mh2"),(tx,spoke,skipped)=>{ mood("cheer"); if(!skipped) Sfx.ok();
-        say("Amen. “Restore” means to bring back to life. That's what He does with tired souls.",{...L,id:"ls_r2",after:"happy"}).then(()=>{ pip(1); later(ex3,900); }); },"I said it in my heart"); };
-    const ex3=()=>{ const t="Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me."; const O=[["😟","Worry"],["💔","A hard relationship"],["😮‍💨","Tiredness"],["💸","Money"]];
-      lx.innerHTML=verse(t,"Psalm 23:4","v_ps23_4")+`<div class="lq">Which “valley” do you want to walk through with God this week?</div>${cards(O)}`; spk();
-      say("Last one. This is my favorite verse.",{...L,id:"ls_q3"}).then(()=>say(t,{...L,id:"v_ps23_4"}));
-      let lock=false; $$(".card",lx).forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; c.classList.add("sel"); Sfx.select(); S.a.Valley=O[+c.dataset.k][1]; mood("love");
-        say("Then this verse is yours this week. You won't walk through it alone.",{...L,id:"ls_r3",after:"love"}).then(()=>{ pip(2); later(()=>go(),1200); }); }); };
-    say("Your first study! Psalm 23, words David wrote about God caring for him like a shepherd. I'll read, you answer.",{...L,id:"ls_intro",after:"happy"});
-    cta("Let's go!",()=>{ cta(null); ex1(); }); },
+    const chain=(arr)=>arr.reduce((p,[t,o])=>p.then(()=>say(t,{...L,...o})),Promise.resolve());
+    /* 1 · the "cast" sheep: He restoreth my soul */
+    const ex1=()=>{ const t="He restoreth my soul.";
+      lx.innerHTML=verse(t,"Psalm 23:3","v_ps23_3");spk();
+      chain([[t,{id:"v_ps23_3"}],["Shepherds in Bible times knew something about sheep. When a sheep rolls onto its back, it can't get up on its own. They called it a “cast” sheep. Without the shepherd, it won't survive.",{id:"ls_cast",after:"empathy"}]]).then(()=>{
+        lx.insertAdjacentHTML("beforeend",ins("Cast sheep","A sheep stuck on its back can't get up alone. The shepherd kneels down and lifts it.")+`<div class="lq">Have you ever felt like that: down, and unable to get up on your own?</div>${cards([["😔","Yes, right now"],["🕰️","I have, in the past"],["🙂","Not really"]])}`);
+        say("Have you ever felt like that? Down, and unable to get up on your own?",{...L,id:"ls_q1",after:"empathy"});
+        const R1=[["Then hear this. “He restoreth my soul” means the Shepherd comes, kneels down, and lifts you up. He's doing that right now.","love"],["And He lifted you, didn't He? That's what “He restoreth my soul” means. The Shepherd kneels down and lifts us up.","love"],["Beautiful. Keep this one close. When that day comes, the Shepherd kneels down and lifts you up.","happy"]];
+        let lock=false; $$(".card",lx).forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const k=+c.dataset.k; c.classList.add("sel"); $$(".card",lx).forEach(x=>x!==c&&x.classList.add("dim")); Sfx.select(); S.a.Cast=["now","past","no"][k]; mood(R1[k][1]);
+          say(R1[k][0],{...L,id:"ls_r1_"+k,after:R1[k][1]}).then(()=>{ pip(0); later(ex2,900); }); }); }); };
+    /* 2 · the pronoun shift in the valley: He… He… He… then THOU */
+    const ex2=()=>{ const W=["The","LORD","is","my","shepherd…","He","maketh","me","to","lie","down…","He","restoreth","my","soul…","Yea,","though","I","walk","through","the","valley","of","the","shadow","of","death,","I","will","fear","no","evil:","for","thou","art","with","me."];
+      lx.innerHTML=`<div class="verse sm scr"><div class="kick">Psalm 23:1–4</div><p style="font-size:17px;line-height:1.55">“${W.map((w,i)=>`<span class="vw" data-i="${i}">${w}</span>`).join(" ")}”</p><small>Tap the word where everything changes</small></div>`;
+      chain([["Now look closely. In verses 1 to 3, David talks ABOUT God: He… He… He… Then, in the valley, something changes. Tap the word where it changes!",{id:"ls_shift",after:"think"}]]);
+      let miss=0, done=false; const win=()=>{ if(done) return; done=true; $$(".vw",lx).find(x=>x.textContent==="thou").classList.add("hit"); Sfx.ok(); mood("wow");
+        lx.insertAdjacentHTML("beforeend",ins("From HE to YOU","In the darkest valley, David stops talking about God and starts talking to Him."));
+        say("Yes! In the darkest valley, David stops talking ABOUT God… and starts talking TO Him. “Thou art with me.” In your valley, God isn't a topic. He's right next to you.",{...L,id:"ls_shift_ok",after:"love"}).then(()=>{ pip(1); later(ex3,1000); }); };
+      $$(".vw",lx).forEach(w=>w.onclick=()=>{ if(done) return; if(w.textContent==="thou") return win(); w.classList.remove("miss"); void w.offsetWidth; w.classList.add("miss"); Sfx.soft(); miss++;
+        if(miss===1) say("Look a little further… down in the valley.",{...L,id:"ls_shift_no",after:"think"}); if(miss>=3) win(); }); };
+    /* 3 · "follow" = radaph, to chase */
+    const ex3=()=>{ const t="Surely goodness and mercy shall follow me all the days of my life.";
+      lx.innerHTML=verse(t,"Psalm 23:6","v_ps23_6");spk();
+      chain([[t,{id:"v_ps23_6"}],["One more secret. The Hebrew word for “follow” here is radaph. It means to chase. To pursue. God's goodness isn't trailing behind you… it's running after you!",{id:"ls_radaph",after:"wow"}]]).then(()=>{
+        lx.insertAdjacentHTML("beforeend",ins("Radaph","“Follow” in Hebrew means to chase, to pursue. Goodness is running after you.")+`<div class="lq">Say it out loud, like a promise:</div><div id="mh2"></div>`);
+        say("Say it out loud, like a promise: goodness and mercy shall follow me!",{...L,id:"ls_q2",after:"happy"});
+        micUI($("mh2"),(tx,spoke,skipped)=>{ mood("cheer"); if(!skipped) Sfx.ok();
+          say(C?"YES! Say it like you mean it! Goodness and mercy are chasing you, every single day!":"Amen. Goodness and mercy are chasing you… every day of your life.",{...L,id:"ls_r2",coachFile:1,after:"cheer"}).then(()=>later(ex4,800)); },"I said it in my heart"); }); };
+    /* 4 · your valley → your verse for the week */
+    const ex4=()=>{ const O=[["😟","Worry"],["💔","A hard relationship"],["😮‍💨","Tiredness"],["💸","Money"],["🌧️","Sadness"],["🙏","Feeling far from God"]];
+      lx.innerHTML=`<div class="lq scr">Which valley do you want God to walk through with you this week?</div>${cards(O)}`;
+      say("Last one. Which valley do you want God to walk through with you this week?",{...L,id:"ls_q3",after:"empathy"});
+      let lock=false; $$(".card",lx).forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const v=O[+c.dataset.k][1]; S.a.Valley=v; Sfx.select(); mood("love");
+        lx.innerHTML=`<div class="myv scr"><div class="k">YOUR VERSE FOR THIS WEEK</div><p>“Even in ${esc(v.toLowerCase())}, You are with me.”</p><small>From Psalm 23:4</small></div>`;
+        say("This verse is yours this week. You won't walk through it alone.",{...L,id:"ls_r3",after:"love"}).then(()=>{ pip(2); later(ex5,900); }); }); };
+    /* 5 · open loop: study 2 is waiting */
+    const ex5=()=>{ lx.insertAdjacentHTML("beforeend",`<div class="lock scr"><span class="lk">🔒</span><div><b>Day 2 · ${esc(CONFIG.weeks[0][1])}</b><span>Your next study is ready, and it goes even deeper.</span></div></div>`);
+      say("That was study 1 of 28. And there's so much more I want to show you.",{...L,id:"ls_next",after:"happy"}).then(()=>later(()=>go(),1400)); };
+    say(bar?`You told me what gets in your way is ${bar}. So your first study goes straight to the heart: Psalm 23… but not the way most people read it.`:"Your first study goes straight to the heart: Psalm 23… but not the way most people read it.",{...L,id:"ls_intro",after:"happy"});
+    cta(C?"Let's do this!":"I'm ready",()=>{ cta(null); ex1(); }); },
 
   done(){ view.innerHTML=`<section class="scr c" style="padding-top:5vh"><div class="hero">${lumi("lg")}</div><div class="kick" style="margin-top:6px">New achievement unlocked</div><h1 class="h1" style="margin:6px 0">Well done!</h1><p class="sub">Your first study is complete, start to finish.</p><div class="hero"><div class="bub" id="bub" style="margin-top:14px"></div></div></section>`;
     mood("cheer"); Sfx.win(); confetti(46);
-    later(()=>say("That's what it feels like to understand God's Word. And it took just 2 minutes.",{id:"done",after:"happy"}),700);
+    later(()=>say(S.style==="coach"?"WOW! Look at you! You didn't just read the Bible today, you understood it! I'm so proud of you!":"That's what it feels like to understand God's Word… not just read it. And it took just a few minutes.",{id:"done",coachFile:1,after:"happy"}),700);
     cta("Continue",()=>go()); },
 
   pact(){ const m=S.min;
@@ -839,7 +941,7 @@ const R={
       <p class="sub" style="margin-top:14px">No pressure, no grades. Just show up and walk with me.</p><p class="note" style="margin-top:16px">Tap Lumi to seal the deal</p></section>`;
     say(`It was so good to study with you. Shall we walk ${m} minutes a day, 5 days a week?`,{id:"pact_"+m,after:"happy"});
     let lock=false; $("tl").onclick=()=>{ if(lock) return; lock=true; $("tl").classList.remove("tap"); S.a.Pact="yes"; Sfx.win(); mood("love"); confetti(24);
-      say("It's a deal! 🙌",{id:"pact_r",after:"love",keep:true}).then(()=>later(()=>go(),1200)); }; },
+      say(S.style==="coach"?"It's a deal! Woohoo! 🙌":"It's a deal! 🙌",{id:"pact_r",coachFile:1,after:"love",keep:true}).then(()=>later(()=>go(),1200)); }; },
 
   streak(){ const today=new Date().getDay(), D=["SUN","MON","TUE","WED","THU","FRI","SAT"];
     view.innerHTML=`<section class="scr c" style="padding-top:6vh"><div class="hero"><div class="tap" id="tl" style="position:relative">${lumi("lg","unlit")}</div></div>
@@ -850,7 +952,7 @@ const R={
         $("sx").innerHTML=`<div class="scr"><span class="badge" style="margin-top:12px">🔥 1 day streak</span><h1 class="h1" style="margin-top:10px">Your lamp is lit!</h1>
           <div class="hero"><div class="bub" id="bub" style="margin-top:12px"></div></div>
           <div class="week">${D.map((d,i)=>`<div class="${i===today?"on":""}"><i>${i===today?"🔥":""}</i>${d}</div>`).join("")}</div></div>`;
-        say("Walk with me every day and your light keeps burning.",{id:"streak",after:"happy"}); cta("Continue",()=>go()); },900); }; },
+        say(S.style==="coach"?"Boom! Your lamp is lit! Show up every day and we'll keep this fire burning!":"Walk with me every day and your light keeps burning.",{id:"streak",coachFile:1,after:"happy"}); cta("Continue",()=>go()); },900); }; },
 
   build(){ const alone=pick("Freq",4)||0, withV=S.min*5, mx=Math.max(alone,withV,1);
     const tp=S.topics.length?S.topics.map(t=>`<span class="chip">${TOPICS[t][0]} ${esc(TOPICS[t][1])}</span>`).join(""):`<span class="chip">🙏 Closer to God</span>`;
@@ -883,17 +985,25 @@ const R={
     play.onclick=()=>{ v.currentTime=0; last=0; v.play(); play.classList.add("hidden"); };
     v.play().catch(()=>{}); },
 
-  email(){ view.innerHTML=`<section class="scr c"><div style="display:flex;justify-content:center">${lumi("sm")}</div><div class="kick" style="margin-top:4px">Just one more step</div>
+  email(){ const DOMAINS=["gmail.com","icloud.com","yahoo.com","hotmail.com","outlook.com","aol.com","live.com","msn.com","me.com","protonmail.com"];
+    view.innerHTML=`<section class="scr c"><div style="display:flex;justify-content:center">${lumi("sm")}</div><div class="kick" style="margin-top:4px">Just one more step</div>
       <h2 class="h2" style="margin-top:6px">Where should I send <em>your plan?</em></h2><p class="sub" style="margin-top:6px">This is how you'll get into the app and see your plan.</p>
-      <div class="field"><label for="em">Your email</label><input id="em" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" value="${esc(S.email)}"><div class="err" id="er"></div>
+      <div class="field"><label for="em">Your email</label><input id="em" type="email" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="you@email.com" value="${esc(S.email)}">
+      <ul class="em-sug" id="sug" hidden></ul><div class="err" id="er"></div>
       <small>We'll use your email to send your plan and to talk with you about VEREDA.</small></div></section>`;
     mood("happy"); Voice.speak("Where should I send your plan?",{id:"email",tone:"happy"});
-    const sub=()=>{ const v=$("em").value.trim(); if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){ $("er").textContent="Please enter a valid email."; return; } S.email=v; sendLead(); clar("lead"); go(); };
-    $("em").onkeydown=e=>{ if(e.key==="Enter") sub(); };
-    cta("Continue",sub,false,"You're not buying anything yet"); },
+    const inp=$("em"), sug=$("sug"), ok=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    const showSug=()=>{ const v=inp.value.trim(); if(!v){ sug.hidden=true; return; } const [user,dom=""]=v.split("@"); if(!user){ sug.hidden=true; return; }
+      const list=v.includes("@")?DOMAINS.filter(d=>d.startsWith(dom)&&d!==dom):DOMAINS; if(!list.length){ sug.hidden=true; return; }
+      sug.innerHTML=list.map(d=>`<li data-v="${esc(user)}@${d}">${esc(user)}<b>@${d}</b></li>`).join(""); sug.hidden=false;
+      sug.querySelectorAll("li").forEach(li=>li.onmousedown=li.ontouchstart=e=>{ e.preventDefault(); inp.value=li.dataset.v; sug.hidden=true; $("er").textContent=""; Sfx.tick(); upd(); }); };
+    const sub=()=>{ const v=inp.value.trim(); if(!ok(v)){ $("er").textContent="Please enter a valid email."; return; } S.email=v; sendLead(); clar("lead"); go(); };
+    const upd=()=>cta("Continue",sub,!inp.value.trim(),"You're not buying anything yet");
+    inp.oninput=()=>{ $("er").textContent=""; showSug(); upd(); }; inp.onfocus=showSug; inp.onblur=()=>setTimeout(()=>sug.hidden=true,180);
+    inp.onkeydown=e=>{ if(e.key==="Enter") sub(); }; upd(); },
 
   diag(){ const lvl=S.k.Freq||0, names=["Just starting","Building","Growing","Rooted"];
-    view.innerHTML=`<section class="scr"><div class="chat">${lumi()}<div class="bub" id="bub"></div></div>
+    view.innerHTML=`<section class="scr">${chatTop(["📋","✨"])}
       <div class="dg"><div class="dg-g"><span>Your goal</span><b>${esc(goalPhrase().replace(/^./,c=>c.toUpperCase()))}</b></div>
       <div class="lv">${[0,1,2,3].map(i=>`<i class="${i<=lvl?"on":""}"></i>`).join("")}<span class="lv-m" style="left:${12.5+lvl*25}%">You today</span></div>
       <div class="lv-n">${names.map(n=>`<span>${n}</span>`).join("")}</div>
