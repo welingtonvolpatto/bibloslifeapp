@@ -284,6 +284,18 @@ main{padding:0 18px 140px}
 .pcard{width:100%;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 3px 0 #d3e1f0,0 10px 24px rgba(25,70,130,.07);margin-top:12px}
 .pcard p{font-size:20px;line-height:1.3;font-weight:900;color:var(--ink);margin-top:4px}
 .pcard small{display:block;color:var(--muted);font-weight:700;font-size:13px;margin-top:6px}
+/* first screen: Lumi points to the button */
+.nudge{position:fixed;left:0;right:0;bottom:104px;z-index:31;display:flex;flex-direction:column;align-items:center;pointer-events:none;animation:fi .5s 1.2s both;opacity:0}
+.nudge span{background:var(--ink);color:#fff;font-weight:900;font-size:13.5px;padding:7px 13px;border-radius:12px;box-shadow:0 6px 16px rgba(10,30,60,.2)}
+.nudge b{font-size:26px;margin-top:2px;animation:nb 1s ease-in-out infinite}
+.nudge.inl{position:static;margin:14px 0 4px;animation-delay:.6s}
+@keyframes nb{50%{transform:translateY(7px)}}
+.btn.pulse{animation:bp 1.6s ease-in-out infinite}
+@keyframes bp{0%,100%{box-shadow:0 4px 0 var(--blue-d),0 0 0 0 rgba(31,111,209,.45)}50%{box-shadow:0 4px 0 var(--blue-d),0 0 0 12px rgba(31,111,209,0)}}
+.lumi.lean .l-bob{animation:lean 2.4s ease-in-out infinite;transform-origin:50% 90%}
+@keyframes lean{0%,100%{transform:rotate(0)}50%{transform:rotate(7deg) translateY(3px)}}
+.pick{display:grid;gap:10px;margin-top:6px}
+.pick .card{padding:16px 14px;font-size:17px}
 /* intro welcome bubble */
 .wb{display:inline-block;margin-top:8px;cursor:pointer}
 /* proof map */
@@ -522,9 +534,12 @@ const STEPS=[
 const NOBACK=new Set(["intro","goalgraph","closer","prep","lesson","done","pact","streak","build","vsl","diag","chests","offer"]);
 const EMAIL_AT=STEPS.findIndex(s=>s.t==="email");
 
+/* ---------- persona: from the ad link (?p=study | ?p=life), or chosen on the first screen ---------- */
+const PERSONA=(()=>{ try{ const q=new URLSearchParams(location.search), v=((q.get("p")||"")+" "+(q.get("utm_content")||"")+" "+(q.get("utm_campaign")||"")).toLowerCase();
+  if(/\bstudy\b|estudo|bible/.test(v)) return "study"; if(/\blife\b|vida|change/.test(v)) return "life"; }catch(e){} return null; })();
 /* ---------- state & helpers ---------- */
 const $=id=>document.getElementById(id), $$=(s,r=document)=>[...r.querySelectorAll(s)], view=$("view");
-const S={i:0,a:{},k:{},topics:[],hist:[],email:"",goal:28,min:10,plan:1,tok:0,closer:0};
+const S={persona:PERSONA,i:0,a:{},k:{},topics:[],hist:[],email:"",goal:28,min:10,plan:1,tok:0,closer:0};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 let TM=[]; const later=(fn,ms)=>{const tok=S.tok;TM.push(setTimeout(()=>{if(tok===S.tok)fn()},ms));};
@@ -717,7 +732,7 @@ function say(text,o={}){ const b=$("bub"); if(!b) return Promise.resolve(); cons
 /* ---------- UI helpers ---------- */
 /* reaction to the last answer is spoken at the start of the next screen, so a tap on an option moves on right away */
 function sayQ(text,o={}){ if(!S.carry) return say(text,o); const c=S.carry; S.carry=null; mood(c[2]); return say(c[0],{id:c[1],after:c[2]}).then(()=>say(text,o)); }
-function cta(label,fn,dis,foot){ const c=$("cta"); if(!label){ c.classList.add("hide"); return; } c.classList.remove("hide"); const b=$("ctaBtn"); b.innerHTML=label; b.disabled=!!dis; b.onclick=()=>{ Sfx.next(); fn(); }; $("ctaFoot").textContent=foot||""; }
+function cta(label,fn,dis,foot){ const c=$("cta"); $("ctaBtn").classList.remove("pulse"); if(!label){ c.classList.add("hide"); return; } c.classList.remove("hide"); const b=$("ctaBtn"); b.innerHTML=label; b.disabled=!!dis; b.onclick=()=>{ Sfx.next(); fn(); }; $("ctaFoot").textContent=foot||""; }
 function cards(list,cls){ return `<div class="cards ${cls||""}">${list.map((o,k)=>`<button class="card" data-k="${k}" style="--d:${120+k*70}ms"><span class="e">${o[0]}</span><span>${esc(o[1])}${o.sub?`<small>${esc(o.sub)}</small>`:""}</span><i class="ck"></i></button>`).join("")}</div>`; }
 function confetti(n){ const col=["#1F6FD1","#F4B740","#19A863","#FF6F61","#8FB6EA"]; for(let i=0;i<(n||40);i++){ const e=document.createElement("i"); e.className="cf";
   e.style.cssText=`left:${Math.random()*100}vw;background:${col[i%5]};--dx:${(Math.random()-.5)*160}px;--r:${Math.random()*720}deg;animation-duration:${1.8+Math.random()*1.4}s;animation-delay:${Math.random()*.3}s`;
@@ -827,18 +842,29 @@ function render(){ const s=STEPS[S.i]; S.tok++; TM.forEach(clearTimeout); TM=[];
 
 /* ---------- screens ---------- */
 const R={
-  intro(){ Voice.preload(["intro","proof","hear","hear_always","read","read_r_none","read_deeper_none","read_r_spoke","read_deeper","goal","goalgraph","q_Why"]); const W="Hi! I'm Lumi. I'm so happy you're here! Give me 3 minutes, and we'll build a 28-day plan made just for you.";
-    view.innerHTML=`<section class="scr c"><div class="orbit">
-      <span class="fi" style="left:4px;top:30px">📖</span><span class="fi" style="right:6px;top:22px;animation-delay:-1s">🎧</span><span class="fi" style="left:22px;bottom:18px;animation-delay:-2s">🙏</span><span class="fi" style="right:18px;bottom:30px;animation-delay:-3s">🕊️</span><span class="fi" style="left:50%;margin-left:-23px;top:-8px;animation-delay:-1.6s">✨</span>
-      <div id="il" style="cursor:pointer">${lumi("lg")}</div></div>
-      <h1 class="h1">Give God 10 minutes a day.<br><em>I'll walk with you.</em></h1>
-      <div class="hero"><div class="bub" id="bub" style="margin-top:12px"></div></div></section>`;
-    let voiced=false; const hello=()=>{ if(voiced) return; voiced=true; Voice.unlockEl(); Voice.unlock(); Music.start(); mood("talk"); Voice.speak(W,{id:"intro",tone:"happy"}).then(()=>mood("happy")); };
-    later(()=>{ mood("happy"); say(W,{id:"intro",after:"happy"}).then(()=>{}); },400);
-    /* browsers only allow sound after a first touch: the first tap anywhere (or on Lumi) plays the welcome */
-    const tapHello=e=>{ if(e.target.closest("#ctaBtn")) return; removeEventListener("pointerdown",tapHello,true); if(STEPS[S.i].t==="intro") hello(); };
+  intro(){ Voice.preload(["intro_study","intro_life","intro_ask","pick_study","pick_life","proof","hear","hear_always","read","read_r_none","read_deeper_none","goal","goalgraph","q_Why"]);
+    const P=S.persona, T={study:["Give God 10 minutes a day.","Finally understand the Bible."],life:["Your marriage, your money, your mind…","the answers are in a book you already own."]}[P]||["Give God 10 minutes a day.","I'll walk with you."];
+    const W={study:"Hi, I'm Lumi! If you've tried to read the Bible and gave up… that's not your fault. Give me 3 minutes, and we'll build your 28-day plan.",
+             life:"Hi, I'm Lumi! Whatever you're facing right now, the Bible has answers most people never find. Give me 3 minutes."}[P]||"Hi, I'm Lumi! I'm so happy you're here. Tell me, what brought you here today?";
+    const id=P?"intro_"+P:"intro_ask";
+    view.innerHTML=`<section class="scr c"><div class="orbit" style="height:200px">
+      <span class="fi" style="left:4px;top:30px">📖</span><span class="fi" style="right:6px;top:22px;animation-delay:-1s">${P==="life"?"💞":"🎧"}</span><span class="fi" style="left:22px;bottom:18px;animation-delay:-2s">${P==="life"?"💰":"🙏"}</span><span class="fi" style="right:18px;bottom:30px;animation-delay:-3s">🕊️</span><span class="fi" style="left:50%;margin-left:-23px;top:-8px;animation-delay:-1.6s">✨</span>
+      <div id="il" style="cursor:pointer">${lumi("lg","lean")}</div></div>
+      <h1 class="h1" style="font-size:27px">${T[0]}<br><em>${T[1]}</em></h1>
+      <div class="hero"><div class="bub" id="bub" style="margin-top:12px"></div></div>
+      ${P?"":`<div class="nudge inl"><span>Tap one, I'll wait for you 😊</span><b>👇</b></div><div class="pick">${cards([["📖","I want to finally understand the Bible"],["🌱","I want God's help with my life"]])}</div>`}</section>
+      ${P?`<div class="nudge" id="nudge"><span>Tap here, I'll wait for you 😊</span><b>👇</b></div>`:""}`;
+    let voiced=false; const hello=()=>{ if(voiced) return; voiced=true; Voice.unlockEl(); Voice.unlock(); mood("talk"); Voice.speak(W,{id,tone:"happy"}).then(()=>mood("happy")); };
+    later(()=>{ mood("happy"); say(W,{id,after:"happy"}); },400);
+    /* sound only works after a first touch: a tap anywhere else (or on Lumi) plays the welcome */
+    const tapHello=e=>{ if(e.target.closest("#ctaBtn,.pick .card")) return; removeEventListener("pointerdown",tapHello,true); if(STEPS[S.i].t==="intro") hello(); };
     addEventListener("pointerdown",tapHello,true); $("il").onclick=()=>{ voiced=false; hello(); };
-    cta("Start →",()=>{ removeEventListener("pointerdown",tapHello,true); Voice.unlock(); Music.start(); go(); },false,"Takes about 3 minutes"); },
+    /* idle nudge: if nothing happens for 4s, Lumi hops to call attention */
+    let idle=0; const nudgeHop=()=>{ if(STEPS[S.i].t!=="intro") return; idle++; mood("happy"); later(()=>mood("idle"),900); if(idle<6) later(nudgeHop,4000); }; later(nudgeHop,4500);
+    const start=()=>{ removeEventListener("pointerdown",tapHello,true); Voice.unlockEl(); Voice.unlock(); S.a.Persona=S.persona; track(0,"p_"+S.persona); go(); };
+    if(P){ cta("Start my plan →",start,false,"Takes about 3 minutes"); $("ctaBtn").classList.add("pulse"); }
+    else $$(".pick .card").forEach(c=>c.onclick=()=>{ const k=+c.dataset.k; c.classList.add("sel"); Sfx.select(); S.persona=k?"life":"study";
+      S.carry=[k?"Then you're in the right place. God's Word has real answers for real life.":"I love that. Let's make the Bible finally make sense to you.",k?"pick_life":"pick_study","happy"]; later(start,300); }); },
 
   proof(){ view.innerHTML=`<section class="scr c"><div style="display:flex;justify-content:center">${lumi("sm")}</div>
       <div class="big" style="margin-top:6px"><span id="cnt">0</span>K+ people</div>
@@ -848,7 +874,7 @@ const R={
     const arc=(x,y,i)=>{ const mx=(H[0]+x)/2, my=Math.min(H[1],y)-Math.abs(x-H[0])*.22-14; return `<path class="arc2" style="opacity:0;animation:fi .4s ${.5+i*.22}s forwards" d="M${H[0]} ${H[1]}Q${mx} ${my} ${x} ${y}"/>`; };
     $("msvg").innerHTML=P.slice(1).filter(q=>q[4]).map((q,i)=>arc(q[1],q[2],i)).join("")+P.map(([c,x,y,up,a],i)=>`<g style="opacity:0;animation:fi .4s ${i?.6+i*.22:.2}s forwards"><circle class="pulse" cx="${x}" cy="${y}" r="7" stroke-width="2" style="animation-delay:${i*.25}s"/><circle class="${i?"dot":"hub"}" cx="${x}" cy="${y}" r="${i?5:7.5}"/><text class="lb" x="${x}" y="${up?y-13:y+24}" text-anchor="middle">${c}</text></g>`).join("");
     const t0=performance.now(); (function tk(t){ const el=$("cnt"); if(!el) return; const k=Math.min(1,(t-t0)/1600); el.textContent=Math.round(560*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(tk); })(t0);
-    say("…in 169+ countries already walk with VEREDA. Ready to be next?",{id:"proof",after:"happy",speak:"Welcome! More than 560 thousand people, in over 169 countries, already walk with VEREDA. Ready to be next?"});
+    sayQ("…in 169+ countries already walk with VEREDA. Ready to be next?",{id:"proof",after:"happy",speak:"Welcome! More than 560 thousand people, in over 169 countries, already walk with VEREDA. Ready to be next?"});
     cta("Let's go →",()=>go()); },
 
   hear(s){ const O=[["🔊","Talk to me anytime","Your voice it is! I'll talk with you all the way.","always"],["🔈","Only during studies","Got it. I'll stay quiet and speak only during our studies.","lessons"],["💬","Text only","No problem. We'll keep it to text.","off"]];
@@ -889,7 +915,8 @@ const R={
     cta("Let's go →",()=>go()); },
 
   q(s){ const D=Q[s.key];
-    view.innerHTML=`<section class="scr">${chatTop(D.art)}${cards(D.o)}</section>`;
+    const ord=s.key==="Why"&&S.persona==="life"?[0,2,3,1]:s.key==="Why"&&S.persona==="study"?[1,3,0,2]:D.o.map((_,i)=>i);
+    view.innerHTML=`<section class="scr">${chatTop(D.art)}${cards(ord.map(i=>D.o[i]))}</section>`; $$(".card").forEach((c,j)=>c.dataset.k=ord[j]);
     sayQ(D.say,{id:"q_"+s.key,after:D.mood||"idle"});
     let lock=false; $$(".card").forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const k=+c.dataset.k, o=D.o[k];
       S.k[s.key]=k; S.a[s.key]=o[1]; c.classList.add("sel"); $$(".card").forEach(x=>x!==c&&x.classList.add("dim")); Sfx.select();
