@@ -658,7 +658,10 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
     const g=++this.gen;
     return new Promise(res=>{ let done=false; const end=()=>{ if(done) return; done=true; if(g===this.gen){ this.busy=false; Music.duck(); } res(); };
       this.busy=true; Music.duck(); setTimeout(end,2500+text.length*90);
-      if(CONFIG.voiceFiles&&o.id){ const a=new Audio(`/study4/voice/${o.id}${S.style==="coach"&&o.coachFile?"_c":""}.mp3`); this.cur=a; a.onended=end; a.onerror=()=>{ this.cur=null; if(g===this.gen) this.tts(text,end,o,g); }; a.play().catch(()=>{ if(g===this.gen) this.tts(text,end,o,g); }); return; }
+      if(CONFIG.voiceFiles&&o.id){ const id=`${o.id}${S.style==="coach"&&o.coachFile?"_c":""}`;
+        /* recorded voice: played through Web Audio (unlocked by the first tap, works in in-app browsers); falls back to the browser voice if the file is missing */
+        this.file(id).then(buf=>{ if(g!==this.gen) return end(); const c=Music.ctx; if(!buf||!c){ this.tts(text,end,o,g); return; }
+          c.resume(); const src=c.createBufferSource(), gn=c.createGain(); gn.gain.value=1; src.buffer=buf; src.connect(gn); gn.connect(c.destination); src.onended=end; this.cur={pause(){ try{ src.onended=null; src.stop(); }catch(e){} }}; src.start(); }); return; }
       setTimeout(()=>{ if(g===this.gen) this.tts(text,end,o,g); else end(); },120); }); },
   /* browser voice with feeling: pitch and pace per mood; the guide style shifts it (coach brighter and faster, gentle softer and slower) */
   TONE:{talk:[1.12,1],idle:[1.1,1],happy:[1.2,1.05],cheer:[1.3,1.1],wow:[1.32,1.1],love:[1.15,.93],empathy:[1,.86],think:[1.05,.92],listen:[1.08,.95],verse:[.98,.8]},
@@ -683,6 +686,9 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
         try{ ss.cancel(); ss.resume(); }catch(e){}
         if(!o._retry&&this.fails<3) this.tts(text,end,{...o,_retry:1},g); else end(); },2600);
     }catch(e){ end(); } },
+  cache:new Map(),
+  file(id){ if(!this.cache.has(id)) this.cache.set(id,fetch(`/study4/voice/${id}.mp3`).then(r=>r.ok?r.arrayBuffer():null).then(ab=>ab&&Music.init()?new Promise((ok,no)=>Music.ctx.decodeAudioData(ab,ok,no)):null).catch(()=>null)); return this.cache.get(id); },
+  preload(ids){ if(CONFIG.voiceFiles) ids.forEach(i=>this.file(i)); },
   /* cancel only when something is playing (cancelling an idle engine breaks some voices), and always resume afterwards */
   stop(){ this.gen++; if(this.ok()){ try{ const ss=this.ss(); if(ss.speaking||ss.pending) ss.cancel(); if(ss.paused) ss.resume(); }catch(e){} } if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
 };
