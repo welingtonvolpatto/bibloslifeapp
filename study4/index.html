@@ -645,9 +645,7 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,
   init(){ try{ this.mode=localStorage.getItem("vq4_voice")||"always"; }catch(e){}
     if(!("speechSynthesis" in window)) return; const choose=()=>{ const vs=speechSynthesis.getVoices().filter(v=>/^en[-_]US/i.test(v.lang));
       for(const p of [/(Aria|Jenny|Ava|Emma|Michelle).*(Natural|Neural)/i,/(Natural|Neural)/i,/(Samantha|Ava|Allison|Zoe|Nicky).*(Enhanced|Premium)/i,/(Enhanced|Premium)/i,/Samantha/i,/Ava/i,/Allison/i,/Google US English/i,/Jenny/i,/Aria/i,/Zira/i]){ const f=vs.find(v=>p.test(v.name)); if(f){ this.v=f; return; } } this.v=vs[0]||null; };
-    choose(); speechSynthesis.onvoiceschanged=choose;
-    /* Chrome stops long speech after ~15s unless nudged */
-    setInterval(()=>{ try{ if(speechSynthesis.speaking&&!speechSynthesis.paused&&/Chrome/.test(navigator.userAgent)&&!/Mobile/.test(navigator.userAgent)){ speechSynthesis.pause(); speechSynthesis.resume(); } }catch(e){} },9000); },
+    choose(); speechSynthesis.onvoiceschanged=choose; },
   unlock(){ try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; this.q.push(u); speechSynthesis.speak(u); }catch(e){} },
   speak(text,o={}){ this.stop(); if(!Snd.on||(!o.force&&(this.mode==="off"||(this.mode==="lessons"&&!o.lesson)))) return Promise.resolve();
     const g=++this.gen;
@@ -663,6 +661,7 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,
       const st=tone==="verse"?[0,1]:S.style==="coach"?[.08,1.08]:S.style==="gentle"?[-.03,.95]:[0,1];
       const parts=(text.replace(/[“”]/g,"").replace(/\s*[—–]\s*/g,", ").replace(/[\u{1F300}-\u{1FAFF}☀-➿]/gu,"").match(/[^.!?…]+[.!?…]*\s*/g)||[text]).map(x=>x.trim()).filter(Boolean);
       if(!parts.length) return end();
+      try{ if(speechSynthesis.paused) speechSynthesis.resume(); }catch(e){}
       this.q=[]; let started=false;
       parts.forEach((p,i)=>{ const u=new SpeechSynthesisUtterance(p.replace(/…/g,"..."));
         if(this.v) u.voice=this.v; u.lang="en-US"; const ex=/!$/.test(p), q=/\?$/.test(p);
@@ -673,7 +672,8 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,
       /* watchdog: if nothing started, the engine got stuck; reset and try once more */
       setTimeout(()=>{ if(!started&&g===this.gen&&!speechSynthesis.speaking){ try{ speechSynthesis.cancel(); speechSynthesis.resume(); }catch(e){} if(!o._retry) this.tts(text,end,{...o,_retry:1},g); else end(); } },1600);
     }catch(e){ end(); } },
-  stop(){ this.gen++; try{ speechSynthesis.cancel(); }catch(e){} if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
+  /* cancel() leaves Chrome "paused" if it was paused, and then every later sentence stays silent: always resume after cancelling */
+  stop(){ this.gen++; try{ speechSynthesis.cancel(); speechSynthesis.resume(); }catch(e){} if(this.cur){ try{this.cur.pause()}catch(e){} this.cur=null; } this.busy=false; }
 };
 Voice.init();
 function sndUI(){ $("snd").classList.toggle("mute",!Snd.on); }
