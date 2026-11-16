@@ -473,7 +473,7 @@ const CONFIG={
   // "Not today" / back button → start smaller: 7-day trial, then the monthly plan
   trial:{url:"https://pay.hotmart.com/F108347453I?off=76tfafb3", days:7, then:19.90},
   // Lumi's voice: false = the browser's voice; true = recorded files at /study4/voice/<id>.mp3 (falls back to the browser's voice when a file is missing)
-  voiceFiles:false,
+  voiceFiles:true,
   weeks:[
     ["Step into Light","Do I know Jesus?","Grace vs Works","Talking With God"],
     ["Walking by Faith","When God Feels Silent","Forgiveness That Frees","The Power of Rest"],
@@ -811,7 +811,7 @@ function render(){ const s=STEPS[S.i]; S.tok++; TM.forEach(clearTimeout); TM=[];
 
 /* ---------- screens ---------- */
 const R={
-  intro(){ const W="Hi! I'm Lumi. I'm so happy you're here! Give me 3 minutes, and we'll build a 28-day plan made just for you.";
+  intro(){ Voice.preload(["intro","proof","hear","hear_always","read","read_r_none","read_deeper_none","read_r_spoke","read_deeper","goal","goalgraph","q_Why"]); const W="Hi! I'm Lumi. I'm so happy you're here! Give me 3 minutes, and we'll build a 28-day plan made just for you.";
     view.innerHTML=`<section class="scr c"><div class="orbit">
       <span class="fi" style="left:4px;top:30px">📖</span><span class="fi" style="right:6px;top:22px;animation-delay:-1s">🎧</span><span class="fi" style="left:22px;bottom:18px;animation-delay:-2s">🙏</span><span class="fi" style="right:18px;bottom:30px;animation-delay:-3s">🕊️</span><span class="fi" style="left:50%;margin-left:-23px;top:-8px;animation-delay:-1.6s">✨</span>
       <div id="il" style="cursor:pointer">${lumi("lg")}</div></div>
