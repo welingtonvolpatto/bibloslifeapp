@@ -134,7 +134,7 @@ tr:last-child td{border-bottom:0}
 <div id="login">
   <form class="lbox" id="lform">
     <div class="brand"><i><svg width="16" height="16" viewBox="0 0 32 32"><path d="M7 7l9 19 9-19" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></i>VEREDA</div>
-    <h1>Painel dos quizzes</h1>
+    <h1>Painel do quiz Lumi</h1>
     <p>Digite a senha de acesso.</p>
     <input class="field" id="pw" type="password" autocomplete="current-password" placeholder="Senha" required>
     <label class="chk"><input type="checkbox" id="remember" checked> Lembrar neste aparelho</label>
@@ -159,7 +159,7 @@ tr:last-child td{border-bottom:0}
     <button class="ghost" id="logout">Sair</button>
   </div></header>
   <main>
-    <div class="vtabs" id="vtabs"><button type="button" data-v="quiz" class="on">Quizzes</button><button type="button" data-v="offer">Funil da oferta</button><button type="button" data-v="lp">Página de vendas</button></div>
+    <div class="vtabs" id="vtabs"><button type="button" data-v="quiz" class="on">Quiz</button><button type="button" data-v="offer">Funil da oferta</button></div>
     <div id="vQuiz">
     <div class="lead" id="lead">Carregando…</div>
     <div class="sub" id="updated"></div>
@@ -167,12 +167,12 @@ tr:last-child td{border-bottom:0}
     <div class="grid3" id="cards"></div>
 
     <section id="vsec">
-      <h2>Quiz Lumi (/study4): comparação das 3 URLs</h2>
+      <h2>Comparação das 3 URLs</h2>
       <p class="note">Cada coluna é um link de anúncio. Percentual = parte de quem abriu aquele link. Sessões de antes de 16/11 (14h) não têm a marcação e aparecem como "Sem marcação".</p>
       <div class="scroll"><table id="vtbl"></table></div>
     </section>
 
-    <section>
+    <section style="display:none">
       <h2>Comparação das etapas principais</h2>
       <p class="note">Percentual = parte de quem iniciou o quiz. Mostra onde cada versão perde mais gente.</p>
       <div class="legend" id="legend"></div>
@@ -249,7 +249,7 @@ const QUIZ = {
   study3:    {name:"Quiz curto (/study3)", url:"https://veredaapplication.vercel.app/study3/", path:"/study3", color:"#d0743c"},
   study4:    {name:"Quiz conversa Lumi (/study4)", url:"https://veredaapplication.vercel.app/study4/", path:"/study4", color:"#e0a020"},
 };
-const ORDER = ["study4","study3","archetype","study","study2","es-arqu","es-estud2","lp-study"];
+const ORDER = ["study4"]; /* only the Lumi quiz is shown; the others stay in QUIZ for names */
 const OFFERS = {"76tfafb3":"Teste grátis 7 dias","t5216fgc":"Mensal $19,90","ah15t54l":"Trimestral $39,90"};
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -261,7 +261,7 @@ const store = {
   set(v, keep){ try { (keep ? localStorage : sessionStorage).setItem("vd_pw", v); } catch {} },
   clear(){ try { localStorage.removeItem("vd_pw"); sessionStorage.removeItem("vd_pw"); } catch {} }
 };
-let PW = null, DATA = null, TAB = "archetype", timer = null;
+let PW = null, DATA = null, TAB = "study4", timer = null;
 
 /* ---------- period picker ---------- */
 const TZ = "America/Sao_Paulo";
@@ -368,7 +368,7 @@ async function downloadLeads(){
 
 
 /* ---------- offer funnel ---------- */
-let VIEWM = "quiz", OTAB = "all", ODATA = null, VIEWLP = false;
+let VIEWM = "quiz", OTAB = "study4", ODATA = null, VIEWLP = false;
 const OSTEPS = [
   ["view","Viram a oferta","chegaram à página de planos"],
   ["t15","Ficaram 15 s ou mais","não saíram de cara"],
@@ -392,7 +392,7 @@ async function fetchOffer(pw){
   return r.json();
 }
 function setView(v){
-  if (v === "lp") { OTAB = "lp-study"; v = "offer"; VIEWLP = true; } else if (v === "offer" && VIEWLP) { OTAB = "all"; VIEWLP = false; }
+  if (v === "lp") { OTAB = "lp-study"; v = "offer"; VIEWLP = true; } else if (v === "offer" && VIEWLP) { OTAB = "study4"; VIEWLP = false; }
   VIEWM = v;
   document.querySelectorAll("#vtabs button").forEach(b => b.classList.toggle("on", b.dataset.v === (VIEWLP && v === "offer" ? "lp" : v)));
   $("#vQuiz").classList.toggle("hidden", v !== "quiz");
@@ -432,7 +432,7 @@ function renderOffer(){
   const STEPS_ = isLP ? LPSTEPS : OSTEPS, INT_ = isLP ? LPINT : OINT;
   const V = ev.view || 0, label = PERIOD.phrase || PERIOD.label.toLowerCase();
   $("#olead").textContent = `${fmt(V)} ${isLP ? (V === 1 ? "pessoa abriu" : "pessoas abriram") + " a página de vendas" : (V === 1 ? "pessoa viu" : "pessoas viram") + " a oferta"} (${label}) · ${fmt(ev.buy || 0)} ${(ev.buy || 0) === 1 ? "clicou" : "clicaram"} em comprar`;
-  const qs = ["all", ...ORDER];
+  const qs = [...ORDER];
   $("#otabs").innerHTML = qs.map(q => `<button class="tab ${OTAB === q ? "on" : ""}" data-oq="${q}">${q === "all" ? "Todos os quizzes" : QUIZ[q].name}</button>`).join("");
   document.querySelectorAll("#otabs .tab").forEach(b => b.onclick = () => { OTAB = b.dataset.oq; VIEWLP = OTAB === "lp-study"; document.querySelectorAll("#vtabs button").forEach(x => x.classList.toggle("on", x.dataset.v === (VIEWLP ? "lp" : "offer"))); renderOffer(); });
   if (!V) {
@@ -596,13 +596,13 @@ function render(){
     <div class="card"><div class="k"><b>${fmt(sumEv("PURCHASE_REFUNDED") + sumEv("PURCHASE_CHARGEBACK"))}</b><span>reembolsos e chargebacks</span></div></div>`;
 
   // daily
-  const daily = (DATA.daily || []).slice().sort((a, b) => b.dia.localeCompare(a.dia) || ORDER.indexOf(a.quiz) - ORDER.indexOf(b.quiz));
+  const daily = (DATA.daily || []).filter(r => ORDER.includes(r.quiz)).slice().sort((a, b) => b.dia.localeCompare(a.dia) || ORDER.indexOf(a.quiz) - ORDER.indexOf(b.quiz));
   $("#daily").innerHTML = daily.length ? `<tr><th>Dia</th><th>Quiz</th><th class="n">Iniciaram</th><th class="n">Chegaram à oferta</th><th class="n">Clicaram em comprar</th><th class="n">Conversão até o clique</th></tr>` +
     daily.map(r => `<tr><td>${r.dia.split("-").reverse().join("/")}</td><td><span class="dot" style="display:inline-block;background:${QUIZ[r.quiz]?.color || "#999"};margin-right:6px"></span>${esc(QUIZ[r.quiz]?.name || r.quiz)}</td><td class="n">${fmt(r.started)}</td><td class="n">${fmt(r.offer)}</td><td class="n">${fmt(r.checkouts)}</td><td class="n">${fp(r.checkouts, r.started)}</td></tr>`).join("")
     : `<tr><td class="empty">Sem dados no período.</td></tr>`;
 
   // source
-  const src = DATA.by_source || [];
+  const src = (DATA.by_source || []).filter(r => ORDER.includes(r.quiz));
   $("#source").innerHTML = src.length ? `<tr><th>Origem</th><th>Quiz</th><th class="n">Iniciaram</th><th class="n">Chegaram à oferta</th><th class="n">Clicaram em comprar</th><th class="n">Conversão até o clique</th></tr>` +
     src.map(r => `<tr><td>${esc(r.source)}</td><td>${esc(QUIZ[r.quiz]?.name || r.quiz)}</td><td class="n">${fmt(r.started)}</td><td class="n">${fmt(r.offer)}</td><td class="n">${fmt(r.checkouts)}</td><td class="n">${fp(r.checkouts, r.started)}</td></tr>`).join("")
     : `<tr><td class="empty">Sem dados no período.</td></tr>`;
@@ -632,7 +632,7 @@ $("#lform").onsubmit = async e => {
 };
 initPicker();
 document.querySelectorAll("#vtabs button").forEach(b => b.onclick = () => setView(b.dataset.v));
-try { const sv = localStorage.getItem("vd_view"); if (sv === "offer" || sv === "lp") setView(sv); } catch {}
+try { const sv = localStorage.getItem("vd_view"); if (sv === "offer") setView(sv); } catch {}
 $("#leadsBtn").onclick = downloadLeads;
 $("#refresh").onclick = load;
 $("#logout").onclick = logout;
