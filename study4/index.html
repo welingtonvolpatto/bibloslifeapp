@@ -540,6 +540,7 @@ const EMAIL_AT=STEPS.findIndex(s=>s.t==="email");
 /* ---------- persona: from the ad link (?p=study | ?p=life), or chosen on the first screen ---------- */
 const PERSONA=(()=>{ try{ const q=new URLSearchParams(location.search), v=((q.get("p")||"")+" "+(q.get("utm_content")||"")+" "+(q.get("utm_campaign")||"")).toLowerCase();
   if(/\bstudy\b|estudo|bible/.test(v)) return "study"; if(/\blife\b|vida|change/.test(v)) return "life"; }catch(e){} return null; })();
+if(PERSONA){ const fi=STEPS.findIndex(x=>x.key==="Freq"); if(fi>0) STEPS.splice(fi,1); }
 /* ---------- state & helpers ---------- */
 const $=id=>document.getElementById(id), $$=(s,r=document)=>[...r.querySelectorAll(s)], view=$("view");
 const S={persona:PERSONA,i:0,a:{},k:{},topics:[],hist:[],email:"",goal:28,min:10,plan:1,tok:0,closer:0};
@@ -713,7 +714,7 @@ const Voice={mode:"always",v:null,cur:null,busy:false,q:[],gen:0,fails:0,bad:new
   unlockEl(){ try{ const el=this.el(); if(el.dataset.ok) return; el.src=this.SILENT; const p=el.play(); el.dataset.ok="1"; if(p&&p.then) p.then(()=>{ try{ if(el.src===this.SILENT) el.pause(); }catch(e){} }).catch(e=>{ if(e&&e.name==="NotAllowedError") delete el.dataset.ok; }); }catch(e){} },
   /* the browser refused sound (no touch yet): show "Tap to hear Lumi" and replay the line on the next touch */
   blocked:false,
-  block(){ this.blocked=true; try{ delete this.el().dataset.ok; }catch(e){} const h=$("sndHint"); if(h) h.classList.add("on"); },
+  block(){ this.blocked=true; try{ delete this.el().dataset.ok; }catch(e){} const h=$("sndHint"); if(h&&!(STEPS[S.i]&&STEPS[S.i].t==="intro")) h.classList.add("on"); },
   gesture(){ const el=this.el();
     if(this.blocked){ this.blocked=false; const h=$("sndHint"); if(h) h.classList.remove("on");
       try{ if(el.src&&!/^data:/.test(el.src)&&el.paused&&!el.ended){ el.currentTime=0; mood("talk"); el.onended=()=>mood("happy"); el.dataset.ok="1"; const p=el.play(); if(p&&p.catch) p.catch(e=>{ if(e&&e.name==="NotAllowedError") this.block(); }); return; } }catch(e){} }
@@ -850,29 +851,24 @@ function render(){ const s=STEPS[S.i]; S.tok++; TM.forEach(clearTimeout); TM=[];
 
 /* ---------- screens ---------- */
 const R={
-  intro(){ Voice.preload(["intro_study","intro_life","intro_ask","pick_study","pick_life","proof","read","read_r_none","read_deeper_none","goal","goalgraph","q_Why"]);
-    const P=S.persona, T={study:["Give God 10 minutes a day.","Finally understand the Bible."],life:["Your marriage, your money, your mind…","the answers are in a book you already own."]}[P]||["Give God 10 minutes a day.","I'll walk with you."];
-    const W={study:"Hi, I'm Lumi! If you've tried to read the Bible and gave up… that's not your fault. Give me 3 minutes, and we'll build your 28-day plan.",
-             life:"Hi, I'm Lumi! Whatever you're facing right now, the Bible has answers most people never find. Give me 3 minutes."}[P]||"Hi, I'm Lumi! I'm so happy you're here. Tell me, what brought you here today?";
-    const id=P?"intro_"+P:"intro_ask";
-    view.innerHTML=`<section class="scr c"><div class="orbit" style="height:200px">
-      <span class="fi" style="left:4px;top:30px">📖</span><span class="fi" style="right:6px;top:22px;animation-delay:-1s">${P==="life"?"💞":"🎧"}</span><span class="fi" style="left:22px;bottom:18px;animation-delay:-2s">${P==="life"?"💰":"🙏"}</span><span class="fi" style="right:18px;bottom:30px;animation-delay:-3s">🕊️</span><span class="fi" style="left:50%;margin-left:-23px;top:-8px;animation-delay:-1.6s">✨</span>
-      <div id="il" style="cursor:pointer">${lumi("lg","lean")}</div></div>
-      <h1 class="h1" style="font-size:27px">${T[0]}<br><em>${T[1]}</em></h1>
-      <div class="hero"><div class="bub" id="bub" style="margin-top:12px"></div></div>
-      ${P?"":`<div class="nudge inl"><span>Tap one, I'll wait for you 😊</span><b>👇</b></div><div class="pick">${cards([["📖","I want to finally understand the Bible"],["🌱","I want God's help with my life"]])}</div>`}</section>
-      ${P?`<div class="nudge" id="nudge"><span>Tap here, I'll wait for you 😊</span><b>👇</b></div>`:""}`;
+  intro(){ Voice.preload(["q_Freq","r_Freq_0","r_Freq_1","r_Freq_2","r_Freq_3","intro_ask","pick_study","pick_life","proof","read","read_r_none","read_deeper_none","goal","q_Why"]);
+    /* first screen = one easy question, answered with a single tap (no "start" button to decide on) */
+    const P=S.persona, D=Q.Freq;
+    const T={study:["Your 28-day Bible plan","Finally understand the Bible."],life:["The Bible has answers for your life","Your marriage, your money, your mind…"]}[P]||["Give God 10 minutes a day","I'll walk with you."];
+    const W=P?D.say:"Hi, I'm Lumi! I'm so happy you're here. Tell me, what brought you here today?", id=P?"q_Freq":"intro_ask";
+    const O=P?D.o:[["📖","I want to finally understand the Bible"],["🌱","I want God's help with my life"]];
+    view.innerHTML=`<section class="scr intro2"><p class="kick" style="text-align:center;color:var(--blue)">${T[0]}</p><h1 class="h1" style="font-size:25px;margin:6px 0 10px;text-align:center">${T[1]}</h1>
+      <div id="il" style="cursor:pointer">${chatTop()}</div>${cards(O)}<p class="note" style="text-align:center;margin-top:12px">Takes about 3 minutes · 560K+ people already study with us</p></section>`;
     let voiced=false; const hello=()=>{ if(voiced) return; voiced=true; Voice.unlockEl(); Voice.unlock(); mood("talk"); Voice.speak(W,{id,tone:"happy"}).then(()=>mood("happy")); };
-    later(()=>{ mood("happy"); say(W,{id,after:"happy"}); },400);
-    /* sound only works after a first touch: a tap anywhere else (or on Lumi) plays the welcome */
-    const tapHello=e=>{ if(e.target.closest("#ctaBtn,.pick .card")) return; removeEventListener("pointerdown",tapHello,true); if(STEPS[S.i].t==="intro") hello(); };
+    later(()=>{ mood("happy"); say(W,{id,after:"happy"}); },300);
+    /* sound only works after a first touch: a tap outside the answers (or on Lumi) plays her line */
+    const tapHello=e=>{ if(e.target.closest(".card")) return; removeEventListener("pointerdown",tapHello,true); if(STEPS[S.i].t==="intro") hello(); };
     addEventListener("pointerdown",tapHello,true); $("il").onclick=()=>{ voiced=false; hello(); };
-    /* idle nudge: if nothing happens for 4s, Lumi hops to call attention */
-    let idle=0; const nudgeHop=()=>{ if(STEPS[S.i].t!=="intro") return; idle++; mood("happy"); later(()=>mood("idle"),900); if(idle<6) later(nudgeHop,4000); }; later(nudgeHop,4500);
     const start=()=>{ removeEventListener("pointerdown",tapHello,true); Voice.unlockEl(); Voice.unlock(); S.a.Persona=S.persona; go(); };
-    if(P){ cta("Start my plan →",start,false,"Takes about 3 minutes"); $("ctaBtn").classList.add("pulse"); }
-    else $$(".pick .card").forEach(c=>c.onclick=()=>{ const k=+c.dataset.k; c.classList.add("sel"); Sfx.select(); S.persona=k?"life":"study";
-      S.carry=[k?"Then you're in the right place. God's Word has real answers for real life.":"I love that. Let's make the Bible finally make sense to you.",k?"pick_life":"pick_study","happy"]; later(start,300); }); },
+    let lock=false; $$(".card").forEach(c=>c.onclick=()=>{ if(lock) return; lock=true; const k=+c.dataset.k; c.classList.add("sel"); $$(".card").forEach(x=>x!==c&&x.classList.add("dim")); Sfx.select();
+      if(P){ const o=D.o[k]; S.k.Freq=k; S.a.Freq=o[1]; mood(o[3]); S.carry=[o[2],"r_Freq_"+k,o[3]]; }
+      else { S.persona=k?"life":"study"; S.carry=[k?"Then you're in the right place. God's Word has real answers for real life.":"I love that. Let's make the Bible finally make sense to you.",k?"pick_life":"pick_study","happy"]; }
+      start(); }); },
 
   proof(){ view.innerHTML=`<section class="scr c"><div style="display:flex;justify-content:center">${lumi("sm")}</div>
       <div class="big" style="margin-top:6px"><span id="cnt">0</span>K+ people</div>
