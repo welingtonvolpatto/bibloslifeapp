@@ -529,7 +529,7 @@ const MINS=[[5,"a quick walk"],[10,"what most people choose"],[15,"to go deeper"
 const GOALS=[[14,"2 weeks","An intense start. 15 minutes or more a day helps."],[28,"28 days","The pace almost everyone can keep: one short study a day."],[90,"3 months","Gentle and steady, at your own pace."]];
 
 const STEPS=[
-  {t:"intro"},{t:"proof"},{t:"read",key:"ReadAloud"},{t:"goal",key:"Goal"},{t:"goalgraph"},
+  {t:"intro"},{t:"proof"},{t:"goal",key:"Goal"},{t:"goalgraph"},
   {t:"q",key:"Why"},{t:"q",key:"Stop"},{t:"q",key:"Freq"},{t:"q",key:"When"},
   {t:"minutes",key:"Minutes"},{t:"topics",key:"Topics"},{t:"closer"},{t:"style",key:"Style"},{t:"prep"},
   {t:"lesson"},{t:"done"},{t:"pact"},{t:"streak"},{t:"build"},{t:"vsl"},{t:"email"},{t:"diag"},{t:"chests"},{t:"offer"}
@@ -833,7 +833,7 @@ const clar=(e)=>{ try{ window.clarity&&clarity("event",e); }catch(_){} };
 
 /* warm up the recordings the next screens will need */
 function preloadNext(s){ if(!CONFIG.voiceFiles) return; const c=S.style==="coach"?"_c":"", A=(p,n)=>Array.from({length:n},(_,i)=>p+i);
-  const P={proof:["read","read_r_none","read_deeper_none","read_r_spoke","read_deeper","goal","goalgraph"],
+  const P={proof:["goal","goalgraph","q_Why"],
     goalgraph:["q_Why",...A("r_Why_",4),"q_Stop",...A("r_Stop_",4)],
     q:["q_Freq",...A("r_Freq_",4),"q_When",...A("r_When_",4),"minutes","min_r_5","min_r_10","min_r_15","min_r_20"],
     minutes:["topics",...[3,4,5,6,7,8,9].map(n=>"closer_"+n),"style","style_gentle","style_coach"],
@@ -851,7 +851,7 @@ function render(){ const s=STEPS[S.i]; S.tok++; TM.forEach(clearTimeout); TM=[];
 
 /* ---------- screens ---------- */
 const R={
-  intro(){ Voice.preload(["q_Freq","r_Freq_0","r_Freq_1","r_Freq_2","r_Freq_3","intro_ask","pick_study","pick_life","proof","read","read_r_none","read_deeper_none","goal","q_Why"]);
+  intro(){ Voice.preload(["q_Freq","r_Freq_0","r_Freq_1","r_Freq_2","r_Freq_3","intro_ask","pick_study","pick_life","proof","goal","goalgraph","q_Why"]);
     /* first screen = one easy question, answered with a single tap (no "start" button to decide on) */
     const P=S.persona, D=Q.Freq;
     const T={study:["Your 28-day Bible plan","Finally understand the Bible."],life:["The Bible has answers for your life","Your marriage, your money, your mind…"]}[P]||["Give God 10 minutes a day","I'll walk with you."];
@@ -1102,7 +1102,10 @@ const R={
       view.appendChild(r); Sfx.win(); later(()=>confetti(60),300); Voice.speak(`Wow! You unlocked ${SAVE}% off!`,{id:"reveal",tone:"wow"});
       later(()=>cta("See my plan →",()=>go()),1200); }; },
 
-  offer(){ oev("view"); clar("offer_view"); const habit=fmt(addDays(finalDays()));
+  offer(){ oev("view"); clar("offer_view");
+    /* in the Facebook browser people leave with the X (no "back"), so the 7-day trial would never show:
+       after 40s on the offer without opening a checkout, Lumi offers it once */
+    setTimeout(()=>{ if(STEPS[S.i].t==="offer"&&!dsShown&&!document.hidden&&!$("coSheet")) downsell("timer"); },40000); const habit=fmt(addDays(finalDays()));
     const bonus=[["community","Prayer community","Pray together with people of faith"],["reflect","Verse of the day","One verse and reflection every morning"],["story","Audio series & Bible stories","Listen anywhere, any time"],["journey","Journal & progress","See how far you've walked"],["bible","The complete Bible","Read or listen to any book"]];
     const FAQ=[["Is this a subscription?",`Yes. The 3-month plan renews every 3 months at ${money(PQ.price)} and the monthly plan renews every month at ${money(PM.price)}, until you cancel. You can cancel anytime.`],
       ["What exactly do I get?","Your VEREDA Bible Plan (10-minute audio studies explained in plain words, with one lesson to practice every day) plus the app bonuses: prayer community, verse of the day, audio series and Bible stories, journal and progress, and the complete Bible."],
